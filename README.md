@@ -1,8 +1,8 @@
-# PortLink Landing Page
+# Portlink Landing Page
 
-Public marketing site for [PortLink](https://portlink.app) — operational coordination infrastructure for the cruise industry. Next.js 16, App Router, deployed via Netlify.
+Public marketing site for [Portlink](https://portlink.app) — operational coordination infrastructure for the cruise industry. Next.js 16, App Router, deployed via Netlify.
 
-Consumes the PortLink Design System **v4.1.1** (see `app/_ds/VERSION`).
+Consumes the Portlink Design System **v4.1.1** (see `app/_ds/VERSION`).
 
 ## Design System
 

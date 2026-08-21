@@ -1,7 +1,7 @@
 # portlink-landing
 
-The public PortLink marketing site — Next.js 16, live at **https://portlink.app**.
-It vendors the PortLink design system into `app/_ds/` at a pinned version; see
+The public Portlink marketing site — Next.js 16, live at **https://portlink.app**.
+It vendors the Portlink design system into `app/_ds/` at a pinned version; see
 `../portlink-design-system/CONSUMERS.md`.
 
 ## Services and connections
@@ -14,7 +14,7 @@ which is copied in rather than fetched at runtime.
 |---|---|---|
 | GitHub | **`Portlink-app/portlink-landing`** (the **org**), public, default branch `main`. The local `origin` still says `https://github.com/portlinkadmin/portlink-landing.git` — the repo was **transferred to the org** and GitHub redirects the old path, which is why both work and why the Netlify site reports the org URL. Push with the `portlinkadmin` account | `gh repo view portlinkadmin/portlink-landing` → resolves to `Portlink-app/portlink-landing` |
 | GitHub — second remote | `v2` → `https://github.com/portlinkadmin/portlink-landing-v2.git`, public, last pushed 20.03.2026. **Not the live site.** Never `git push v2` expecting a deploy | `git remote -v` · `gh repo view portlinkadmin/portlink-landing-v2` |
-| Netlify | account **PortLink** (`admin-irpjrvy`) · site **`portlin-landing-2`** — note the typo, "portlin", not "portlink" — (`34ab2932-19da-44e5-b761-0bc83acc0055`) · **https://portlink.app** · builds `main` from the org repo | `GET /api/v1/sites` with the **PortLink** token |
+| Netlify | account **Portlink** (`admin-irpjrvy`) · site **`portlin-landing-2`** — note the typo, "portlin", not "portlink" — (`34ab2932-19da-44e5-b761-0bc83acc0055`) · **https://portlink.app** · builds `main` from the org repo | `GET /api/v1/sites` with the **Portlink** token |
 | Supabase / Stripe / mail / SMS / CI | **none** | `ls .github/workflows` → absent |
 
 **Deploy trigger, stated plainly:** Netlify auto-deploys `main` from the **org** repo to
@@ -25,8 +25,8 @@ no build gate in front of it. A push to the `v2` remote deploys nothing.
 
 | Need | `op://` reference |
 |---|---|
-| GitHub PAT (PortLink) | `op://cypqkqoeuibf4f6aud47v3qooa/owl6advkmjvx2bjpzi3y6duyha/credential` |
-| Netlify API token (PortLink) | `op://cypqkqoeuibf4f6aud47v3qooa/a7h7xyjwjlfmzsc4oaf6gmuoym/credential` |
+| GitHub PAT (Portlink) | `op://cypqkqoeuibf4f6aud47v3qooa/owl6advkmjvx2bjpzi3y6duyha/credential` |
+| Netlify API token (Portlink) | `op://cypqkqoeuibf4f6aud47v3qooa/a7h7xyjwjlfmzsc4oaf6gmuoym/credential` |
 
 `op://PortLink/…` also works (single-word vault name), unlike `op://Bakke & Co/…`, which `op`
 rejects. Read with `op read '<ref>' --no-newline` and pipe straight into the consuming command;
@@ -34,7 +34,7 @@ never echo, log or paste a value.
 
 **Not in 1Password:** nothing — this site has no runtime environment.
 
-**Hard separation:** GitHub `portlinkadmin` / the `Portlink-app` org, and the **PortLink** Netlify
+**Hard separation:** GitHub `portlinkadmin` / the `Portlink-app` org, and the **Portlink** Netlify
 account. The **Bakke & Co** side of this machine — GitHub `GitDABA`, the Bakke & Co Netlify
 account, vault `7tr6yo3acnhdlbltgkzexw7rce` — is a different company and is out of bounds. `gh`'s
 active account defaults to `GitDABA`; check it every time, because a wrong-account push here lands

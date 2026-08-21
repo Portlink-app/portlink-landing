@@ -21,14 +21,14 @@ which is copied in rather than fetched at runtime.
 **portlink.app**, the company's public front door. Pushing `main` is publishing. There is no CI and
 no build gate in front of it. A push to the `v2` remote deploys nothing.
 
-**Credentials — references only, never values.** Vault `cypqkqoeuibf4f6aud47v3qooa` (*PortLink*):
+**Credentials — references only, never values.** Vault `cypqkqoeuibf4f6aud47v3qooa` (*Portlink*):
 
 | Need | `op://` reference |
 |---|---|
 | GitHub PAT (Portlink) | `op://cypqkqoeuibf4f6aud47v3qooa/owl6advkmjvx2bjpzi3y6duyha/credential` |
 | Netlify API token (Portlink) | `op://cypqkqoeuibf4f6aud47v3qooa/a7h7xyjwjlfmzsc4oaf6gmuoym/credential` |
 
-`op://PortLink/…` also works (single-word vault name), unlike `op://Bakke & Co/…`, which `op`
+`op://Portlink/…` also works (single-word vault name), unlike `op://Bakke & Co/…`, which `op`
 rejects. Read with `op read '<ref>' --no-newline` and pipe straight into the consuming command;
 never echo, log or paste a value.
 

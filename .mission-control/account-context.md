@@ -2,7 +2,7 @@
 
 Repo: `/Users/nyx/Projects/portlink/portlink-landing`
 Remote: `https://github.com/portlinkadmin/portlink-landing.git`
-Default account id: _(none — no Supabase backend; Resend key in the `PortLink` vault)_
+Default account id: _(none — no Supabase backend; Resend key in the `Portlink` vault)_
 
 ## How agents/tools should find account information
 

@@ -2,6 +2,7 @@
 /**
  * Delete one Seatrade lead (and its email pointer) from the site-wide Netlify Blobs store.
  * For removing verification leads before/after the show. Real leads: think twice, export first.
+ * Removes the lead document, its email pointer and its referral-code pointer.
  *
  *   NETLIFY_AUTH_TOKEN=… node scripts/seatrade-delete-lead.mjs someone@example.com
  *   NETLIFY_AUTH_TOKEN=… node scripts/seatrade-delete-lead.mjs --list      # print ids + emails
@@ -36,6 +37,8 @@ const email = arg.trim().toLowerCase()
 const pointerKey = 'email/' + createHash('sha256').update(email).digest('hex')
 const ref = await store.get(pointerKey, { type: 'json' })
 if (!ref?.id) { console.error(`no lead for ${email}`); process.exit(1) }
+const lead = await store.get(`lead/${ref.id}`, { type: 'json' })
 await store.delete(`lead/${ref.id}`)
 await store.delete(pointerKey)
-console.log(`deleted lead ${ref.id} (${email})`)
+if (lead?.referralCode) await store.delete(`code/${lead.referralCode}`)
+console.log(`deleted lead ${ref.id} (${email})${lead?.referralCode ? ` and code ${lead.referralCode}` : ''}`)

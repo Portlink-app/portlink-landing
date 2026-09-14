@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { Resend } from 'resend'
+import { wrap } from '@/lib/email/wrap'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@portlink.app'
@@ -20,37 +21,6 @@ interface AccessRequest {
   bookingLeadTime?: string
   keyPorts?: string
   message?: string
-}
-
-// ── Shared email wrapper ─────────────────────────────────────────────────────
-
-function wrap(body: string): string {
-  return `
-<!DOCTYPE html>
-<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
-<body style="margin:0;padding:0;background:#f4f7fa;font-family:'Plus Jakarta Sans','Inter',Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased">
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f7fa;padding:40px 16px">
-<tr><td align="center">
-<table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;background:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #e2e8f0">
-  <!-- Header bar -->
-  <tr><td style="padding:28px 36px;border-bottom:1px solid #e2e8f0">
-    <img src="https://portlink.app/portlink-logo.png" alt="Portlink" width="120" height="32" style="display:block;width:120px;height:auto;border:0" />
-  </td></tr>
-  <!-- Body -->
-  <tr><td style="padding:36px 36px 40px">
-    ${body}
-  </td></tr>
-  <!-- Footer -->
-  <tr><td style="padding:20px 36px;border-top:1px solid #e2e8f0;background:#f8fafc">
-    <p style="margin:0;font-size:12px;color:#94a3b8;line-height:1.5">
-      Portlink &middot; Port call coordination, simplified.<br>
-      <a href="https://portlink.app" style="color:#3d7daf;text-decoration:none">portlink.app</a>
-    </p>
-  </td></tr>
-</table>
-</td></tr>
-</table>
-</body></html>`
 }
 
 // ── Confirmation email (to the person signing up) ────────────────────────────

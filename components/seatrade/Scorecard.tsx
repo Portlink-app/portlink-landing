@@ -3,7 +3,10 @@
 import { useEffect, useMemo, useState, type CSSProperties, type FormEvent } from 'react'
 import Link from 'next/link'
 import { MotionConfig, motion } from 'framer-motion'
-import { ArrowLeft, ArrowRight, Check, Mail } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Check, Mail, MailCheck } from 'lucide-react'
+import ShareBox from '@/components/seatrade/ShareBox'
+import { DRAW, PRIZE_NAME, REFERRAL_CAP, TERMS_PATH } from '@/lib/seatrade/config'
+import { cleanCode, workEmailProblem } from '@/lib/seatrade/eligibility'
 import {
   QUESTIONS, ROLE_LINES, isComplete, score,
   type Answers, type Band, type Finding, type QuestionId,
@@ -11,7 +14,7 @@ import {
 
 type Phase = 'quiz' | 'result' | 'sent'
 
-interface LiveStats { n: number; avg: number | null; emailShare: number | null }
+interface LiveStats { n: number; avg: number | null; emailShare: number | null; topEntries?: number }
 
 interface SubmitResponse {
   ok: boolean
@@ -21,6 +24,11 @@ interface SubmitResponse {
   findings: Finding[]
   stats: LiveStats
   isNew: boolean
+  verified: boolean
+  referralCode: string
+  referralUrl: string
+  mePath: string
+  invitedBy: string | null
 }
 
 const BAND_TONE: Record<Band['id'], { fg: string; bg: string }> = {
@@ -64,6 +72,8 @@ const primaryButton: CSSProperties = {
   minHeight: 52,
 }
 
+const labelStyle: CSSProperties = { fontSize: 'var(--ds-text-sm)', fontWeight: 500, color: 'var(--text-secondary)' }
+
 function StatPill({ stats }: { stats: LiveStats | null }) {
   if (!stats) return null
   const text = stats.n >= 5 && stats.avg !== null
@@ -91,10 +101,14 @@ export default function Scorecard() {
   const [answers, setAnswers] = useState<Partial<Answers>>({})
   const [stats, setStats] = useState<LiveStats | null>(null)
   const [source, setSource] = useState('direct')
+  const [ref, setRef] = useState<string | null>(null)
+  const [invitedBy, setInvitedBy] = useState<string | null>(null)
 
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
+  const [emailHint, setEmailHint] = useState('')
   const [company, setCompany] = useState('')
+  const [roleDetail, setRoleDetail] = useState('')
   const [consent, setConsent] = useState(false)
   const [website, setWebsite] = useState('') // honeypot
   const [submitting, setSubmitting] = useState(false)
@@ -102,13 +116,28 @@ export default function Scorecard() {
   const [response, setResponse] = useState<SubmitResponse | null>(null)
 
   useEffect(() => {
+    let code: string | null = null
+    let src: string | null = null
     try {
-      const s = new URLSearchParams(window.location.search).get('s')
-      if (s) setSource(s)
-    } catch { /* ignore */ }
+      const params = new URLSearchParams(window.location.search)
+      src = params.get('s')
+      code = cleanCode(params.get('r'))
+      // A code survives a page reload or a detour to the report page, but never a different device.
+      if (code) window.sessionStorage.setItem('seatrade-ref', code)
+      else code = cleanCode(window.sessionStorage.getItem('seatrade-ref'))
+    } catch { /* storage blocked: the code from the URL still applies for this page view */ }
+    if (src) setSource(src)
+    else if (code) setSource('referral')
+    if (code) {
+      setRef(code)
+      fetch(`/api/seatrade/ref/?c=${code}`)
+        .then(r => (r.ok ? r.json() : null))
+        .then((d: { ok: boolean; firstName?: string } | null) => { if (d?.ok && d.firstName) setInvitedBy(d.firstName) })
+        .catch(() => {})
+    }
     fetch('/api/seatrade/stats/')
       .then(r => (r.ok ? r.json() : null))
-      .then((s: LiveStats | null) => { if (s) setStats({ n: s.n, avg: s.avg, emailShare: s.emailShare }) })
+      .then((s: LiveStats | null) => { if (s) setStats({ n: s.n, avg: s.avg, emailShare: s.emailShare, topEntries: s.topEntries }) })
       .catch(() => {})
   }, [])
 
@@ -131,16 +160,20 @@ export default function Scorecard() {
     if (index > 0) { setDir(-1); setIndex(index - 1) }
   }
 
+  const checkEmail = () => setEmailHint(email.trim() ? (workEmailProblem(email) ?? '') : '')
+
   const submit = async (e: FormEvent) => {
     e.preventDefault()
     if (!isComplete(answers)) return
+    const problem = workEmailProblem(email)
+    if (problem) { setEmailHint(problem); setError(problem); return }
     setSubmitting(true)
     setError('')
     try {
       const res = await fetch('/api/seatrade/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, company, consent, website, source, answers }),
+        body: JSON.stringify({ name, email, company, roleDetail, consent, website, source, ref, answers }),
       })
       const data = (await res.json()) as SubmitResponse
       if (!res.ok || !data.ok) throw new Error(data.error || 'Something went wrong. Please try again.')
@@ -159,12 +192,20 @@ export default function Scorecard() {
   if (phase === 'quiz') {
     return (
       <section aria-labelledby="sc-title">
+        {ref && (
+          <div style={{ background: 'var(--brand-faint)', border: '1px solid var(--brand)', borderRadius: 'var(--ds-radius-lg)', padding: '10px 14px', marginBottom: 'var(--ds-gap-4)', fontSize: 'var(--ds-text-sm)', color: 'var(--text-primary)' }}>
+            {invitedBy ? <><strong>{invitedBy}</strong> invited you to score your port calls.</> : <>You came through an invitation link.</>} Confirm your work email after scoring and you are both in the draw.
+          </div>
+        )}
         <div style={{ marginBottom: 'var(--ds-gap-6)' }}>
           <h1 id="sc-title" style={{ fontSize: 'clamp(1.75rem, 6vw, 2.5rem)', fontWeight: 700, lineHeight: 1.1, letterSpacing: 'var(--ds-track-title)', margin: '0 0 var(--ds-gap-3)' }}>
             What is your port call friction score?
           </h1>
-          <p style={{ fontSize: 'var(--ds-text-body)', color: 'var(--text-secondary)', lineHeight: 1.55, margin: '0 0 var(--ds-gap-4)' }}>
+          <p style={{ fontSize: 'var(--ds-text-body)', color: 'var(--text-secondary)', lineHeight: 1.55, margin: '0 0 var(--ds-gap-3)' }}>
             Seven taps, about a minute. See how much of your port call still runs on email, and how you compare with the rest of the show.
+          </p>
+          <p style={{ fontSize: 'var(--ds-text-sm)', color: 'var(--text-secondary)', lineHeight: 1.55, margin: '0 0 var(--ds-gap-4)' }}>
+            Confirm your work email and you are in the draw for <strong style={{ color: 'var(--text-primary)' }}>{PRIZE_NAME}</strong>. Every colleague you invite who confirms adds an entry. <Link href={TERMS_PATH} style={{ color: 'var(--text-muted)' }}>Terms</Link>
           </p>
           <StatPill stats={stats} />
         </div>
@@ -220,6 +261,7 @@ export default function Scorecard() {
   // ── Result + capture ──
   if (phase === 'result' && local) {
     const tone = BAND_TONE[local.band.id]
+    const isOther = answers.role === 'other'
     return (
       <section aria-labelledby="res-title">
         <button type="button" onClick={back} style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', fontFamily: 'inherit', fontSize: 'var(--ds-text-sm)', display: 'inline-flex', alignItems: 'center', gap: 4, padding: 0, marginBottom: 'var(--ds-gap-4)' }}>
@@ -261,29 +303,39 @@ export default function Scorecard() {
             <Mail size={20} color="var(--brand)" /> Email me the full scorecard
           </h2>
           <p style={{ fontSize: 'var(--ds-text-sm)', color: 'var(--text-secondary)', lineHeight: 1.55, margin: '0 0 var(--ds-gap-5)' }}>
-            Your findings, what each one costs, and the live Seatrade Med benchmark as it fills up. A couple of follow-ups after the show. Unsubscribe in one tap.
+            Your findings, the live Seatrade Med benchmark, and your entry in the draw for {PRIZE_NAME}. Work email only: the draw is for people in the industry, and the domain is how we see where you work.
           </p>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-            <label style={{ fontSize: 'var(--ds-text-sm)', fontWeight: 500, color: 'var(--text-secondary)' }}>
+            <label style={labelStyle}>
               Name
               <input required autoComplete="name" value={name} onChange={e => setName(e.target.value)} placeholder="Jane Smith" style={{ ...inputStyle, marginTop: 6 }} />
             </label>
-            <label style={{ fontSize: 'var(--ds-text-sm)', fontWeight: 500, color: 'var(--text-secondary)' }}>
+            <label style={labelStyle}>
               Work email
-              <input required type="email" inputMode="email" autoComplete="email" autoCapitalize="none" value={email} onChange={e => setEmail(e.target.value)} placeholder="jane@cruiseline.com" style={{ ...inputStyle, marginTop: 6 }} />
+              <input required type="email" inputMode="email" autoComplete="email" autoCapitalize="none" value={email}
+                onChange={e => { setEmail(e.target.value); if (emailHint) setEmailHint('') }} onBlur={checkEmail}
+                placeholder="jane@cruiseline.com" aria-invalid={!!emailHint} aria-describedby="email-hint"
+                style={{ ...inputStyle, marginTop: 6, borderColor: emailHint ? 'var(--danger)' : 'var(--border)' }} />
+              {emailHint && <span id="email-hint" role="alert" style={{ display: 'block', marginTop: 6, fontSize: 'var(--ds-text-xs)', color: 'var(--danger)', lineHeight: 1.5, fontWeight: 500 }}>{emailHint}</span>}
             </label>
-            <label style={{ fontSize: 'var(--ds-text-sm)', fontWeight: 500, color: 'var(--text-secondary)' }}>
-              Company
-              <input required autoComplete="organization" value={company} onChange={e => setCompany(e.target.value)} placeholder="Your company" style={{ ...inputStyle, marginTop: 6 }} />
+            <label style={labelStyle}>
+              Where you work
+              <input required autoComplete="organization" value={company} onChange={e => setCompany(e.target.value)} placeholder="Company or port" style={{ ...inputStyle, marginTop: 6 }} />
             </label>
+            {isOther && (
+              <label style={labelStyle}>
+                What you do in the industry
+                <input required value={roleDetail} onChange={e => setRoleDetail(e.target.value)} placeholder="e.g. port authority marketing, ship supplier" style={{ ...inputStyle, marginTop: 6 }} />
+              </label>
+            )}
             {/* Honeypot: off-screen, tab-skipped, never filled by people. */}
             <label aria-hidden style={{ position: 'absolute', left: -9999, top: 0, width: 1, height: 1, overflow: 'hidden' }}>
               Website <input tabIndex={-1} autoComplete="off" value={website} onChange={e => setWebsite(e.target.value)} />
             </label>
             <label style={{ display: 'flex', gap: 10, alignItems: 'flex-start', fontSize: 'var(--ds-text-sm)', color: 'var(--text-secondary)', lineHeight: 1.5, cursor: 'pointer' }}>
               <input type="checkbox" checked={consent} onChange={e => setConsent(e.target.checked)} style={{ marginTop: 3, width: 18, height: 18, accentColor: 'var(--brand)', flexShrink: 0 }} />
-              <span>Send my scorecard and up to three Portlink follow-ups. Unsubscribe anytime.</span>
+              <span>Send my scorecard, enter me in the draw, and send up to three Portlink follow-ups. Unsubscribe anytime. <Link href={TERMS_PATH} style={{ color: 'var(--text-muted)' }}>Draw terms</Link>.</span>
             </label>
           </div>
 
@@ -307,13 +359,17 @@ export default function Scorecard() {
     return (
       <section aria-labelledby="sent-title">
         <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.35 }}
-          style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--ds-radius-xl)', padding: 'var(--ds-gap-6)', textAlign: 'center' }}>
-          <span style={{ display: 'inline-flex', width: 56, height: 56, borderRadius: '50%', background: 'var(--ds-success-bg)', color: 'var(--ds-success)', alignItems: 'center', justifyContent: 'center', marginBottom: 'var(--ds-gap-4)' }}>
-            <Check size={28} />
+          style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--ds-radius-xl)', padding: 'var(--ds-gap-6)', textAlign: 'center', marginBottom: 'var(--ds-gap-4)' }}>
+          <span style={{ display: 'inline-flex', width: 56, height: 56, borderRadius: '50%', background: response.verified ? 'var(--ds-success-bg)' : 'var(--brand-faint)', color: response.verified ? 'var(--ds-success)' : 'var(--brand)', alignItems: 'center', justifyContent: 'center', marginBottom: 'var(--ds-gap-4)' }}>
+            {response.verified ? <Check size={28} /> : <MailCheck size={28} />}
           </span>
-          <h1 id="sent-title" style={{ fontSize: 'clamp(1.5rem, 6vw, 2rem)', fontWeight: 700, margin: '0 0 8px', lineHeight: 1.15 }}>Sent to {email}</h1>
+          <h1 id="sent-title" style={{ fontSize: 'clamp(1.5rem, 6vw, 2rem)', fontWeight: 700, margin: '0 0 8px', lineHeight: 1.15 }}>
+            {response.verified ? 'Sent. Your entry is active.' : 'One more tap, in your inbox'}
+          </h1>
           <p style={{ color: 'var(--text-secondary)', lineHeight: 1.6, margin: '0 0 var(--ds-gap-5)', fontSize: 'var(--ds-text-body)' }}>
-            Your full scorecard is on its way. If it is not there in a minute, check spam and look for pilot@portlink.app.
+            {response.verified
+              ? <>Your scorecard is on its way to {email}.</>
+              : <>Your scorecard is on its way to <strong style={{ color: 'var(--text-primary)' }}>{email}</strong>. Open it and press <strong style={{ color: 'var(--text-primary)' }}>Confirm my email</strong> to activate your entry in the draw for {PRIZE_NAME}. If it is not there in a minute, check spam and look for pilot@portlink.app.</>}
           </p>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, margin: '0 0 var(--ds-gap-5)' }}>
@@ -329,16 +385,21 @@ export default function Scorecard() {
             </div>
           </div>
 
-          <p style={{ fontSize: 'var(--ds-text-sm)', color: 'var(--text-secondary)', lineHeight: 1.6, margin: '0 0 var(--ds-gap-4)', textAlign: 'left' }}>{roleLine}</p>
-          <p style={{ fontSize: 'var(--ds-text-sm)', color: 'var(--text-secondary)', lineHeight: 1.6, margin: 0, textAlign: 'left' }}>
-            Want to see it on one of your own port calls? Reply to the email and we will find you at the terminal, or set up a short call after the show.
-          </p>
+          <p style={{ fontSize: 'var(--ds-text-sm)', color: 'var(--text-secondary)', lineHeight: 1.6, margin: 0, textAlign: 'left' }}>{roleLine}</p>
         </motion.div>
 
+        <p style={{ fontSize: 'var(--ds-text-sm)', color: 'var(--text-secondary)', lineHeight: 1.55, margin: '0 0 10px' }}>
+          <strong style={{ color: 'var(--text-primary)' }}>More entries:</strong> every colleague or partner who scores their port calls through your link and confirms their work email adds one, up to {REFERRAL_CAP}. Entries close {DRAW.closesLabel}.
+        </p>
+        <ShareBox url={response.referralUrl} code={response.referralCode} prize={PRIZE_NAME} />
+
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 'var(--ds-gap-5)' }}>
-          <a href="/seatrade/report/" style={{ ...primaryButton, textDecoration: 'none' }}>See the live benchmark <ArrowRight size={16} /></a>
-          <Link href="/" style={{ ...primaryButton, background: 'transparent', color: 'var(--text-secondary)', border: '1px solid var(--border)', textDecoration: 'none' }}>What Portlink does</Link>
+          <a href={response.mePath} style={{ ...primaryButton, textDecoration: 'none' }}>My entries <ArrowRight size={16} /></a>
+          <a href="/seatrade/report/" style={{ ...primaryButton, background: 'transparent', color: 'var(--text-secondary)', border: '1px solid var(--border)', textDecoration: 'none' }}>See the live benchmark</a>
         </div>
+        <p style={{ fontSize: 'var(--ds-text-xs)', color: 'var(--text-muted)', margin: '14px 0 0', lineHeight: 1.5, textAlign: 'center' }}>
+          Want to see Portlink on one of your own port calls? Reply to the email and we will find you at the terminal.
+        </p>
       </section>
     )
   }

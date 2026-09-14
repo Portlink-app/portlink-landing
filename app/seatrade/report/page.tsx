@@ -77,6 +77,11 @@ export default async function ReportPage() {
               <span style={{ display: 'block', fontSize: 'var(--ds-text-xs)', color: 'var(--text-muted)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: 'var(--ds-track-caps)' }}>Port calls on email</span>
               <span style={{ display: 'block', fontSize: '2.25rem', fontWeight: 800, lineHeight: 1.1 }}>{Math.round((stats.emailShare ?? 0) * 100)}<span style={{ fontSize: '1rem', color: 'var(--text-muted)', fontWeight: 500 }}> %</span></span>
             </div>
+            <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--ds-radius-lg)', padding: '18px 16px' }}>
+              <span style={{ display: 'block', fontSize: 'var(--ds-text-xs)', color: 'var(--text-muted)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: 'var(--ds-track-caps)' }}>Entries in the draw</span>
+              <span style={{ display: 'block', fontSize: '2.25rem', fontWeight: 800, lineHeight: 1.1 }}>{stats.entries}</span>
+              <span style={{ fontSize: 'var(--ds-text-xs)', color: 'var(--text-muted)' }}>{stats.verified} confirmed · leader holds {stats.topEntries}</span>
+            </div>
           </div>
 
           <h2 style={{ fontSize: 'var(--ds-h3)', fontWeight: 700, margin: '0 0 var(--ds-gap-4)' }}>Bands</h2>

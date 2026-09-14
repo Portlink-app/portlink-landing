@@ -20,6 +20,8 @@ export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://portlink.a
 /** Where the funnel lives. Trailing slash matters: next.config has trailingSlash: true. */
 export const FUNNEL_PATH = '/seatrade/'
 export const REPORT_PATH = '/seatrade/report/'
+export const ME_PATH = '/seatrade/me/'
+export const TERMS_PATH = '/seatrade/terms/'
 export const PILOT_URL = `${SITE_URL}/#access`
 
 export const FROM = 'Portlink <pilot@portlink.app>'
@@ -30,6 +32,44 @@ export const RESEND_AUDIENCE_ID = process.env.RESEND_AUDIENCE_ID || '462446b9-df
 
 /** Netlify Blobs store holding one JSON document per lead. Site-wide, shared by every deploy. */
 export const LEAD_STORE = 'seatrade-leads'
+
+// ── The draw ──────────────────────────────────────────────────────────────────
+
+/** ONE place to change the prize. Copy everywhere reads "the draw for {PRIZE_NAME}". */
+export const PRIZE_NAME = process.env.SEATRADE_PRIZE_NAME || 'an iPhone'
+
+export const DRAW = {
+  /** Entries close a week after the show so referrals sent from Las Palmas still count. */
+  closesAt: '2026-09-26T21:59:59Z',
+  closesLabel: '26 September 2026 at 23.59 (Madrid time)',
+  drawDate: '2026-09-29',
+  drawLabel: '29 September 2026',
+} as const
+
+/** Entries: 1 for your own verified sign-up + 1 per verified referral, capped. */
+export const REFERRAL_CAP = 10
+/** Of those, at most this many may come from the referrer's own email domain. */
+export const SAME_DOMAIN_CAP = 3
+/** "Your entry is not active yet" goes out this many hours after sign-up unless they confirm. */
+export const VERIFY_REMINDER_HOURS = 20
+
+export function referralUrl(code: string): string {
+  return `${SITE_URL}${FUNNEL_PATH}?r=${code}`
+}
+
+export function verifyUrl(id: string): string {
+  return `${SITE_URL}/api/seatrade/verify/?t=${id}`
+}
+
+export function meUrl(id: string): string {
+  return `${SITE_URL}${ME_PATH}?t=${id}`
+}
+
+export function drawIsOpen(now = new Date()): boolean {
+  return now.getTime() <= Date.parse(DRAW.closesAt)
+}
+
+// ── The email sequence ────────────────────────────────────────────────────────
 
 /**
  * The drip: days after sign-up, delivered at 09:00 Europe/Madrid (07:00Z in September).

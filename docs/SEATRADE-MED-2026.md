@@ -82,6 +82,10 @@ production; locally use `netlify dev` (linked site) or set `NETLIFY_SITE_ID` + `
 | 14.09.2026 | Export | CSV mailed to admin; second call inside 10 min → 429 |
 | 14.09.2026 | Quiz on 375×812 in-app browser | Full tap-through; transitions made timer-free after a throttled-tab stall |
 | 14.09.2026 | QR PNGs decoded with `zbarimg` | all six decode to the intended URL |
+| 14.09.2026 | **Draft deploy** `6aa796fbb2742a8567890fff--portlin-landing-2.netlify.app` (real Blobs, real env) | `/seatrade/`, `/seatrade/report/`, `/seatrade/unsubscribed/`, `og.png`, `qr-badge.svg` all 200; stats n=0 |
+| 14.09.2026 | Draft: POST test lead (`test: true`, to davidbakke85@gmail.com, source `draft-verify`) | 200, score 95 Heavy weather; e1 `delivered` and present in the Gmail inbox 06:42:08Z; e2/e3/e4 `scheduled` 19.09 / 23.09 / 29.09 07:00Z; admin `[TEST]` mail `sent`; stats n=0 |
+| 14.09.2026 | Draft: unsubscribe link | 303 → `portlink.app/seatrade/unsubscribed/` (Netlify appends the `?t=` query to the Location; cosmetic); e2/e3/e4 `canceled` in Resend |
+| 14.09.2026 | Cleanup | `scripts/seatrade-delete-lead.mjs davidbakke85@gmail.com` → store lists 0 leads, 0 keys |
 
 ## Still unmapped / could surprise us
 
@@ -89,5 +93,8 @@ production; locally use `netlify dev` (linked site) or set `NETLIFY_SITE_ID` + `
   test lead is visible to production; mark them `test: true` or delete them (script above).
 - The e-mail sender `pilot@portlink.app` replies go to `ADMIN_EMAIL` (`post@davidbakke.no` in
   the Netlify env, not `david@portlink.app`). Change the env var, not the code, if that should differ.
+- The unsubscribe redirect reaches the browser as `/seatrade/unsubscribed/?t=<id>` on Netlify (the
+  query survives the 303 there, not locally). Harmless: the page ignores it and the id is already in
+  that person's own email. Strip it in the route if it ever matters.
 - Netlify free-tier Blobs and function limits are far above a trade show's volume, but the
   in-process stats cache is per lambda instance; two instances may disagree by ≤30 s. Harmless.

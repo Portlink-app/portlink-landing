@@ -1,9 +1,9 @@
 'use client'
 
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { BentoGrid, BentoCard } from '@/components/BentoGrid'
-import { Globe, CheckCircle2, FileText, Map, Inbox, Shield, Calendar, FileBarChart, Anchor } from 'lucide-react'
-import type { Persona } from '@/app/page'
+import { Ship, Anchor, Compass, CheckCircle2 } from 'lucide-react'
 
 // ── Abstract mini-visuals ─────────────────────────────────────────────────────
 
@@ -44,7 +44,7 @@ function FleetTimeline() {
             border: '1px solid var(--border)',
             borderRadius: 4,
           }} />
-          <span style={{ fontSize: 9, color: 'var(--text-muted)', fontWeight: 600 }}>{p}</span>
+          <span style={{ fontSize: 11, color: 'var(--text-muted)', fontWeight: 600 }}>{p}</span>
         </div>
       ))}
     </div>
@@ -228,7 +228,7 @@ type BentoItem = {
   accent?: boolean
 }
 
-const bentoData: Record<string, BentoItem[]> = {
+const bentoData: Record<'cruise' | 'agent' | 'tour', BentoItem[]> = {
   cruise: [
     {
       title: 'Full Fleet Visibility',
@@ -308,52 +308,127 @@ const bentoData: Record<string, BentoItem[]> = {
 
 // ── Section ───────────────────────────────────────────────────────────────────
 
-interface BentoSectionProps {
-  persona: Persona
-}
+type RoleKey = 'cruise' | 'agent' | 'tour'
 
-export default function BentoSection({ persona }: BentoSectionProps) {
-  if (persona === 'all') return null
+const roles: { id: RoleKey; label: string; icon: typeof Ship }[] = [
+  { id: 'cruise', label: 'Cruise line',   icon: Ship },
+  { id: 'agent',  label: 'Port agent',    icon: Anchor },
+  { id: 'tour',   label: 'Tour operator', icon: Compass },
+]
 
-  const cards = bentoData[persona as string]
-  if (!cards) return null
+/**
+ * The role switch, and the only place on the page a role exists.
+ *
+ * It used to be a gate in front of the whole site and a floating pill that
+ * re-keyed five sections. Now the state lives here and nothing outside this
+ * component reads it, so "the switch changes the bento grid and nothing else"
+ * is a property of the code rather than something to re-check by eye.
+ */
+export default function BentoSection() {
+  const [role, setRole] = useState<RoleKey>('cruise')
+  const cards = bentoData[role]
 
   return (
-    <section style={{ background: 'var(--bg)', padding: '80px 24px' }}>
+    <section id="bento" style={{ background: 'var(--ds-canvas)', padding: 'clamp(56px, 8vw, 96px) clamp(16px, 4vw, 24px)' }}>
       <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-40px' }}
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          style={{ textAlign: 'center', marginBottom: '48px' }}
+          style={{ textAlign: 'center', marginBottom: '28px' }}
         >
           <span style={{
-            fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.12em',
-            color: 'var(--text-muted)', fontWeight: 600,
+            fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.12em',
+            color: 'var(--ds-primary)', fontWeight: 600,
           }}>
-            Platform features
+            What this means for you
           </span>
           <h2 style={{
-            fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)',
+            fontSize: 'clamp(1.5rem, 3.2vw, 2.25rem)',
             fontWeight: 700,
-            color: 'var(--text-primary)',
-            margin: '12px 0 0',
+            color: 'var(--ds-text-1)',
+            letterSpacing: '-0.02em',
+            margin: '10px 0 0',
           }}>
-            Built for your workflow
+            The same platform, from where you sit
           </h2>
+          <p style={{
+            fontSize: 'clamp(0.95rem, 1.4vw, 1.0625rem)',
+            color: 'var(--ds-text-2)',
+            lineHeight: 1.6,
+            maxWidth: 560,
+            margin: '12px auto 0',
+          }}>
+            The features above are the same for everyone. What changes is which of them you live in all day.
+          </p>
         </motion.div>
+
+        {/* The switch */}
+        <div
+          role="tablist"
+          aria-label="Choose a role"
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            marginBottom: '28px',
+          }}
+        >
+          <div style={{
+            display: 'inline-flex',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+            gap: 4,
+            padding: 4,
+            borderRadius: 'var(--ds-radius-pill)',
+            background: 'var(--ds-surface-2)',
+            border: '1px solid var(--ds-border-1)',
+          }}>
+            {roles.map((r) => {
+              const Icon = r.icon
+              const active = role === r.id
+              return (
+                <button
+                  key={r.id}
+                  role="tab"
+                  aria-selected={active}
+                  onClick={() => setRole(r.id)}
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 7,
+                    padding: '9px 18px',
+                    minHeight: 40,
+                    borderRadius: 'var(--ds-radius-pill)',
+                    border: 'none',
+                    cursor: 'pointer',
+                    fontFamily: 'inherit',
+                    fontSize: 13,
+                    fontWeight: active ? 600 : 500,
+                    whiteSpace: 'nowrap',
+                    background: active ? 'var(--ds-primary)' : 'transparent',
+                    color: active ? 'var(--ds-primary-ink)' : 'var(--ds-text-2)',
+                    transition: 'background var(--ds-dur-2) var(--ds-ease-standard), color var(--ds-dur-2) var(--ds-ease-standard)',
+                  }}
+                >
+                  <Icon size={15} />
+                  {r.label}
+                </button>
+              )
+            })}
+          </div>
+        </div>
 
         <BentoGrid columns={3}>
           {cards.map((card, i) => (
             <BentoCard
-              key={card.title}
+              key={`${role}-${card.title}`}
               title={card.title}
               description={card.description}
               visual={card.visual}
               span={card.span}
               accent={card.accent}
-              delay={i * 0.08}
+              delay={i * 0.06}
             />
           ))}
         </BentoGrid>

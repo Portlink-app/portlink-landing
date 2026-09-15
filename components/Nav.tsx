@@ -6,7 +6,7 @@ import { Menu, X, Sun, Moon } from 'lucide-react'
 const links = [
   { label: 'Problem', href: '#pain' },
   { label: 'Roles', href: '#roles' },
-  { label: 'Platform', href: '#how' },
+  { label: 'Platform', href: '#dashboard' },
   { label: 'Pilot', href: '#pilot' },
   { label: 'Access', href: '#access' },
   // A real route, not a section: the handler below only intercepts in-page anchors.

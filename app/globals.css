@@ -279,3 +279,37 @@ textarea:focus-visible {
   0%, 100% { opacity: 1; }
   50%      { opacity: 0.4; }
 }
+
+/* =========================================================
+   Feature scenes — two authored compositions, not one squeezed
+   layout. Exactly one of the pair is in the DOM's render tree at
+   any width, so the hidden one is also out of the a11y tree.
+   ========================================================= */
+.scene-wide   { display: block; }
+.scene-narrow { display: none; }
+
+@media (max-width: 767px) {
+  .scene-wide   { display: none; }
+  .scene-narrow { display: block; }
+}
+
+/* Film hero — the frame the product plays inside. */
+.film-frame {
+  position: relative;
+  width: 100%;
+  border-radius: var(--ds-radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--ds-border-1);
+  background: var(--ds-surface-2);
+  box-shadow: var(--ds-shadow-3);
+  aspect-ratio: 16 / 9;
+}
+
+@media (max-width: 767px) {
+  /* The mobile encodes are a 2× zoom into the working region. */
+  .film-frame { aspect-ratio: 780 / 438; }
+}
+
+/* Anchored sections clear the fixed nav — without this, "See the platform"
+   lands with the section heading hidden behind the 64 px bar. */
+section[id] { scroll-margin-top: 80px; }

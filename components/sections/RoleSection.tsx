@@ -6,7 +6,6 @@ import { CheckCircle } from 'lucide-react'
 import { useReveal } from '@/hooks/useReveal'
 import { ContainerScroll } from '@/components/ContainerScroll'
 import DashboardMockup from '@/components/DashboardMockup'
-import type { Persona } from '@/app/page'
 
 type RoleKey = 'cruise' | 'agent' | 'tour'
 
@@ -137,12 +136,13 @@ function RoleContent({ role }: { role: RoleKey }) {
   )
 }
 
-export default function RoleSection({ persona }: { persona: Persona }) {
+/**
+ * One neutral variant: the three roles as tabs, which reads to any visitor.
+ * The tab state is local to this section and drives nothing outside it.
+ */
+export default function RoleSection() {
   const [activeTab, setActiveTab] = useState<RoleKey>('cruise')
   const sectionRef = useReveal()
-
-  const isSingle = persona !== 'all'
-  const singleRole = persona as RoleKey
 
   return (
     <section
@@ -151,9 +151,7 @@ export default function RoleSection({ persona }: { persona: Persona }) {
       style={{ background: 'var(--inverted-bg)', paddingTop: '48px', paddingBottom: '72px', color: 'var(--inverted-text)' }}
     >
       <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 24px' }}>
-        {/* Section header — only shown in "all" mode. Single persona gets title from ContainerScroll */}
-        {!isSingle && (
-          <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '48px' }}>
             <span
               className="reveal"
               style={{
@@ -179,11 +177,9 @@ export default function RoleSection({ persona }: { persona: Persona }) {
             >
               Three roles. One platform.
             </h2>
-          </div>
-        )}
+        </div>
 
-        {!isSingle && (
-          <div
+        <div
             className="reveal"
             style={{
               display: 'flex',
@@ -213,25 +209,20 @@ export default function RoleSection({ persona }: { persona: Persona }) {
                 {roleData[tab].label}
               </button>
             ))}
-          </div>
-        )}
+        </div>
 
         <div className="reveal">
-          {isSingle ? (
-            <RoleContent role={singleRole} />
-          ) : (
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeTab}
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -16 }}
-                transition={{ duration: 0.35 }}
-              >
-                <RoleContent role={activeTab} />
-              </motion.div>
-            </AnimatePresence>
-          )}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -16 }}
+              transition={{ duration: 0.35 }}
+            >
+              <RoleContent role={activeTab} />
+            </motion.div>
+          </AnimatePresence>
         </div>
       </div>
     </section>

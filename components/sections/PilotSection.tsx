@@ -2,7 +2,6 @@
 
 import { Rocket, DollarSign, Users } from 'lucide-react'
 import { useReveal } from '@/hooks/useReveal'
-import type { Persona } from '@/app/page'
 
 const pilotCards = [
   {
@@ -22,21 +21,11 @@ const pilotCards = [
   },
 ]
 
-const pilotHeadlines: Record<string, string> = {
-  all: "We're running a pilot programme with a small number of operators.",
-  cruise: 'Be among the first cruise lines in the pilot',
-  agent: 'Join as a founding port agent',
-  tour: 'Lock in founding operator pricing',
-}
+const pilotHeadline = "We're running a pilot programme with a small number of operators."
+const pilotDesc =
+  'The first group of operators will shape what Portlink becomes. Your operational reality drives the roadmap.'
 
-const pilotDescs: Record<string, string> = {
-  all: 'The first group of operators will shape what Portlink becomes. Your operational reality drives the roadmap.',
-  cruise: 'Shape what gets built. Pilot participants work directly with our team.',
-  agent: "Shape what gets built. Your operational reality drives the roadmap, not a feature backlog written by people who've never done a port call.",
-  tour: 'Shape what gets built. Pilot participants work directly with our team. Your operational reality drives the roadmap.',
-}
-
-export default function PilotSection({ persona }: { persona: Persona }) {
+export default function PilotSection() {
   const sectionRef = useReveal()
 
   return (
@@ -75,7 +64,7 @@ export default function PilotSection({ persona }: { persona: Persona }) {
             marginBottom: '16px',
           }}
         >
-          {pilotHeadlines[persona]}
+          {pilotHeadline}
         </h2>
 
         <p
@@ -88,7 +77,7 @@ export default function PilotSection({ persona }: { persona: Persona }) {
             lineHeight: 1.6,
           }}
         >
-          {pilotDescs[persona]}
+          {pilotDesc}
         </p>
 
         <div

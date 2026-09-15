@@ -1,40 +1,50 @@
 # portlink-landing
 
-The public PortLink marketing site — Next.js 16, live at **https://portlink.app**.
-It vendors the PortLink design system into `app/_ds/` at a pinned version; see
+The public Portlink marketing site — Next.js 16, live at **https://portlink.app**.
+It vendors the Portlink design system into `app/_ds/` at a pinned version; see
 `../portlink-design-system/CONSUMERS.md`.
 
 ## Services and connections
 
-**Architecture:** A Next.js App Router marketing site on Netlify with no backend of its own — no
-database, no auth, no payments, no API. Its only real dependency is the vendored design system,
-which is copied in rather than fetched at runtime.
+**Architecture:** A Next.js App Router marketing site on Netlify with no database of its own, no
+auth and no payments. Two server-side flows exist: the pilot request form (`/api/access`, Resend)
+and the **Seatrade Cruise Med 2026 lead funnel** (`/seatrade/`, `/api/seatrade/*`; Resend for the
+four-email sequence, **Netlify Blobs** for the lead store). Everything else is static. The vendored
+design system is copied in rather than fetched at runtime. Funnel entry doc:
+`docs/SEATRADE-MED-2026.md`.
 
 | Service | This repo uses | Verify with |
 |---|---|---|
 | GitHub | **`Portlink-app/portlink-landing`** (the **org**), public, default branch `main`. The local `origin` still says `https://github.com/portlinkadmin/portlink-landing.git` — the repo was **transferred to the org** and GitHub redirects the old path, which is why both work and why the Netlify site reports the org URL. Push with the `portlinkadmin` account | `gh repo view portlinkadmin/portlink-landing` → resolves to `Portlink-app/portlink-landing` |
 | GitHub — second remote | `v2` → `https://github.com/portlinkadmin/portlink-landing-v2.git`, public, last pushed 20.03.2026. **Not the live site.** Never `git push v2` expecting a deploy | `git remote -v` · `gh repo view portlinkadmin/portlink-landing-v2` |
-| Netlify | account **PortLink** (`admin-irpjrvy`) · site **`portlin-landing-2`** — note the typo, "portlin", not "portlink" — (`34ab2932-19da-44e5-b761-0bc83acc0055`) · **https://portlink.app** · builds `main` from the org repo | `GET /api/v1/sites` with the **PortLink** token |
-| Supabase / Stripe / mail / SMS / CI | **none** | `ls .github/workflows` → absent |
+| Netlify | account **Portlink** (`admin-irpjrvy`) · site **`portlin-landing-2`** — note the typo, "portlin", not "portlink" — (`34ab2932-19da-44e5-b761-0bc83acc0055`) · **https://portlink.app** · builds `main` from the org repo | `GET /api/v1/sites` with the **Portlink** token |
+| Resend | account **Portlink**, domain `portlink.app` verified (eu-west-1), sender `pilot@portlink.app`, audiences *General* + *Seatrade Med 2026* (`462446b9-df54-4ce1-ace1-8cf07e3b4d7b`) | `GET https://api.resend.com/domains` with the key below |
+| Netlify Blobs | store `seatrade-leads` on the site above, site-wide (shared by drafts and production) | `node scripts/seatrade-delete-lead.mjs --list` |
+| Supabase / Stripe / SMS / CI | **none** | `ls .github/workflows` → absent |
 
 **Deploy trigger, stated plainly:** Netlify auto-deploys `main` from the **org** repo to
 **portlink.app**, the company's public front door. Pushing `main` is publishing. There is no CI and
 no build gate in front of it. A push to the `v2` remote deploys nothing.
 
-**Credentials — references only, never values.** Vault `cypqkqoeuibf4f6aud47v3qooa` (*PortLink*):
+**Credentials — references only, never values.** Vault `cypqkqoeuibf4f6aud47v3qooa` (*Portlink*):
 
 | Need | `op://` reference |
 |---|---|
-| GitHub PAT (PortLink) | `op://cypqkqoeuibf4f6aud47v3qooa/owl6advkmjvx2bjpzi3y6duyha/credential` |
-| Netlify API token (PortLink) | `op://cypqkqoeuibf4f6aud47v3qooa/a7h7xyjwjlfmzsc4oaf6gmuoym/credential` |
+| GitHub PAT (Portlink) | `op://cypqkqoeuibf4f6aud47v3qooa/owl6advkmjvx2bjpzi3y6duyha/credential` |
+| Netlify API token (Portlink) | `op://cypqkqoeuibf4f6aud47v3qooa/a7h7xyjwjlfmzsc4oaf6gmuoym/credential` |
+| Resend API key (Portlink) | `op://cypqkqoeuibf4f6aud47v3qooa/lhylbglnfx7vy7yenlxn2tfehm/credential` |
 
-`op://PortLink/…` also works (single-word vault name), unlike `op://Bakke & Co/…`, which `op`
+`op://Portlink/…` also works (single-word vault name), unlike `op://Bakke & Co/…`, which `op`
 rejects. Read with `op read '<ref>' --no-newline` and pipe straight into the consuming command;
 never echo, log or paste a value.
 
-**Not in 1Password:** nothing — this site has no runtime environment.
+**Runtime environment (Netlify site env, all contexts):** `RESEND_API_KEY` (same value as the
+1Password item above) and `ADMIN_EMAIL` (where pilot requests, Seatrade lead notifications and CSV
+exports land; `post@davidbakke.no` as of 14.09.2026). Nothing else. Netlify Blobs needs no credential
+on Netlify; locally run `netlify dev` (the checkout is linked to the site) or export
+`NETLIFY_SITE_ID` + `NETLIFY_AUTH_TOKEN`.
 
-**Hard separation:** GitHub `portlinkadmin` / the `Portlink-app` org, and the **PortLink** Netlify
+**Hard separation:** GitHub `portlinkadmin` / the `Portlink-app` org, and the **Portlink** Netlify
 account. The **Bakke & Co** side of this machine — GitHub `GitDABA`, the Bakke & Co Netlify
 account, vault `7tr6yo3acnhdlbltgkzexw7rce` — is a different company and is out of bounds. `gh`'s
 active account defaults to `GitDABA`; check it every time, because a wrong-account push here lands

@@ -16,7 +16,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
-import { usePrefersReducedMotion, useInViewPlayback } from './useFilm'
+import { useMotionAllowed, useInViewPlayback } from './useFilm'
 
 type Stage = {
   label: string
@@ -52,15 +52,15 @@ function StageVideo({
   poster,
   label,
   visible,
-  reduced,
+  motionAllowed,
 }: {
   src: string
   poster: string
   label: string
   visible: boolean
-  reduced: boolean
+  motionAllowed: boolean
 }) {
-  const ref = useInViewPlayback(visible && !reduced)
+  const ref = useInViewPlayback(visible && motionAllowed)
 
   const layer: React.CSSProperties = {
     position: 'absolute',
@@ -74,7 +74,7 @@ function StageVideo({
     willChange: 'opacity, transform',
   }
 
-  if (reduced) {
+  if (!motionAllowed) {
     return <img src={poster} alt={label} style={{ ...layer, transition: 'opacity 200ms linear', transform: 'none' }} />
   }
 
@@ -93,7 +93,7 @@ function StageVideo({
   )
 }
 
-function StageStack({ variant, stage, reduced }: { variant: 'desktop' | 'mobile'; stage: number; reduced: boolean }) {
+function StageStack({ variant, stage, motionAllowed }: { variant: 'desktop' | 'mobile'; stage: number; motionAllowed: boolean }) {
   return (
     <div className="film-frame">
       {stages.map((s, i) => (
@@ -103,7 +103,7 @@ function StageStack({ variant, stage, reduced }: { variant: 'desktop' | 'mobile'
           poster={variant === 'desktop' ? s.desktopPoster : s.mobilePoster}
           label={`Portlink — ${s.label}`}
           visible={i === stage}
-          reduced={reduced}
+          motionAllowed={motionAllowed}
         />
       ))}
     </div>
@@ -113,7 +113,7 @@ function StageStack({ variant, stage, reduced }: { variant: 'desktop' | 'mobile'
 export default function FilmHero() {
   const [stage, setStage] = useState(0)
   const sectionRef = useRef<HTMLElement>(null)
-  const reduced = usePrefersReducedMotion()
+  const motionAllowed = useMotionAllowed()
 
   // Scroll advances the film. Hysteresis, so a reader resting on the boundary
   // does not sit in a cross-fade that keeps re-triggering.
@@ -246,10 +246,10 @@ export default function FilmHero() {
           transition={{ duration: 0.7, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
         >
           <div className="scene-wide">
-            <StageStack variant="desktop" stage={stage} reduced={reduced} />
+            <StageStack variant="desktop" stage={stage} motionAllowed={motionAllowed} />
           </div>
           <div className="scene-narrow">
-            <StageStack variant="mobile" stage={stage} reduced={reduced} />
+            <StageStack variant="mobile" stage={stage} motionAllowed={motionAllowed} />
           </div>
 
           {/* Stage marker — says the film has two acts and that scrolling advances it. */}

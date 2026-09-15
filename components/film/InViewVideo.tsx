@@ -1,11 +1,13 @@
 'use client'
 
-import { usePrefersReducedMotion, useInViewPlayback } from './useFilm'
+import { useMotionAllowed, useInViewPlayback } from './useFilm'
 
 /**
- * One clip of the product, played only while on screen. Under reduced motion
- * the element is an image: there is no media element to start, so "starts no
- * playback" is true by construction rather than by a paused flag.
+ * One clip of the product, played only while on screen. Until the browser has
+ * said motion is welcome — which includes the server render — the element is an
+ * image: there is no media element to start and none to fetch, so "starts no
+ * playback" and "downloads no film" are both true by construction rather than
+ * by a paused flag.
  */
 export default function InViewVideo({
   src,
@@ -18,8 +20,8 @@ export default function InViewVideo({
   label: string
   aspect?: string
 }) {
-  const reduced = usePrefersReducedMotion()
-  const ref = useInViewPlayback(!reduced)
+  const motionAllowed = useMotionAllowed()
+  const ref = useInViewPlayback(motionAllowed)
 
   const frame: React.CSSProperties = {
     width: '100%',
@@ -29,7 +31,7 @@ export default function InViewVideo({
     background: 'var(--ds-surface-2)',
   }
 
-  if (reduced) {
+  if (!motionAllowed) {
     return <img src={poster} alt={label} style={frame} />
   }
 

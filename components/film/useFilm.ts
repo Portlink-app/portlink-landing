@@ -3,25 +3,30 @@
 import { useEffect, useRef, useState } from 'react'
 
 /**
- * True once the visitor has asked for reduced motion.
+ * True only once the browser has been asked and has answered that motion is welcome.
  *
- * Deliberately false during SSR and the first client render. Nothing in this
- * file starts playback on its own: no `autoPlay` attribute is ever set, and
- * play() is only ever called from an effect that reads this value. So the
- * pre-hydration frame cannot play a video it should not.
+ * False during SSR and the first client render, and false is the *still* branch —
+ * so the markup the server sends carries a poster image, never a <video>. That
+ * ordering is the whole point. A <video preload="metadata"> in the server HTML is
+ * fetched by the browser before React can replace it, so a visitor who had asked
+ * for reduced motion still paid 776 217 byte of film across six encodes (measured
+ * on deploy preview 2, 15.09.2026, Chrome --force-prefers-reduced-motion).
+ *
+ * Rendering the still first costs the motion visitor nothing: the poster is the
+ * same file the <video> would have shown while it buffered.
  */
-export function usePrefersReducedMotion(): boolean {
-  const [reduced, setReduced] = useState(false)
+export function useMotionAllowed(): boolean {
+  const [allowed, setAllowed] = useState(false)
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
-    const apply = () => setReduced(mq.matches)
+    const apply = () => setAllowed(!mq.matches)
     apply()
     mq.addEventListener('change', apply)
     return () => mq.removeEventListener('change', apply)
   }, [])
 
-  return reduced
+  return allowed
 }
 
 /**

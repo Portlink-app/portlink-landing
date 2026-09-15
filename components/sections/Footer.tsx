@@ -8,6 +8,7 @@ const navLinks = {
     { label: 'Request Access', href: '#access' },
   ],
   Company: [
+    { label: 'Team', href: '/team/' },
     { label: 'About', href: '#' },
     { label: 'Blog', href: '#' },
     { label: 'Contact', href: '#access' },

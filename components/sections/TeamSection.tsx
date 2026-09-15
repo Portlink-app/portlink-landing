@@ -11,19 +11,22 @@ type Member = {
   photo: string
 }
 
-/* Founders first, then advisors. Roles only: nobody's biography is written here on their behalf.
+/* Founders first, then advisors. Both founders carry the same role and the same shape of sentence:
+   no CEO, no chair, nothing that ranks one above the other (David, 15.09.2026). Each line leads
+   with the expertise the person brings rather than a title, and carries only what their own CV
+   states: nobody's biography is written here on their behalf.
    The advisors' positions are the ones they publish themselves at pallefabrik.dk. */
 const founders: Member[] = [
   {
     name: 'David Bakke',
     role: 'Co-Founder',
-    bio: 'Runs the company. Sixteen years in digital product and commercial roles, most recently at Volkswagen Møller Bilfinans, and before that Telenor and Nortura.',
+    bio: 'Digital product and e-commerce. Sixteen years building and running digital services at Volkswagen Møller Bilfinans, Telenor and Nortura, with executive education in artificial intelligence at MIT.',
     photo: '/team/david.jpg',
   },
   {
     name: 'Kris Willassen',
     role: 'Co-Founder',
-    bio: 'Has planned and run cruise port calls for over a decade: itineraries, port operations and expedition permitting at SeaDream Yacht Club and Hurtigruten Expeditions.',
+    bio: 'Cruise port operations. A decade of itinerary planning, deployment and nautical planning at SeaDream Yacht Club and Hurtigruten Expeditions, including expedition compliance and permitting, on top of training in nautical navigation.',
     photo: '/team/kris.jpg',
   },
 ]

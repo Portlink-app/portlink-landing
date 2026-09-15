@@ -5,6 +5,7 @@ import { useReveal } from '@/hooks/useReveal'
 type Member = {
   name: string
   role: string
+  bio?: string
   affiliation?: string
   href?: string
   photo: string
@@ -13,8 +14,18 @@ type Member = {
 /* Founders first, then advisors. Roles only: nobody's biography is written here on their behalf.
    The advisors' positions are the ones they publish themselves at pallefabrik.dk. */
 const founders: Member[] = [
-  { name: 'David Bakke', role: 'Co-Founder', photo: '/team/david.jpg' },
-  { name: 'Kris Willassen', role: 'Co-Founder', photo: '/team/kris.jpg' },
+  {
+    name: 'David Bakke',
+    role: 'Co-Founder',
+    bio: 'Runs the company. Sixteen years in digital product and commercial roles, most recently at Volkswagen Møller Bilfinans, and before that Telenor and Nortura.',
+    photo: '/team/david.jpg',
+  },
+  {
+    name: 'Kris Willassen',
+    role: 'Co-Founder',
+    bio: 'Has planned and run cruise port calls for over a decade: itineraries, port operations and expedition permitting at SeaDream Yacht Club and Hurtigruten Expeditions.',
+    photo: '/team/kris.jpg',
+  },
 ]
 
 const advisors: Member[] = [
@@ -74,6 +85,21 @@ function Person({ member }: { member: Member }) {
       <div style={{ fontSize: '18px', fontWeight: 600, marginBottom: '4px' }}>{member.name}</div>
       <div style={{ fontSize: '14px', color: 'var(--brand)', fontWeight: 500 }}>{member.role}</div>
       {affiliation ? <div style={{ fontSize: '13px', marginTop: '6px' }}>{affiliation}</div> : null}
+      {member.bio ? (
+        <p
+          style={{
+            marginTop: '12px',
+            fontSize: '14px',
+            lineHeight: 1.6,
+            color: 'var(--text-muted)',
+            maxWidth: '260px',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+          }}
+        >
+          {member.bio}
+        </p>
+      ) : null}
     </div>
   )
 }

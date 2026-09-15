@@ -9,6 +9,8 @@ const links = [
   { label: 'Platform', href: '#how' },
   { label: 'Pilot', href: '#pilot' },
   { label: 'Access', href: '#access' },
+  // A real route, not a section: the handler below only intercepts in-page anchors.
+  { label: 'Team', href: '/team/' },
 ]
 
 /** Native smooth scroll to anchor */
@@ -69,7 +71,7 @@ export default function Nav({ theme, setTheme }: NavProps) {
             <a
               key={link.href}
               href={link.href}
-              onClick={(e) => { e.preventDefault(); smoothScrollTo(link.href) }}
+              onClick={(e) => { if (link.href.startsWith('#')) { e.preventDefault(); smoothScrollTo(link.href) } }}
               style={{
                 color: 'var(--text-secondary)',
                 textDecoration: 'none',
@@ -160,7 +162,7 @@ export default function Nav({ theme, setTheme }: NavProps) {
             <a
               key={link.href}
               href={link.href}
-              onClick={(e) => { e.preventDefault(); setOpen(false); smoothScrollTo(link.href) }}
+              onClick={(e) => { setOpen(false); if (link.href.startsWith('#')) { e.preventDefault(); smoothScrollTo(link.href) } }}
               style={{
                 display: 'block',
                 padding: '12px 0',

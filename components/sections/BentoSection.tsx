@@ -317,19 +317,69 @@ const roles: { id: RoleKey; label: string; icon: typeof Ship }[] = [
 ]
 
 /**
+ * The per-role copy, folded in from the old `RoleSection` on 16.09.2026.
+ *
+ * It used to live in a second section with a second, independent role switch,
+ * so choosing Port Agent there left this section on Cruise Line. Kris asked for
+ * one switch — "kun bentogrid endrer seg" — and the page shipped two. Now there
+ * is one switch, one state, and the copy and the cards change together.
+ */
+const roleCopy: Record<RoleKey, { tagline: string; headline: string; body: string; features: string[] }> = {
+  cruise: {
+    tagline: 'Fleet-wide coordination',
+    headline: 'Your entire fleet. One live view.',
+    body: 'See every port call across your deployment, prep status, agent confirmations, PDA approvals, shore programme oversight. Without calling anyone.',
+    features: [
+      'Fleet-wide port call calendar',
+      'Real-time agent confirmation status',
+      'PDA review and approval',
+      'Shore programme oversight',
+      'Full audit trail per port call',
+    ],
+  },
+  agent: {
+    tagline: 'Port operations hub',
+    headline: 'Every vessel. One workspace.',
+    body: 'Manage all incoming calls, coordinate services, submit PDAs, and communicate with cruise lines from a single dashboard with full history. Not a stack of portals with separate logins.',
+    features: [
+      'All cruise line calls in one inbox',
+      'Digital PDA workflow',
+      'Service coordination dashboard',
+      'Document sharing with full versioning',
+      'Complete port call history',
+    ],
+  },
+  tour: {
+    tagline: 'Shore excursions management',
+    headline: 'Enter your tour once. Export to any format.',
+    body: 'Publish to the platform. Receive booking requests. Set deadlines that hold. No more filling in nine different RFP formats with the same information for each cruise line.',
+    features: [
+      'One-time tour listing',
+      'Automatic deadline enforcement',
+      'Real-time booking counts',
+      'Schedule change notifications',
+      'Consistent export to any cruise line format',
+    ],
+  },
+}
+
+/**
  * The role switch, and the only place on the page a role exists.
  *
  * It used to be a gate in front of the whole site and a floating pill that
  * re-keyed five sections. Now the state lives here and nothing outside this
- * component reads it, so "the switch changes the bento grid and nothing else"
- * is a property of the code rather than something to re-check by eye.
+ * component reads it, so "the switch changes the role block and the cards, and
+ * nothing else" is a property of the code rather than something to re-check by
+ * eye. Everything the role moves is inside `#bento`; everything outside it is
+ * the same bytes whichever role is chosen.
  */
 export default function BentoSection() {
   const [role, setRole] = useState<RoleKey>('cruise')
   const cards = bentoData[role]
+  const copy = roleCopy[role]
 
   return (
-    <section id="bento" style={{ background: 'var(--ds-canvas)', padding: 'clamp(56px, 8vw, 96px) clamp(16px, 4vw, 24px)' }}>
+    <section id="roles" style={{ background: 'var(--ds-canvas)', padding: 'clamp(56px, 8vw, 96px) clamp(16px, 4vw, 24px)' }}>
       <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
         <motion.div
           initial={{ opacity: 0, y: 16 }}
@@ -342,16 +392,16 @@ export default function BentoSection() {
             fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.12em',
             color: 'var(--ds-primary)', fontWeight: 600,
           }}>
-            What this means for you
+            Built for your role
           </span>
           <h2 style={{
-            fontSize: 'clamp(1.5rem, 3.2vw, 2.25rem)',
+            fontSize: 'clamp(1.75rem, 3.6vw, 2.75rem)',
             fontWeight: 700,
             color: 'var(--ds-text-1)',
             letterSpacing: '-0.02em',
             margin: '10px 0 0',
           }}>
-            The same platform, from where you sit
+            Three roles. One platform.
           </h2>
           <p style={{
             fontSize: 'clamp(0.95rem, 1.4vw, 1.0625rem)',
@@ -364,74 +414,133 @@ export default function BentoSection() {
           </p>
         </motion.div>
 
-        {/* The switch */}
-        <div
-          role="tablist"
-          aria-label="Choose a role"
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            marginBottom: '28px',
-          }}
-        >
-          <div style={{
-            display: 'inline-flex',
-            flexWrap: 'wrap',
-            justifyContent: 'center',
-            gap: 4,
-            padding: 4,
-            borderRadius: 'var(--ds-radius-pill)',
-            background: 'var(--ds-surface-2)',
-            border: '1px solid var(--ds-border-1)',
-          }}>
-            {roles.map((r) => {
-              const Icon = r.icon
-              const active = role === r.id
-              return (
-                <button
-                  key={r.id}
-                  role="tab"
-                  aria-selected={active}
-                  onClick={() => setRole(r.id)}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: 7,
-                    padding: '9px 18px',
-                    minHeight: 40,
-                    borderRadius: 'var(--ds-radius-pill)',
-                    border: 'none',
-                    cursor: 'pointer',
-                    fontFamily: 'inherit',
-                    fontSize: 13,
-                    fontWeight: active ? 600 : 500,
-                    whiteSpace: 'nowrap',
-                    background: active ? 'var(--ds-primary)' : 'transparent',
-                    color: active ? 'var(--ds-primary-ink)' : 'var(--ds-text-2)',
-                    transition: 'background var(--ds-dur-2) var(--ds-ease-standard), color var(--ds-dur-2) var(--ds-ease-standard)',
-                  }}
-                >
-                  <Icon size={15} />
-                  {r.label}
-                </button>
-              )
-            })}
+        {/* Everything the switch moves lives in here — including the switch's own
+            selected state, which is why the tablist sits inside it. Outside this
+            element the page is the same bytes whichever role is chosen. */}
+        <div id="bento">
+          {/* The switch */}
+          <div
+            role="tablist"
+            aria-label="Choose a role"
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              marginBottom: '28px',
+            }}
+          >
+            <div style={{
+              display: 'inline-flex',
+              flexWrap: 'wrap',
+              justifyContent: 'center',
+              gap: 4,
+              padding: 4,
+              borderRadius: 'var(--ds-radius-pill)',
+              background: 'var(--ds-surface-2)',
+              border: '1px solid var(--ds-border-1)',
+            }}>
+              {roles.map((r) => {
+                const Icon = r.icon
+                const active = role === r.id
+                return (
+                  <button
+                    key={r.id}
+                    role="tab"
+                    aria-selected={active}
+                    onClick={() => setRole(r.id)}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: 7,
+                      padding: '9px 18px',
+                      minHeight: 40,
+                      borderRadius: 'var(--ds-radius-pill)',
+                      border: 'none',
+                      cursor: 'pointer',
+                      fontFamily: 'inherit',
+                      fontSize: 13,
+                      fontWeight: active ? 600 : 500,
+                      whiteSpace: 'nowrap',
+                      background: active ? 'var(--ds-primary)' : 'transparent',
+                      color: active ? 'var(--ds-primary-ink)' : 'var(--ds-text-2)',
+                      transition: 'background var(--ds-dur-2) var(--ds-ease-standard), color var(--ds-dur-2) var(--ds-ease-standard)',
+                    }}
+                  >
+                    <Icon size={15} />
+                    {r.label}
+                  </button>
+                )
+              })}
+            </div>
           </div>
-        </div>
 
-        <BentoGrid columns={3}>
-          {cards.map((card, i) => (
-            <BentoCard
-              key={`${role}-${card.title}`}
-              title={card.title}
-              description={card.description}
-              visual={card.visual}
-              span={card.span}
-              accent={card.accent}
-              delay={i * 0.06}
-            />
-          ))}
-        </BentoGrid>
+          <motion.div
+            key={role}
+            /* A fade, with no travel: this block changes because the reader
+               pressed a tab, and a translate on a keyboard-driven change is
+               motion nobody asked for. */
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            style={{ textAlign: 'center', marginBottom: 'clamp(24px, 4vw, 36px)' }}
+          >
+            <span style={{
+              fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.12em',
+              color: 'var(--ds-text-3)', fontWeight: 600,
+            }}>
+              {copy.tagline}
+            </span>
+            <h3 style={{
+              fontSize: 'clamp(1.25rem, 2.4vw, 1.75rem)',
+              fontWeight: 700,
+              color: 'var(--ds-text-1)',
+              letterSpacing: '-0.02em',
+              margin: '8px 0 0',
+            }}>
+              {copy.headline}
+            </h3>
+            <p style={{
+              fontSize: 'clamp(0.95rem, 1.4vw, 1.0625rem)',
+              color: 'var(--ds-text-2)',
+              lineHeight: 1.6,
+              maxWidth: 620,
+              margin: '10px auto 0',
+            }}>
+              {copy.body}
+            </p>
+
+            <ul style={{
+              listStyle: 'none',
+              display: 'flex',
+              flexWrap: 'wrap',
+              justifyContent: 'center',
+              gap: '10px 24px',
+              margin: '18px auto 0',
+              padding: 0,
+              maxWidth: 860,
+            }}>
+              {copy.features.map((f) => (
+                <li key={f} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <CheckCircle2 size={16} color="var(--ds-primary)" style={{ flexShrink: 0 }} />
+                  <span style={{ fontSize: 14, color: 'var(--ds-text-2)' }}>{f}</span>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+
+          <BentoGrid columns={3}>
+            {cards.map((card, i) => (
+              <BentoCard
+                key={`${role}-${card.title}`}
+                title={card.title}
+                description={card.description}
+                visual={card.visual}
+                span={card.span}
+                accent={card.accent}
+                delay={i * 0.06}
+              />
+            ))}
+          </BentoGrid>
+        </div>
       </div>
     </section>
   )

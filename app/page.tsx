@@ -14,7 +14,6 @@ import S6Messages from '@/components/scenes/S6Messages'
 import S7Compliance from '@/components/scenes/S7Compliance'
 import PainSection from '@/components/sections/PainSection'
 import ValueSection from '@/components/sections/ValueSection'
-import RoleSection from '@/components/sections/RoleSection'
 import EcosystemSection from '@/components/sections/EcosystemSection'
 import BentoSection from '@/components/sections/BentoSection'
 import PilotSection from '@/components/sections/PilotSection'
@@ -105,7 +104,6 @@ export default function Home() {
         </SceneSection>
 
         <ValueSection />
-        <RoleSection />
         <EcosystemSection />
         <BentoSection />
         <PilotSection />

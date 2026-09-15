@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 /**
  * True only once the browser has been asked and has answered that motion is welcome.
@@ -32,16 +32,22 @@ export function useMotionAllowed(): boolean {
 /**
  * Plays the element only while it is actually on screen.
  *
+ * The element arrives by callback ref rather than useRef, because it does not
+ * exist on the first render: the still is rendered until motion is known to be
+ * welcome, so an effect that reads a ref once on mount would find null and never
+ * observe anything. Measured on preview 2 — the hero cross-faded correctly and
+ * both stages stayed paused at currentTime 0.
+ *
  * This also does the desktop/phone selection for free: the two encodes are
  * rendered as a CSS-hidden pair, and a `display: none` element never reports
  * an intersection — so the encode the visitor cannot see never decodes.
  */
 export function useInViewPlayback(active: boolean) {
-  const ref = useRef<HTMLVideoElement>(null)
+  const [el, setEl] = useState<HTMLVideoElement | null>(null)
+  const ref = useCallback((node: HTMLVideoElement | null) => setEl(node), [])
   const [inView, setInView] = useState(false)
 
   useEffect(() => {
-    const el = ref.current
     if (!el) return
     const io = new IntersectionObserver(
       ([entry]) => setInView(entry.isIntersecting),
@@ -49,10 +55,9 @@ export function useInViewPlayback(active: boolean) {
     )
     io.observe(el)
     return () => io.disconnect()
-  }, [])
+  }, [el])
 
   useEffect(() => {
-    const el = ref.current
     if (!el) return
 
     if (active && inView) {
@@ -63,7 +68,7 @@ export function useInViewPlayback(active: boolean) {
     } else {
       el.pause()
     }
-  }, [active, inView])
+  }, [el, active, inView])
 
   return ref
 }

@@ -189,6 +189,36 @@ body {
   }
 }
 
+/* Skip link. Offscreen until focused, never display:none or visibility:hidden, because a hidden
+   element cannot take focus and a skip link that cannot take focus is decoration. It is the first
+   focusable node in the body, so it is reached on the first Tab of every visit. */
+.skip-link {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  transform: translateY(-120%);
+  padding: 12px 20px;
+  background: var(--ds-primary);
+  color: var(--ds-primary-ink);
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 0 0 var(--ds-radius-md) 0;
+  transition: transform 160ms var(--ds-ease-standard);
+}
+
+.skip-link:focus-visible,
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+/* The skip link's destination takes focus programmatically, so it must not then draw a ring
+   around the entire page. Focus still MOVES, which is the whole point; it is only the outline
+   that is suppressed. */
+main:focus,
+main:focus-visible { outline: none; }
+
 /* Focus ring — global accessibility */
 a:focus-visible,
 button:focus-visible,
@@ -279,3 +309,281 @@ textarea:focus-visible {
   0%, 100% { opacity: 1; }
   50%      { opacity: 0.4; }
 }
+
+/* =========================================================
+   Feature scenes — two authored compositions, not one squeezed
+   layout. Exactly one of the pair is in the DOM's render tree at
+   any width, so the hidden one is also out of the a11y tree.
+   ========================================================= */
+.scene-wide   { display: block; }
+.scene-narrow { display: none; }
+
+@media (max-width: 767px) {
+  .scene-wide   { display: none; }
+  .scene-narrow { display: block; }
+}
+
+/* =========================================================
+   Film hero — a pinned scroll stage.
+
+   The reader stays on the film while scrolling advances it through
+   its stages, and the page only carries on to the feature scenes
+   once the last stage has been read. The outer track is tall; the
+   pane inside it is `position: sticky`, so the browser does the
+   pinning. Nothing intercepts the wheel or the touch, and momentum
+   scrolling stays exactly as native as it was before.
+
+   The pin is CSS, not state, on purpose. A reduced-motion visitor
+   gets no track and no pin — but that has to be true of the HTML
+   the server sends, and the server cannot read a media preference.
+   A media query can. Deciding the pin in JavaScript would restructure
+   the page on hydration for every visitor, which is the layout shift
+   this whole component was built to avoid.
+
+   svh, not vh: on iOS the address bar resizes vh mid-scroll, and a
+   100vh sticky pane jitters every time it does. The vh values are the
+   fallback for browsers without svh; @supports upgrades them.
+   ========================================================= */
+.film-track {
+  --film-pane: 100vh;
+  --film-seg: 90vh;
+
+  /* 16/9 twice: once as a ratio for the box, once as a number for the
+     width calculation below, which cannot use the `/` form. */
+  --film-ar-box: 16 / 9;
+  --film-ar-num: 1.7778;
+
+  /* Everything in the pane that is not the film. The film is sized to
+     whatever is left, so it is never taller than the viewport. */
+  --film-chrome: 275px;
+
+  position: relative;
+  height: calc(var(--film-pane) + var(--film-seg) * var(--film-stages, 2));
+}
+
+@supports (height: 100svh) {
+  .film-track { --film-pane: 100svh; --film-seg: 90svh; }
+}
+
+@media (max-width: 767px) {
+  .film-track {
+    /* The phone encodes are a portrait cut of the same recording. */
+    --film-ar-box: 3 / 4;
+    --film-ar-num: 0.75;
+    --film-chrome: 190px;
+  }
+}
+
+/* Zero-height scroll targets, one per stage, at the scroll position
+   where that stage is the active one. They are what the stage pills
+   link to — a plain anchor, so the browser scrolls, honours its own
+   reduced-motion setting, and no script has to call scrollTo. */
+.film-marker {
+  position: absolute;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  scroll-margin-top: 0;
+}
+
+.film-pane {
+  position: sticky;
+  top: 0;
+  height: var(--film-pane);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(10px, 1.6vh, 18px);
+  /* 64px clears the fixed nav. */
+  padding: calc(64px + clamp(8px, 2vh, 20px)) clamp(16px, 4vw, 24px) clamp(16px, 3vh, 28px);
+}
+
+/* <picture> is an inline box, so an <img> inside it resolves `height: 100%` against nothing and
+   collapses. The film's still lives inside one (it is how exactly one encode gets fetched), so the
+   wrapper has to carry the frame's box rather than disappear from it. */
+.film-frame > picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.film-stack {
+  position: relative;
+  margin-inline: auto;
+  aspect-ratio: var(--film-ar-box);
+  width: min(1100px, 100%, calc((var(--film-pane) - var(--film-chrome)) * var(--film-ar-num)));
+}
+
+.film-slide {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  transition: opacity 700ms var(--ds-ease-standard), transform 900ms var(--ds-ease-standard);
+  will-change: opacity, transform;
+}
+
+.film-slide[data-active='false'] { opacity: 0; transform: scale(1.015); pointer-events: none; }
+.film-slide[data-active='true']  { opacity: 1; transform: scale(1); }
+
+.film-frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--ds-radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--ds-border-1);
+  background: var(--ds-surface-2);
+  box-shadow: var(--ds-shadow-3);
+}
+
+.film-media {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Per-slide caption. Only a reader who has no pin needs it; with the
+   pin, the shared caption under the pills says the same thing once. */
+.film-slide-cap { display: none; }
+
+.film-stages-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* The stage controls are the only navigation the pinned hero has, so they have to read as
+   controls. Three separate defects were measured here on 16.09.2026 and each has its own line:
+
+   1. min-height 44px. They were about 26px tall, on a page reviewed on a phone.
+   2. 14px / 600, up from 12px / 500. A small thin glyph loses most of its nominal contrast to
+      antialiasing: --ds-text-3 computes to 6,22:1 on the dark hero and rendered at 3,50:1. The
+      fix is size and weight, not a darker token, because the same halving hits any token.
+   3. A visible border in the resting state. "Dimmer than the active one" is not an affordance. */
+.film-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 16px;
+  border-radius: var(--ds-radius-pill);
+  border: 1px solid var(--ds-border-1);
+  background: transparent;
+  color: var(--ds-text-2);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 400ms var(--ds-ease-standard), border-color 400ms var(--ds-ease-standard),
+              background-color 400ms var(--ds-ease-standard);
+}
+
+/* Gated on a real pointer. A touch device has no hover, so an ungated :hover sticks after a tap
+   and leaves the pill looking selected when it is not, which is the state change being swallowed. */
+@media (hover: hover) {
+  .film-pill:hover {
+    color: var(--ds-text-1);
+    border-color: var(--ds-border-2);
+    background: var(--ds-surface-1);
+  }
+}
+
+/* The ring the global a:focus-visible rule gives is --ds-focus at 2px. On the near-black hero that
+   is the one surface where it needs to be unmistakable, so it is thicker and doubled with an
+   inverted halo that holds whichever way the theme goes. */
+.film-pill:focus-visible {
+  outline: 3px solid var(--ds-focus);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 1px var(--ds-canvas);
+}
+
+/* Four signals, only one of which is colour: weight, border, background, and the dot's width.
+   A reader who cannot tell the two hues apart still sees a 7px dot become a 22px bar. */
+.film-pill[aria-current='true'] {
+  color: var(--ds-text-1);
+  font-weight: 700;
+  border-color: var(--ds-primary);
+  background: var(--ds-surface-1);
+}
+
+.film-pill-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: var(--ds-radius-pill);
+  /* ⛔ NOT --ds-border-2. A border token is designed to be barely visible, so anything that
+     borrows one as a state indicator fails 1.4.11 by construction: it computed to 1,99:1 on the
+     hero. This is a content token, which is what an indicator a reader must see actually is. */
+  background: var(--ds-text-3);
+  transition: width 400ms var(--ds-ease-standard), background-color 400ms var(--ds-ease-standard);
+}
+
+.film-pill[aria-current='true'] .film-pill-dot { width: 22px; background: var(--ds-primary); }
+
+.film-caption {
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ds-text-3);
+  margin: 0;
+  max-width: 44ch;
+  /* Two lines, always. One stage's caption wraps and the other's does not, and
+     a centred column re-centres when it changes — measured as an 11 px jump of
+     the film at the exact moment the reader is watching it change. */
+  min-height: 40px;
+}
+
+/* The reduced-motion branch: no track, no pin, no long empty scroll.
+   The stages become what they are without the film — stacked stills,
+   each with its own caption, read in order. */
+@media (prefers-reduced-motion: reduce) {
+  .film-track { height: auto; }
+
+  .film-pane {
+    position: static;
+    height: auto;
+    padding-top: clamp(20px, 4vw, 36px);
+  }
+
+  .film-marker,
+  .film-stages-nav,
+  .film-caption { display: none; }
+
+  .film-stack {
+    position: static;
+    aspect-ratio: auto;
+    width: min(1100px, 100%);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(22px, 4vw, 34px);
+  }
+
+  .film-slide[data-active] {
+    position: static;
+    opacity: 1;
+    transform: none;
+    transition: none;
+    pointer-events: auto;
+  }
+
+  .film-frame { height: auto; aspect-ratio: var(--film-ar-box); }
+
+  .film-slide-cap {
+    display: block;
+    margin-top: 10px;
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--ds-text-3);
+  }
+
+  .film-slide-cap b { color: var(--ds-text-1); font-weight: 600; }
+}
+
+/* Anchored sections clear the fixed nav — without this, "See the platform"
+   lands with the section heading hidden behind the 64 px bar. */
+section[id] { scroll-margin-top: 80px; }

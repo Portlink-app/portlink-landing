@@ -33,6 +33,10 @@ export default function PageNav() {
   }, [theme])
 
   return (
+    /* <header> is the banner landmark. The <nav> inside it keeps the fixed positioning and
+       the styles, so this wrapper changes the document's semantics and nothing about its
+       layout: a block-level element wrapping a position:fixed child occupies no space. */
+    <header>
     <nav
       role="navigation"
       aria-label="Main navigation"
@@ -144,5 +148,6 @@ export default function PageNav() {
         </div>
       ) : null}
     </nav>
+    </header>
   )
 }

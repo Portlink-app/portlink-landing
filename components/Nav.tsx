@@ -6,7 +6,7 @@ import { Menu, X, Sun, Moon } from 'lucide-react'
 const links = [
   { label: 'Problem', href: '#pain' },
   { label: 'Roles', href: '#roles' },
-  { label: 'Platform', href: '#how' },
+  { label: 'Platform', href: '#dashboard' },
   { label: 'Pilot', href: '#pilot' },
   { label: 'Access', href: '#access' },
   // A real route, not a section: the handler below only intercepts in-page anchors.
@@ -27,6 +27,10 @@ export default function Nav({ theme, setTheme }: NavProps) {
   const [open, setOpen] = useState(false)
 
   return (
+    /* <header> is the banner landmark. The <nav> inside it keeps the fixed positioning and
+       the styles, so this wrapper changes the document's semantics and nothing about its
+       layout: a block-level element wrapping a position:fixed child occupies no space. */
+    <header>
     <nav
       role="navigation"
       aria-label="Main navigation"
@@ -195,5 +199,6 @@ export default function Nav({ theme, setTheme }: NavProps) {
         </div>
       )}
     </nav>
+    </header>
   )
 }

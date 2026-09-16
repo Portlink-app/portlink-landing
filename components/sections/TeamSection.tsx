@@ -1,52 +1,7 @@
 'use client'
 
 import { useReveal } from '@/hooks/useReveal'
-
-type Member = {
-  name: string
-  role: string
-  bio?: string
-  affiliation?: string
-  href?: string
-  photo: string
-}
-
-/* Founders first, then advisors. Both founders carry the same role and the same shape of sentence:
-   no CEO, no chair, nothing that ranks one above the other (David, 15.09.2026). Each line leads
-   with the expertise the person brings rather than a title, and carries only what their own CV
-   states: nobody's biography is written here on their behalf.
-   The advisors' positions are the ones they publish themselves at pallefabrik.dk. */
-const founders: Member[] = [
-  {
-    name: 'David Bakke',
-    role: 'Co-Founder',
-    bio: 'Digital product and e-commerce. Sixteen years building and running digital services at Volkswagen Møller Bilfinans, Telenor and Nortura, with executive education in artificial intelligence at MIT.',
-    photo: '/team/david.jpg',
-  },
-  {
-    name: 'Kris Willassen',
-    role: 'Co-Founder',
-    bio: 'Cruise port operations. A decade of itinerary planning, deployment and nautical planning at SeaDream Yacht Club and Hurtigruten Expeditions, including expedition compliance and permitting, on top of training in nautical navigation.',
-    photo: '/team/kris.jpg',
-  },
-]
-
-const advisors: Member[] = [
-  {
-    name: 'Dann Handberg Madsen',
-    role: 'Advisor and Investor',
-    affiliation: 'CEO and owner, Pallefabrik',
-    href: 'https://www.pallefabrik.dk/kontakt-os',
-    photo: '/team/dann.jpg',
-  },
-  {
-    name: 'Leo Hansen',
-    role: 'Advisor',
-    affiliation: 'CFO, Pallefabrik',
-    href: 'https://www.pallefabrik.dk/kontakt-os',
-    photo: '/team/leo.jpg',
-  },
-]
+import { advisors, founders, type Member } from './team-members'
 
 function Person({ member }: { member: Member }) {
   const affiliation = member.affiliation ? (

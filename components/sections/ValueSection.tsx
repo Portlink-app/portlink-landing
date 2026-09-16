@@ -62,7 +62,7 @@ export default function ValueSection() {
               margin: '12px 0 16px',
             }}
           >
-            The same team, the same ship, the same port, but next season you don't start from scratch.
+            The same team, the same ship, the same port, but next season you don&rsquo;t start from scratch.
           </h2>
         </div>
 

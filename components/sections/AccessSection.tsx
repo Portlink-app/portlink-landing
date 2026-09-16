@@ -158,7 +158,7 @@ export default function AccessSection() {
             fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 700,
             color: 'var(--text-primary)', margin: '14px 0 16px',
           }}>
-            Founding cohort — onboarding now.
+            Founding cohort, onboarding now.
           </h2>
           <p style={{ fontSize: '17px', color: 'var(--text-secondary)', lineHeight: 1.65, marginBottom: '48px', maxWidth: '560px', margin: '0 auto 48px' }}>
             The first group will shape what Portlink becomes, so we work with a small number of teams at a time. Best fit: complex operations, a low tolerance for manual work, and strong opinions about what is broken.
@@ -419,7 +419,7 @@ export default function AccessSection() {
                           onFocus={focusStyle} onBlur={blurStyle} inputBase={inputBase} />
                         <SelectField id="portCallsPerYear" label="Estimated port calls per year" required
                           value={data.portCallsPerYear} onChange={v => setData(d => ({ ...d, portCallsPerYear: v }))}
-                          options={['< 100', '100–500', '500–2,000', '2,000–10,000', '10,000+']}
+                          options={['< 100', '100-500', '500-2,000', '2,000-10,000', '10,000+']}
                           inputBase={inputBase} />
                         <Field id="keyPorts" label="Key ports of call" optional
                           placeholder="e.g. Barcelona, Miami, Piraeus, Southampton"
@@ -439,7 +439,7 @@ export default function AccessSection() {
                           onFocus={focusStyle} onBlur={blurStyle} inputBase={inputBase} />
                         <SelectField id="cruiseLinesServed" label="Cruise lines you currently serve" required
                           value={data.cruiseLinesServed} onChange={v => setData(d => ({ ...d, cruiseLinesServed: v }))}
-                          options={['1–3', '4–10', '11–25', '25+']}
+                          options={['1-3', '4-10', '11-25', '25+']}
                           inputBase={inputBase} />
                         <SelectField id="agentSoftware" label="Current tools for managing port calls" required
                           value={data.agentSoftware} onChange={v => setData(d => ({ ...d, agentSoftware: v }))}
@@ -460,11 +460,11 @@ export default function AccessSection() {
                           onFocus={focusStyle} onBlur={blurStyle} inputBase={inputBase} />
                         <SelectField id="groupSizeTypical" label="Typical group size per excursion" required
                           value={data.groupSizeTypical} onChange={v => setData(d => ({ ...d, groupSizeTypical: v }))}
-                          options={['1–15 pax', '16–40 pax', '41–100 pax', '100+ pax', 'Varies widely']}
+                          options={['1-15 pax', '16-40 pax', '41-100 pax', '100+ pax', 'Varies widely']}
                           inputBase={inputBase} />
                         <SelectField id="bookingLeadTime" label="How far in advance do you receive bookings?" required
                           value={data.bookingLeadTime} onChange={v => setData(d => ({ ...d, bookingLeadTime: v }))}
-                          options={['Days before arrival', '1–4 weeks', '1–3 months', '3+ months']}
+                          options={['Days before arrival', '1-4 weeks', '1-3 months', '3+ months']}
                           inputBase={inputBase} />
                         <Field id="keyPorts" label="Key ports or regions" optional
                           placeholder="e.g. Western Mediterranean, Caribbean, Nordics"

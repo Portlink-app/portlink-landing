@@ -19,7 +19,12 @@
 # ASSERTED RATHER THAN ASSUMED:
 #   * the brand face (Plus Jakarta Sans) is fetched the way globals.css fetches it, so a card
 #     rendered offline would silently fall back to the system face and look off-brand next to the
-#     site. document.fonts.check is read after the render and a miss fails the build.
+#     site. The check counts LOADED FontFace objects of that family, and the reason is worth the
+#     line: document.fonts.check('800 62px "Plus Jakarta Sans"') returns TRUE on a page with no
+#     font of any kind, measured 16.09.2026, and it returns true for a family called
+#     "Zzz Not A Font 12345" as well. It is not a load test and it cannot fail, so as a guard it
+#     was decoration. The loaded-face count is 4 here and 0 on scripts/og/card.html, which links no
+#     webfont: a control that proves the assertion can still say no.
 #   * the prize is injected from PRIZE_NAME in lib/seatrade/config.ts, never typed into the HTML,
 #     so the most-shared surface we own cannot keep advertising last month's prize. The placeholder
 #     surviving the injection fails the build rather than shipping "{{PRIZE_NAME}}" to LinkedIn.
@@ -79,7 +84,7 @@ render_seatrade() {
       const art = document.querySelector('.art img');
       return {
         placeholders: (document.body.innerText.match(/{{/g) || []).length,
-        font: document.fonts.check('800 62px \"Plus Jakarta Sans\"'),
+        font: [...document.fonts].filter(f => f.family === 'Plus Jakarta Sans' && f.status === 'loaded').length,
         art: art.naturalWidth,
         prize: document.querySelector('.prize').textContent,
       };
@@ -92,7 +97,7 @@ render_seatrade() {
     const fail = (m) => { console.error("build-og-card: FAIL, " + m); process.exit(1) };
     if (!r.ok) fail("render failed: " + r.error);
     if (v.placeholders) fail(v.placeholders + " unreplaced {{placeholder}} left on the card");
-    if (!v.font) fail("Plus Jakarta Sans did not load; the card would ship in the system face");
+    if (!v.font) fail("no loaded Plus Jakarta Sans face; the card would ship in the system face");
     if (!v.art) fail("the prize artwork did not load; the card would ship with an empty right side");
     if (v.prize !== process.argv[2]) fail("prize on the card is " + JSON.stringify(v.prize) + ", config says " + JSON.stringify(process.argv[2]));
   ' "$result" "$prize"

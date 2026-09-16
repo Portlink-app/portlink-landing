@@ -1,0 +1,116 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Portlink Seatrade share card</title>
+<!--
+  The 1200x630 share card for /seatrade/, authored as a page rather than drawn in an image editor.
+
+  WHY THIS FILE EXISTS. The first Seatrade card shipped as a committed PNG with no source, so the
+  only way to change it was to redraw it somewhere else and hope the result still matched the site.
+  This is the same arrangement the front page card already has (scripts/og/card.html): the card
+  links the vendored design-system token file, so --ds-inverted-bg, --ds-inverted-text and the navy
+  ramp here are the values the site renders with, and a design-system bump changes the card.
+
+  WHY IT CARRIES THE PRIZE. The draw travels by referral, and a referral posted on LinkedIn is not
+  a page, it is this image: LinkedIn passes no share text of its own (ShareBox.tsx hands it a URL
+  and nothing else), so whatever the card omits is omitted from the whole message. The prize is the
+  reason to tap, so it is on the card.
+
+  PRIZE_NAME IS INJECTED, NEVER TYPED. The .prize span holds a placeholder that
+  scripts/build-og-card.sh replaces with PRIZE_NAME from lib/seatrade/config.ts at render time, and
+  the script fails if the placeholder survives. A prize typed here would keep claiming an iPhone
+  Duo on the most-shared surface we own the day the prize changes, and the one-place-to-change rule
+  in config.ts would be quietly false.
+
+  Rendered by scripts/build-og-card.sh through the same headless Chrome page-probe uses.
+  Do not hand-edit public/og/*.png; edit this and re-run that script.
+-->
+<link rel="stylesheet" href="../../app/_ds/portlink-tokens.dist.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=block" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; }
+  body {
+    width: 1200px; height: 630px; overflow: hidden; position: relative;
+    /* The inverted-section pattern, which is how this site already renders navy in light mode. */
+    background:
+      linear-gradient(152deg, var(--pl-navy-800) 0%, var(--ds-inverted-bg) 58%, var(--pl-navy-950) 100%);
+    font-family: var(--ds-font-sans);
+    color: var(--ds-inverted-text);
+    -webkit-font-smoothing: antialiased;
+  }
+  /* The chart grid the funnel's own hero carries, at the weight where it is texture and not pattern. */
+  .grid {
+    position: absolute; inset: 0; opacity: 0.5;
+    background-image:
+      repeating-linear-gradient(0deg, rgba(242,245,249,0.055) 0 1px, transparent 1px 60px),
+      repeating-linear-gradient(90deg, rgba(242,245,249,0.055) 0 1px, transparent 1px 60px);
+  }
+
+  /* The artwork is not a pasted panel: it is the right side of the same scene, faded into the card
+     on its left edge. The render's own background is a blurred port at blue hour, which is the
+     colour the card is already made of, so a hard panel edge would be the only thing announcing
+     that two images are involved. */
+  .art {
+    position: absolute; right: 0; top: 0; width: 600px; height: 630px;
+    /* 90deg, not an angle: any tilt makes the mask non-zero somewhere along the element's own left
+       edge, and that shows up as a hairline seam running the height of the card. Straight
+       left-to-right fades identically at every y, so the artwork has no edge at all. */
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.5) 20%, #000 52%);
+    mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.5) 20%, #000 52%);
+  }
+  .art img { width: 100%; height: 100%; object-fit: cover; object-position: 60% 50%; display: block; }
+
+  .copy { position: absolute; left: 76px; top: 112px; width: 600px; z-index: 2; }
+  .eyebrow {
+    margin: 0; font-size: 19px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--pl-navy-300);
+  }
+  h1 {
+    margin: 26px 0 0; width: 600px;
+    font-size: 56px; line-height: 1.04; letter-spacing: -0.035em; font-weight: 800;
+  }
+  .line {
+    margin: 30px 0 0; width: 520px;
+    font-size: 25px; line-height: 1.4; font-weight: 500; color: rgba(242,245,249,0.78);
+  }
+  .prize { color: #fff; font-weight: 700; white-space: nowrap; }
+
+  .foot {
+    position: absolute; left: 76px; bottom: 62px; z-index: 2;
+    display: flex; align-items: center; gap: 18px;
+  }
+  /* The site's own rule for the wordmark on a dark ground, character for character:
+     globals.css line 163, [data-theme="dark"] .logo-img. One navy asset, inverted, rather than a
+     second white PNG nobody remembers to re-export. */
+  .foot img { height: 34px; display: block; filter: brightness(0) invert(1); }
+  .foot span { font-size: 20px; font-weight: 600; color: var(--pl-navy-300); }
+
+  /* Says what the render is, so a folding phone beside the Portlink mark cannot be read as a
+     product of ours rather than the thing you can win. */
+  .tag {
+    position: absolute; right: 76px; bottom: 62px; z-index: 2;
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 11px 22px; border-radius: 999px;
+    background: rgba(5,13,24,0.55); border: 1px solid rgba(242,245,249,0.22);
+    font-size: 17px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    color: #fff; backdrop-filter: blur(6px);
+  }
+  .tag .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--ds-success); }
+</style>
+
+<div class="art"><img src="../../public/seatrade/prize.webp" alt=""></div>
+<div class="grid"></div>
+
+<div class="copy">
+  <p class="eyebrow">Seatrade Cruise Med 2026 · Las Palmas</p>
+  <h1>What is your port&nbsp;call friction score?</h1>
+  <p class="line">Seven taps, about a minute, and you are in the draw for <span class="prize">{{PRIZE_NAME}}</span>.</p>
+</div>
+
+<div class="foot">
+  <img src="../../public/portlink-logo.png" alt="Portlink">
+  <span>portlink.app/seatrade</span>
+</div>
+
+<div class="tag">The prize</div>

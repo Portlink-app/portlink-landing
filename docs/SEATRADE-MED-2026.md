@@ -74,7 +74,7 @@ weighted by `entries`, `eligible=yes`, test rows excluded, reproducible for the 
 | Unsubscribe | `app/api/seatrade/unsubscribe/route.ts` | GET (link) and POST (RFC 8058 one-click). Cancels e2–e4 via `resend.emails.cancel`. |
 | Export | `app/api/seatrade/export/route.ts` | GET. Mails the CSV to `ADMIN_EMAIL`. No auth by design; throttled to one per 10 min. |
 | Pages | `app/seatrade/page.tsx` (+ `layout.tsx` metadata/OG), `app/seatrade/report/page.tsx` (dynamic), `app/seatrade/unsubscribed/page.tsx` | One-column shell `components/seatrade/Shell.tsx`; quiz `components/seatrade/Scorecard.tsx`. |
-| Assets | `public/seatrade/qr-*.svg`, `public/seatrade/og.png`, `public/seatrade/prize.webp` | QR per placement (`badge card slides linkedin booth print`), error level H, encode `https://portlink.app/seatrade/?s=<placement>`. |
+| Assets | `public/seatrade/qr-*.svg`, `public/seatrade/prize.webp`, `public/og/seatrade-2026-09-16.png` | QR per placement (`badge card slides linkedin booth print`), error level H, encode `https://portlink.app/seatrade/?s=<placement>`. The share card is generated from `scripts/og/seatrade-card.html`. |
 
 ### Consent, the two open questions and the prize artwork (added 16.09.2026)
 
@@ -107,6 +107,18 @@ our own render still ships, and the reasons and the conditions for revisiting th
 component's header. Naming the prize in text is unrelated and unchanged; that is what `PRIZE_NAME`
 is for.
 
+**The share card carries the draw** (`scripts/og/seatrade-card.html`, rendered by
+`scripts/build-og-card.sh seatrade` to `public/og/seatrade-2026-09-16.png`). The funnel grows by
+referral, and a referral posted on LinkedIn is not a page: `ShareBox.tsx` hands LinkedIn a URL and
+no text, so the card is the whole message there. It names the prize in a line under the headline,
+shows the artwork as the right half of the same scene, and is labelled `The prize` so a folding
+phone beside the Portlink mark cannot be read as a product of ours. The card is a page like the
+front page card: it links the vendored tokens, so the navy is the design system's navy, and it
+fetches Plus Jakarta Sans the way `globals.css` does. Three things are asserted at render and fail
+the build rather than shipping quietly: the brand face loaded, the artwork loaded, and `PRIZE_NAME`
+replaced the `{{PRIZE_NAME}}` placeholder. The old `public/seatrade/og.png` is gone; it had no
+source, so it could not be changed without redrawing it outside the repo.
+
 **Runtime env** (already set on the Netlify site for all contexts): `RESEND_API_KEY`, `ADMIN_EMAIL`.
 Optional overrides: `RESEND_AUDIENCE_ID`, `NEXT_PUBLIC_SITE_URL`. Blobs need no credential in
 production; locally use `netlify dev` (linked site) or set `NETLIFY_SITE_ID` + `NETLIFY_AUTH_TOKEN`.
@@ -138,6 +150,15 @@ production; locally use `netlify dev` (linked site) or set `NETLIFY_SITE_ID` + `
   declare the draw unsponsored and unendorsed, and third-party product imagery on the same page
   contradicts that in the exact place a reader checks. Revisit never; this is a licensing boundary,
   not a taste one.
+- **Chose to carry the prize on the share card** over naming it only in the page copy - because the
+  draw travels by referral and LinkedIn, David's own channel, sends no text with a shared link
+  (`ShareBox.tsx` passes `url` alone), so for that audience the card is the entire message and a
+  card without the prize is an invitation without a reason. Revisit if the funnel ever stops
+  depending on referral.
+- **Chose to generate the Seatrade card from HTML** over keeping the committed PNG - because the
+  first card had no source at all, so every change to it meant redrawing it somewhere else and
+  hoping it still matched the site, and the prize could never be read from `PRIZE_NAME`. Revisit
+  never; a card with no source is the thing being fixed.
 - **Chose an unauthenticated export that mails the admin** over a token-protected download —
   because it adds no secret and the worst case is one extra email to David every 10 minutes.
 
@@ -153,7 +174,10 @@ production; locally use `netlify dev` (linked site) or set `NETLIFY_SITE_ID` + `
   `node scripts/seatrade-draw.mjs seatrade-leads-2026-09-29.csv --seed "<value>"`, check the winner's
   `domainMatch`/company/role by hand, email them (terms: reply within 7 days), keep the output.
 - **Change the prize**: `PRIZE_NAME` in `lib/seatrade/config.ts` (or env `SEATRADE_PRIZE_NAME`); the
-  terms carry a substitution clause. Dates: `DRAW` in the same file.
+  terms carry a substitution clause. Dates: `DRAW` in the same file. **Then re-run
+  `scripts/build-og-card.sh seatrade`**: the share card reads PRIZE_NAME at render time, but a PNG
+  is not re-rendered by a code change, so the card keeps advertising the old prize until it is.
+  A new prize should also land on a new dated filename, since `/og/*` is immutable for a year.
 - **Watch the room**: `https://portlink.app/seatrade/report/` (works on a phone or a screen).
 - **Change copy**: edit `lib/seatrade/emails.ts` / `scorecard.ts`; already-booked e2–e4 keep the old
   copy. To replace them for an existing lead: cancel the ids in the lead doc and re-book.

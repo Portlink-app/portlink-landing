@@ -222,8 +222,8 @@ export default function Scorecard() {
                 Confirm your work email and you are in the draw for <strong style={{ color: 'var(--text-primary)' }}>{PRIZE_NAME}</strong>. Every colleague you invite who confirms adds an entry. <Link href={TERMS_PATH} style={{ color: 'var(--text-muted)' }}>Terms</Link>
               </p>
             </div>
-            <p style={{ fontSize: 'var(--ds-text-sm)', color: 'var(--text-secondary)', lineHeight: 1.5, margin: '10px 0 0', paddingTop: 10, borderTop: '1px solid var(--border)' }}>
-              Entering the draw includes a subscription to the Portlink newsletter, which runs for as long as you want it. Unsubscribe anytime; your entry stays.
+            <p style={{ fontSize: 'var(--ds-text-sm)', color: 'var(--text-secondary)', lineHeight: 1.5, margin: '8px 0 0', paddingTop: 8, borderTop: '1px solid var(--border)' }}>
+              Entering the draw includes the Portlink newsletter, with no end date. Unsubscribe anytime; your entry stays.
             </p>
           </div>
           <StatPill stats={stats} />

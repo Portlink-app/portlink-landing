@@ -18,6 +18,7 @@ import EcosystemSection from '@/components/sections/EcosystemSection'
 import BentoSection from '@/components/sections/BentoSection'
 import PilotSection from '@/components/sections/PilotSection'
 import TeamProofSection from '@/components/sections/TeamProofSection'
+import DrawSection from '@/components/sections/DrawSection'
 import AccessSection from '@/components/sections/AccessSection'
 import Footer from '@/components/sections/Footer'
 
@@ -109,6 +110,7 @@ export default function Home() {
         <BentoSection />
         <PilotSection />
         <TeamProofSection />
+        <DrawSection />
         <AccessSection />
       </main>
       <Footer />

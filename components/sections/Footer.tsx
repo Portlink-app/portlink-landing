@@ -9,10 +9,9 @@ const navLinks = {
   ],
   Company: [
     { label: 'Team', href: '/team/' },
-    { label: 'About', href: '#' },
     { label: 'Blog', href: 'https://www.linkedin.com/company/portlink-app/' },
-    { label: 'Contact', href: '#access' },
-    { label: 'Privacy', href: '#' },
+    { label: 'Contact', href: 'mailto:admin@portlink.app' },
+    { label: 'Privacy', href: '/privacy/' },
   ],
 }
 

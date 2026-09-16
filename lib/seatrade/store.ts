@@ -20,6 +20,7 @@ import { getStore, type Store } from '@netlify/blobs'
 import { LEAD_STORE, REFERRAL_CAP, SAME_DOMAIN_CAP } from './config'
 import { CODE_ALPHABET } from './eligibility'
 import { BANDS, QUESTIONS, type Answers, type BandId, type QuestionId } from './scorecard'
+import { type OpenAnswers } from './openQuestions'
 
 export type ResendStep = 'e1' | 'e2' | 'e3' | 'e4' | 'verify'
 
@@ -39,6 +40,9 @@ export interface Lead {
   answers: Answers
   score: number
   band: BandId
+  /** The two optional open questions, answered on the "sent" screen after the entry exists.
+   *  Absent until they write something; never required, never part of the score or the draw. */
+  openAnswers?: OpenAnswers
   consent: true
   /** Their own invitation code (6 chars). Link: /seatrade/?r=CODE */
   referralCode: string
@@ -271,6 +275,7 @@ export function leadsToCsv(leads: Lead[]): string {
   const codeToName = new Map(leads.map(l => [l.id, l.referralCode]))
   const cols = ['createdAt', 'name', 'email', 'emailDomain', 'domainMatch', 'company', 'role', 'roleDetail', 'score', 'band', 'source',
     ...QUESTIONS.filter(q => q.id !== 'role').map(q => q.id),
+    'openFriction', 'openWish',
     'verifiedAt', 'referralCode', 'referredByCode', 'referralsVerified', 'referralsPending', 'entries', 'eligible',
     'unsubscribedAt', 'submissions', 'test', 'id']
   const esc = (v: unknown) => {
@@ -282,6 +287,7 @@ export function leadsToCsv(leads: Lead[]): string {
     return [
       l.createdAt, l.name, l.email, l.emailDomain ?? '', l.domainMatch ?? '', l.company, l.answers.role, l.roleDetail ?? '', l.score, l.band, l.source,
       ...QUESTIONS.filter(q => q.id !== 'role').map(q => l.answers[q.id]),
+      l.openAnswers?.friction ?? '', l.openAnswers?.wish ?? '',
       l.verifiedAt ?? '', l.referralCode ?? '', l.referredBy ? (codeToName.get(l.referredBy) ?? '') : '',
       t.verifiedReferrals, t.pendingReferrals, t.entries, t.eligible ? 'yes' : '',
       l.unsubscribedAt ?? '', l.submissions, l.test ? 'yes' : '', l.id,

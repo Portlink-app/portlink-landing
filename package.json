@@ -4,15 +4,16 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "prebuild": "node scripts/check-ds-version.mjs && node scripts/lint-dashes.mjs && node scripts/check-clip-modes.mjs --if-available",
+    "prebuild": "node scripts/check-ds-version.mjs && node scripts/lint-dashes.mjs && node scripts/check-clip-modes.mjs --if-available && npm run check:leaderboard",
     "check:clips": "node scripts/check-clip-modes.mjs",
-    "verify": "npm run lint:dashes && npm run lint:dashes-selftest && npm run check:clips && npm run lint",
+    "verify": "npm run lint:dashes && npm run lint:dashes-selftest && npm run check:clips && npm run check:leaderboard && npm run lint",
     "lint:dashes": "node scripts/lint-dashes.mjs",
     "lint:dashes-selftest": "node scripts/lint-dashes.selftest.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "ds:check": "node scripts/check-ds-version.mjs --strict"
+    "ds:check": "node scripts/check-ds-version.mjs --strict",
+    "check:leaderboard": "tsx scripts/check-leaderboard-privacy.mjs"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
@@ -34,6 +35,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.1.7",
     "tailwindcss": "^4",
+    "tsx": "^4.23.13",
     "typescript": "^5"
   }
 }

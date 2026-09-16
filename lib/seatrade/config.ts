@@ -36,14 +36,19 @@ export const LEAD_STORE = 'seatrade-leads'
 // ── The draw ──────────────────────────────────────────────────────────────────
 
 /** ONE place to change the prize. Copy everywhere reads "the draw for {PRIZE_NAME}". */
-export const PRIZE_NAME = process.env.SEATRADE_PRIZE_NAME || 'an iPhone'
+export const PRIZE_NAME = process.env.SEATRADE_PRIZE_NAME || 'an iPhone Duo'
 
 export const DRAW = {
-  /** Entries close a week after the show so referrals sent from Las Palmas still count. */
-  closesAt: '2026-09-26T21:59:59Z',
-  closesLabel: '26 September 2026 at 23.59 (Madrid time)',
-  drawDate: '2026-09-29',
-  drawLabel: '29 September 2026',
+  /**
+   * Entries run for a MONTH after the show (David, 16.09.2026), not a week. A referral chain needs
+   * time to travel: someone met at the booth forwards the link to a colleague, who forwards it on,
+   * and a seven-day window cut that off before the second hop. Safe to move on 16.09 because the
+   * live counter read n=0, verified=0, entries=0 - nobody had entered under the old dates.
+   */
+  closesAt: '2026-10-17T21:59:59Z',
+  closesLabel: '17 October 2026 at 23.59 (Madrid time)',
+  drawDate: '2026-10-19',
+  drawLabel: '19 October 2026',
 } as const
 
 /** Entries: 1 for your own verified sign-up + 1 per verified referral, capped. */

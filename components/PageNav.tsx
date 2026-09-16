@@ -13,6 +13,7 @@ const links = [
   { label: 'Roles', href: '/#roles' },
   { label: 'Platform', href: '/#how' },
   { label: 'Pilot', href: '/#pilot' },
+  { label: 'Draw', href: '/#draw' },
   { label: 'Team', href: '/team/' },
 ]
 

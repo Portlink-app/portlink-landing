@@ -10,7 +10,7 @@ const navLinks = {
   Company: [
     { label: 'Team', href: '/team/' },
     { label: 'About', href: '#' },
-    { label: 'Blog', href: '#' },
+    { label: 'Blog', href: 'https://www.linkedin.com/company/portlink-app/' },
     { label: 'Contact', href: '#access' },
     { label: 'Privacy', href: '#' },
   ],
@@ -70,6 +70,11 @@ export default function Footer() {
                 <li key={link.label}>
                   <a
                     href={link.href}
+                    // An off-site link opens in a new tab and drops the opener, derived from the
+                    // href rather than flagged per row, so the next external link inherits it.
+                    {...(link.href.startsWith('http')
+                      ? { target: '_blank', rel: 'noopener noreferrer' }
+                      : {})}
                     style={{
                       color: 'var(--text-muted)',
                       textDecoration: 'none',

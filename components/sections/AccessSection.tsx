@@ -4,6 +4,7 @@ import { useState, type FormEvent, type FocusEvent } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { CheckCircle, ChevronRight, ChevronLeft, Ship, Anchor, Compass, Zap, Tag, HeadphonesIcon } from 'lucide-react'
 import { useReveal } from '@/hooks/useReveal'
+import { pilotEmailProblem } from '@/lib/access/eligibility'
 
 // ── Step definitions ──────────────────────────────────────────────────────────
 
@@ -29,6 +30,9 @@ interface WizardData {
   // Shared
   keyPorts: string
   message: string
+  /** Honeypot. Off-screen and tab-skipped, so only a script fills it. The API answers a filled
+   *  one with a fake success and sends nothing. */
+  website: string
 }
 
 const roleOptions = [
@@ -86,12 +90,13 @@ export default function AccessSection() {
   const [dir, setDir] = useState(1) // 1 = forward, -1 = back
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState('')
+  const [emailHint, setEmailHint] = useState('')
   const [data, setData] = useState<WizardData>({
     role: '', name: '', email: '', company: '',
     fleetSize: '', portCallsPerYear: '', currentPdaTool: '',
     portsOperated: '', cruiseLinesServed: '', agentSoftware: '',
     destinationsCount: '', groupSizeTypical: '', bookingLeadTime: '',
-    keyPorts: '', message: '',
+    keyPorts: '', message: '', website: '',
   })
 
   const steps: StepId[] = ['role', 'identity', 'operation']
@@ -113,14 +118,19 @@ export default function AccessSection() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       })
-      if (!res.ok) throw new Error('Request failed')
+      const payload = (await res.json().catch(() => null)) as { ok?: boolean; error?: string } | null
+      if (!res.ok || !payload?.ok) throw new Error(payload?.error || 'Something went wrong. Please try again.')
       go('done', 1)
-    } catch {
-      setSubmitError('Something went wrong. Please try again.')
+    } catch (err) {
+      setSubmitError(err instanceof Error ? err.message : 'Something went wrong. Please try again.')
     } finally {
       setSubmitting(false)
     }
   }
+
+  /** The API's own rule, run in the browser so a wrong address is fixable in place rather than
+   *  after a round trip. Same module, so the two can never drift apart. */
+  const checkEmail = () => setEmailHint(data.email.trim() ? (pilotEmailProblem(data.email) ?? '') : '')
 
   const focusStyle = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     e.currentTarget.style.borderColor = 'var(--brand)'
@@ -333,7 +343,12 @@ export default function AccessSection() {
                     animate="center"
                     exit="exit"
                     transition={stepTransition}
-                    onSubmit={(e) => { e.preventDefault(); go('operation', 1) }}
+                    onSubmit={(e) => {
+                      e.preventDefault()
+                      const problem = pilotEmailProblem(data.email)
+                      if (problem) { setEmailHint(problem); return }
+                      go('operation', 1)
+                    }}
                   >
                     <h3 style={{ fontSize: 22, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 8 }}>
                       About you
@@ -358,13 +373,31 @@ export default function AccessSection() {
                             autoComplete={f.auto}
                             required
                             value={data[f.name]}
-                            onChange={(e) => setData(d => ({ ...d, [f.name]: e.target.value }))}
+                            onChange={(e) => {
+                              setData(d => ({ ...d, [f.name]: e.target.value }))
+                              if (f.name === 'email' && emailHint) setEmailHint('')
+                            }}
                             style={inputBase}
                             onFocus={focusStyle}
-                            onBlur={blurStyle}
+                            onBlur={(e) => { blurStyle(e); if (f.name === 'email') checkEmail() }}
                           />
+                          {f.name === 'email' && emailHint && (
+                            <p role="alert" style={{ color: 'var(--alert)', fontSize: 13, margin: '6px 0 0', lineHeight: 1.5 }}>
+                              {emailHint}
+                            </p>
+                          )}
                         </div>
                       ))}
+                      {/* Honeypot: off-screen, tab-skipped, never filled by people. */}
+                      <label aria-hidden style={{ position: 'absolute', left: -9999, top: 0, width: 1, height: 1, overflow: 'hidden' }}>
+                        Website
+                        <input
+                          tabIndex={-1}
+                          autoComplete="off"
+                          value={data.website}
+                          onChange={(e) => setData(d => ({ ...d, website: e.target.value }))}
+                        />
+                      </label>
                     </div>
                     <div style={{ display: 'flex', gap: 12, marginTop: 28 }}>
                       <button type="button" onClick={() => go('role', -1)} style={{

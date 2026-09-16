@@ -33,7 +33,7 @@ function RecordHead() {
     <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, flexWrap: 'wrap', marginBottom: 12 }}>
       <span style={{ fontSize: 15, fontWeight: 700, color: 'var(--ds-text-1)' }}>Norwegian Fjords</span>
       <Pill tone="primary">In review</Pill>
-      <Num style={{ color: 'var(--ds-text-3)' }}>19–24 Sep 2026 · 6 ports</Num>
+      <Num style={{ color: 'var(--ds-text-3)' }}>19-24 Sep 2026 · 6 ports</Num>
     </div>
   )
 }

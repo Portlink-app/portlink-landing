@@ -81,7 +81,7 @@ function PortGrid() {
 }
 
 function NotificationStream() {
-  const items = ['MSC Grandiosa — Piraeus', 'Costa Fortuna — Bari', 'Celebrity Edge — Mykonos']
+  const items = ['MSC Grandiosa · Piraeus', 'Costa Fortuna · Bari', 'Celebrity Edge · Mykonos']
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
       {items.map((item, i) => (

@@ -23,7 +23,7 @@ const thread: Message[] = [
     org: 'Nordvik Line',
     who: 'Marine Ops',
     when: '18 Sep 09:31',
-    body: 'Understood. Passenger count is up 140 on the last manifest — does that change the gangway plan?',
+    body: 'Understood. Passenger count is up 140 on the last manifest. Does that change the gangway plan?',
     own: true,
   },
   {

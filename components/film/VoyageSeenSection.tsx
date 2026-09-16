@@ -20,14 +20,14 @@ const clips = [
     poster: '/video/landing-2026-09-15/hero-C.jpg',
     title: 'Plan it on the chart',
     body: 'Depths, seamarks and lights are on the chart you route against, in the light or the dark.',
-    label: 'Portlink — the chart in dark mode',
+    label: 'Portlink: the chart in dark mode',
   },
   {
     src: '/video/landing-2026-09-15/hero-D.mp4',
     poster: '/video/landing-2026-09-15/hero-D.jpg',
     title: 'See the whole voyage',
     body: 'Every leg, every port and the distance between them, in one picture.',
-    label: 'Portlink — the finished route',
+    label: 'Portlink: the finished route',
   },
 ]
 
@@ -82,7 +82,7 @@ export default function VoyageSeenSection() {
               opacity: 0.72,
             }}
           >
-            The route you draw is the route the itinerary computes against — the same distances, the same
+            The route you draw is the route the itinerary computes against: the same distances, the same
             times, the same ports everyone else is reading.
           </p>
         </motion.div>

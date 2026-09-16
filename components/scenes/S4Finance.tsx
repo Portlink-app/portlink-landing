@@ -30,7 +30,7 @@ const pct = ((delta / pdaTotal) * 100).toFixed(1).replace('.', ',')
 
 /** Norwegian number form: non-breaking thousands separator, so a sum never wraps mid-number. */
 const kr = (n: number) => `${n.toLocaleString('nb-NO')}\u00A0kr`
-const signed = (n: number) => (n === 0 ? '—' : `${n > 0 ? '+' : '−'}${kr(Math.abs(n))}`)
+const signed = (n: number) => (n === 0 ? '-' : `${n > 0 ? '+' : '−'}${kr(Math.abs(n))}`)
 
 function TotalBar() {
   return (

@@ -20,9 +20,11 @@
  * reduced-motion visitor gets no track at all. This component only decides
  * which stage is showing, and only when there is a track to read.
  *
- * Desktop and phone are separate encodes rendered as a CSS-hidden pair, and the
- * phone one is a portrait cut of the same recording rather than a zoom into the
- * landscape one. Measured 16.09.2026: with the landscape encode the pinned pane
+ * Desktop and phone are separate encodes, and exactly one of them is fetched:
+ * see StageMedia, where the CSS-hidden pair this used to render was measured
+ * downloading both. The phone cut is a portrait re-cut of the same recording
+ * rather than a zoom into the landscape one. Measured 16.09.2026: with the
+ * landscape encode the pinned pane
  * on a 390x844 phone was a 358x201 band with roughly 600 px of empty screen
  * around it — pinning a reader to a mostly empty screen for two stages is worse
  * than not pinning at all. The portrait cut fills 477 px of the same screen and
@@ -32,7 +34,7 @@
 
 import { useRef } from 'react'
 import { motion } from 'framer-motion'
-import { useMotionAllowed, useInViewPlayback, useTrackStage } from './useFilm'
+import { useMotionAllowed, useInViewPlayback, useNarrow, useTrackStage } from './useFilm'
 
 type Stage = {
   label: string
@@ -62,32 +64,67 @@ const stages: Stage[] = [
   },
 ]
 
-/** One stage's media, filling its frame. Still until motion is known to be welcome. */
+/**
+ * One stage's media, filling its frame, in exactly one encode.
+ *
+ * ⛔ THE PAIR USED TO BE RENDERED TWICE AND HIDDEN WITH CSS, AND `display: none` DOES NOT STOP A
+ * FETCH. Measured 16.09.2026 on preview 2 at `6b1829f8`: a phone pulled hero-A.jpg (47 258) and
+ * hero-B.jpg (64 632) it can never display, and a desktop pulled m-A-portrait.jpg (23 627) and
+ * m-B-portrait.jpg (30 187) it can never display. The film is the larger half of the same defect:
+ * the desktop also fetched both portrait mp4s (346 704 + 187 183) and a phone both landscape ones
+ * (606 036 + 406 007). The old comment was right that a hidden element never DECODES; it never
+ * said anything about the request, which is the byte a visitor actually pays for.
+ *
+ * So there is one element now, and it chooses:
+ *   still  <picture> + <source media>, which the browser resolves before it fetches anything, with
+ *          no JavaScript. This is the branch the SERVER renders, so it has to work without us.
+ *   film   `media` on <source> is honoured inside <picture> and ignored inside <video>, so the
+ *          film picks its src from matchMedia instead. That is client-only and costs nothing:
+ *          nothing plays until the reduced-motion answer has arrived on the client anyway.
+ */
 function StageMedia({
-  src,
-  poster,
+  stage,
   label,
   playing,
   motionAllowed,
+  narrow,
+  eager,
 }: {
-  src: string
-  poster: string
+  stage: Stage
   label: string
   playing: boolean
   motionAllowed: boolean
+  narrow: boolean
+  eager: boolean
 }) {
   const ref = useInViewPlayback(playing && motionAllowed)
 
   if (!motionAllowed) {
-    return <img className="film-media" src={poster} alt={label} />
+    return (
+      <picture>
+        <source media="(max-width: 767px)" srcSet={stage.mobilePoster} />
+        <img
+          className="film-media"
+          src={stage.desktopPoster}
+          alt={label}
+          /* The hero is the first thing on the page, so its stills are not deferred. Stage two is
+             eager too: it lives in the same pinned pane and is one scroll step away, and a still
+             that arrives after the cross-fade has started is a blank frame at the moment the
+             reader is looking straight at it. */
+          loading={eager ? 'eager' : 'lazy'}
+          fetchPriority={eager ? 'high' : 'auto'}
+          decoding="async"
+        />
+      </picture>
+    )
   }
 
   return (
     <video
       className="film-media"
       ref={ref}
-      src={src}
-      poster={poster}
+      src={narrow ? stage.mobile : stage.desktop}
+      poster={narrow ? stage.mobilePoster : stage.desktopPoster}
       muted
       loop
       playsInline
@@ -98,13 +135,13 @@ function StageMedia({
 }
 
 function StageStack({
-  variant,
   stage,
   motionAllowed,
+  narrow,
 }: {
-  variant: 'desktop' | 'mobile'
   stage: number
   motionAllowed: boolean
+  narrow: boolean
 }) {
   return (
     <div className="film-stack">
@@ -112,11 +149,12 @@ function StageStack({
         <figure key={s.label} className="film-slide" data-active={i === stage ? 'true' : 'false'}>
           <div className="film-frame">
             <StageMedia
-              src={variant === 'desktop' ? s.desktop : s.mobile}
-              poster={variant === 'desktop' ? s.desktopPoster : s.mobilePoster}
-              label={`Portlink — ${s.label}`}
+              stage={s}
+              label={`Portlink: ${s.label}`}
               playing={i === stage}
               motionAllowed={motionAllowed}
+              narrow={narrow}
+              eager
             />
           </div>
           {/* Read only without the pin, where every stage is on screen at once. */}
@@ -133,6 +171,7 @@ export default function FilmHero() {
   const trackRef = useRef<HTMLDivElement>(null)
   const paneRef = useRef<HTMLDivElement>(null)
   const motionAllowed = useMotionAllowed()
+  const narrow = useNarrow()
   const stage = useTrackStage(trackRef, paneRef, stages.length, motionAllowed)
 
   return (
@@ -244,12 +283,7 @@ export default function FilmHero() {
         ))}
 
         <div ref={paneRef} className="film-pane">
-          <div className="scene-wide">
-            <StageStack variant="desktop" stage={stage} motionAllowed={motionAllowed} />
-          </div>
-          <div className="scene-narrow">
-            <StageStack variant="mobile" stage={stage} motionAllowed={motionAllowed} />
-          </div>
+          <StageStack stage={stage} motionAllowed={motionAllowed} narrow={narrow} />
 
           {/* Real links, not decoration: a keyboard or switch user reaches stage
               two without scrolling to it, and the browser does the scrolling. */}

@@ -4,7 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "prebuild": "node scripts/check-ds-version.mjs",
+    "prebuild": "node scripts/check-ds-version.mjs && node scripts/lint-dashes.mjs && node scripts/check-clip-modes.mjs --if-available",
+    "check:clips": "node scripts/check-clip-modes.mjs",
+    "verify": "npm run lint:dashes && npm run lint:dashes-selftest && npm run check:clips && npm run lint",
+    "lint:dashes": "node scripts/lint-dashes.mjs",
+    "lint:dashes-selftest": "node scripts/lint-dashes.selftest.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",

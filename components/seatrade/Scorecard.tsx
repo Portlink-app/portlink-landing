@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState, type CSSProperties, type FormEvent } from
 import Link from 'next/link'
 import { MotionConfig, motion } from 'framer-motion'
 import { ArrowLeft, ArrowRight, Check, Mail, MailCheck } from 'lucide-react'
+import { PrizeChip } from '@/components/seatrade/PrizeImage'
 import ShareBox from '@/components/seatrade/ShareBox'
 import { DRAW, PRIZE_NAME, REFERRAL_CAP, TERMS_PATH } from '@/lib/seatrade/config'
 import { cleanCode, workEmailProblem } from '@/lib/seatrade/eligibility'
@@ -204,9 +205,15 @@ export default function Scorecard() {
           <p style={{ fontSize: 'var(--ds-text-body)', color: 'var(--text-secondary)', lineHeight: 1.55, margin: '0 0 var(--ds-gap-3)' }}>
             Seven taps, about a minute. See how much of your port call still runs on email, and how you compare with the rest of the show.
           </p>
-          <p style={{ fontSize: 'var(--ds-text-sm)', color: 'var(--text-secondary)', lineHeight: 1.55, margin: '0 0 var(--ds-gap-4)' }}>
-            Confirm your work email and you are in the draw for <strong style={{ color: 'var(--text-primary)' }}>{PRIZE_NAME}</strong>. Every colleague you invite who confirms adds an entry. <Link href={TERMS_PATH} style={{ color: 'var(--text-muted)' }}>Terms</Link>
-          </p>
+          {/* The prize sits INSIDE the draw line rather than above it. A full-width banner here read
+              well and pushed the first option off a 390x844 screen (measured: option bottom 866 with
+              the banner, 559 without). As a chip beside the text it is visible and costs ~30px. */}
+          <div style={{ display: 'flex', gap: 14, alignItems: 'center', margin: '0 0 var(--ds-gap-4)', background: 'var(--surface-plain)', border: '1px solid var(--border)', borderRadius: 'var(--ds-radius-lg)', padding: 12 }}>
+            <PrizeChip size={84} />
+            <p style={{ fontSize: 'var(--ds-text-sm)', color: 'var(--text-secondary)', lineHeight: 1.5, margin: 0 }}>
+              Confirm your work email and you are in the draw for <strong style={{ color: 'var(--text-primary)' }}>{PRIZE_NAME}</strong>. Every colleague you invite who confirms adds an entry. <Link href={TERMS_PATH} style={{ color: 'var(--text-muted)' }}>Terms</Link>
+            </p>
+          </div>
           <StatPill stats={stats} />
         </div>
 

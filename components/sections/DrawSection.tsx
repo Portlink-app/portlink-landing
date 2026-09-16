@@ -16,6 +16,7 @@ import Link from 'next/link'
 import { Trophy, MailCheck, Share2 } from 'lucide-react'
 import { useReveal } from '@/hooks/useReveal'
 import Leaderboard from '@/components/seatrade/Leaderboard'
+import { PrizeBanner } from '@/components/seatrade/PrizeImage'
 import { DRAW, EVENT, FUNNEL_PATH, PRIZE_NAME, REFERRAL_CAP, TERMS_PATH } from '@/lib/seatrade/config'
 
 const steps = [
@@ -92,6 +93,10 @@ export default function DrawSection() {
             Entries close {DRAW.closesLabel} and the draw is on {DRAW.drawLabel}. It is open to people
             working in cruise port calls, which is what the work email confirms.
           </p>
+
+          <div className="reveal" style={{ maxWidth: '720px', margin: '0 auto 48px' }}>
+            <PrizeBanner />
+          </div>
         </div>
 
         <div

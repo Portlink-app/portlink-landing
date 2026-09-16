@@ -34,6 +34,11 @@ export default function Home() {
       <Nav theme={theme} setTheme={setTheme} />
       <main id="main" tabIndex={-1}>
         <FilmHero />
+        {/* Directly under the hero for the duration of the Seatrade Med campaign: David hands this
+            link out on the show floor, and the draw previously sat below the team block near the
+            foot of the page. Moved, not duplicated. Put it back below TeamProofSection when the
+            campaign closes (DRAW.closesAt in lib/seatrade/config.ts). */}
+        <DrawSection />
         <PainSection />
 
         <SceneSection
@@ -110,7 +115,6 @@ export default function Home() {
         <BentoSection />
         <PilotSection />
         <TeamProofSection />
-        <DrawSection />
         <AccessSection />
       </main>
       <Footer />

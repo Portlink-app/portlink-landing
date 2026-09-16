@@ -17,6 +17,7 @@ import ValueSection from '@/components/sections/ValueSection'
 import EcosystemSection from '@/components/sections/EcosystemSection'
 import BentoSection from '@/components/sections/BentoSection'
 import PilotSection from '@/components/sections/PilotSection'
+import TeamProofSection from '@/components/sections/TeamProofSection'
 import AccessSection from '@/components/sections/AccessSection'
 import Footer from '@/components/sections/Footer'
 
@@ -30,7 +31,7 @@ export default function Home() {
   return (
     <>
       <Nav theme={theme} setTheme={setTheme} />
-      <main>
+      <main id="main" tabIndex={-1}>
         <FilmHero />
         <PainSection />
 
@@ -107,6 +108,7 @@ export default function Home() {
         <EcosystemSection />
         <BentoSection />
         <PilotSection />
+        <TeamProofSection />
         <AccessSection />
       </main>
       <Footer />

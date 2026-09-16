@@ -36,13 +36,16 @@ export async function POST(request: Request) {
   // Both boxes left blank. Nothing to record, and nothing has gone wrong.
   if (!answers) return NextResponse.json({ ok: true, saved: false })
 
-  const unchanged = sameOpenAnswers(lead.openAnswers, answers)
-  lead.openAnswers = { ...answers, savedAt: new Date().toISOString() }
+  // Merge, never replace. This is text a person wrote about their own work: a later payload that
+  // carries only one of the two answers must not silently delete the other.
+  const merged = { ...lead.openAnswers, ...answers }
+  const unchanged = sameOpenAnswers(lead.openAnswers, merged)
+  lead.openAnswers = { ...merged, savedAt: new Date().toISOString() }
   lead.updatedAt = new Date().toISOString()
   await saveLead(lead)
 
   if (!unchanged) {
-    const mail = renderOpenAnswers(lead, answers)
+    const mail = renderOpenAnswers(lead, merged)
     const res = await new Resend(process.env.RESEND_API_KEY).emails.send({
       from: FROM,
       to: ADMIN_EMAIL,

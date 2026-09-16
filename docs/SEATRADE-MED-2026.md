@@ -11,8 +11,8 @@ visitor answers seven tap-only questions (role, volume, where the port call live
 changes propagate, time-to-full-picture, biggest pain), gets a **Port Call Friction Score** 0–100
 with a nautical band (Smooth sailing · Choppy · Heavy weather) and three findings, and leaves name,
 work email and company to get the scorecard by email. Entering requires agreeing to the Portlink
-newsletter, and that requirement is stated on the intro screen before question 1, next to the prize
-artwork. Once the entry exists, two optional free-text questions are offered. That sign-up sends one email immediately and
+newsletter, and that requirement is stated on the intro screen before question 1, in the same card as
+the prize and the draw rule. Once the entry exists, two optional free-text questions are offered. That sign-up sends one email immediately and
 books three more with Resend's `scheduledAt`, anchored to the show's end: a sign-up on 14–17.09 gets
 e2 on 19.09, e3 on 23.09, e4 on 29.09 (09:00 Madrid); a later sign-up counts from its own date. Every answer feeds a live, anonymous benchmark at
 `/seatrade/report/`. The admin gets a notification per lead and can mail themselves the full CSV.
@@ -96,13 +96,16 @@ because the lead notification has already been sent by then. An unchanged re-sub
 mailing. The route creates nothing, scores nothing, verifies nothing and counts no entries, so a
 failure there cannot affect the draw. They reach the CSV as `openFriction` and `openWish`.
 
-**The prize artwork** is `public/seatrade/prize.webp` (1376x768, 40 KB), original artwork supplied by
-Starboard on 16.09.2026 and re-encoded from a 1.08 MB PNG.
-⛔ No manufacturer photograph, render, logo or campaign asset may be used here. Apple's third-party
-guidelines require express written permission for their photographs and do not support third-party
-promotional use of their images or product names, and the terms already declare that the draw is not
-sponsored or endorsed by Apple, which a borrowed product shot on the same page would contradict.
-Naming the prize in text is fine and is what `PRIZE_NAME` is for.
+**The prize artwork** is owned by `components/seatrade/PrizeImage.tsx`, not by this screen: one
+asset, `public/seatrade/prize.webp`, in two presentations (`PrizeBanner` on the front page's draw
+section, `PrizeChip` in the funnel intro). The chip and not a banner is a measurement: a full-width
+banner above question 1 put the first answer button off a 390x844 screen, bottom edge 866 px against
+a 559 px baseline. Both presentations set `width` and `height`, because `images: { unoptimized: true }`
+means nothing computes an intrinsic ratio and those attributes are all that stops the text below from
+jumping. David authorised Apple product imagery on 16.09.2026, so it is permitted rather than banned;
+our own render still ships, and the reasons and the conditions for revisiting that live in the
+component's header. Naming the prize in text is unrelated and unchanged; that is what `PRIZE_NAME`
+is for.
 
 **Runtime env** (already set on the Netlify site for all contexts): `RESEND_API_KEY`, `ADMIN_EMAIL`.
 Optional overrides: `RESEND_AUDIENCE_ID`, `NEXT_PUBLIC_SITE_URL`. Blobs need no credential in

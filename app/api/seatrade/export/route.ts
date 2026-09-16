@@ -36,7 +36,7 @@ export async function GET() {
     text: [
       `Attached: every Seatrade Med 2026 scorecard lead as CSV (${leads.length} rows, ${stats.n} counted in the live benchmark).`,
       stats.avg !== null ? `Show average so far: ${stats.avg}/100. Email or single-inbox port calls: ${Math.round((stats.emailShare ?? 0) * 100)} %.` : 'No benchmark yet.',
-      'Columns: createdAt, name, email, company, role, score, band, source, volume, system, reentry, change, status, pain, unsubscribedAt, submissions, test, id.',
+      'Columns: createdAt, name, email, company, role, score, band, source, volume, system, reentry, change, status, pain, openFriction, openWish, unsubscribedAt, submissions, test, id.',
     ].join('\n\n'),
     attachments: [{ filename: `seatrade-leads-${stamp.slice(0, 10)}.csv`, content: Buffer.from(csv, 'utf8'), contentType: 'text/csv' }],
   })

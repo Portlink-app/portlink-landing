@@ -10,7 +10,9 @@ A QR code on a badge, card, slide or post opens `https://portlink.app/seatrade/?
 visitor answers seven tap-only questions (role, volume, where the port call lives, re-entry, how
 changes propagate, time-to-full-picture, biggest pain), gets a **Port Call Friction Score** 0–100
 with a nautical band (Smooth sailing · Choppy · Heavy weather) and three findings, and leaves name,
-work email and company to get the scorecard by email. That sign-up sends one email immediately and
+work email and company to get the scorecard by email. Entering requires agreeing to the Portlink
+newsletter, and that requirement is stated on the intro screen before question 1, in the same card as
+the prize and the draw rule. Once the entry exists, two optional free-text questions are offered. That sign-up sends one email immediately and
 books three more with Resend's `scheduledAt`, anchored to the show's end: a sign-up on 14–17.09 gets
 e2 on 19.09, e3 on 23.09, e4 on 29.09 (09:00 Madrid); a later sign-up counts from its own date. Every answer feeds a live, anonymous benchmark at
 `/seatrade/report/`. The admin gets a notification per lead and can mail themselves the full CSV.
@@ -31,7 +33,7 @@ day. Runners-up: "see your own ship in Portlink" (highest wow, needs platform wo
 `PRIZE_NAME` (config.ts, default "an iPhone"). Every colleague or partner who scores through your
 invitation link and confirms their own work email adds one entry, up to `REFERRAL_CAP` (10), at most
 `SAME_DOMAIN_CAP` (3) from your own domain. People count once, for whoever invited them first.
-Entries close `DRAW.closesAt` (26.09.2026 23.59 CEST), draw `DRAW.drawDate` (29.09.2026). Terms at
+Entries close `DRAW.closesAt` (17.10.2026 23.59 Madrid), draw `DRAW.drawDate` (19.10.2026). Terms at
 `/seatrade/terms/`.
 
 **What "verified lead" means here:** (1) a work email, so free-mail and disposable providers are
@@ -68,10 +70,42 @@ weighted by `entries`, `eligible=yes`, test rows excluded, reproducible for the 
 | Draw | `scripts/seatrade-draw.mjs` | Reads the exported CSV; seeded weighted pick; audit table. |
 | Sign-up | `app/api/seatrade/route.ts` | POST. Honeypot, consent, server-side re-score, dedupe by email (second submission = re-send e1, no re-booking), Resend contact into audience *Seatrade Med 2026*. |
 | Stats | `app/api/seatrade/stats/route.ts` | GET. Counts only, no PII. |
+| Open answers | `app/api/seatrade/notes/route.ts` | POST. Stores the two optional free-text answers on an existing lead and mails the admin. Touches no draw state. |
 | Unsubscribe | `app/api/seatrade/unsubscribe/route.ts` | GET (link) and POST (RFC 8058 one-click). Cancels e2–e4 via `resend.emails.cancel`. |
 | Export | `app/api/seatrade/export/route.ts` | GET. Mails the CSV to `ADMIN_EMAIL`. No auth by design; throttled to one per 10 min. |
 | Pages | `app/seatrade/page.tsx` (+ `layout.tsx` metadata/OG), `app/seatrade/report/page.tsx` (dynamic), `app/seatrade/unsubscribed/page.tsx` | One-column shell `components/seatrade/Shell.tsx`; quiz `components/seatrade/Scorecard.tsx`. |
-| Assets | `public/seatrade/qr-*.svg`, `public/seatrade/og.png` | QR per placement (`badge card slides linkedin booth print`), error level H, encode `https://portlink.app/seatrade/?s=<placement>`. |
+| Assets | `public/seatrade/qr-*.svg`, `public/seatrade/og.png`, `public/seatrade/prize.webp` | QR per placement (`badge card slides linkedin booth print`), error level H, encode `https://portlink.app/seatrade/?s=<placement>`. |
+
+### Consent, the two open questions and the prize artwork (added 16.09.2026)
+
+**Consent is a condition of entry, and it is disclosed before question 1.** The intro screen carries
+one line saying that entering includes a Portlink newsletter subscription with no end date and that
+unsubscribing does not withdraw the entry; the checkbox at the end says the same thing in the first
+person. Forbrukertilsynet's competitions guidance permits requiring marketing consent to enter as
+long as it is disclosed up front and the entry is not advertised as free, so the words **"free to
+enter"** must never appear on this site. `No purchase is necessary` in the terms is a separate claim
+about money and stays. `markedsforingsloven` §15's business-address exemption covers only generic
+addresses such as `post@firma.no`, and this draw deliberately collects a named individual's work
+address, so the consent is genuinely required rather than decorative.
+
+**The two open questions** (`lib/seatrade/openQuestions.ts`) are shown only on the "sent" screen,
+after the scorecard has been mailed and the entry exists, and after the referral share box so the
+growth loop stays the primary call to action. Both are optional; `POST /api/seatrade/notes/` writes
+`openAnswers` on the lead document and mails the admin a separate "In their own words" notification,
+because the lead notification has already been sent by then. An unchanged re-submit is stored without
+mailing. The route creates nothing, scores nothing, verifies nothing and counts no entries, so a
+failure there cannot affect the draw. They reach the CSV as `openFriction` and `openWish`.
+
+**The prize artwork** is owned by `components/seatrade/PrizeImage.tsx`, not by this screen: one
+asset, `public/seatrade/prize.webp`, in two presentations (`PrizeBanner` on the front page's draw
+section, `PrizeChip` in the funnel intro). The chip and not a banner is a measurement: a full-width
+banner above question 1 put the first answer button off a 390x844 screen, bottom edge 866 px against
+a 559 px baseline. Both presentations set `width` and `height`, because `images: { unoptimized: true }`
+means nothing computes an intrinsic ratio and those attributes are all that stops the text below from
+jumping. David authorised Apple product imagery on 16.09.2026, so it is permitted rather than banned;
+our own render still ships, and the reasons and the conditions for revisiting that live in the
+component's header. Naming the prize in text is unrelated and unchanged; that is what `PRIZE_NAME`
+is for.
 
 **Runtime env** (already set on the Netlify site for all contexts): `RESEND_API_KEY`, `ADMIN_EMAIL`.
 Optional overrides: `RESEND_AUDIENCE_ID`, `NEXT_PUBLIC_SITE_URL`. Blobs need no credential in
@@ -88,6 +122,22 @@ production; locally use `netlify dev` (linked site) or set `NETLIFY_SITE_ID` + `
   Revisit if the sequence ever exceeds 30 days (Resend's horizon) or must react to replies.
 - **Chose explicit consent checkbox (unchecked)** over soft opt-in — because the audience is EU B2B
   individuals (Spain/Norway) and the follow-ups are marketing. Conversion cost accepted.
+- **Chose the newsletter as a condition of entry, disclosed on the intro screen** over a consent box
+  only at the last step - because a requirement revealed after seven answers is both a worse
+  experience and a weaker consent, and the guidance that permits the requirement is the same guidance
+  that demands it be stated up front. Cost: some visitors leave at question 0 instead of question 7,
+  which is the honest place to leave. Revisit if the newsletter programme is ever discontinued.
+- **Chose the two open questions AFTER the entry** over adding them to the seven-question quiz -
+  because a free-text box in front of the email capture is where a visitor on a show floor abandons,
+  and a qualitative answer is worth nothing if it costs an entry. Revisit if the answer rate is so
+  low that the placement, not the ask, is what is failing.
+- **Chose to place them after the referral share box** over above it - because the referral loop is
+  the measured growth engine and one more entry compounds, while the free text does not. Revisit if
+  the share box proves to be where people stop reading.
+- **Chose original artwork for the prize** over a manufacturer product shot - because the terms
+  declare the draw unsponsored and unendorsed, and third-party product imagery on the same page
+  contradicts that in the exact place a reader checks. Revisit never; this is a licensing boundary,
+  not a taste one.
 - **Chose an unauthenticated export that mails the admin** over a token-protected download —
   because it adds no secret and the worst case is one extra email to David every 10 minutes.
 

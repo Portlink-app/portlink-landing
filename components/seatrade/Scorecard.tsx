@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState, type CSSProperties, type FormEvent } from
 import Link from 'next/link'
 import { MotionConfig, motion } from 'framer-motion'
 import { ArrowLeft, ArrowRight, Check, Mail, MailCheck } from 'lucide-react'
+import OpenQuestions from '@/components/seatrade/OpenQuestions'
 import { PrizeChip } from '@/components/seatrade/PrizeImage'
 import ShareBox from '@/components/seatrade/ShareBox'
 import { DRAW, PRIZE_NAME, REFERRAL_CAP, TERMS_PATH } from '@/lib/seatrade/config'
@@ -20,6 +21,8 @@ interface LiveStats { n: number; avg: number | null; emailShare: number | null; 
 interface SubmitResponse {
   ok: boolean
   error?: string
+  /** The lead id. Also the handle /seatrade/me/ and the open questions post back with. */
+  id: string
   score: number
   band: Band
   findings: Finding[]
@@ -74,6 +77,7 @@ const primaryButton: CSSProperties = {
 }
 
 const labelStyle: CSSProperties = { fontSize: 'var(--ds-text-sm)', fontWeight: 500, color: 'var(--text-secondary)' }
+
 
 function StatPill({ stats }: { stats: LiveStats | null }) {
   if (!stats) return null
@@ -205,13 +209,21 @@ export default function Scorecard() {
           <p style={{ fontSize: 'var(--ds-text-body)', color: 'var(--text-secondary)', lineHeight: 1.55, margin: '0 0 var(--ds-gap-3)' }}>
             Seven taps, about a minute. See how much of your port call still runs on email, and how you compare with the rest of the show.
           </p>
-          {/* The prize sits INSIDE the draw line rather than above it. A full-width banner here read
-              well and pushed the first option off a 390x844 screen (measured: option bottom 866 with
-              the banner, 559 without). As a chip beside the text it is visible and costs ~30px. */}
-          <div style={{ display: 'flex', gap: 14, alignItems: 'center', margin: '0 0 var(--ds-gap-4)', background: 'var(--surface-plain)', border: '1px solid var(--border)', borderRadius: 'var(--ds-radius-lg)', padding: 12 }}>
-            <PrizeChip size={84} />
-            <p style={{ fontSize: 'var(--ds-text-sm)', color: 'var(--text-secondary)', lineHeight: 1.5, margin: 0 }}>
-              Confirm your work email and you are in the draw for <strong style={{ color: 'var(--text-primary)' }}>{PRIZE_NAME}</strong>. Every colleague you invite who confirms adds an entry. <Link href={TERMS_PATH} style={{ color: 'var(--text-muted)' }}>Terms</Link>
+          {/* The prize chip, the draw rule and the consent requirement are ONE card on purpose.
+              Height before question 1 is this funnel's scarcest resource: a full-width prize banner
+              here pushed the first answer button off a 390x844 screen (option bottom 866 px against
+              a 559 px baseline), and a separate bordered box for the consent line would spend another
+              card's padding on one sentence. Everything a visitor needs before deciding to start is
+              in one box, above the first question, and the first option stays above the fold. */}
+          <div style={{ margin: '0 0 var(--ds-gap-4)', background: 'var(--surface-plain)', border: '1px solid var(--border)', borderRadius: 'var(--ds-radius-lg)', padding: 12 }}>
+            <div style={{ display: 'flex', gap: 14, alignItems: 'center' }}>
+              <PrizeChip size={84} />
+              <p style={{ fontSize: 'var(--ds-text-sm)', color: 'var(--text-secondary)', lineHeight: 1.5, margin: 0 }}>
+                Confirm your work email and you are in the draw for <strong style={{ color: 'var(--text-primary)' }}>{PRIZE_NAME}</strong>. Every colleague you invite who confirms adds an entry. <Link href={TERMS_PATH} style={{ color: 'var(--text-muted)' }}>Terms</Link>
+              </p>
+            </div>
+            <p style={{ fontSize: 'var(--ds-text-sm)', color: 'var(--text-secondary)', lineHeight: 1.5, margin: '8px 0 0', paddingTop: 8, borderTop: '1px solid var(--border)' }}>
+              Entering the draw includes the Portlink newsletter, with no end date. Unsubscribe anytime; your entry stays.
             </p>
           </div>
           <StatPill stats={stats} />
@@ -342,7 +354,7 @@ export default function Scorecard() {
             </label>
             <label style={{ display: 'flex', gap: 10, alignItems: 'flex-start', fontSize: 'var(--ds-text-sm)', color: 'var(--text-secondary)', lineHeight: 1.5, cursor: 'pointer' }}>
               <input type="checkbox" checked={consent} onChange={e => setConsent(e.target.checked)} style={{ marginTop: 3, width: 18, height: 18, accentColor: 'var(--brand)', flexShrink: 0 }} />
-              <span>Send my scorecard, enter me in the draw, and send up to three Portlink follow-ups. Unsubscribe anytime. <Link href={TERMS_PATH} style={{ color: 'var(--text-muted)' }}>Draw terms</Link>.</span>
+              <span>Send my scorecard, enter me in the draw, and subscribe me to the Portlink newsletter: email about port call operations and the product, with no end date. Unsubscribe anytime. <Link href={TERMS_PATH} style={{ color: 'var(--text-muted)' }}>Draw terms</Link>.</span>
             </label>
           </div>
 
@@ -399,6 +411,8 @@ export default function Scorecard() {
           <strong style={{ color: 'var(--text-primary)' }}>More entries:</strong> every colleague or partner who scores their port calls through your link and confirms their work email adds one, up to {REFERRAL_CAP}. Entries close {DRAW.closesLabel}.
         </p>
         <ShareBox url={response.referralUrl} code={response.referralCode} prize={PRIZE_NAME} />
+
+        <OpenQuestions leadId={response.id} />
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 'var(--ds-gap-5)' }}>
           <a href={response.mePath} style={{ ...primaryButton, textDecoration: 'none' }}>My entries <ArrowRight size={16} /></a>

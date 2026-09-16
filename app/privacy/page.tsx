@@ -55,15 +55,18 @@ export default function Privacy() {
 
           <h2 style={h}>The Seatrade draw and benchmark</h2>
           <p style={p}>
-            The draw takes your name, work email, company, your seven benchmark answers and, if you arrived
-            through a colleague&rsquo;s link, who invited you. That record is stored on Netlify Blobs and is
+            The draw takes your name, work email, company, your seven benchmark answers, anything you write
+            in the two optional open questions we show once your entry is in, and, if you arrived through a
+            colleague&rsquo;s link, who invited you. That record is stored on Netlify Blobs and is
             what runs the draw, produces your scorecard and feeds the live benchmark in anonymous aggregate.
             Confirming your work email is what activates an entry.
           </p>
           <p style={p}>
-            If you sign up, your email is also added to our Resend audience so we can send the follow-up
-            emails described in the <Link href={TERMS_PATH} style={{ color: 'var(--brand)' }}>draw terms</Link>.
-            Every one of those carries an unsubscribe link.
+            Agreeing to the Portlink newsletter is a condition of entering the draw, and it is stated before
+            the questions begin. Your email is added to our Resend audience so we can send it, together with
+            the emails described in the <Link href={TERMS_PATH} style={{ color: 'var(--brand)' }}>draw terms</Link>.
+            The newsletter has no end date, every message carries an unsubscribe link, and unsubscribing does
+            not withdraw your entry.
           </p>
 
           <h2 style={h}>The public standings</h2>

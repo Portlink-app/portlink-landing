@@ -19,6 +19,7 @@
 import { ctaButton, escapeHtml as esc, wrap } from '@/lib/email/wrap'
 import { DRAW, EVENT, PILOT_URL, PRIZE_NAME, REFERRAL_CAP, REPORT_PATH, SITE_URL, TERMS_PATH, meUrl, referralUrl, verifyUrl } from './config'
 import { ROLE_LABELS, ROLE_LINES, type Finding, type ScoreResult, QUESTIONS, type Answers } from './scorecard'
+import { OPEN_QUESTIONS, type OpenAnswers } from './openQuestions'
 
 export interface LeadEmailInput {
   id: string
@@ -407,4 +408,40 @@ export function renderAdmin(lead: AdminInput): RenderedEmail {
     html,
     text,
   }
+}
+
+// ── admin notification: the two open answers ──────────────────────────────────
+
+/**
+ * Sent when someone writes one of the two open questions on the "sent" screen. A second, separate
+ * mail rather than a field in the lead notification, because the lead notification has already
+ * left the building by then: the entry is created and mailed before the questions are even shown.
+ */
+export function renderOpenAnswers(
+  lead: Pick<LeadEmailInput, 'id' | 'name' | 'email' | 'company'>,
+  answers: OpenAnswers,
+): RenderedEmail {
+  const written = OPEN_QUESTIONS.filter(q => answers[q.id])
+  const blocks = written.map(q => `
+    <p style="margin:0 0 6px;font-size:13px;font-weight:600;color:#6b7280;line-height:1.5">${esc(q.label)}</p>
+    <p style="margin:0 0 20px;font-size:15px;color:#111827;line-height:1.65;white-space:pre-wrap;border-left:3px solid #3d7daf;padding-left:14px">${esc(answers[q.id] ?? '')}</p>`,
+  ).join('')
+
+  const html = wrap(`
+    ${h1(`In their own words: ${esc(lead.name)}`)}
+    <p style="margin:0 0 20px;font-size:14px;color:#6b7280;line-height:1.6">${esc(lead.company)} · <a href="mailto:${esc(lead.email)}" style="color:#3d7daf;text-decoration:none">${esc(lead.email)}</a><br>
+    Their entry and scorecard came through earlier; this is the free text they added afterwards.</p>
+    ${blocks}
+    <div style="margin:24px 0 0;text-align:center">
+      <a href="mailto:${esc(lead.email)}?subject=${encodeURIComponent(`Portlink at Seatrade Med, ${lead.company}`)}" style="display:inline-block;background:#3d7daf;color:#ffffff;padding:12px 28px;border-radius:9999px;font-size:14px;font-weight:600;text-decoration:none">Reply to ${esc(firstName(lead.name))}</a>
+    </div>
+  `)
+
+  const text = textify([
+    `In their own words: ${lead.name}, ${lead.company} (${lead.email})`,
+    ...written.map(q => `${q.label}\n${answers[q.id]}`),
+    `Lead id: ${lead.id}`,
+  ])
+
+  return { subject: `Seatrade answers: ${lead.name}, ${lead.company}`, html, text }
 }

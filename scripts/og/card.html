@@ -1,0 +1,80 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Portlink share card</title>
+<!--
+  The 1200x630 share card, authored as a page rather than drawn in an image editor.
+
+  Why a page: the card has to be in the design system, and the design system is CSS. This links
+  the vendored token file directly, so --ds-canvas, --ds-text-1 and --ds-primary here are the same
+  values the site renders with, and a Consolidated release changes the card by changing the tokens.
+  It also picks up the site's real font stack, which matters more than it looks: nothing in this
+  repo loads Plus Jakarta Sans or Inter, so every visitor sees the ui-sans-serif fallback, and a
+  card drawn in some other face would be off-brand against the site as it actually ships.
+
+  Rendered by scripts/build-og-card.sh through the same headless Chrome page-probe uses.
+  Do not hand-edit public/og/*.png; edit this and re-run that script.
+-->
+<link rel="stylesheet" href="../../app/_ds/portlink-tokens.dist.css">
+<style>
+  html, body { margin: 0; padding: 0; }
+  body {
+    width: 1200px; height: 630px; overflow: hidden; position: relative;
+    /* A flat --ds-canvas card sits on a white iMessage or Slack bubble with almost no edge, so it
+       reads as a torn-off piece of the message rather than a card. The gradient to --ds-surface-3
+       and the inset hairline give it its own shape, in tokens, without inventing a colour. */
+    background: linear-gradient(168deg, var(--ds-canvas) 0%, var(--ds-canvas) 46%, var(--ds-surface-3) 100%);
+    box-shadow: inset 0 0 0 1px var(--ds-border-1);
+    font-family: var(--ds-font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  /* The hero's own wash, so the card and the page open with the same light. */
+  .wash {
+    position: absolute; inset: 0;
+    background: radial-gradient(90% 120% at 8% -10%, var(--ds-primary-faint) 0%, transparent 60%);
+  }
+  .copy {
+    position: absolute; left: 76px; top: 86px; width: 520px; z-index: 2;
+  }
+  .logo { height: 40px; display: block; }
+  h1 {
+    margin: 46px 0 0;
+    font-size: 58px; line-height: 1.04; letter-spacing: -0.035em; font-weight: 700;
+    color: var(--ds-text-1);
+  }
+  p {
+    margin: 24px 0 0;
+    font-size: 21px; line-height: 1.45; color: var(--ds-text-2); max-width: 440px;
+  }
+  .foot {
+    position: absolute; left: 76px; bottom: 66px; z-index: 2;
+    display: flex; align-items: center; gap: 12px;
+    font-size: 16px; font-weight: 600; letter-spacing: 0.02em; color: var(--ds-text-3);
+  }
+  .foot .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ds-success); }
+
+  /* The product frame bleeds off the right and bottom edges. A panel that ends inside the card
+     reads as a pasted screenshot; one that runs off it reads as a window onto something larger,
+     and at thumbnail size the chart's own colours are what say "marine" before any word does. */
+  .panel {
+    position: absolute; left: 616px; top: 132px; width: 700px;
+    border-radius: 18px; overflow: hidden;
+    border: 1px solid var(--ds-border-2);
+    box-shadow: 0 32px 70px -24px rgba(13, 20, 32, 0.38), 0 8px 20px -10px rgba(13, 20, 32, 0.16);
+    background: var(--ds-surface-1);
+    line-height: 0;
+  }
+  .panel img { width: 100%; display: block; }
+</style>
+<div class="wash"></div>
+
+<div class="panel">
+  <img src="../../public/video/landing-2026-09-15/hero-B.jpg" alt="">
+</div>
+
+<div class="copy">
+  <img class="logo" src="../../public/portlink-logo.png" alt="Portlink">
+  <h1>Every port call on one live record.</h1>
+  <p>Cruise lines, port agents and tour operators, reading the same status.</p>
+</div>
+
+<div class="foot"><span class="dot"></span> portlink.app</div>

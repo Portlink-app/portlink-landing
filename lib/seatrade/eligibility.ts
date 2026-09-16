@@ -10,9 +10,10 @@
  * person and hard to prove to a machine.
  */
 
-/** First label of the domain (before the first dot) for the big consumer providers, so that
- *  outlook.es, hotmail.co.uk and yahoo.fr are all caught without listing every country. */
-const FREE_MAIL_LABELS = new Set([
+/** The big consumer providers, by the one label that identifies them, so that outlook.es,
+ *  hotmail.co.uk and yahoo.fr are all caught without listing every country they operate in.
+ *  A label counts as free mail only when it is the WHOLE registrable domain — see `isFreeMail`. */
+export const FREE_MAIL_LABELS = new Set([
   'gmail', 'googlemail', 'hotmail', 'outlook', 'live', 'msn', 'yahoo', 'ymail', 'rocketmail',
   'icloud', 'me', 'mac', 'aol', 'protonmail', 'proton', 'pm', 'gmx', 'mail', 'email', 'yandex',
   'zoho', 'zohomail', 'qq', '163', '126', 'sina', 'web', 't-online', 'orange', 'wanadoo', 'free',
@@ -21,7 +22,9 @@ const FREE_MAIL_LABELS = new Set([
   'bluewin', 'skynet', 'telenet', 'ziggo', 'kpnmail', 'home', 'terra', 'uol', 'bol', 'rediffmail',
 ])
 
-const DISPOSABLE_DOMAINS = new Set([
+/** Exported, with FREE_MAIL_LABELS, so `scripts/check-eligibility.mjs` generates its corpus from
+ *  the real sets. A provider added here tomorrow is then covered without editing a second list. */
+export const DISPOSABLE_DOMAINS = new Set([
   'mailinator.com', 'guerrillamail.com', 'guerrillamail.net', '10minutemail.com', 'temp-mail.org',
   'tempmail.com', 'yopmail.com', 'yopmail.fr', 'trashmail.com', 'getnada.com', 'dispostable.com',
   'sharklasers.com', 'maildrop.cc', 'throwawaymail.com', 'fakeinbox.com', 'mohmal.com',
@@ -44,9 +47,53 @@ export function emailDomain(email: string): string {
   return at < 0 ? '' : email.slice(at + 1).toLowerCase()
 }
 
+/**
+ * Public suffixes that occupy two labels, so that the label in front of them is the registrable
+ * name rather than a host. Without this, `hotmail.co.uk` reads as the company "hotmail.co" and is
+ * accepted as work email.
+ *
+ * WHY A HAND TABLE AND NOT `psl`. This is lead qualification, not a security control, and the two
+ * want opposite failure directions. A suffix missing from this table makes `isFreeMail` ACCEPT an
+ * address it should have refused — one free-mail lead on a list David reads, which costs nothing
+ * and is visible. The failure it prevents is the silent refusal of a real prospect, which costs a
+ * customer and tells nobody. Twenty-nine auditable lines beat a dependency and its data file on a
+ * marketing site that rebuilds on every push. Revisit if this rule is ever used to gate something
+ * that matters more than a lead, because then the failure direction flips and `psl` is the answer.
+ *
+ * Only genuine multi-label public suffixes belong here: a wrong entry refuses a real company. And
+ * none may lead with a provider label — `me.uk` is a real suffix and is left out for that reason,
+ * because it would make `mail.me.uk` read as the provider `mail` standing alone. It buys nothing:
+ * no consumer provider operates under it, and a company at `acme.me.uk` is accepted either way.
+ */
+export const TWO_LABEL_SUFFIXES = new Set([
+  'co.uk', 'org.uk', 'com.au', 'net.au', 'org.au', 'com.br', 'co.jp', 'ne.jp', 'or.jp', 'co.za',
+  'com.mx', 'co.in', 'co.nz', 'com.sg', 'co.kr', 'com.tr', 'com.ar', 'co.il', 'com.hk',
+  'com.cn', 'com.co', 'com.pl', 'com.ua', 'co.id', 'com.ph', 'com.my', 'com.vn', 'com.pe', 'com.tw',
+])
+
+/**
+ * True when the address belongs to a consumer provider or a throwaway, rather than to a company.
+ *
+ * The rule is the free-mail label standing alone as the registrable domain, with a known two-label
+ * public suffix stripped first. `gmail.com`, `web.de`, `hotmail.co.uk` and `yahoo.com.au` are all
+ * the provider itself and are refused. `mail.portagent.no`, `email.msccruises.com` and
+ * `home.tallink.ee` are a company running mail on a subdomain of its own name and are accepted.
+ *
+ * The earlier rule tested only the first label, which refused every such company: any firm whose
+ * mail host sits on `mail.`, `email.`, `web.`, `home.` or `online.` under its own domain was read
+ * as free mail. That is a silently lost lead, the direction nobody reports, and it reached two
+ * funnels through `workEmailProblem`. MSC Cruises — this file's own worked example of a company a
+ * person recognises — would have been refused at `email.msccruises.com`.
+ *
+ * This is strictly a widening of the old rule, by construction rather than by inspection: it can
+ * only refuse when the first label is a free-mail label, which is exactly when the old rule already
+ * refused. `scripts/check-eligibility.mjs` asserts that over a generated corpus, in both directions.
+ */
 export function isFreeMail(domain: string): boolean {
-  const first = domain.split('.')[0]
-  return FREE_MAIL_LABELS.has(first) || DISPOSABLE_DOMAINS.has(domain)
+  if (DISPOSABLE_DOMAINS.has(domain)) return true
+  const labels = domain.split('.')
+  const core = TWO_LABEL_SUFFIXES.has(labels.slice(-2).join('.')) ? labels.slice(0, -2) : labels.slice(0, -1)
+  return core.length === 1 && FREE_MAIL_LABELS.has(core[0])
 }
 
 /** Null when the address is acceptable; otherwise the sentence to show the visitor. */

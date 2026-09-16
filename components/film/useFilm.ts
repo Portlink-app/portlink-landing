@@ -31,6 +31,33 @@ export function useMotionAllowed(): boolean {
 }
 
 /**
+ * True when the viewport is at or below the phone breakpoint.
+ *
+ * 767px is `.scene-wide` / `.scene-narrow` in globals.css, character for character. It is written
+ * twice because a media query cannot be read from CSS and a <video> cannot choose its own source:
+ * the `media` attribute on <source> works inside <picture> and does nothing inside <video>, which
+ * is why the still is declarative and the film is not.
+ *
+ * Client-only, and that costs nothing here. This decides which mp4 to fetch, and by the time any
+ * mp4 is fetched the browser has already answered the reduced-motion question, so the still is
+ * on screen either way. Defaulting to false before the answer arrives is therefore not a desktop
+ * bias: nothing is rendered from it until useMotionAllowed has also turned true.
+ */
+export function useNarrow(): boolean {
+  const [narrow, setNarrow] = useState(false)
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)')
+    const apply = () => setNarrow(mq.matches)
+    apply()
+    mq.addEventListener('change', apply)
+    return () => mq.removeEventListener('change', apply)
+  }, [])
+
+  return narrow
+}
+
+/**
  * Plays the element only while it is actually on screen.
  *
  * The element arrives by callback ref rather than useRef, because it does not

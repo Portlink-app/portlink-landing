@@ -189,6 +189,36 @@ body {
   }
 }
 
+/* Skip link. Offscreen until focused, never display:none or visibility:hidden, because a hidden
+   element cannot take focus and a skip link that cannot take focus is decoration. It is the first
+   focusable node in the body, so it is reached on the first Tab of every visit. */
+.skip-link {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  transform: translateY(-120%);
+  padding: 12px 20px;
+  background: var(--ds-primary);
+  color: var(--ds-primary-ink);
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 0 0 var(--ds-radius-md) 0;
+  transition: transform 160ms var(--ds-ease-standard);
+}
+
+.skip-link:focus-visible,
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+/* The skip link's destination takes focus programmatically, so it must not then draw a ring
+   around the entire page. Focus still MOVES, which is the whole point; it is only the outline
+   that is suppressed. */
+main:focus,
+main:focus-visible { outline: none; }
+
 /* Focus ring — global accessibility */
 a:focus-visible,
 button:focus-visible,
@@ -369,8 +399,14 @@ textarea:focus-visible {
   padding: calc(64px + clamp(8px, 2vh, 20px)) clamp(16px, 4vw, 24px) clamp(16px, 3vh, 28px);
 }
 
-.film-pane .scene-wide,
-.film-pane .scene-narrow { width: 100%; }
+/* <picture> is an inline box, so an <img> inside it resolves `height: 100%` against nothing and
+   collapses. The film's still lives inside one (it is how exactly one encode gets fetched), so the
+   wrapper has to carry the frame's box rather than disappear from it. */
+.film-frame > picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
 
 .film-stack {
   position: relative;
@@ -420,29 +456,58 @@ textarea:focus-visible {
   flex-wrap: wrap;
 }
 
+/* The stage controls are the only navigation the pinned hero has, so they have to read as
+   controls. Three separate defects were measured here on 16.09.2026 and each has its own line:
+
+   1. min-height 44px. They were about 26px tall, on a page reviewed on a phone.
+   2. 14px / 600, up from 12px / 500. A small thin glyph loses most of its nominal contrast to
+      antialiasing: --ds-text-3 computes to 6,22:1 on the dark hero and rendered at 3,50:1. The
+      fix is size and weight, not a darker token, because the same halving hits any token.
+   3. A visible border in the resting state. "Dimmer than the active one" is not an affordance. */
 .film-pill {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  padding: 6px 12px;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 16px;
   border-radius: var(--ds-radius-pill);
-  border: 1px solid transparent;
+  border: 1px solid var(--ds-border-1);
   background: transparent;
-  color: var(--ds-text-3);
-  font-size: 12px;
-  font-weight: 500;
+  color: var(--ds-text-2);
+  font-size: 14px;
+  font-weight: 600;
   text-decoration: none;
   cursor: pointer;
   transition: color 400ms var(--ds-ease-standard), border-color 400ms var(--ds-ease-standard),
               background-color 400ms var(--ds-ease-standard);
 }
 
-.film-pill:hover { color: var(--ds-text-1); background: var(--ds-surface-1); }
+/* Gated on a real pointer. A touch device has no hover, so an ungated :hover sticks after a tap
+   and leaves the pill looking selected when it is not, which is the state change being swallowed. */
+@media (hover: hover) {
+  .film-pill:hover {
+    color: var(--ds-text-1);
+    border-color: var(--ds-border-2);
+    background: var(--ds-surface-1);
+  }
+}
 
+/* The ring the global a:focus-visible rule gives is --ds-focus at 2px. On the near-black hero that
+   is the one surface where it needs to be unmistakable, so it is thicker and doubled with an
+   inverted halo that holds whichever way the theme goes. */
+.film-pill:focus-visible {
+  outline: 3px solid var(--ds-focus);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 1px var(--ds-canvas);
+}
+
+/* Four signals, only one of which is colour: weight, border, background, and the dot's width.
+   A reader who cannot tell the two hues apart still sees a 7px dot become a 22px bar. */
 .film-pill[aria-current='true'] {
   color: var(--ds-text-1);
-  font-weight: 600;
-  border-color: var(--ds-border-1);
+  font-weight: 700;
+  border-color: var(--ds-primary);
   background: var(--ds-surface-1);
 }
 
@@ -451,7 +516,10 @@ textarea:focus-visible {
   width: 7px;
   height: 7px;
   border-radius: var(--ds-radius-pill);
-  background: var(--ds-border-2);
+  /* ⛔ NOT --ds-border-2. A border token is designed to be barely visible, so anything that
+     borrows one as a state indicator fails 1.4.11 by construction: it computed to 1,99:1 on the
+     hero. This is a content token, which is what an indicator a reader must see actually is. */
+  background: var(--ds-text-3);
   transition: width 400ms var(--ds-ease-standard), background-color 400ms var(--ds-ease-standard);
 }
 

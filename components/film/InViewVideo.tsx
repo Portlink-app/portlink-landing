@@ -32,7 +32,9 @@ export default function InViewVideo({
   }
 
   if (!motionAllowed) {
-    return <img src={poster} alt={label} style={frame} />
+    // Below the fold, single encode, so no <picture> to choose between and every reason to defer:
+    // this still is two full sections past the hero.
+    return <img src={poster} alt={label} loading="lazy" decoding="async" style={frame} />
   }
 
   return (

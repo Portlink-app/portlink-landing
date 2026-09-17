@@ -18,7 +18,6 @@ import EcosystemSection from '@/components/sections/EcosystemSection'
 import BentoSection from '@/components/sections/BentoSection'
 import PilotSection from '@/components/sections/PilotSection'
 import TeamProofSection from '@/components/sections/TeamProofSection'
-import DrawSection from '@/components/sections/DrawSection'
 import AccessSection from '@/components/sections/AccessSection'
 import Footer from '@/components/sections/Footer'
 
@@ -34,11 +33,11 @@ export default function Home() {
       <Nav theme={theme} setTheme={setTheme} />
       <main id="main" tabIndex={-1}>
         <FilmHero />
-        {/* Directly under the hero for the duration of the Seatrade Med campaign: David hands this
-            link out on the show floor, and the draw previously sat below the team block near the
-            foot of the page. Moved, not duplicated. Put it back below TeamProofSection when the
-            campaign closes (DRAW.closesAt in lib/seatrade/config.ts). */}
-        <DrawSection />
+        {/* The Seatrade draw block is deliberately absent from the front page — David's instruction
+            of 17.09.2026. The campaign itself is unchanged and live: /seatrade/ still takes entries,
+            the show QR codes still resolve, the email sequence still sends. Only the front page
+            stopped advertising it. Restoring it is this one import plus the two nav rows named in
+            the header of components/sections/DrawSection.tsx. */}
         <PainSection />
 
         <SceneSection

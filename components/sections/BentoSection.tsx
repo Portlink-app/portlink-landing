@@ -7,6 +7,39 @@ import { Ship, Anchor, Building2, Compass, CheckCircle2 } from 'lucide-react'
 
 // ── Abstract mini-visuals ─────────────────────────────────────────────────────
 
+/**
+ * One type floor for the mini-visuals, and one row shape.
+ *
+ * Both exist because the same decision was being made separately in every visual below.
+ *
+ * `VIZ_TEXT` is the smallest size any text inside a mini-visual renders at, and `VIZ_TEXT_LEAD`
+ * the one deliberate step above it. Each visual used to inline its own number, so the page's
+ * smallest text was settled in fourteen separate declarations across eleven visuals: 9 px for a
+ * calendar letter, 10 px for a node label, an ETA and two card eyebrows, 11 px for most rows and
+ * 12 px for the audit trail.
+ * Measured on the built page before this change, pressing the section's own role tabs: Port agent
+ * rendered 6 strings below 11 px, Tour operator 11 (7 at 9 px, 4 at 10 px) and Port or terminal 12
+ * (7 at 9 px, 5 at 10 px), at 390 px and at 1440 px alike. The default Cruise line tab rendered
+ * none, which is why a font-size sweep that never presses a tab reports zero for the whole page.
+ * `scripts/check-viz-type.mjs` fails the build on a smaller literal, so the next visual inherits
+ * the floor rather than having to remember it.
+ *
+ * `vizRow` is the label-left, value-right row. It carries a gap, and that is the whole fix: a
+ * card's visual area is a shrink-to-fit flex item, so the widest row decides the list's width and
+ * has no slack left for `space-between` to distribute. Measured at both 390 px and 1440 px,
+ * `Costa Fortuna` and `Tomorrow 14:00` rendered exactly 0 px apart and read as one word. A gap is
+ * part of the intrinsic width, so it survives where distributed space cannot.
+ */
+const VIZ_TEXT = 11
+const VIZ_TEXT_LEAD = 12
+
+const vizRow: React.CSSProperties = {
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  gap: 12,
+}
+
 function StatusFlow() {
   const steps = ['Pending', 'Reviewing', 'Confirmed']
   const colors = ['var(--text-muted)', 'var(--text-secondary)', 'var(--success)']
@@ -19,7 +52,7 @@ function StatusFlow() {
             borderRadius: 9999,
             background: i === 2 ? 'rgba(74,124,78,0.1)' : 'var(--bg)',
             border: `1px solid ${colors[i]}`,
-            fontSize: 11,
+            fontSize: VIZ_TEXT,
             fontWeight: 600,
             color: colors[i],
           }}>
@@ -44,7 +77,7 @@ function FleetTimeline() {
             border: '1px solid var(--border)',
             borderRadius: 4,
           }} />
-          <span style={{ fontSize: 11, color: 'var(--text-muted)', fontWeight: 600 }}>{p}</span>
+          <span style={{ fontSize: VIZ_TEXT, color: 'var(--text-muted)', fontWeight: 600 }}>{p}</span>
         </div>
       ))}
     </div>
@@ -56,7 +89,7 @@ function CostCard() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 4, width: '100%', maxWidth: 200 }}>
       {items.map(item => (
-        <div key={item.l} style={{ display: 'flex', justifyContent: 'space-between', padding: '3px 8px', background: 'var(--surface)', borderRadius: 6, fontSize: 11 }}>
+        <div key={item.l} style={{ ...vizRow, padding: '3px 8px', background: 'var(--surface)', borderRadius: 6, fontSize: VIZ_TEXT }}>
           <span style={{ color: 'var(--text-muted)' }}>{item.l}</span>
           <span style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{item.v}</span>
         </div>
@@ -73,7 +106,7 @@ function PortGrid() {
         <div key={p} style={{
           padding: '4px 8px', background: 'var(--surface)',
           border: '1px solid var(--border)', borderRadius: 6,
-          fontSize: 11, color: 'var(--text-secondary)', fontWeight: 500, textAlign: 'center',
+          fontSize: VIZ_TEXT, color: 'var(--text-secondary)', fontWeight: 500, textAlign: 'center',
         }}>{p}</div>
       ))}
     </div>
@@ -90,7 +123,7 @@ function NotificationStream() {
           padding: '4px 10px', borderRadius: 8,
           background: i === 0 ? 'var(--brand-faint)' : 'var(--surface)',
           border: `1px solid ${i === 0 ? 'var(--brand)' : 'var(--border)'}`,
-          fontSize: 11, color: 'var(--text-secondary)',
+          fontSize: VIZ_TEXT, color: 'var(--text-secondary)',
         }}>
           <Anchor size={10} color="var(--brand)" style={{ flexShrink: 0 }} />
           {item}
@@ -106,14 +139,14 @@ function DocumentCard() {
       background: 'var(--bg)', border: '1px solid var(--border)',
       borderRadius: 10, padding: '8px 12px', width: '100%', maxWidth: 200,
     }}>
-      <div style={{ fontSize: 10, color: 'var(--text-muted)', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.08em' }}>PDA Draft</div>
+      <div style={{ fontSize: VIZ_TEXT, color: 'var(--text-muted)', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.08em' }}>PDA Draft</div>
       {['Port dues', 'Pilotage', 'Agency fee', 'Total'].map((l, i) => (
         <div key={l} style={{
-          display: 'flex', justifyContent: 'space-between',
+          ...vizRow,
           padding: '2px 0',
           borderTop: i === 3 ? '1px solid var(--border)' : 'none',
           marginTop: i === 3 ? 4 : 0,
-          fontSize: 11,
+          fontSize: VIZ_TEXT,
           color: i === 3 ? 'var(--text-primary)' : 'var(--text-muted)',
           fontWeight: i === 3 ? 600 : 400,
         }}>
@@ -140,7 +173,7 @@ function NetworkDiagram() {
             }}>
               <Anchor size={14} color={i === 1 ? 'white' : 'var(--text-muted)'} />
             </div>
-            <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>{label}</span>
+            <span style={{ fontSize: VIZ_TEXT, color: 'var(--text-muted)' }}>{label}</span>
           </div>
           {i < 2 && <div style={{ width: 20, height: 1, background: 'var(--brand)', opacity: 0.5 }} />}
         </div>
@@ -155,12 +188,12 @@ function VesselList() {
     <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
       {vessels.map(v => (
         <div key={v.name} style={{
-          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+          ...vizRow,
           padding: '5px 10px', background: 'var(--surface)',
           border: '1px solid var(--border)', borderRadius: 8,
         }}>
-          <span style={{ fontSize: 11, color: 'var(--text-primary)', fontWeight: 500 }}>{v.name}</span>
-          <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>{v.eta}</span>
+          <span style={{ fontSize: VIZ_TEXT, color: 'var(--text-primary)', fontWeight: 500 }}>{v.name}</span>
+          <span style={{ fontSize: VIZ_TEXT, color: 'var(--text-muted)', whiteSpace: 'nowrap' }}>{v.eta}</span>
         </div>
       ))}
     </div>
@@ -179,7 +212,7 @@ function CalendarView() {
           border: `1px solid ${active.includes(i) ? 'var(--brand)' : 'var(--border)'}`,
           display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 2,
         }}>
-          <span style={{ fontSize: 9, color: active.includes(i) ? 'var(--brand)' : 'var(--text-muted)', fontWeight: 600 }}>{d}</span>
+          <span style={{ fontSize: VIZ_TEXT, color: active.includes(i) ? 'var(--brand)' : 'var(--text-muted)', fontWeight: 600 }}>{d}</span>
           {active.includes(i) && <div style={{ width: 4, height: 4, borderRadius: '50%', background: 'var(--brand)' }} />}
         </div>
       ))}
@@ -193,9 +226,9 @@ function ShoreRequestCard() {
       background: 'var(--bg)', border: '1px solid var(--border)',
       borderRadius: 10, padding: '8px 12px', maxWidth: 220,
     }}>
-      <div style={{ fontSize: 10, color: 'var(--text-muted)', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Shore Request</div>
+      <div style={{ fontSize: VIZ_TEXT, color: 'var(--text-muted)', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Shore Request</div>
       {[['Port', 'Barcelona'], ['Pax', '3,200'], ['Date', 'Apr 14']].map(([l, v]) => (
-        <div key={l} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, padding: '2px 0' }}>
+        <div key={l} style={{ ...vizRow, fontSize: VIZ_TEXT, padding: '2px 0' }}>
           <span style={{ color: 'var(--text-muted)' }}>{l}</span>
           <span style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{v}</span>
         </div>
@@ -211,7 +244,7 @@ function AuditTrail() {
       {steps.map((s, i) => (
         <div key={s} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <CheckCircle2 size={14} color={i < 2 ? 'var(--ds-success)' : 'var(--border)'} />
-          <span style={{ fontSize: 12, color: i < 2 ? 'var(--text-primary)' : 'var(--text-muted)', fontWeight: i < 2 ? 500 : 400 }}>{s}</span>
+          <span style={{ fontSize: VIZ_TEXT_LEAD, color: i < 2 ? 'var(--text-primary)' : 'var(--text-muted)', fontWeight: i < 2 ? 500 : 400 }}>{s}</span>
         </div>
       ))}
     </div>

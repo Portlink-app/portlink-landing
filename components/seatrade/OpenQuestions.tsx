@@ -8,8 +8,10 @@ import { OPEN_ANSWER_MAX, OPEN_QUESTIONS, type OpenQuestionId } from '@/lib/seat
  * The two open questions, shown only on the "sent" screen.
  *
  * Everything about this component assumes the entry is already secured: it appears after the
- * scorecard has been mailed, both boxes are optional, the button is never disabled on an empty
- * box, and a failure to save says so without implying anything about the draw.
+ * scorecard has been mailed, so both boxes are optional in the sense that matters - a blank
+ * answer costs nobody an entry, and a failure to save says so without implying anything about
+ * the draw. The send button IS inert while both boxes are empty, because there is nothing to
+ * send; that is a property of this form, never a condition on the draw.
  */
 export default function OpenQuestions({ leadId }: { leadId: string }) {
   const [values, setValues] = useState<Record<OpenQuestionId, string>>({ friction: '', wish: '' })

@@ -207,19 +207,27 @@ export default function Scorecard() {
             What is your port call friction score?
           </h1>
           <p style={{ fontSize: 'var(--ds-text-body)', color: 'var(--text-secondary)', lineHeight: 1.55, margin: '0 0 var(--ds-gap-3)' }}>
-            Seven taps, about a minute. See how much of your port call still runs on email, and how you compare with the rest of the show.
+            Seven taps, about a minute. See how much still runs on email, and how you compare.
           </p>
           {/* The prize chip, the draw rule and the consent requirement are ONE card on purpose.
               Height before question 1 is this funnel's scarcest resource: a full-width prize banner
               here pushed the first answer button off a 390x844 screen (option bottom 866 px against
               a 559 px baseline), and a separate bordered box for the consent line would spend another
               card's padding on one sentence. Everything a visitor needs before deciding to start is
-              in one box, above the first question, and the first option stays above the fold. */}
+              in one box, above the first question, and the first option stays above the fold.
+
+              THE ROW'S HEIGHT IS THE CHIP'S, NOT THE SENTENCE'S, and that is why both move together.
+              Measured on live at 390x667 (the smallest common phone, and not the 390x844 the brief
+              named): chip 84, the sentence beside it 78, so the row is 84 and shortening the sentence
+              alone buys nothing at all. The chip is 64 here and the sentence fits inside it. The
+              pixels do NOT come from the consent line below: that sentence is the one telling a
+              visitor that unsubscribing later will not cost them the entry, which is what makes the
+              disclosure honest rather than merely present. */}
           <div style={{ margin: '0 0 var(--ds-gap-4)', background: 'var(--surface-plain)', border: '1px solid var(--border)', borderRadius: 'var(--ds-radius-lg)', padding: 12 }}>
             <div style={{ display: 'flex', gap: 14, alignItems: 'center' }}>
-              <PrizeChip size={84} />
+              <PrizeChip size={64} />
               <p style={{ fontSize: 'var(--ds-text-sm)', color: 'var(--text-secondary)', lineHeight: 1.5, margin: 0 }}>
-                Confirm your work email and you are in the draw for <strong style={{ color: 'var(--text-primary)' }}>{PRIZE_NAME}</strong>. Every colleague you invite who confirms adds an entry. <Link href={TERMS_PATH} style={{ color: 'var(--text-muted)' }}>Terms</Link>
+                Confirm your work email to enter the draw for <strong style={{ color: 'var(--text-primary)' }}>{PRIZE_NAME}</strong>. Every confirmed invite adds an entry. <Link href={TERMS_PATH} style={{ color: 'var(--text-muted)' }}>Terms</Link>
               </p>
             </div>
             <p style={{ fontSize: 'var(--ds-text-sm)', color: 'var(--text-secondary)', lineHeight: 1.5, margin: '8px 0 0', paddingTop: 8, borderTop: '1px solid var(--border)' }}>

@@ -77,14 +77,18 @@ export default function EcosystemSection() {
             }}
           >
             Nobody re-enters what somebody else already entered. The status one side changes is the status
-            the other two are reading.
+            the other three are reading.
           </p>
         </motion.div>
 
+        {/* An explicit 2x2, not `auto-fit`. With four cards in an 1100 px container auto-fit fits
+            three per row and strands the fourth alone underneath, which reads as one of the four
+            sides being an afterthought. That is the exact impression this section exists to undo. */}
         <div
+          className="ecosystem-grid"
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+            gridTemplateColumns: 'repeat(2, 1fr)',
             gap: 'clamp(14px, 2vw, 24px)',
           }}
         >

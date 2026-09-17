@@ -30,6 +30,7 @@
 
 import { CheckCircle2 } from 'lucide-react'
 import { useReveal } from '@/hooks/useReveal'
+import { CONTACT_PROMISES } from '@/lib/contact/promises'
 
 /** The pilot's terms. One copy, on one page, in one place. */
 const pilotTerms = [
@@ -161,6 +162,30 @@ export default function TwoDoorsSection() {
               Tell us what your operation actually needs. If we can build it, we say how and roughly
               when. If we cannot, we say that in the first reply.
             </p>
+            {/* The same three promises `/contact/` prints and the confirmation mail makes, read
+                from one module so the door, the page and the mail cannot drift. They are what
+                makes this door weigh the same as the one beside it without claiming a capability
+                or a customer we cannot show. */}
+            <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'grid', gap: 12 }}>
+              {CONTACT_PROMISES.map((promise) => (
+                <li key={promise.lead} style={{ display: 'flex', gap: 10 }}>
+                  <CheckCircle2
+                    size={16}
+                    color="var(--ds-primary)"
+                    style={{ flexShrink: 0, marginTop: 3 }}
+                    aria-hidden="true"
+                  />
+                  <span>
+                    <span style={{ display: 'block', fontSize: 14, fontWeight: 600, color: 'var(--ds-text-1)' }}>
+                      {promise.lead}
+                    </span>
+                    <span style={{ fontSize: 13.5, color: 'var(--ds-text-2)', lineHeight: 1.55 }}>
+                      {promise.body}
+                    </span>
+                  </span>
+                </li>
+              ))}
+            </ul>
             <a href="/contact/" style={ctaStyle}>
               Tell us what you need
             </a>

@@ -32,6 +32,7 @@ import {
   type PilotRole,
 } from '@/lib/access/eligibility'
 import { clientIp, rateLimit } from '@/lib/rateLimit'
+import { CONTACT_PROMISES } from '@/lib/contact/promises'
 
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@portlink.app'
 
@@ -147,11 +148,10 @@ const nextSteps: Record<ContactIntent, string[]> = {
     'If selected, we set up a short call to learn about your setup.',
     'We onboard you personally. No help articles, no self-serve.',
   ],
-  build: [
-    'David or Kris reads it. There is no sales team, and the person who replies is one of the two people who decide what gets built.',
-    'You get a real answer within 48 hours. Either what we would build and roughly what that takes, or a straight no with the reason.',
-    'If it goes further, we talk to the people who do the work. The planner, the agent, the duty officer, not a procurement contact.',
-  ],
+  /* Read from `lib/contact/promises.ts`, the same list `/contact/` and door B of TwoDoorsSection
+     render. The page promising one thing and the mail promising another is the single most
+     damaging inconsistency available on this route, because the mail is the proof of the page. */
+  build: CONTACT_PROMISES.map((p) => `${p.lead} ${p.body}`),
 }
 
 function buildConfirmationEmail(data: AccessRequest): string {

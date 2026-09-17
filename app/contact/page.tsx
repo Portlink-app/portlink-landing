@@ -1,6 +1,7 @@
 import { ogDefaults, twitterDefaults } from '@/lib/metadata'
 import PageNav from '@/components/PageNav'
 import ContactForm from '@/components/contact/ContactForm'
+import { CONTACT_PROMISES } from '@/lib/contact/promises'
 import TeamProofSection from '@/components/sections/TeamProofSection'
 import Footer from '@/components/sections/Footer'
 
@@ -85,21 +86,8 @@ export default function ContactPage() {
                 <ContactForm />
               </div>
 
-              <ol className="contact-promises" style={{ listStyle: 'none', margin: 0, padding: 0, display: 'grid', gap: 18, counterReset: 'promise' }}>
-                {[
-                  {
-                    lead: 'David or Kris reads it.',
-                    body: 'There is no sales team. The person who replies is one of the two people who decide what gets built.',
-                  },
-                  {
-                    lead: 'You get a real answer within 48 hours.',
-                    body: 'Either what we would build and roughly what that takes, or a straight no with the reason.',
-                  },
-                  {
-                    lead: 'If it goes further, we talk to the people who do the work.',
-                    body: 'Not to a procurement contact. To the planner, the agent, the duty officer.',
-                  },
-                ].map((item, i) => (
+              <ol className="contact-promises" style={{ listStyle: 'none', margin: 0, padding: 0, display: 'grid', gap: 18 }}>
+                {CONTACT_PROMISES.map((item, i) => (
                   <li key={item.lead} style={{ display: 'flex', gap: 14 }}>
                     <span
                       aria-hidden="true"

@@ -64,7 +64,11 @@ export default function FounderBar() {
                 lineHeight: 1.55,
               }}
             >
-              <strong style={{ fontWeight: 700 }}>{person.name.split(' ')[0]}</strong>{' '}
+              {/* Bold name, full stop, then the fact. Exactly the pattern the film captions already
+                  use (`<b>{label}.</b> {caption}` in FilmHero), and the reason it is a full stop
+                  rather than a dash is scripts/lint-dashes.mjs: no em-dash or en-dash in shipped
+                  copy, stated by Kris 24.06.2026 and restated by David 15.09.2026 for websites. */}
+              <strong style={{ fontWeight: 700 }}>{person.name.split(' ')[0]}.</strong>{' '}
               <span style={{ color: 'var(--ds-text-2)' }}>{person.short}</span>
             </li>
           ))}

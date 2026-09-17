@@ -26,6 +26,13 @@ design system is copied in rather than fetched at runtime. Funnel entry doc:
 **portlink.app**, the company's public front door. Pushing `main` is publishing. There is no CI and
 no build gate in front of it. A push to the `v2` remote deploys nothing.
 
+**Who may publish, settled 17.09.2026.** This line used to read as a flat reservation to David, and
+on 17.09 it cost him five hours: he asked for the draw block to come off the front page, the work was
+done and proven within six minutes, and it then sat in PR #11 while two agents in turn refused to
+merge it and put a decision row on his board instead. He had already decided. **A change David asked
+for is published by whoever carries it out, all the way to the live domain, with no intermediate ask.**
+What stays his is the publish nobody requested: an agent-initiated edit to the public site.
+
 **Credentials — references only, never values.** Vault `cypqkqoeuibf4f6aud47v3qooa` (*Portlink*):
 
 | Need | `op://` reference |
@@ -60,7 +67,8 @@ documentation change.
 
 | Step | Owner | Note |
 |---|---|---|
-| `git push origin main` | **David approves** | it publishes portlink.app, the company's public front door, with no CI in between |
+| `git push origin main`, carrying out a change **David asked for** | **you land it** | his ruling, 17.09.2026: *"whenever i ask for somthing i expecot yoiu to tkae the instrcurtucon and land it all the way, without quaestion"*. Publishing is the last step of his instruction, not a separate permission. Do not stop at a pull request and do not file a decision row |
+| `git push origin main`, carrying a change **nobody asked for** | **David approves** | it publishes portlink.app, the company's public front door, with no CI in between. An agent-initiated edit to the public site is still his |
 | `git push v2 …` | **avoid** | that remote is a stale parallel repo and deploys nothing — pushing there splits history |
 | Changing the custom domain or DNS for portlink.app | **David only** | it takes the company's public site offline |
 | Bumping the vendored DS version in `app/_ds/` | **David approves** | it is a visual change to the public site; keep `CONSUMERS.md` in step |

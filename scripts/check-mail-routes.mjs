@@ -103,18 +103,33 @@ function routeFiles(dir) {
 const allRoutes = routeFiles(API_DIR).map(rel).sort()
 const mailRoutes = allRoutes.filter((r) => RESEND_IMPORT.test(fs.readFileSync(path.join(ROOT, r), 'utf8')))
 
-// ── Calibration, before any verdict is read off the numbers above ───────────
-const KNOWN_POSITIVE = 'app/api/access/route.ts'
-if (!allRoutes.includes(KNOWN_POSITIVE)) {
-  fail(`the enumerator did not find ${KNOWN_POSITIVE}. It is reading the wrong tree, so every result below is meaningless.`, 2)
+/*
+ * ── Calibration, before any verdict is read off the numbers above ───────────
+ *
+ * ⛔ ON FIXTURES, NOT ON A NAMED ROUTE. Calibrating by asserting that `app/api/access/route.ts`
+ * matches would mean that deleting or renaming that route reports "reading the wrong tree" rather
+ * than the truth, which is the same defect `scripts/check-anchors.mjs` records having shipped once.
+ * The pattern is proven here; the tree is then judged by counts alone.
+ */
+{
+  const positives = [
+    "import { Resend } from 'resend'",
+    'import { Resend } from "resend"',
+    "const { Resend } = await import('resend')",
+  ]
+  const negatives = [
+    "import { NextResponse } from 'next/server'",
+    "// this route deliberately does not import resend",
+    "import { resendLater } from './helpers'",
+  ]
+  const missed = positives.filter((p) => !RESEND_IMPORT.test(p))
+  if (missed.length) fail(`the import pattern missed ${missed.length} known mail import(s), starting with: ${missed[0]}. It is broken, so "no unguarded routes" would be a false clean.`, 2)
+  const falsePositives = negatives.filter((n) => RESEND_IMPORT.test(n))
+  if (falsePositives.length) fail(`the import pattern matched ${falsePositives.length} line(s) that do not import the mail client, starting with: ${falsePositives[0]}. A gate that flags everything is a gate somebody switches off.`, 2)
 }
-if (!mailRoutes.includes(KNOWN_POSITIVE)) {
-  fail(`the import pattern did not match in ${KNOWN_POSITIVE}, which does import resend. The pattern is broken, so "no mail routes" would be a false clean.`, 2)
-}
+
+if (allRoutes.length === 0) fail(`no route files under ${rel(API_DIR)}. This is reading the wrong tree.`, 2)
 const knownNegatives = allRoutes.filter((r) => !mailRoutes.includes(r))
-if (knownNegatives.length === 0) {
-  fail('every route matched the mail pattern, so the pattern cannot distinguish. A gate that flags everything is a gate somebody switches off.', 2)
-}
 
 // ── Covered is read out of the guard, never declared here ───────────────────
 const guardSrc = fs.readFileSync(GUARD, 'utf8')
@@ -140,7 +155,7 @@ const unaccounted = mailRoutes.filter((r) => !covered.includes(r) && !exemptRout
 
 // ── Report ──────────────────────────────────────────────────────────────────
 console.log(`check:mail-routes: ${allRoutes.length} route(s) under app/api/, ${mailRoutes.length} can send mail.`)
-console.log(`  calibration: found ${KNOWN_POSITIVE} and matched its resend import; ${knownNegatives.length} route(s) correctly did not match.`)
+console.log(`  calibration: the import pattern matched three known mail imports and rejected three near misses; ${knownNegatives.length} route(s) in this tree do not import it.`)
 for (const r of mailRoutes) {
   const how = covered.includes(r)
     ? 'GUARDED by check:access'

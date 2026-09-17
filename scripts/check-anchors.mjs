@@ -106,17 +106,47 @@ for (const file of files) {
 }
 
 // ── Calibration ─────────────────────────────────────────────────────────────
-if (!linked.has('access')) fail('the link scanner found no `#access` anywhere, and the nav, the footer and the hero all carry it. The pattern is broken, so a clean result here means nothing.', 2)
-if (!ids.has('access')) fail('the id scanner found no `id="access"`, which AccessSection declares literally. The pattern is broken.', 2)
-if (ids.has('a-fabricated-anchor-that-cannot-exist')) fail('the id scanner matched a string that is not in the source. It is not measuring the files.', 2)
+/*
+ * ⛔ THE PATTERNS ARE CALIBRATED ON FIXTURES, NOT ON THE REPOSITORY, AND THAT DISTINCTION IS THE
+ * WHOLE POINT. The first version of this file calibrated by asserting that `id="access"` was found
+ * in the source. Renaming that id therefore produced "the pattern is broken" (exit 2) instead of
+ * "the required anchor is absent" (exit 1) - the gate blamed itself for the exact defect it exists
+ * to report, and a gate that says something untrue about a real break is one somebody switches off.
+ * Measured on this branch by renaming the id and reading the message.
+ *
+ * So: the patterns are proven against strings held here, and the repository is then judged only by
+ * REQUIRED and by the link-to-id comparison. Nothing about the verdict depends on any particular
+ * id still existing.
+ */
 {
-  /* Known negative: a fabricated anchor must come out unresolved, or the comparison below cannot
-     report anything at all. Run on a copy of the real sets, so it cannot affect the verdict. */
-  const probe = new Set(ids)
-  if (probe.has('fabricated-probe-anchor')) fail('impossible: the probe anchor exists in the source.', 2)
-  const unresolvedProbe = ['fabricated-probe-anchor'].filter((a) => !probe.has(a))
-  if (unresolvedProbe.length !== 1) fail('the comparison cannot report a missing anchor. Every clean result from it would be a false clean.', 2)
+  const FIXTURE = [
+    'const a = { label: "Access", href: "#access-fixture" }',
+    '<a href="/#pilot-fixture">Pilot</a>',
+    '<a href="#">logo, no anchor</a>',
+    '<section id="access-fixture">',
+    '<div idx="not-an-id">',
+  ].join('\n')
+
+  const fLinks = [...FIXTURE.matchAll(LINK_RE)].map((m) => m[1]).sort()
+  const fIds = [...FIXTURE.matchAll(ID_RE)].map((m) => m[1]).sort()
+
+  if (fLinks.join(',') !== 'access-fixture,pilot-fixture') {
+    fail(`the link pattern extracted [${fLinks}] from a fixture holding exactly #access-fixture and /#pilot-fixture. It is broken, so every clean result from it would be a false clean.`, 2)
+  }
+  if (fIds.join(',') !== 'access-fixture') {
+    fail(`the id pattern extracted [${fIds}] from a fixture holding exactly one id. It is broken.`, 2)
+  }
+  /* The comparison itself must be able to report a miss, or a clean run means nothing. */
+  const unresolved = fLinks.filter((a) => !fIds.includes(a))
+  if (unresolved.join(',') !== 'pilot-fixture') {
+    fail('the link-to-id comparison did not report the fixture anchor that has no id. It cannot report a real one either.', 2)
+  }
 }
+
+/* Repository sanity, which is a different question from pattern sanity: zero files, zero ids or
+   zero links means this is pointed at the wrong tree, not that the site is clean. */
+if (ids.size === 0) fail('no literal id declared anywhere in scope. The scanner is reading the wrong tree.', 2)
+if (linked.size === 0) fail('no literal in-page anchor linked anywhere in scope. The scanner is reading the wrong tree.', 2)
 
 // ── Verdict ─────────────────────────────────────────────────────────────────
 const broken = [...linked.entries()]
@@ -128,7 +158,7 @@ const missingRequired = REQUIRED
   .map((r) => `id="${r.anchor}" is required and absent. ${r.why}`)
 
 console.log(`check:anchors: ${files.length} file(s) in scope, ${linked.size} literal anchor(s) linked, ${ids.size} literal id(s) declared, ${interpolated} interpolated anchor(s) out of scope.`)
-console.log(`  calibration: #access found linked and declared; a fabricated anchor was correctly reported unresolved.`)
+console.log(`  calibration: both patterns verified against fixtures, and the comparison reported the fixture anchor that had no id.`)
 for (const r of REQUIRED) console.log(`  required  id="${r.anchor}"  ${ids.has(r.anchor) ? 'present' : 'MISSING'}`)
 console.log(`  excluded: ${EXCLUDE_PREFIXES.join(' ')}`)
 

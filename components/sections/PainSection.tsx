@@ -36,14 +36,15 @@ export default function PainSection() {
     <section
       ref={sectionRef}
       id="pain"
-      className="section-pad"
+      /* The scenes' rhythm, character for character. `section-pad` is gone with it: that class is a
+         `!important` override at 768 px and below, so it and a clamp cannot both be in charge. */
       style={{
         background: 'var(--surface)',
-        padding: '120px 24px',
+        padding: 'clamp(56px, 8vw, 96px) clamp(16px, 4vw, 24px)',
       }}
     >
       <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: '64px' }}>
+        <div style={{ textAlign: 'center', marginBottom: 'clamp(28px, 4vw, 48px)' }}>
           <span
             className="reveal"
             style={{
@@ -57,12 +58,17 @@ export default function PainSection() {
           >
             The current state
           </span>
+          {/* The scene type scale. At clamp(2rem, 4vw, 3rem) this preamble was set at 48 px while
+              the seven screens it introduces are headed at 36 px, so the setup shouted over the
+              evidence. Same scale as SceneSection now, character for character. */}
           <h2
             className="reveal"
             style={{
-              fontSize: 'clamp(2rem, 4vw, 3rem)',
+              fontSize: 'clamp(1.5rem, 3.2vw, 2.25rem)',
               fontWeight: 700,
               color: 'var(--text-primary)',
+              letterSpacing: '-0.02em',
+              lineHeight: 1.18,
               margin: '12px 0 16px',
             }}
           >

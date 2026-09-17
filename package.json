@@ -4,9 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "prebuild": "node scripts/check-ds-version.mjs && node scripts/lint-dashes.mjs && node scripts/check-clip-modes.mjs --if-available && npm run check:leaderboard && npm run check:access && npm run check:eligibility",
+    "prebuild": "node scripts/check-ds-version.mjs && node scripts/lint-dashes.mjs && node scripts/check-clip-modes.mjs --if-available && npm run check:leaderboard && npm run check:access && npm run check:eligibility && npm run check:anchors && npm run check:mail-routes",
     "check:clips": "node scripts/check-clip-modes.mjs",
-    "verify": "npm run lint:dashes && npm run lint:dashes-selftest && npm run check:clips && npm run check:leaderboard && npm run check:access && npm run check:eligibility && npm run lint",
+    "verify": "npm run lint:dashes && npm run lint:dashes-selftest && npm run check:clips && npm run check:leaderboard && npm run check:access && npm run check:eligibility && npm run check:anchors && npm run check:mail-routes && npm run lint",
     "lint:dashes": "node scripts/lint-dashes.mjs",
     "lint:dashes-selftest": "node scripts/lint-dashes.selftest.mjs",
     "build": "next build",
@@ -15,7 +15,9 @@
     "ds:check": "node scripts/check-ds-version.mjs --strict",
     "check:leaderboard": "tsx scripts/check-leaderboard-privacy.mjs",
     "check:access": "tsx scripts/check-access-guard.mjs",
-    "check:eligibility": "tsx scripts/check-eligibility.mjs"
+    "check:eligibility": "tsx scripts/check-eligibility.mjs",
+    "check:anchors": "node scripts/check-anchors.mjs",
+    "check:mail-routes": "node scripts/check-mail-routes.mjs"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",

@@ -26,8 +26,9 @@ export default function TeamProofSection() {
     <section
       ref={sectionRef}
       id="team-proof"
-      className="section-pad"
-      style={{ background: 'var(--ds-canvas)', padding: 'clamp(64px, 9vw, 104px) 24px' }}
+      /* The scenes' rhythm, character for character. `section-pad` is gone with it: that class is a
+         `!important` override at 768 px and below, so it and a clamp cannot both be in charge. */
+      style={{ background: 'var(--ds-canvas)', padding: 'clamp(56px, 8vw, 96px) clamp(16px, 4vw, 24px)' }}
     >
       <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: 'clamp(28px, 4vw, 44px)' }}>

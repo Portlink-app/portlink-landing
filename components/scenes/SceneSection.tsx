@@ -42,17 +42,7 @@ export default function SceneSection({
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
           style={{ maxWidth: 680, marginBottom: 'clamp(24px, 4vw, 40px)' }}
         >
-          <span
-            style={{
-              fontSize: 11,
-              fontWeight: 600,
-              letterSpacing: '0.12em',
-              textTransform: 'uppercase',
-              color: 'var(--ds-primary)',
-            }}
-          >
-            {eyebrow}
-          </span>
+          <span className="section-eyebrow">{eyebrow}</span>
           <h2
             style={{
               fontSize: 'clamp(1.5rem, 3.2vw, 2.25rem)',

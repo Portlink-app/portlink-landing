@@ -9,8 +9,9 @@ const links = [
   { label: 'Platform', href: '#dashboard' },
   { label: 'Pilot', href: '#pilot' },
   { label: 'Access', href: '#access' },
-  // A real route, not a section: the handler below only intercepts in-page anchors.
+  // Real routes, not sections: the handler below only intercepts in-page anchors.
   { label: 'Team', href: '/team/' },
+  { label: 'Contact', href: '/contact/' },
 ]
 
 /** Native smooth scroll to anchor */
@@ -114,8 +115,7 @@ export default function Nav({ theme, setTheme }: NavProps) {
           </button>
 
           <a
-            href="#access"
-            onClick={(e) => { e.preventDefault(); smoothScrollTo('#access') }}
+            href="/contact/"
             className="nav-cta-desktop"
             style={{
               background: 'var(--brand)',
@@ -130,7 +130,7 @@ export default function Nav({ theme, setTheme }: NavProps) {
             onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--brand-bright)')}
             onMouseLeave={(e) => (e.currentTarget.style.background = 'var(--brand)')}
           >
-            Request Access
+            Contact us
           </a>
 
           <button
@@ -180,8 +180,8 @@ export default function Nav({ theme, setTheme }: NavProps) {
             </a>
           ))}
           <a
-            href="#access"
-            onClick={(e) => { e.preventDefault(); setOpen(false); smoothScrollTo('#access') }}
+            href="/contact/"
+            onClick={() => setOpen(false)}
             style={{
               display: 'inline-block',
               marginTop: '16px',
@@ -194,7 +194,7 @@ export default function Nav({ theme, setTheme }: NavProps) {
               textDecoration: 'none',
             }}
           >
-            Request Access
+            Contact us
           </a>
         </div>
       )}

@@ -5,10 +5,17 @@
  *
  * This section used to render nothing at all unless a visitor had picked a
  * role at the gate. The page no longer has a gate, so it says the thing that
- * is true for every reader: three sides, one record.
+ * is true for every reader: four sides, one record.
+ *
+ * ⛔ FOUR, NOT THREE, FROM 17.09.2026. Ports and terminals were missing from every surface of this
+ * site while being one of the parties a port call cannot happen without. The card below says only
+ * what S2, S5, S6 and S7 already demonstrate: arrivals, who is handling them, current paperwork and
+ * open work. No berth allocation, no slot scheduling, no gate management. Nothing on this site
+ * shows those, and a card that promises an unbuilt feature undoes the credibility argument the
+ * whole page now rests on.
  */
 
-import { Anchor, Compass, Ship } from 'lucide-react'
+import { Anchor, Building2, Compass, Ship } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 const partners = [
@@ -27,6 +34,11 @@ const partners = [
     title: 'Tour operators',
     body: 'Confirmed calls early enough to plan capacity, briefs that arrive in the same shape every time, and changes that come with a sign-off instead of a surprise.',
   },
+  {
+    icon: Building2,
+    title: 'Ports and terminals',
+    body: 'One view of who is arriving, what they need and who is handling it. Berth and service requests land on the call record with the documents attached, instead of arriving as an attachment to a message somebody has to forward.',
+  },
 ]
 
 export default function EcosystemSection() {
@@ -43,17 +55,7 @@ export default function EcosystemSection() {
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
           style={{ textAlign: 'center', marginBottom: 'clamp(28px, 4vw, 48px)' }}
         >
-          <span
-            style={{
-              fontSize: 11,
-              textTransform: 'uppercase',
-              letterSpacing: '0.12em',
-              color: 'var(--ds-primary)',
-              fontWeight: 600,
-            }}
-          >
-            Ecosystem
-          </span>
+          <span className="section-eyebrow">Ecosystem</span>
           <h2
             style={{
               fontSize: 'clamp(1.5rem, 3.2vw, 2.25rem)',
@@ -63,7 +65,7 @@ export default function EcosystemSection() {
               margin: '10px 0 0',
             }}
           >
-            Three sides of a port call, one record between them
+            Four sides of a port call, one record between them
           </h2>
           <p
             style={{
@@ -75,14 +77,18 @@ export default function EcosystemSection() {
             }}
           >
             Nobody re-enters what somebody else already entered. The status one side changes is the status
-            the other two are reading.
+            the other three are reading.
           </p>
         </motion.div>
 
+        {/* An explicit 2x2, not `auto-fit`. With four cards in an 1100 px container auto-fit fits
+            three per row and strands the fourth alone underneath, which reads as one of the four
+            sides being an afterthought. That is the exact impression this section exists to undo. */}
         <div
+          className="ecosystem-grid"
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+            gridTemplateColumns: 'repeat(2, 1fr)',
             gap: 'clamp(14px, 2vw, 24px)',
           }}
         >

@@ -2,7 +2,9 @@
 
 const navLinks = {
   Product: [
-    { label: 'Features', href: '#how' },
+    /* `#how` was ValueSection's id, and that section is deleted. `#dashboard` is the first product
+       scene, which is what "Features" meant to a reader following this row. */
+    { label: 'Features', href: '#dashboard' },
     { label: 'Roles', href: '#roles' },
     { label: 'Pilot Program', href: '#pilot' },
     { label: 'Request Access', href: '#access' },
@@ -10,7 +12,10 @@ const navLinks = {
   Company: [
     { label: 'Team', href: '/team/' },
     { label: 'Blog', href: 'https://www.linkedin.com/company/portlink-app/' },
-    { label: 'Contact', href: 'mailto:admin@portlink.app' },
+    /* A page, not a `mailto:`. A mail client is the one door we cannot see through: nobody knows
+       whether a message sent that way arrived, and it bypasses the work-address rule the form
+       applies. The address still reaches us; it is simply no longer the advertised route. */
+    { label: 'Contact', href: '/contact/' },
     { label: 'Privacy', href: '/privacy/' },
   ],
 }

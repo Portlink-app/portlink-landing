@@ -11,9 +11,12 @@ import { Menu, X, Sun, Moon } from 'lucide-react'
 const links = [
   { label: 'Problem', href: '/#pain' },
   { label: 'Roles', href: '/#roles' },
-  { label: 'Platform', href: '/#how' },
+  /* `#how` was ValueSection's id, and that section is deleted. `#dashboard` is the first product
+     scene, which is what "Platform" meant to a reader following this row. */
+  { label: 'Platform', href: '/#dashboard' },
   { label: 'Pilot', href: '/#pilot' },
   { label: 'Team', href: '/team/' },
+  { label: 'Contact', href: '/contact/' },
 ]
 
 const linkStyle: React.CSSProperties = {
@@ -94,7 +97,7 @@ export default function PageNav() {
           </button>
 
           <Link
-            href="/#access"
+            href="/contact/"
             className="nav-cta-desktop"
             style={{
               background: 'var(--brand)',
@@ -106,7 +109,7 @@ export default function PageNav() {
               textDecoration: 'none',
             }}
           >
-            Request Access
+            Contact us
           </Link>
 
           <button
@@ -142,8 +145,8 @@ export default function PageNav() {
               {link.label}
             </Link>
           ))}
-          <Link href="/#access" onClick={() => setOpen(false)} style={{ ...linkStyle, color: 'var(--brand)', fontWeight: 600 }}>
-            Request Access
+          <Link href="/contact/" onClick={() => setOpen(false)} style={{ ...linkStyle, color: 'var(--brand)', fontWeight: 600 }}>
+            Contact us
           </Link>
         </div>
       ) : null}

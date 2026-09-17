@@ -166,7 +166,9 @@ body {
 /* Scroll reveal system — marketing-only animation */
 .reveal {
   opacity: 0;
-  transform: translateY(24px);
+  /* 12px, not 24. At 24 the element arrives from off its own baseline and reads as flying in;
+     at 12 it reads as settling into place. The reduced-motion block below still cancels it. */
+  transform: translateY(12px);
   transition: opacity var(--ds-dur-4) var(--ds-ease-standard),
               transform var(--ds-dur-4) var(--ds-ease-standard);
 }
@@ -219,6 +221,18 @@ body {
 main:focus,
 main:focus-visible { outline: none; }
 
+/* The section eyebrow, in one place.
+   It was the same five declarations inline in SceneSection, EcosystemSection and BentoSection, and
+   every new section added 17.09.2026 wanted a sixth copy. One class means a colour decision about
+   it is made once rather than in six files, which is exactly the decision the dark theme forced. */
+.section-eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ds-primary);
+}
+
 /* Focus ring — global accessibility */
 a:focus-visible,
 button:focus-visible,
@@ -269,17 +283,33 @@ textarea:focus-visible {
 }
 
 /* Pain + Value grids */
+/* `.value-grid` is gone with ValueSection. `.pilot-grid` below is NOT dead: DrawSection still
+   carries it, and that section is the documented one-import restore path for the Seatrade draw. */
 @media (max-width: 1024px) {
-  .pain-grid,
-  .value-grid {
+  .pain-grid {
     grid-template-columns: repeat(2, 1fr) !important;
   }
 }
 @media (max-width: 600px) {
-  .pain-grid,
-  .value-grid {
+  .pain-grid {
     grid-template-columns: 1fr !important;
   }
+}
+
+/* Two doors: side by side where there is room, stacked where there is not. Below 860 px two cards
+   of this density are two narrow columns of orphaned words rather than two doors. */
+@media (max-width: 860px) {
+  .two-doors-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* /contact/: the form first on a phone, the three promises first on a desktop.
+   The gate on that page is that the first answer control clears the fold at 390 px, and the
+   headline, the lede and three multi-line promises put it past that. Above the phone breakpoint
+   the fold is not in question, so the promises take their intended place above the form. */
+@media (min-width: 768px) {
+  .contact-stack .contact-promises { order: -1; }
 }
 
 /* Pilot grid mobile */

@@ -203,7 +203,7 @@ export default function FilmHero() {
               border: '1px solid var(--ds-border-1)',
             }}
           >
-            Port call coordination
+            Maritime software engineering, Oslo
           </span>
 
           <h1
@@ -216,7 +216,7 @@ export default function FilmHero() {
               margin: '20px 0 0',
             }}
           >
-            Port calls run on emails, spreadsheets, and phone calls. They shouldn&rsquo;t have to.
+            Maritime software, built by people who have run port calls.
           </h1>
 
           <p
@@ -228,13 +228,17 @@ export default function FilmHero() {
               margin: '18px auto 0',
             }}
           >
-            Portlink connects cruise lines, port agents, and tour operators on a single port call record.
-            Everyone sees the same status. Nobody re-enters the same data.
+            We are a software company for the cruise and port industry. Portlink is the platform we
+            built for port calls, and the same team builds what ports, agents, cruise lines and tour
+            operators need next.
           </p>
 
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', justifyContent: 'center', marginTop: 26 }}>
+            {/* The primary action is now the company's door, not the product's form. A reader who
+                came for the platform has the secondary button and the whole page below it; a
+                reader who came because they need something built had nowhere to go before. */}
             <a
-              href="#access"
+              href="/contact/"
               style={{
                 background: 'var(--ds-primary)',
                 color: 'var(--ds-primary-ink)',
@@ -245,10 +249,10 @@ export default function FilmHero() {
                 textDecoration: 'none',
               }}
             >
-              Request Pilot Access
+              Tell us what you need
             </a>
             <a
-              href="#calls"
+              href="#dashboard"
               style={{
                 border: '1px solid var(--ds-border-2)',
                 color: 'var(--ds-text-1)',
@@ -260,7 +264,7 @@ export default function FilmHero() {
                 background: 'transparent',
               }}
             >
-              See the platform
+              See what we built
             </a>
           </div>
         </div>

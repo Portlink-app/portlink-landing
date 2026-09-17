@@ -12,11 +12,12 @@ import S4Finance from '@/components/scenes/S4Finance'
 import S5Work from '@/components/scenes/S5Work'
 import S6Messages from '@/components/scenes/S6Messages'
 import S7Compliance from '@/components/scenes/S7Compliance'
+import FounderBar from '@/components/sections/FounderBar'
 import PainSection from '@/components/sections/PainSection'
-import ValueSection from '@/components/sections/ValueSection'
+import BuiltSection from '@/components/sections/BuiltSection'
 import EcosystemSection from '@/components/sections/EcosystemSection'
 import BentoSection from '@/components/sections/BentoSection'
-import PilotSection from '@/components/sections/PilotSection'
+import TwoDoorsSection from '@/components/sections/TwoDoorsSection'
 import TeamProofSection from '@/components/sections/TeamProofSection'
 import AccessSection from '@/components/sections/AccessSection'
 import Footer from '@/components/sections/Footer'
@@ -38,7 +39,13 @@ export default function Home() {
             the show QR codes still resolve, the email sequence still sends. Only the front page
             stopped advertising it. Restoring it is this one import plus the two nav rows named in
             the header of components/sections/DrawSection.tsx. */}
+        <FounderBar />
         <PainSection />
+
+        {/* The hinge. It converts every scene below it from "buy this" into "this is the standard
+            of work that leaves this building", which is the whole argument of the repositioning of
+            17.09.2026. The scenes themselves are unchanged; only their job is. */}
+        <BuiltSection />
 
         <SceneSection
           id="dashboard"
@@ -109,11 +116,11 @@ export default function Home() {
           <S7Compliance />
         </SceneSection>
 
-        <ValueSection />
         <EcosystemSection />
         <BentoSection />
-        <PilotSection />
         <TeamProofSection />
+        {/* Keeps id="pilot": the nav, the footer and PageNav all link to it. */}
+        <TwoDoorsSection />
         <AccessSection />
       </main>
       <Footer />

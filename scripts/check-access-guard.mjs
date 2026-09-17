@@ -1,5 +1,11 @@
 /**
- * check:access - the pilot form must refuse a submission BEFORE it can send mail.
+ * check:access - the contact form must refuse a submission BEFORE it can send mail.
+ *
+ * ONE ROUTE, TWO INTENTS since 17.09.2026. `/api/access` now answers both the pilot request and the
+ * build enquiry, so both are exercised here: a deny and an allow for each, because a gate that only
+ * ever drives one branch has measured half an endpoint. `scripts/check-mail-routes.mjs` is the
+ * companion invariant, and it fails if a route in this repo imports `resend` and is neither
+ * exercised here nor exempted by name with a reason.
  *
  * WHY A GATE AND NOT A COMMENT. `/api/access` sends a confirmation to an address the caller
  * supplies, from the verified sender pilot@portlink.app. Until 16.09.2026 the only check was that
@@ -104,11 +110,16 @@ console.log('calibration')
 console.log('refusals (RESEND_API_KEY unset, so a leak cannot be silent)')
 const deny = [
   ['malformed JSON returns 400, not 500', 'not json', 400, /Invalid JSON/],
-  ['a JSON body that is not an object', '"just a string"', 400, /Invalid JSON|choose your role/],
-  ['an empty body', {}, 400, /choose your role/],
+  ['a JSON body that is not an object', '"just a string"', 400, /Invalid JSON|kind of organisation/],
+  ['an empty body', {}, 400, /kind of organisation/],
   ['a missing name', { ...VALID, name: '' }, 400, /enter your name/],
   ['a missing company', { ...VALID, company: '' }, 400, /enter your company/],
-  ['a role that is not one of the three', { ...VALID, role: 'Hacker' }, 400, /choose your role/],
+  ['an organisation type that is not one of the five', { ...VALID, role: 'Hacker' }, 400, /kind of organisation/],
+  ['an intent that is not one of the two', { ...VALID, intent: 'invoice-me' }, 400, /what you are asking about/],
+  ['an intent that is an object, not a string', { ...VALID, intent: { build: true } }, 400, /what you are asking about/],
+  ['a build enquiry with no need at all', { ...VALID, intent: 'build' }, 400, /what you need built/],
+  ['a build enquiry whose need is one character', { ...VALID, intent: 'build', need: 'x' }, 400, /what you need built/],
+  ['a build enquiry whose need is only whitespace', { ...VALID, intent: 'build', need: '   \n  ' }, 400, /what you need built/],
   ['an address that is not an address', { ...VALID, email: 'ada-at-example' }, 400, /valid email address/],
   ['a free-mail address', { ...VALID, email: 'ada@gmail.com' }, 400, /work email address/],
   ['a free-mail address on a country domain', { ...VALID, email: 'ada@hotmail.co.uk' }, 400, /work email address/],
@@ -207,6 +218,112 @@ console.log('accept')
   })
   await check('no header can be smuggled into a subject line', () => {
     for (const b of bodies) assert.equal(/[\r\n]/.test(b.subject), false, 'newline in a subject')
+  })
+  delete process.env.RESEND_API_KEY
+}
+
+// ALLOW: the second intent, the new audience, and the catch-all all work and arrive right.
+console.log('accept: the build enquiry')
+{
+  process.env.RESEND_API_KEY = 're_dummy_never_sent'
+  const r = await post({
+    intent: 'build',
+    role: 'Something else',
+    name: 'Ada Lovelace',
+    email: 'ada@nordicportagency.com',
+    company: 'Nordic Port Agency',
+    need: 'Three people re-key the same arrival list into two systems every Monday.',
+    timeline: 'This quarter',
+    existingSystems: 'Our own berth sheet',
+  })
+  const bodies = r.sent.map(c => c.payload)
+  await check('a build enquiry with a need is accepted', () => {
+    assert.equal(r.status, 200, JSON.stringify(r.json))
+    assert.deepEqual(r.json, { ok: true })
+    assert.equal(bodies.length, 2)
+  })
+  await check('the admin subject says build enquiry, not pilot request', () => {
+    const admin = bodies.find(b => String(b.to).includes('admin@portlink.test'))
+    assert.match(admin.subject, /^Build enquiry: /)
+    assert.doesNotMatch(admin.subject, /Pilot request/)
+  })
+  await check('the need reaches the admin mail, under its own label', () => {
+    const admin = bodies.find(b => String(b.to).includes('admin@portlink.test'))
+    assert.match(admin.html, /What they need/)
+    assert.match(admin.html, /re-key the same arrival list/)
+    assert.match(admin.html, /Wants us to build something/)
+  })
+  await check('the visitor is promised the same 48 hours the page promises', () => {
+    const visitor = bodies.find(b => String(b.to).includes('nordicportagency'))
+    assert.match(visitor.html, /within 48 hours/)
+    assert.match(visitor.html, /David or Kris reads it/)
+    /* The pilot's cohort language must not reach somebody who asked for a bespoke build. */
+    assert.doesNotMatch(visitor.html, /current cohort/)
+  })
+  delete process.env.RESEND_API_KEY
+}
+
+console.log('accept: ports and terminals, the fourth audience')
+{
+  process.env.RESEND_API_KEY = 're_dummy_never_sent'
+  const r = await post({
+    intent: 'pilot',
+    role: 'Port or Terminal',
+    name: 'Ada Lovelace',
+    email: 'ada@lasp.example.com',
+    company: 'Las Palmas Terminal',
+    cruiseCallsPerYear: '200 to 500',
+    berths: '3 cruise berths',
+    currentSystem: 'Email and spreadsheets',
+  })
+  const bodies = r.sent.map(c => c.payload)
+  await check('a port or terminal is an accepted organisation type', () => {
+    assert.equal(r.status, 200, JSON.stringify(r.json))
+    assert.equal(bodies.length, 2)
+  })
+  await check('its three detail fields reach the admin mail', () => {
+    const admin = bodies.find(b => String(b.to).includes('admin@portlink.test'))
+    assert.match(admin.html, /Cruise calls \/ year/)
+    assert.match(admin.html, /200 to 500/)
+    assert.match(admin.html, /3 cruise berths/)
+    assert.match(admin.html, /Email and spreadsheets/)
+  })
+  await check('it gets confirmation copy of its own, not the cruise line default', () => {
+    const visitor = bodies.find(b => String(b.to).includes('lasp.example.com'))
+    assert.match(visitor.html, /port or a terminal/)
+    assert.doesNotMatch(visitor.html, /across their deployment/)
+  })
+  delete process.env.RESEND_API_KEY
+}
+
+console.log('accept: the catch-all, and the absent intent')
+{
+  process.env.RESEND_API_KEY = 're_dummy_never_sent'
+  const r = await post({
+    intent: 'pilot',
+    role: 'Something else',
+    name: 'Ada Lovelace',
+    email: 'ada@nordicportagency.com',
+    company: 'Nordic Port Agency',
+  })
+  await check('Something else is accepted rather than refused by the endpoint the form offered it on', () => {
+    assert.equal(r.status, 200, JSON.stringify(r.json))
+    assert.equal(r.sent.length, 2)
+  })
+  await check('no empty labelled detail section is rendered when there are no detail rows', () => {
+    const admin = r.sent.map(c => c.payload).find(b => String(b.to).includes('admin@portlink.test'))
+    assert.doesNotMatch(admin.html, /Operation details/)
+    assert.doesNotMatch(admin.html, /Enquiry details/)
+  })
+
+  /* An absent intent is the shape every submission had before 17.09.2026, and the homepage form
+     would still be a pilot request if its preset were ever dropped. It must not become a refusal. */
+  const legacy = await post({ ...VALID })
+  await check('a submission with no intent field is still a pilot request', () => {
+    assert.equal(legacy.status, 200, JSON.stringify(legacy.json))
+    const admin = legacy.sent.map(c => c.payload).find(b => String(b.to).includes('admin@portlink.test'))
+    assert.match(admin.subject, /^Pilot request: /)
+    assert.match(admin.html, /Wants the pilot/)
   })
   delete process.env.RESEND_API_KEY
 }

@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { BentoGrid, BentoCard } from '@/components/BentoGrid'
-import { Ship, Anchor, Compass, CheckCircle2 } from 'lucide-react'
+import { Ship, Anchor, Building2, Compass, CheckCircle2 } from 'lucide-react'
 
 // ── Abstract mini-visuals ─────────────────────────────────────────────────────
 
@@ -228,7 +228,7 @@ type BentoItem = {
   accent?: boolean
 }
 
-const bentoData: Record<'cruise' | 'agent' | 'tour', BentoItem[]> = {
+const bentoData: Record<'cruise' | 'agent' | 'tour' | 'port', BentoItem[]> = {
   cruise: [
     {
       title: 'Full Fleet Visibility',
@@ -279,6 +279,41 @@ const bentoData: Record<'cruise' | 'agent' | 'tour', BentoItem[]> = {
       span: 'two-thirds',
     },
   ],
+  /**
+   * Ports and terminals, added 17.09.2026, and every card reuses a visual that is already on this
+   * page.
+   *
+   * ⛔ WRITTEN STRICTLY FROM WHAT S2, S5, S6 AND S7 DEMONSTRATE. Arrivals across a season and a
+   * week, who is handling each call, which certificates are current, and what your own people
+   * still have open. NOT berth allocation, NOT slot scheduling, NOT gate management: nothing on
+   * this site shows those, and the page's whole argument from `BuiltSection` down is that every
+   * screen on it is real. An invented card would cost more than a missing audience did.
+   */
+  port: [
+    {
+      title: 'The Season, Then The Week',
+      description: 'Every arrival ahead of you, from the season down to the next seven days. One calendar, not a mail folder.',
+      visual: <CalendarView />,
+      span: 'two-thirds',
+    },
+    {
+      title: 'Who Is Handling It',
+      description: 'The agent, the line and your own people on each call, on the record rather than in somebody\u2019s contacts.',
+      visual: <NetworkDiagram />,
+      accent: true,
+    },
+    {
+      title: 'Paperwork That Is Current',
+      description: 'What is valid, what expires next, and what is still waiting for a counter-signature. Attached to the call it belongs to.',
+      visual: <AuditTrail />,
+    },
+    {
+      title: 'Your Team\u2019s Open Work',
+      description: 'The arrivals with something still open on them, and who owes it. Without a phone call to find out.',
+      visual: <VesselList />,
+      span: 'two-thirds',
+    },
+  ],
   tour: [
     {
       title: 'Demand You Can Plan Around',
@@ -308,12 +343,13 @@ const bentoData: Record<'cruise' | 'agent' | 'tour', BentoItem[]> = {
 
 // ── Section ───────────────────────────────────────────────────────────────────
 
-type RoleKey = 'cruise' | 'agent' | 'tour'
+type RoleKey = 'cruise' | 'agent' | 'tour' | 'port'
 
 const roles: { id: RoleKey; label: string; icon: typeof Ship }[] = [
   { id: 'cruise', label: 'Cruise line',   icon: Ship },
   { id: 'agent',  label: 'Port agent',    icon: Anchor },
   { id: 'tour',   label: 'Tour operator', icon: Compass },
+  { id: 'port',   label: 'Port or terminal', icon: Building2 },
 ]
 
 /**
@@ -347,6 +383,18 @@ const roleCopy: Record<RoleKey, { tagline: string; headline: string; body: strin
       'Service coordination dashboard',
       'Document sharing with full versioning',
       'Complete port call history',
+    ],
+  },
+  port: {
+    tagline: 'Terminal and berth coordination',
+    headline: 'Every arrival, with its paperwork already on it.',
+    body: 'See the season and the week ahead, who the agent is on each call, which permits and certificates are current, and what your own people still have open. Without a phone call to find out.',
+    features: [
+      'Season and week ahead in one calendar',
+      'The agent and the line on every call',
+      'Permits and certificates with their expiry',
+      'Your own team\u2019s open tasks per call',
+      'Documents on the call record, not in an inbox',
     ],
   },
   tour: {
@@ -388,12 +436,7 @@ export default function BentoSection() {
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
           style={{ textAlign: 'center', marginBottom: '28px' }}
         >
-          <span style={{
-            fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.12em',
-            color: 'var(--ds-primary)', fontWeight: 600,
-          }}>
-            Built for your role
-          </span>
+          <span className="section-eyebrow">Built for your role</span>
           <h2 style={{
             fontSize: 'clamp(1.75rem, 3.6vw, 2.75rem)',
             fontWeight: 700,
@@ -401,7 +444,7 @@ export default function BentoSection() {
             letterSpacing: '-0.02em',
             margin: '10px 0 0',
           }}>
-            Three roles. One platform.
+            Four roles. One platform.
           </h2>
           <p style={{
             fontSize: 'clamp(0.95rem, 1.4vw, 1.0625rem)',

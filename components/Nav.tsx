@@ -8,7 +8,6 @@ const links = [
   { label: 'Roles', href: '#roles' },
   { label: 'Platform', href: '#dashboard' },
   { label: 'Pilot', href: '#pilot' },
-  { label: 'Draw', href: '#draw' },
   { label: 'Access', href: '#access' },
   // A real route, not a section: the handler below only intercepts in-page anchors.
   { label: 'Team', href: '/team/' },

@@ -1,9 +1,21 @@
 'use client'
 
 /**
- * The Seatrade Cruise Med draw, on the front page.
+ * The Seatrade Cruise Med draw block.
  *
- * WHY IT IS HERE. The draw and its referral mechanics already existed at /seatrade/, reachable only
+ * OFF THE FRONT PAGE SINCE 17.09.2026, BY DAVID'S INSTRUCTION. The component is kept here,
+ * unchanged, because the campaign it belongs to is still running: /seatrade/ takes entries, the
+ * show QR codes resolve, the four-email sequence sends. What stopped is the front page advertising
+ * it. Nothing else was removed.
+ *
+ * TO PUT IT BACK, three lines, and that is the whole change:
+ *   1. app/page.tsx      — `import DrawSection from '@/components/sections/DrawSection'` and
+ *                          `<DrawSection />` directly under `<FilmHero />`
+ *   2. components/Nav.tsx     — `{ label: 'Draw', href: '#draw' },` after the Pilot row
+ *   3. components/PageNav.tsx — `{ label: 'Draw', href: '/#draw' },` after the Pilot row
+ * One `git revert` of the removal commit does all three together.
+ *
+ * WHY IT WAS HERE. The draw and its referral mechanics already existed at /seatrade/, reachable only
  * by people who had been handed the link at the booth. Everyone who arrives at portlink.app from a
  * post, a signature or a search saw nothing about it. A referral competition that the referred
  * person cannot find is a competition with one hop in it.

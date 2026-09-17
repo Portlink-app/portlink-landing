@@ -6,10 +6,11 @@
     "dev": "next dev",
     "prebuild": "node scripts/check-ds-version.mjs && node scripts/lint-dashes.mjs && node scripts/check-clip-modes.mjs --if-available && npm run check:leaderboard && npm run check:access && npm run check:eligibility && npm run check:anchors && npm run check:mail-routes && npm run check:viz-type && npm run check:contact-intent",
     "check:clips": "node scripts/check-clip-modes.mjs",
-    "verify": "npm run lint:dashes && npm run lint:dashes-selftest && npm run check:clips && npm run check:leaderboard && npm run check:access && npm run check:eligibility && npm run check:anchors && npm run check:mail-routes && npm run check:viz-type && npm run check:contact-intent && npm run lint",
+    "verify": "npm run lint:dashes && npm run lint:dashes-selftest && npm run check:clips && npm run check:leaderboard && npm run check:access && npm run check:eligibility && npm run check:anchors && npm run check:mail-routes && npm run check:viz-type && npm run check:contact-intent && npm run check:scene-layouts && npm run check:film-motion && npm run lint",
     "lint:dashes": "node scripts/lint-dashes.mjs",
     "lint:dashes-selftest": "node scripts/lint-dashes.selftest.mjs",
     "build": "next build",
+    "postbuild": "node scripts/check-scene-layouts.mjs --built && node scripts/check-film-motion.mjs --built",
     "start": "next start",
     "lint": "eslint",
     "ds:check": "node scripts/check-ds-version.mjs --strict",
@@ -19,7 +20,9 @@
     "check:anchors": "node scripts/check-anchors.mjs",
     "check:mail-routes": "node scripts/check-mail-routes.mjs",
     "check:viz-type": "node scripts/check-viz-type.mjs",
-    "check:contact-intent": "node scripts/check-contact-intent.mjs"
+    "check:contact-intent": "node scripts/check-contact-intent.mjs",
+    "check:scene-layouts": "node scripts/check-scene-layouts.mjs",
+    "check:film-motion": "node scripts/check-film-motion.mjs"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",

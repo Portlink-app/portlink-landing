@@ -66,7 +66,7 @@ export default function AccessSection() {
       </div>
 
       <div className="reveal" style={{ marginTop: 'clamp(32px, 5vw, 56px)', textAlign: 'left' }}>
-        <ContactForm presetIntent="pilot" />
+        <ContactForm intent="pilot" lockIntent />
       </div>
     </section>
   )

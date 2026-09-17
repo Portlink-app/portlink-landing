@@ -3,9 +3,21 @@
 /**
  * The one contact form. One implementation, two mounts, one endpoint.
  *
- * `/contact/` mounts it with the intent question asked. `AccessSection` on the homepage mounts it
- * with `presetIntent="pilot"` and that question hidden, because a reader who has just read the
- * pilot terms has already answered it. Both post to `/api/access`.
+ * `/contact/` mounts it with the intent question asked and `build` selected on arrival, matching
+ * its own H1 and the homepage link that sends people there. `AccessSection` mounts it with the
+ * intent fixed to `pilot` and the question hidden, because a reader who has just read the pilot
+ * terms has already answered it. Both post to `/api/access`.
+ *
+ * ⛔ `intent` IS REQUIRED, AND IT IS A SEPARATE QUESTION FROM `lockIntent`. `intent` is which
+ * option is selected when the form opens. `lockIntent` is whether the reader is asked at all.
+ * They used to be one optional `presetIntent` that meant both at once, so a mount wanting a
+ * starting selection without hiding the question had no way to say so and fell through to a
+ * `?? 'pilot'` tail nobody chose. Measured on the live page 17.09.2026: `/contact/` served the
+ * `pilot` radio checked and `build` unchecked, under an H1 reading "Tell us what you need built."
+ * A visitor who skimmed sent a pilot request meaning a build request, the submission looked valid,
+ * the confirmation was plausible, and nothing anywhere recorded that the intent was wrong.
+ * Requiring `intent` is the actual repair: `<ContactForm />` no longer compiles, so no future
+ * mount can inherit a default nobody decided.
  *
  * WHY NOT FOUR PATHS. The obvious shape for "four audiences, two intents" is a router with a form
  * per branch, which is eight forms to keep in step, eight sets of validation and eight places for
@@ -73,8 +85,10 @@ interface FormData {
   website: string
 }
 
-const EMPTY: FormData = {
-  intent: 'pilot',
+/* Deliberately `Omit<…, 'intent'>`. It used to carry `intent: 'pilot'`, which the mount's value
+   then overrode. A second place an intent could come from, and a silent winner the day anyone
+   dropped the override. There is one source of the intent now, and it is the caller. */
+const EMPTY: Omit<FormData, 'intent'> = {
   role: '', name: '', email: '', company: '',
   fleetSize: '', portCallsPerYear: '', currentPdaTool: '',
   cruiseCallsPerYear: '', berths: '', currentSystem: '',
@@ -288,7 +302,14 @@ function TextareaField({
 
 // ── The form ──────────────────────────────────────────────────────────────────
 
-export default function ContactForm({ presetIntent }: { presetIntent?: ContactIntent }) {
+type ContactFormProps = {
+  /** Which option is selected when the form opens. Required on purpose. See the header. */
+  intent: ContactIntent
+  /** When true the question is not asked and `intent` stands as the answer. */
+  lockIntent?: boolean
+}
+
+export default function ContactForm({ intent, lockIntent = false }: ContactFormProps) {
   /* Unique per mount, so two mounts on one document cannot collide on an input id. The homepage has
      one today, but a duplicate id silently breaks every `label for=`, which is the kind of defect
      that only shows up in a screen reader. */
@@ -300,7 +321,8 @@ export default function ContactForm({ presetIntent }: { presetIntent?: ContactIn
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState('')
   const [emailHint, setEmailHint] = useState('')
-  const [data, setData] = useState<FormData>({ ...EMPTY, intent: presetIntent ?? 'pilot' })
+  /* No `??` tail. The caller decided, and the type made it decide. */
+  const [data, setData] = useState<FormData>({ ...EMPTY, intent })
 
   const set = <K extends keyof FormData>(key: K, value: FormData[K]) =>
     setData((d) => ({ ...d, [key]: value }))
@@ -410,16 +432,16 @@ export default function ContactForm({ presetIntent }: { presetIntent?: ContactIn
                   transition={stepTransition}
                   onSubmit={submitWho}
                 >
-                  <h3 style={stepHeading}>{presetIntent ? 'About you' : 'What can we help with?'}</h3>
+                  <h3 style={stepHeading}>{lockIntent ? 'About you' : 'What can we help with?'}</h3>
                   <p style={stepLede}>
-                    {presetIntent
+                    {lockIntent
                       ? 'How should we reach you?'
                       : 'Two questions about you, then one about what you need.'}
                   </p>
 
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
                     {/* The intent question, asked only where it has not already been answered. */}
-                    {!presetIntent && (
+                    {!lockIntent && (
                       <fieldset style={{ border: 'none', padding: 0, margin: 0 }}>
                         <legend style={{ ...labelStyle, marginBottom: 10 }}>What brings you here?</legend>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>

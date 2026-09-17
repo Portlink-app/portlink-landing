@@ -83,7 +83,12 @@ export default function ContactPage() {
 
             <div className="contact-stack" style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(32px, 5vw, 48px)', marginTop: 'clamp(28px, 4vw, 40px)' }}>
               <div className="contact-form-slot">
-                <ContactForm />
+                {/* `build` selected on arrival: this route is the build door in the site's own
+                    navigation. `TwoDoorsSection` sends "Tell us what you need" here and
+                    "Request pilot access" to `#access`, and the H1 above says so. The question is
+                    still asked, and the pilot option sits directly under it for anyone who wants
+                    the other door. */}
+                <ContactForm intent="build" />
               </div>
 
               <ol className="contact-promises" style={{ listStyle: 'none', margin: 0, padding: 0, display: 'grid', gap: 18 }}>
@@ -166,6 +171,7 @@ export default function ContactPage() {
             </div>
           </div>
         </section>
+
       </main>
       <Footer />
     </>

@@ -33,6 +33,24 @@ export const metadata = {
  * company is new; the people are not, and the proof strip at the bottom is the only proof that is
  * both true and ours.
  *
+ * ⛔ DO NOT ADD A "CHECK ANY OF THIS YOURSELF" BLOCK BACK. One stood here from 17.09.2026 to
+ * 18.09.2026, asserting three measured things about this site: two authored layouts per product
+ * screen, no video at all under reduced motion, and no text below 11 px. All three were true —
+ * re-measured on the live domain before the block came off — and that is not why it went.
+ * Chose: cut the block.
+ * Over: rewording it, shortening it to one sentence, or moving it to /team.
+ * Because: the reader here is a port agent or a deployment manager deciding whether to trust us
+ *   with software, and two of the three proofs are about authored breakpoints and video requests —
+ *   facts about our craft that their business has no stake in. It read as engineers talking to
+ *   engineers on the one page written for a buyer, and the same site already shows rather than
+ *   claims, in a currency this reader values: seven real product screens and two named people with
+ *   checkable histories.
+ * Revisit-if: a page appears whose audience IS technical — a build-quality or engineering page —
+ *   in which case the sentences are worth having and both gates already read a claim wherever it
+ *   is written under app/ or components/.
+ * The three gates behind those sentences stayed: `check:scene-layouts`, `check:film-motion` and
+ * `check:viz-type`. Each says in its own header why it outlived the sentence it was written for.
+ *
  * ⛔ THE FORM COMES BEFORE THE THREE PROMISES IN THE DOM, AND THAT IS DELIBERATE.
  * Chose: promises after the form in source order, lifted above it by `order` at 768 px and up.
  * Over: promises first in source order, which is how they read on a desktop.
@@ -155,78 +173,6 @@ export default function ContactPage() {
                 'We do not take work we cannot do well. If what you need sits outside what we know, we say so in the first reply rather than the third meeting.',
                 'We do not put you into a sequence. One reply from a person, and nothing after that unless you answer.',
                 'We do not claim customers we do not have. Everything on this site is either our own product or our own people’s history, and all of it is checkable.',
-              ].map((text) => (
-                <p
-                  key={text}
-                  style={{
-                    margin: 0,
-                    fontSize: 'clamp(0.95rem, 1.4vw, 1.0625rem)',
-                    color: 'var(--ds-text-2)',
-                    lineHeight: 1.65,
-                  }}
-                >
-                  {text}
-                </p>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/*
-          The one part of this page that asks the reader to go and look, which is why every
-          sentence in it is a measurement rather than a position.
-
-          ⛔ NOTHING GOES IN HERE THAT HAS NOT BEEN MEASURED AGAINST THE LIVE DOMAIN. Measured
-          17.09.2026 on https://portlink.app, after the deploy that carried it:
-            1. served markup carries 7 `scene-wide` and 7 `scene-narrow` against the 7 scene ids
-               (dashboard, calls, review, finance, work, messages, compliance).
-            2. with prefers-reduced-motion: reduce, the homepage loaded 0 video elements, 0 video
-               sources and requested 0 film files. The control with motion allowed, same page,
-               same session: 4, 4 and 8 (hero-A through hero-D).
-            3. a computed font-size sweep over all 9 public routes at 390px and 1440px, pressing
-               every tab the pages own, found 0 strings below 11px. Each page carried its own
-               known-positive control (a 9px span injected live was counted) and known-negative
-               (the same span at 11px was not). `npm run check:viz-type` keeps it true.
-          The third sentence was cut from this block once already, because the first sweep ran
-          only the default role tab and returned a zero it had not earned. Do not restore a
-          sentence here on a zero that has not pressed the page's own controls.
-        */}
-        <section
-          style={{
-            background: 'var(--ds-canvas)',
-            borderTop: '1px solid var(--ds-border-1)',
-            padding: 'clamp(56px, 8vw, 96px) clamp(16px, 4vw, 24px)',
-          }}
-        >
-          <div style={{ maxWidth: 680, margin: '0 auto' }}>
-            <h2
-              style={{
-                fontSize: 'clamp(1.5rem, 3.2vw, 2.25rem)',
-                fontWeight: 700,
-                color: 'var(--ds-text-1)',
-                letterSpacing: '-0.02em',
-                lineHeight: 1.18,
-                margin: 0,
-              }}
-            >
-              Check any of this yourself
-            </h2>
-            <p
-              style={{
-                margin: 'clamp(12px, 2vw, 16px) 0 0',
-                fontSize: 'clamp(0.95rem, 1.4vw, 1.0625rem)',
-                color: 'var(--ds-text-2)',
-                lineHeight: 1.65,
-              }}
-            >
-              We would rather show the standard than describe it. Three things about this site,
-              each verifiable without asking us.
-            </p>
-            <div style={{ display: 'grid', gap: 16, marginTop: 'clamp(18px, 3vw, 24px)' }}>
-              {[
-                'Every product screen on the front page ships two authored layouts, one wide and one narrow, instead of one design squeezed to fit. Seven screens, fourteen layouts, all of them in the page source.',
-                'If your system asks for reduced motion, we send you no video at all. Not a paused one, not a still standing in for one. The files are never requested.',
-                'No text anywhere on this site renders below 11 px. Open the inspector on any page here and look.',
               ].map((text) => (
                 <p
                   key={text}

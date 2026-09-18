@@ -12,6 +12,13 @@
  * Measured on the built page at 94992469, pressing the section's own tabs: Port agent 6 strings
  * below 11 px, Tour operator 11, Port or terminal 12, identical at 390 px and 1440 px.
  *
+ * This gate never read a claim, and that is why nothing about it changed on 18.09.2026 when the
+ * "Check any of this yourself" block came off /contact/ and took the 11 px sentence with it. It
+ * was written for the phone reader who could not read a 9 px label, not for the paragraph that
+ * later mentioned them. Sibling gates `check:scene-layouts` and `check:film-motion` did read that
+ * block and now treat the claim as optional; see their headers for the same reasoning stated where
+ * it was a change rather than a non-event.
+ *
  * SCOPE, stated so a zero from this script cannot be read as more than it is: inline `fontSize`
  * literals in the .tsx we author. The vendored design system in `app/_ds/` is excluded — it is
  * Tiller's, it ships its own scale, and this gate has no opinion on it. Sizes expressed through

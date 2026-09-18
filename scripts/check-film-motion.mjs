@@ -2,15 +2,25 @@
 /**
  * check-film-motion — a visitor who asked for reduced motion is still sent no film.
  *
- * What this is, plainly: the contact page promises that if your computer is set to reduce motion,
- * this site sends you no video at all — not a paused one, not a still standing in for one — and
- * that the film files are never even requested. That is true today by construction: the hook that
- * answers the motion question starts out saying "no", so the markup the server sends carries a
- * poster image, and the <video> element that would fetch the film is never created. It was true
- * once before too, and then it was not: a <video preload="metadata"> in the server HTML made a
- * reduced-motion visitor pay 776 217 byte of film before React could replace it.
+ * What this is, plainly: if your computer is set to reduce motion, this site sends you no video at
+ * all — not a paused one, not a still standing in for one — and the film files are never even
+ * requested. That is true today by construction: the hook that answers the motion question starts
+ * out saying "no", so the markup the server sends carries a poster image, and the <video> element
+ * that would fetch the film is never created. It was true once before too, and then it was not: a
+ * <video preload="metadata"> in the server HTML made a reduced-motion visitor pay 776 217 byte of
+ * film before React could replace it.
  *
  * Nothing was keeping the fix in place. This gate does.
+ *
+ * ⛔ WHY THIS GATE OUTLIVED THE SENTENCE IT WAS WRITTEN FOR. It was built on 17.09.2026 to hold a
+ * public claim on /contact/ that invited a reader to verify this in their own browser. That block
+ * came off the page on 18.09.2026 — the claims were true, the audience was wrong: a port agent
+ * deciding whether to trust us with software has no stake in how we author video requests. The
+ * BEHAVIOUR is owed to a visitor who asked for less motion, and that visitor did not stop existing
+ * when the paragraph did. So the gate stayed and the claim half became conditional: the build
+ * fails for exactly the same regressions it failed for yesterday. A promise removed from the site
+ * must not quietly remove the thing the promise described — and of the two, the accessibility
+ * behaviour is the part that was never really about marketing.
  *
  * TWO PASSES, and the pairing is the point, because each one is blind where the other sees:
  *   source  every <video> element this repo authors sits behind an early return on the reduced-
@@ -27,7 +37,8 @@
  * SCOPE, stated so a clean verdict cannot be read as more than it is: this judges authored .tsx
  * under `app/` and `components/`, and the prerendered HTML under `.next/server/app/`. Routes that
  * are server-rendered on demand have no prerendered artifact and are not covered here; neither is
- * anything a third-party script might inject at runtime. The identifier the guard tests is read
+ * anything a third-party script might inject at runtime. The optional claim pass searches the same
+ * authored files, so a claim that moves to another page is still found. The identifier the guard tests is read
  * from wherever this repo binds `useMotionAllowed()`, so renaming the hook's result is a change
  * this gate follows rather than one it refuses.
  *
@@ -48,7 +59,6 @@ const EXCLUDED = ['app/_ds', 'node_modules', '.next']
 const BUILT_DIR = '.next/server/app'
 const HOOK = 'useMotionAllowed'
 const FILM_EXT = /\.(mp4|webm|mov|m4v|ogv)\b/i
-const CLAIM_FILE = 'app/contact/page.tsx'
 const CLAIM_ANCHOR = 'we send you no video at all'
 
 /** Source with comments removed. This file is full of the word `<video>` in prose; none of it is markup. */
@@ -223,14 +233,6 @@ if (broken.length) {
 
 // ── The run ──────────────────────────────────────────────────────────────────
 const requireBuilt = process.argv.includes('--built')
-const read = (rel) => readFileSync(join(ROOT, rel), 'utf8')
-
-if (!stripComments(read(CLAIM_FILE)).includes(CLAIM_ANCHOR)) {
-  console.error(`check-film-motion: the claim this gate exists to hold is not in ${CLAIM_FILE}.`)
-  console.error(`  looked for: "${CLAIM_ANCHOR}"`)
-  console.error('\nIf the sentence was removed on purpose, remove this gate in the same commit.')
-  process.exit(1)
-}
 
 let files = []
 for (const r of ROOTS) {
@@ -251,6 +253,13 @@ if (allNames.size === 0) {
   console.error(`check-film-motion: nothing in this repository binds ${HOOK}(). The guard this script looks for does not exist here, so a clean verdict would be an accident.`)
   process.exit(2)
 }
+
+/* THE CLAIM PASS IS CONDITIONAL, AND NOTHING ELSE HERE IS.
+   Every check below runs whether or not a page says a word about reduced motion, because the
+   behaviour is owed to the visitor and not to the sentence. Finding a claim only adds a line to
+   the verdict naming what is now also a public promise; not finding one removes nothing. The
+   scope line prints which happened, so a clean verdict always carries its own coverage. */
+const claimSource = parsed.find(({ clean }) => clean.includes(CLAIM_ANCHOR))?.file ?? null
 
 const problems = []
 let videoCount = 0
@@ -297,12 +306,15 @@ if (existsSync(builtDir)) {
   process.exit(2)
 }
 
-console.log(`check-film-motion: ${files.length} files · ${videoCount} <video> element(s) authored · guard identifier(s) ${[...allNames].join(', ')} read from ${HOOK}()`)
+const claimScope = claimSource
+  ? `also a public claim, in ${claimSource}`
+  : `claim pass: NO PUBLIC CLAIM on the site (searched ${files.length} authored file(s) for "${CLAIM_ANCHOR}") — the behaviour is held for the visitor, not for a sentence`
+console.log(`check-film-motion: ${files.length} files · ${videoCount} <video> element(s) authored · guard identifier(s) ${[...allNames].join(', ')} read from ${HOOK}() · ${claimScope}`)
 console.log(`check-film-motion: ${builtScope}`)
 if (problems.length) {
   console.error(`\ncheck-film-motion: ${problems.length} way(s) film can reach a visitor who asked for none.`)
   for (const p of problems) console.error(`  - ${p}`)
-  console.error(`\nThe sentence being held, on ${CLAIM_FILE}: "${CLAIM_ANCHOR}..."`)
+  if (claimSource) console.error(`\nThe sentence being held, on ${claimSource}: "${CLAIM_ANCHOR}..."`)
   process.exit(1)
 }
 console.log('check-film-motion: ok — every authored <video> is behind the reduced-motion guard, and no prerendered page carries film.')

@@ -2,17 +2,29 @@
 /**
  * check-scene-layouts — the front page really does ship two authored layouts per product screen.
  *
- * What this is, plainly: the contact page makes a promise a reader is invited to check in their
- * own browser — that every product screen on the front page is drawn twice, once for a wide
- * screen and once for a phone, rather than once and squeezed. That promise is true today because
- * somebody measured it once. Nothing was keeping it true. A refactor that collapses one pair, or
- * an eighth screen added with only a wide layout, falsifies a public sentence in silence, and the
- * sentence would still be sitting there inviting people to look.
+ * What this is, plainly: every product screen on the front page is drawn twice, once for a wide
+ * screen and once for a phone, rather than once and squeezed. That is true today because somebody
+ * measured it once. Nothing else was keeping it true. A refactor that collapses one pair, or an
+ * eighth screen added with only a wide layout, takes a phone visitor back to a desktop layout
+ * shrunk to fit, and no test anywhere would have said a word.
  *
- * So this gate reads the claim itself, counts the layouts, and refuses the build when the two
- * disagree — including the NUMBERS SPELLED OUT IN THE COPY, which is the half a code-only check
- * cannot see. Adding an eighth screen correctly, with both layouts, still leaves the page saying
- * "Seven screens, fourteen layouts". That is a false claim written by a correct change.
+ * ⛔ WHY THIS GATE OUTLIVED THE SENTENCE IT WAS WRITTEN FOR. It was built on 17.09.2026 to hold a
+ * public claim on /contact/ that invited a reader to check the two layouts in their own browser.
+ * That block came off the page on 18.09.2026 — the claims were true, the audience was wrong: a
+ * port agent deciding whether to trust us with software has no stake in our breakpoint authoring.
+ * The PROPERTY is still worth keeping, and it is worth keeping for the visitor rather than for the
+ * sentence, so the gate stayed and the claim half became conditional. The build fails the same way
+ * it did when the copy was there; it just no longer needs a paragraph on a marketing page to
+ * justify its existence. Removing a promise from the site must not quietly remove the behaviour
+ * the promise described.
+ *
+ * So this gate counts the layouts and refuses the build when a screen is not authored twice. When
+ * a public claim IS present anywhere in the authored pages, it additionally reads the NUMBERS
+ * SPELLED OUT IN THE COPY, which is the half a code-only check cannot see: adding an eighth screen
+ * correctly, with both layouts, still leaves a page saying "Seven screens, fourteen layouts", and
+ * that is a false claim written by a correct change. With no claim on the site there is nothing to
+ * disagree with, and the scope line below says so on every run rather than letting a clean verdict
+ * imply a comparison that never happened.
  *
  * TWO PASSES, and they cover each other's blind spots:
  *   source  every scene component the front page renders contains exactly one <Wide> and one
@@ -27,7 +39,9 @@
  * SCOPE, stated so a clean verdict cannot be read as more than it is: this counts authored
  * layouts and their presence in the prerendered HTML of `/`. It does not judge whether the two
  * layouts are good, whether the CSS shows exactly one of them at a given width, or anything on a
- * route other than the front page. The CSS pairing is checked only for existence.
+ * route other than the front page. The CSS pairing is checked only for existence. The claim pass
+ * covers authored `.tsx` under `app/` and `components/`, so a claim that moves to another page is
+ * still held; a claim written anywhere else — a CMS, an image, a PDF — is outside this gate.
  *
  * Run with `--built` to REQUIRE the built-output pass. Without it, the built pass runs when a
  * build is present and is reported as skipped when it is not — and the scope line says which.
@@ -37,15 +51,16 @@
  * that reports its own blindness as the repository's defect is one people learn to rerun past.
  */
 
-import { existsSync, readFileSync } from 'node:fs'
-import { join } from 'node:path'
+import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs'
+import { join, relative } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const ROOT = join(fileURLToPath(new URL('.', import.meta.url)), '..')
 const PAGE = 'app/page.tsx'
 const UI = 'components/scenes/ui.tsx'
 const CSS = 'app/globals.css'
-const CLAIM_FILE = 'app/contact/page.tsx'
+const CLAIM_ROOTS = ['app', 'components']
+const CLAIM_EXCLUDED = ['app/_ds', 'node_modules', '.next']
 const CLAIM_ANCHOR = 'ships two authored layouts'
 const BUILT_HTML = '.next/server/app/index.html'
 
@@ -129,6 +144,18 @@ function countBefore(sentence, noun) {
     if (n !== null) return n
   }
   return null
+}
+
+/** Every authored .tsx under the claim roots, so a claim that moves pages is still held. */
+function walkClaimFiles(dir, acc = []) {
+  for (const entry of readdirSync(dir)) {
+    const full = join(dir, entry)
+    const rel = relative(ROOT, full)
+    if (CLAIM_EXCLUDED.some((x) => rel === x || rel.startsWith(x + '/'))) continue
+    if (statSync(full).isDirectory()) walkClaimFiles(full, acc)
+    else if (entry.endsWith('.tsx')) acc.push(rel)
+  }
+  return acc
 }
 
 /** The scene components the front page actually renders, in page order. */
@@ -234,13 +261,27 @@ if (broken.length) {
 const requireBuilt = process.argv.includes('--built')
 const read = (rel) => readFileSync(join(ROOT, rel), 'utf8')
 
-const claim = readClaim(read(CLAIM_FILE))
-if (!claim.found) {
-  console.error(`check-scene-layouts: the claim this gate exists to hold is not in ${CLAIM_FILE}.`)
-  console.error(`  looked for: "${CLAIM_ANCHOR}"`)
-  console.error('\nIf the sentence was removed on purpose, remove this gate in the same commit.')
-  console.error('A gate holding a promise the site no longer makes is a check nobody can act on.')
-  process.exit(1)
+/* THE CLAIM PASS IS CONDITIONAL, AND THIS IS THE ONLY PLACE THAT IS TRUE.
+   The layout counting below is not: a screen authored once still fails whether or not any page
+   talks about it, because the property protects a phone visitor and not a sentence. What the
+   absence of a claim removes is the count comparison, which has nothing to compare against — and
+   the scope line prints which of the two happened, so a clean verdict never implies a check that
+   did not run. See the header for why the sentence went and the gate stayed. */
+let claimFiles = []
+for (const r of CLAIM_ROOTS) {
+  try { claimFiles = claimFiles.concat(walkClaimFiles(join(ROOT, r))) } catch { /* a root may not exist */ }
+}
+if (claimFiles.length === 0) {
+  console.error(`check-scene-layouts: scanned 0 files under ${CLAIM_ROOTS.join(', ')}. The scanner saw nothing, so it could not tell a site with no claim from a site it failed to read.`)
+  process.exit(2)
+}
+/* EVERY file carrying the anchor, not the first one found. Two pages asserting different counts
+   is exactly the drift this gate exists to catch, and a first-match reader would hold one of them
+   and be blind to the other — a clean verdict earned by stopping early. */
+const claims = []
+for (const f of claimFiles) {
+  const c = readClaim(read(f))
+  if (c.found) claims.push({ ...c, file: f })
 }
 
 const scenes = frontPageScenes(read(PAGE))
@@ -272,11 +313,13 @@ for (const cls of [wideClass, narrowClass]) {
   if (!css.includes(`.${cls}`)) problems.push(`${CSS}  no rule for .${cls} — the pair is authored but nothing decides which one shows`)
 }
 
-if (claim.screens !== scenes.length) {
-  problems.push(`${CLAIM_FILE}  the page says ${claim.screens} screens, the front page renders ${scenes.length}`)
-}
-if (claim.layouts !== layouts) {
-  problems.push(`${CLAIM_FILE}  the page says ${claim.layouts} layouts, the scene components author ${layouts}`)
+for (const c of claims) {
+  if (c.screens !== scenes.length) {
+    problems.push(`${c.file}  the page says ${c.screens} screens, the front page renders ${scenes.length}`)
+  }
+  if (c.layouts !== layouts) {
+    problems.push(`${c.file}  the page says ${c.layouts} layouts, the scene components author ${layouts}`)
+  }
 }
 
 // ── The built-output pass ────────────────────────────────────────────────────
@@ -304,13 +347,20 @@ if (existsSync(builtPath)) {
   process.exit(2)
 }
 
-console.log(`check-scene-layouts: ${scenes.length} product screens on the front page · ${layouts} authored layouts · claim says ${claim.screens}/${claim.layouts} · classes .${wideClass}/.${narrowClass} read from ${UI}`)
+const claimScope = claims.length
+  ? `${claims.length} public claim(s): ${claims.map((c) => `${c.file} says ${c.screens}/${c.layouts}`).join(' · ')}`
+  : `claim pass: NO PUBLIC CLAIM on the site (searched ${claimFiles.length} .tsx under ${CLAIM_ROOTS.join(', ')} for "${CLAIM_ANCHOR}") — layouts counted, counts not compared`
+console.log(`check-scene-layouts: ${scenes.length} product screens on the front page · ${layouts} authored layouts · ${claimScope} · classes .${wideClass}/.${narrowClass} read from ${UI}`)
 console.log(`check-scene-layouts: ${builtScope}`)
 if (problems.length) {
-  console.error(`\ncheck-scene-layouts: ${problems.length} disagreement(s) with the claim on ${CLAIM_FILE}.`)
+  console.error(`\ncheck-scene-layouts: ${problems.length} problem(s) with the two-layout property${claims.length ? ' or a claim about it' : ''}.`)
   for (const p of problems) console.error(`  - ${p}`)
-  console.error(`\nThe sentence being held: "${claim.sentence}"`)
-  console.error('Either author the missing layout, or change the sentence. Both are fine; leaving them apart is not.')
+  if (claims.length) {
+    for (const c of claims) console.error(`\nThe sentence being held, in ${c.file}: "${c.sentence}"`)
+    console.error('Either author the missing layout, or change the sentence. Both are fine; leaving them apart is not.')
+  } else {
+    console.error('\nNo page claims this any more; the property is held for the phone visitor, not for a sentence. Author the missing layout.')
+  }
   process.exit(1)
 }
-console.log('check-scene-layouts: ok — every product screen on the front page ships both layouts, and the page says so correctly.')
+console.log(`check-scene-layouts: ok — every product screen on the front page ships both layouts${claims.length ? ', and every page that says so says it correctly' : ''}.`)

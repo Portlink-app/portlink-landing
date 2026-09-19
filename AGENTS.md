@@ -35,3 +35,14 @@ Use `/Users/nyx/.Codex/bin/secret`. Feed values directly into the consuming proc
 Read `docs/LANDING-DIRECTION.md` for the design rationale, Refero references, component map, verification evidence and current progress. Do not edit generated `app/_ds/*`. The product explorer's chapter registry is `components/scenes/chapters.ts`; keep every scene's separate Wide and Narrow composition. Contact forms and the Seatrade campaign are independent of this visual upgrade.
 
 Run `npm run build` and `npm run verify`. The build checks rendered scene pairs and excludes film from server markup. `check:viz-type` covers authored TSX and CSS, including the new CSS modules. Browser verification still owns actual layout, keyboard, fragment links and playback.
+
+## Preview links
+
+Always include a verified Tailscale URL when sharing this preview. Current private endpoint:
+`https://nyxs-mac-studio.tail79b0ec.ts.net:4320/`, forwarding to `http://127.0.0.1:4320/`.
+The same URL is used from the Mac Studio, MacBook and iPhone when connected to Tailscale.
+The underlying optimized preview is `npm run start -- --hostname 127.0.0.1 --port 4320`.
+Inspect live status with `/Applications/Tailscale.app/Contents/MacOS/Tailscale serve status --json`.
+Preserve unrelated routes. This endpoint is private Serve, not public Funnel. Browser loading on
+this Mac was verified on 19.09.2026; a remote-device browser test was not performed.
+To remove just this endpoint: `/Applications/Tailscale.app/Contents/MacOS/Tailscale serve --https=4320 off`.

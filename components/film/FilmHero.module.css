@@ -1,0 +1,36 @@
+.hero { position: relative; background: var(--ds-canvas); }
+.intro { max-width: 1208px; padding: 122px 24px 0; margin: auto; }
+.eyebrow { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-bottom: 25px; border-bottom: 1px solid var(--ds-border-1); }
+.eyebrow > span:last-child { font: 11px var(--ds-font-mono); color: var(--ds-text-3); }
+.copyGrid { display: grid; grid-template-columns: 1.45fr 1fr; gap: clamp(32px, 6vw, 80px); padding: 36px 0 44px; align-items: center; }
+.copyGrid h1 { font-size: clamp(36px, 4.8vw, 65px); line-height: 1.06; font-weight: 600; letter-spacing: -.055em; color: var(--ds-text-1); }
+.aside p { font-size: 15px; line-height: 1.75; color: var(--ds-text-2); max-width: 430px; }
+.aside p:first-child { color: var(--ds-text-1); font-size: 20px; font-weight: 500; line-height: 1.5; margin-bottom: 14px; max-width: 350px; letter-spacing: -.025em; }
+.actions { margin-top: 24px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.actions a { display: inline-flex; align-items: center; gap: 12px; min-height: 46px; font-size: 12px; font-weight: 600; text-decoration: none; border-radius: var(--ds-radius-pill); transition: background var(--ds-dur-2) var(--ds-ease-standard); }
+.primary { background: var(--ds-primary); color: var(--ds-primary-ink); padding: 12px 19px; }
+.secondary { color: var(--ds-text-1); padding: 12px 2px; }
+.filmLead { display: flex; align-items: center; justify-content: space-between; gap: 20px; font: 11px var(--ds-font-mono); color: var(--ds-text-3); border-top: 1px solid var(--ds-border-1); padding-top: 18px; }
+.filmLead > span:last-child { display: flex; align-items: center; gap: 10px; }
+.pane { justify-content: flex-start; }
+.sceneLabel { width: min(1100px, 100%, calc((100svh - 275px) * 1.7778)); display: flex; justify-content: space-between; font: 11px var(--ds-font-mono); text-transform: uppercase; letter-spacing: .12em; color: var(--ds-text-3); }
+.pause { font-family: inherit; }
+@media (hover: hover) { .primary:hover { background: var(--ds-primary-hover); } .secondary:hover { color: var(--ds-accent-strong); } }
+@media (max-width: 767px) {
+  .intro { padding: 100px 20px 0; }
+  .eyebrow { align-items: start; padding-bottom: 20px; }
+  .eyebrow > span:first-child { max-width: 190px; line-height: 1.6; font-size: 11px; }
+  .eyebrow > span:last-child { font-size: 11px; white-space: nowrap; padding-top: 2px; }
+  .copyGrid { grid-template-columns: 1fr; padding: 26px 0 30px; gap: 24px; }
+  .copyGrid h1 { font-size: clamp(34px, 7.9vw, 58px); }
+  .aside p:first-child { font-size: 18px; max-width: 100%; }
+  .aside p { font-size: 14px; }
+  .actions { margin-top: 20px; gap: 14px; }
+  .actions a { font-size: 11px; gap: 6px; }
+  .primary { padding-inline: 14px; }
+  .filmLead { font-size: 11px; gap: 8px; flex-wrap: wrap; }
+  .sceneLabel { width: min(100%, calc((100svh - 190px) * .75)); }
+  .pause { padding-inline: 12px; }
+  .pause span { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { .sceneLabel { display: none; } .filmLead > span:last-child { display: none; } }

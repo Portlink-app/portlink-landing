@@ -45,6 +45,7 @@ export default function InViewVideo({
       muted
       loop
       playsInline
+      controls
       preload="metadata"
       aria-label={label}
       style={frame}

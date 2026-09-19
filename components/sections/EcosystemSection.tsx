@@ -1,23 +1,11 @@
 'use client'
 
-/**
- * The ecosystem, in one neutral variant.
- *
- * This section used to render nothing at all unless a visitor had picked a
- * role at the gate. The page no longer has a gate, so it says the thing that
- * is true for every reader: four sides, one record.
- *
- * ⛔ FOUR, NOT THREE, FROM 17.09.2026. Ports and terminals were missing from every surface of this
- * site while being one of the parties a port call cannot happen without. The card below says only
- * what S2, S5, S6 and S7 already demonstrate: arrivals, who is handling them, current paperwork and
- * open work. No berth allocation, no slot scheduling, no gate management. Nothing on this site
- * shows those, and a card that promises an unbuilt feature undoes the credibility argument the
- * whole page now rests on.
- */
+import { useState } from 'react'
+import { Anchor, Building2, Compass, Ship, ArrowRight, RotateCcw, Check } from 'lucide-react'
+import styles from './EcosystemSection.module.css'
 
-import { Anchor, Building2, Compass, Ship } from 'lucide-react'
-import { motion } from 'framer-motion'
-
+// These responsibilities are the existing published descriptions. The diagram demonstrates
+// visibility of one update, not automatic approvals, berth allocation or an operational feed.
 const partners = [
   {
     icon: Ship,
@@ -41,79 +29,52 @@ const partners = [
   },
 ]
 
-export default function EcosystemSection() {
-  return (
-    <section
-      id="ecosystem"
-      style={{ background: 'var(--ds-surface-2)', padding: 'clamp(56px, 8vw, 96px) clamp(16px, 4vw, 24px)' }}
-    >
-      <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-60px' }}
-          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          style={{ textAlign: 'center', marginBottom: 'clamp(28px, 4vw, 48px)' }}
-        >
-          <span className="section-eyebrow">Ecosystem</span>
-          <h2
-            style={{
-              fontSize: 'clamp(1.5rem, 3.2vw, 2.25rem)',
-              fontWeight: 700,
-              color: 'var(--ds-text-1)',
-              letterSpacing: '-0.02em',
-              margin: '10px 0 0',
-            }}
-          >
-            Four sides of a port call, one record between them
-          </h2>
-          <p
-            style={{
-              fontSize: 'clamp(0.95rem, 1.4vw, 1.0625rem)',
-              color: 'var(--ds-text-2)',
-              maxWidth: 620,
-              margin: '12px auto 0',
-              lineHeight: 1.6,
-            }}
-          >
-            Nobody re-enters what somebody else already entered. The status one side changes is the status
-            the other three are reading.
-          </p>
-        </motion.div>
 
-        {/* An explicit 2x2, not `auto-fit`. With four cards in an 1100 px container auto-fit fits
-            three per row and strands the fourth alone underneath, which reads as one of the four
-            sides being an afterthought. That is the exact impression this section exists to undo. */}
-        <div
-          className="ecosystem-grid"
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(2, 1fr)',
-            gap: 'clamp(14px, 2vw, 24px)',
-          }}
-        >
-          {partners.map((p, i) => {
-            const Icon = p.icon
-            return (
-              <motion.div
-                key={p.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-40px' }}
-                transition={{ duration: 0.5, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
-                style={{
-                  background: 'var(--ds-surface-1)',
-                  border: '1px solid var(--ds-border-1)',
-                  borderRadius: 'var(--ds-radius-lg)',
-                  padding: '26px 24px',
-                }}
-              >
-                <Icon size={24} color="var(--ds-primary)" style={{ marginBottom: 16 }} />
-                <h3 style={{ fontSize: 17, fontWeight: 700, color: 'var(--ds-text-1)', margin: '0 0 8px' }}>{p.title}</h3>
-                <p style={{ fontSize: 14, color: 'var(--ds-text-2)', lineHeight: 1.6, margin: 0 }}>{p.body}</p>
-              </motion.div>
-            )
-          })}
+const paths = ['M300 210 C300 135 110 155 110 85', 'M300 210 C300 135 490 155 490 85', 'M300 210 C300 285 110 265 110 335', 'M300 210 C300 285 490 265 490 335']
+
+export default function EcosystemSection() {
+  const [traced, setTraced] = useState(false)
+
+  return (
+    <section id="ecosystem" className={styles.section}>
+      <div className={styles.inner}>
+        <div className={styles.top}>
+          <div className={styles.copy}>
+            <span className={styles.eyebrow}>The connected port call</span>
+            <h2>Four sides.<br />One shared record.</h2>
+            <p>The status one side changes is the status the other three are reading. The itinerary, the conversation and the paperwork stay connected.</p>
+            <button type="button" onClick={() => setTraced(!traced)} className={styles.trace}>
+              {traced ? 'Reset illustration' : 'Trace a shared update'}
+              {traced ? <RotateCcw size={16} aria-hidden="true" /> : <ArrowRight size={16} aria-hidden="true" />}
+            </button>
+            <span className={styles.note}>An illustration of how the shared record connects the teams.</span>
+          </div>
+          <div className={styles.diagram} data-traced={traced}>
+            <div className={styles.grid} aria-hidden="true" />
+            <svg viewBox="0 0 600 420" preserveAspectRatio="none" className={styles.lines} aria-hidden="true">
+              {paths.map((d) => <path key={d} d={d} className={styles.basePath} />)}
+              {paths.map((d, index) => <path key={d} d={d} pathLength="1" className={styles.signal} style={{ transitionDelay: `${index * 100}ms` }} />)}
+            </svg>
+            <div className={styles.record}>
+              <span className={styles.recordIcon}><Anchor size={27} strokeWidth={1.5} aria-hidden="true" /></span>
+              <strong>Portlink</strong>
+              <span>One port call</span>
+              <span className={styles.recordStatus} aria-live="polite">{traced ? 'Update shared' : 'The shared record'}</span>
+            </div>
+            {partners.map((partner, index) => {
+              const Icon = partner.icon
+              return (
+                <div className={styles.node} data-node={index} key={partner.title}>
+                  <Icon size={22} strokeWidth={1.5} aria-hidden="true" />
+                  <strong>{partner.title}</strong>
+                  <span>{traced ? <><Check size={12} aria-hidden="true" /> Update visible</> : 'Connected'}</span>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+        <div className={styles.responsibilities}>
+          {partners.map((partner) => <div key={partner.title}><h3>{partner.title}</h3><p>{partner.body}</p></div>)}
         </div>
       </div>
     </section>

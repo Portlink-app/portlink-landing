@@ -19,9 +19,9 @@
  * block and now treat the claim as optional; see their headers for the same reasoning stated where
  * it was a change rather than a non-event.
  *
- * SCOPE, stated so a zero from this script cannot be read as more than it is: inline `fontSize`
- * literals in the .tsx we author. The vendored design system in `app/_ds/` is excluded — it is
- * Tiller's, it ships its own scale, and this gate has no opinion on it. Sizes expressed through
+ * SCOPE: inline `fontSize` literals in authored TSX and literal `font-size` / `font`
+ * declarations in authored CSS. The vendored design system in `app/_ds/` is excluded.
+ * It ships its own scale, and this gate has no opinion on it. Sizes expressed through
  * `clamp()`, `var()` or `calc()` are not decidable statically; they are counted and printed on
  * every run, so the coverage of a clean verdict is always visible next to the verdict.
  *
@@ -67,13 +67,27 @@ function scan(source) {
   return hits
 }
 
+/** CSS modules now own the new homepage compositions, so they share the same type floor. */
+function scanCss(source) {
+  const clean = source.replace(/\/\*[\s\S]*?\*\//g, '')
+  const hits = []
+  for (const m of clean.matchAll(/\bfont(?:-size)?:\s*([^;}]+)/g)) {
+    const raw = m[1].trim()
+    const size = raw.match(/(?:^|\s)(\d*\.?\d+)(px|rem)\b/)
+    const px = size && !raw.slice(0, size.index).includes('(')
+      ? Number(size[1]) * (size[2] === 'rem' ? 16 : 1) : null
+    hits.push({ line: clean.slice(0, m.index).split('\n').length, raw, px, dynamic: px === null })
+  }
+  return hits
+}
+
 function walk(dir, acc = []) {
   for (const entry of readdirSync(dir)) {
     const full = join(dir, entry)
     const rel = relative(ROOT, full)
     if (EXCLUDED.some(x => rel === x || rel.startsWith(x + '/'))) continue
     if (statSync(full).isDirectory()) walk(full, acc)
-    else if (entry.endsWith('.tsx') || entry.endsWith('.ts')) acc.push(full)
+    else if (/\.(tsx?|css)$/.test(entry)) acc.push(full)
   }
   return acc
 }
@@ -101,6 +115,14 @@ const MUST_COUNT_AS_DYNAMIC = [
 ]
 
 const calibrationFailures = []
+for (const [src, want] of [
+  ['.x { font-size: 9px; }', 9],
+  ['.x { font: 600 10px var(--ds-font-mono); }', 10],
+  ['.x { font: .6875rem sans-serif; }', 11],
+  ['.x { font-size: clamp(11px, 2vw, 16px); }', null],
+]) {
+  if (scanCss(src)[0]?.px !== want) calibrationFailures.push(`CSS reader: ${src} should resolve to ${want}`)
+}
 for (const [name, src] of MUST_FLAG) {
   const found = scan(src).filter(h => h.px !== null && h.px < FLOOR)
   if (found.length !== 1) calibrationFailures.push(`should have flagged ${name}, flagged ${found.length}`)
@@ -135,7 +157,8 @@ let parsed = 0
 const dynamic = []
 for (const f of files) {
   const rel = relative(ROOT, f)
-  for (const h of scan(readFileSync(f, 'utf8'))) {
+  const reader = f.endsWith('.css') ? scanCss : scan
+  for (const h of reader(readFileSync(f, 'utf8'))) {
     if (h.dynamic) { dynamic.push(`${rel}:${h.line}  ${h.raw}`); continue }
     parsed++
     if (h.px < FLOOR) violations.push(`${rel}:${h.line}  fontSize: ${h.raw}  resolves to ${h.px}px, below the ${FLOOR}px floor`)
@@ -147,7 +170,7 @@ if (violations.length) {
   console.error(`\ncheck-viz-type: ${violations.length} declaration(s) below the floor.`)
   for (const v of violations) console.error(`  - ${v}`)
   console.error(`\nUse the named constant the file already exports, or raise the literal to ${FLOOR}.`)
-  console.error('This floor covers the .tsx this repo authors. The vendored design system in app/_ds/ is excluded and unjudged.')
+  console.error('This floor covers authored TSX and CSS. The vendored design system in app/_ds/ is excluded and unjudged.')
   process.exit(1)
 }
-console.log('check-viz-type: ok — no authored inline font size below the floor.')
+console.log('check-viz-type: ok: no authored inline or CSS font size below the floor.')

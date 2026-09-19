@@ -1,19 +1,6 @@
 'use client'
 
-/**
- * The hinge: it converts the seven scenes below from a sales pitch into a work sample.
- *
- * Nothing about those scenes changes. Their JOB changes. Before this paragraph they read as "buy
- * this"; after it they read as "this is the standard of work that leaves this building", which is
- * the argument a software company makes and a single-product site does not. That is the whole
- * reason the section exists, and it is why it sits immediately before S1 rather than anywhere that
- * would read better in isolation.
- *
- * ⛔ IT CLAIMS ONLY WHAT THE PAGE BELOW IT DEMONSTRATES. "Rebuilt as markup" is checkable by anyone
- * with a browser inspector, and it is true: `components/scenes/` is markup, authored twice per
- * scene, wide and narrow. Do not add a figure, a customer, an uptime number or a certification
- * here. The credibility of every scene under it rests on this paragraph being verifiable.
- */
+/** Introduces the explorer as a work sample. Its data is illustrative, not a live customer feed. */
 
 import { useReveal } from '@/hooks/useReveal'
 
@@ -44,7 +31,7 @@ export default function BuiltSection() {
             margin: '10px 0 0',
           }}
         >
-          Seven surfaces we designed, built and shipped ourselves
+          One platform. The whole operation.
         </h2>
         <p
           className="reveal"
@@ -55,9 +42,9 @@ export default function BuiltSection() {
             margin: '12px 0 0',
           }}
         >
-          What follows is the platform, not a mockup of it. Every screen below is the real interface,
-          rebuilt as markup for this page so it stays readable on a phone instead of being a
-          screenshot you pinch at. It is also the standard we hold anything we build for you to.
+          Explore the interfaces we designed and built for Portlink, from the first port call to the
+          final account. These previews use illustrative data. The attention to the work behind
+          them is what we bring to everything we build.
         </p>
       </div>
     </section>

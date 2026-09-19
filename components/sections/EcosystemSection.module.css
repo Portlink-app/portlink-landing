@@ -1,0 +1,35 @@
+.section { background: var(--ds-inverted-bg); color: var(--ds-inverted-text); padding: clamp(64px, 8vw, 112px) 24px; }
+.inner { max-width: 1160px; margin: auto; }
+.top { display: grid; grid-template-columns: .85fr 1.15fr; gap: 48px; align-items: center; }
+.eyebrow { font: 11px var(--ds-font-mono); text-transform: uppercase; letter-spacing: .14em; }
+.copy h2 { color: inherit; font-size: clamp(36px, 4.2vw, 55px); letter-spacing: -.045em; line-height: 1.08; font-weight: 500; margin: 24px 0; }
+.copy p { font-size: 15px; line-height: 1.75; color: inherit; max-width: 390px; }
+.trace { display: inline-flex; justify-content: center; align-items: center; gap: 16px; min-height: 48px; padding: 10px 18px; margin-top: 28px; border: 1px solid var(--ds-inverted-text); border-radius: var(--ds-radius-pill); background: transparent; color: inherit; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; }
+.trace:focus-visible { outline-color: var(--ds-inverted-text); }
+.note { display: block; font-size: 11px; line-height: 1.6; max-width: 310px; margin-top: 14px; }
+.diagram { position: relative; height: 440px; }
+.grid { position: absolute; inset: 0; background-image: linear-gradient(var(--ds-inverted-border) 1px, transparent 1px), linear-gradient(90deg, var(--ds-inverted-border) 1px, transparent 1px); background-size: 36px 36px; mask-image: radial-gradient(ellipse, black, transparent 72%); }
+.lines { position: absolute; inset: 0; width: 100%; height: 100%; fill: none; }
+.basePath { stroke: var(--ds-inverted-border); stroke-width: 1.5; }
+.signal { stroke: var(--ds-inverted-text); stroke-width: 1.5; stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 1.2s var(--ds-ease-standard); }
+.diagram[data-traced='true'] .signal { stroke-dashoffset: 0; }
+.record { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); display: flex; align-items: center; flex-direction: column; width: 156px; padding: 18px 12px 14px; border: 1px solid var(--ds-inverted-border); border-radius: var(--ds-radius-lg); background: var(--ds-inverted-surface); z-index: 1; }
+.recordIcon { display: grid; place-items: center; width: 52px; height: 52px; border: 1px solid var(--ds-inverted-border); border-radius: var(--ds-radius-md); margin-bottom: 8px; }
+.record > strong { font-size: 22px; font-weight: 600; letter-spacing: -.035em; }
+.record > span:not(.recordIcon) { font-size: 11px; margin-top: 4px; }
+.record .recordStatus { border-top: 1px solid var(--ds-inverted-border); padding-top: 10px; margin-top: 12px !important; width: 100%; text-align: center; font-family: var(--ds-font-mono); font-size: 11px !important; }
+.node { position: absolute; display: flex; flex-direction: column; align-items: center; gap: 10px; width: 164px; padding: 18px 8px; background: var(--ds-inverted-bg); border: 1px solid var(--ds-inverted-border); border-radius: var(--ds-radius-md); transition: border-color var(--ds-dur-4) var(--ds-ease-standard); }
+.node[data-node='0'] { top: 22px; left: 4%; }
+.node[data-node='1'] { top: 22px; right: 4%; }
+.node[data-node='2'] { bottom: 22px; left: 4%; }
+.node[data-node='3'] { bottom: 22px; right: 4%; }
+.node strong { font-size: 12px; font-weight: 600; }
+.node > span { font: 11px var(--ds-font-mono); display: flex; align-items: center; gap: 5px; min-height: 12px; }
+.diagram[data-traced='true'] .node { border-color: var(--ds-inverted-text); }
+.responsibilities { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; border-top: 1px solid var(--ds-inverted-border); margin-top: 58px; padding-top: 30px; }
+.responsibilities h3 { font-size: 14px; color: inherit; margin: 0 0 12px; }
+.responsibilities p { font-size: 12px; line-height: 1.85; color: inherit; }
+@media (hover: hover) { .trace:hover { background: var(--ds-inverted-surface); } }
+@media (max-width: 900px) { .top { grid-template-columns: 1fr; gap: 24px; } .copy { max-width: 560px; } .copy p { max-width: 500px; } .diagram { width: 100%; max-width: 620px; margin-inline: auto; } .responsibilities { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px) { .section { padding-inline: 20px; } .copy h2 { font-size: 40px; } .diagram { height: 480px; } .node { width: min(142px, 46%); padding: 16px 8px; } .node[data-node='0'], .node[data-node='2'] { left: 0; } .node[data-node='1'], .node[data-node='3'] { right: 0; } .record { width: 142px; padding-block: 13px; } .recordIcon { width: 38px; height: 38px; } .responsibilities { gap: 28px 20px; margin-top: 32px; } .responsibilities p { font-size: 12px; } }
+@media (prefers-reduced-motion: reduce) { .signal, .node { transition: none; } }

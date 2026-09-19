@@ -32,9 +32,10 @@
  * is the chart.
  */
 
-import { useRef } from 'react'
-import { motion } from 'framer-motion'
+import { useRef, useState } from 'react'
+import { ArrowDown, ArrowUpRight, Pause, Play } from 'lucide-react'
 import { useMotionAllowed, useInViewPlayback, useNarrow, useTrackStage } from './useFilm'
+import styles from './FilmHero.module.css'
 
 type Stage = {
   label: string
@@ -138,10 +139,12 @@ function StageStack({
   stage,
   motionAllowed,
   narrow,
+  paused,
 }: {
   stage: number
   motionAllowed: boolean
   narrow: boolean
+  paused: boolean
 }) {
   return (
     <div className="film-stack">
@@ -151,7 +154,7 @@ function StageStack({
             <StageMedia
               stage={s}
               label={`Portlink: ${s.label}`}
-              playing={i === stage}
+              playing={i === stage && !paused}
               motionAllowed={motionAllowed}
               narrow={narrow}
               eager
@@ -172,103 +175,26 @@ export default function FilmHero() {
   const paneRef = useRef<HTMLDivElement>(null)
   const motionAllowed = useMotionAllowed()
   const narrow = useNarrow()
+  const [paused, setPaused] = useState(false)
   const stage = useTrackStage(trackRef, paneRef, stages.length, motionAllowed)
 
   return (
-    <section id="hero" style={{ position: 'relative', background: 'var(--ds-canvas)' }}>
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        style={{
-          textAlign: 'center',
-          padding:
-            'clamp(88px, 11vh, 124px) clamp(16px, 4vw, 24px) clamp(24px, 4vh, 40px)',
-          background:
-            'radial-gradient(120% 120% at 50% -20%, var(--ds-primary-faint) 0%, transparent 62%)',
-        }}
-      >
-        <div style={{ maxWidth: 960, margin: '0 auto' }}>
-          <span
-            style={{
-              display: 'inline-block',
-              background: 'var(--ds-surface-1)',
-              color: 'var(--ds-text-2)',
-              fontSize: 12,
-              textTransform: 'uppercase',
-              letterSpacing: '0.1em',
-              borderRadius: 'var(--ds-radius-pill)',
-              padding: '4px 14px',
-              fontWeight: 600,
-              border: '1px solid var(--ds-border-1)',
-            }}
-          >
-            Maritime software engineering, Oslo
-          </span>
-
-          <h1
-            style={{
-              fontSize: 'clamp(2.25rem, 5.6vw, 4.25rem)',
-              fontWeight: 700,
-              color: 'var(--ds-text-1)',
-              lineHeight: 1.06,
-              letterSpacing: '-0.03em',
-              margin: '20px 0 0',
-            }}
-          >
-            Maritime software, built by people who have run port calls.
-          </h1>
-
-          <p
-            style={{
-              fontSize: 'clamp(1rem, 1.6vw, 1.1875rem)',
-              color: 'var(--ds-text-2)',
-              lineHeight: 1.6,
-              maxWidth: 620,
-              margin: '18px auto 0',
-            }}
-          >
-            We are a software company for the cruise and port industry. Portlink is the platform we
-            built for port calls, and the same team builds what ports, agents, cruise lines and tour
-            operators need next.
-          </p>
-
-          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', justifyContent: 'center', marginTop: 26 }}>
-            {/* The primary action is now the company's door, not the product's form. A reader who
-                came for the platform has the secondary button and the whole page below it; a
-                reader who came because they need something built had nowhere to go before. */}
-            <a
-              href="/contact/"
-              style={{
-                background: 'var(--ds-primary)',
-                color: 'var(--ds-primary-ink)',
-                padding: '12px 28px',
-                borderRadius: 'var(--ds-radius-pill)',
-                fontWeight: 600,
-                fontSize: 15,
-                textDecoration: 'none',
-              }}
-            >
-              Tell us what you need
-            </a>
-            <a
-              href="#dashboard"
-              style={{
-                border: '1px solid var(--ds-border-2)',
-                color: 'var(--ds-text-1)',
-                padding: '12px 28px',
-                borderRadius: 'var(--ds-radius-pill)',
-                fontWeight: 600,
-                fontSize: 15,
-                textDecoration: 'none',
-                background: 'transparent',
-              }}
-            >
-              See what we built
-            </a>
+    <section id="hero" className={styles.hero}>
+      <div className={styles.intro}>
+        <div className={styles.eyebrow}><span className="section-eyebrow">Maritime software engineering</span><span>Oslo, Norway</span></div>
+        <div className={styles.copyGrid}>
+          <h1>Maritime software.<br />Built by people<br />who know port calls.</h1>
+          <div className={styles.aside}>
+            <p>We have run the port calls. Now we build the software behind them.</p>
+            <p>Portlink is our platform for the cruise and port industry. The same team builds what ports, agents, cruise lines and tour operators need next.</p>
+            <div className={styles.actions}>
+              <a href="/contact/" className={styles.primary}>Tell us what you need <ArrowUpRight size={17} aria-hidden="true" /></a>
+              <a href="#dashboard" className={styles.secondary}>Explore the platform <ArrowDown size={16} aria-hidden="true" /></a>
+            </div>
           </div>
         </div>
-      </motion.div>
+        <div className={styles.filmLead}><span>Built here. Working below.</span><span>Scroll to follow a voyage <ArrowDown size={14} aria-hidden="true" /></span></div>
+      </div>
 
       <div
         ref={trackRef}
@@ -286,8 +212,9 @@ export default function FilmHero() {
           />
         ))}
 
-        <div ref={paneRef} className="film-pane">
-          <StageStack stage={stage} motionAllowed={motionAllowed} narrow={narrow} />
+        <div ref={paneRef} className={`film-pane ${styles.pane}`}>
+          <div className={styles.sceneLabel}><span>Portlink in motion</span><span>0{stage + 1} / 0{stages.length}</span></div>
+          <StageStack stage={stage} motionAllowed={motionAllowed} narrow={narrow} paused={paused} />
 
           {/* Real links, not decoration: a keyboard or switch user reaches stage
               two without scrolling to it, and the browser does the scrolling. */}
@@ -303,6 +230,9 @@ export default function FilmHero() {
                 {s.label}
               </a>
             ))}
+            {motionAllowed && <button type="button" className={`film-pill ${styles.pause}`} onClick={() => setPaused(!paused)} aria-label={paused ? 'Play product film' : 'Pause product film'}>
+              {paused ? <Play size={15} aria-hidden="true" /> : <Pause size={15} aria-hidden="true" />}<span>{paused ? 'Play' : 'Pause'}</span>
+            </button>}
           </nav>
 
           <p className="film-caption">{stages[stage].caption}</p>

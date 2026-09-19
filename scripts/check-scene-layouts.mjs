@@ -57,6 +57,7 @@ import { fileURLToPath } from 'node:url'
 
 const ROOT = join(fileURLToPath(new URL('.', import.meta.url)), '..')
 const PAGE = 'app/page.tsx'
+const CHAPTERS = 'components/scenes/chapters.ts'
 const UI = 'components/scenes/ui.tsx'
 const CSS = 'app/globals.css'
 const CLAIM_ROOTS = ['app', 'components']
@@ -163,7 +164,7 @@ function frontPageScenes(pageSrc) {
   const clean = stripComments(pageSrc)
   const imported = new Map()
   for (const m of clean.matchAll(/import\s+([A-Za-z_$][\w$]*)\s+from\s+'@\/components\/scenes\/([A-Za-z0-9_$]+)'/g)) {
-    if (m[2] === 'SceneSection' || m[2] === 'ui') continue
+    if (m[2] === 'SceneSection' || m[2] === 'ui' || m[2] === 'PlatformExplorer') continue
     imported.set(m[1], `components/scenes/${m[2]}.tsx`)
   }
   const rendered = []
@@ -179,6 +180,25 @@ function sceneIds(pageSrc) {
   const ids = []
   for (const m of clean.matchAll(/<SceneSection\b[\s\S]{0,200}?\bid="([^"]+)"/g)) ids.push(m[1])
   return ids
+}
+
+/** The explorer moved composition into a registry. Follow that registry without weakening
+ * either layout count or the built-output checks. An unused import is not a chapter. */
+function chapterScenes(src) {
+  const clean = stripComments(src)
+  const imports = new Map()
+  for (const m of clean.matchAll(/import\s+([A-Za-z_$][\w$]*)\s+from\s+['"]\.\/([A-Za-z0-9_$]+)['"]/g)) {
+    imports.set(m[1], `components/scenes/${m[2]}.tsx`)
+  }
+  const result = []
+  for (const object of clean.matchAll(/\{([^{}]+)\}/g)) {
+    const id = object[1].match(/\bid:\s*['"]([^'"]+)['"]/)
+    const component = object[1].match(/\bcomponent:\s*([A-Za-z_$][\w$]*)/)
+    if (id && component && imports.has(component[1])) {
+      result.push({ id: id[1], name: component[1], file: imports.get(component[1]) })
+    }
+  }
+  return result
 }
 
 /** The class name a wrapper in ui.tsx actually emits. Read, never assumed. */
@@ -200,6 +220,17 @@ function countLayouts(sceneSrc) {
 // Deliberately NOT against the repository. A gate calibrated on the very thing it guards exits 2
 // and blames its own pattern the day that thing is what changed.
 const broken = []
+
+const REGISTRY_FIXTURES = [
+  ['a registered scene', `import Preview from './S1Overview'\n[{ id: 'dashboard', component: Preview }]`, 1],
+  ['double quotes', `import Preview from "./S1Overview"\n[{ id: "dashboard", component: Preview }]`, 1],
+  ['an unused import', `import Preview from './S1Overview'\n[]`, 0],
+  ['a missing import', `[{ id: 'dashboard', component: Missing }]`, 0],
+  ['a commented chapter', `import Preview from './S1Overview'\n/* { id: 'dashboard', component: Preview } */`, 0],
+]
+for (const [name, src, count] of REGISTRY_FIXTURES) {
+  if (chapterScenes(src).length !== count) broken.push(`chapter reader: ${name} should count ${count}`)
+}
 
 const CLEAN = [
   ['a line comment', 'const a = 1 // <Wide> in a comment\n<Wide>x</Wide>', 1],
@@ -284,7 +315,10 @@ for (const f of claimFiles) {
   if (c.found) claims.push({ ...c, file: f })
 }
 
-const scenes = frontPageScenes(read(PAGE))
+const pageSource = read(PAGE)
+const usesExplorer = /<PlatformExplorer\s*\/>/.test(stripComments(pageSource))
+const registeredScenes = usesExplorer ? chapterScenes(read(CHAPTERS)) : []
+const scenes = [...frontPageScenes(pageSource), ...registeredScenes]
 if (scenes.length === 0) {
   console.error(`check-scene-layouts: found 0 scene components rendered by ${PAGE}. The scanner saw nothing, so it proved nothing.`)
   process.exit(2)
@@ -327,7 +361,7 @@ const builtPath = join(ROOT, BUILT_HTML)
 let builtScope = 'built output: SKIPPED, no build present (run `npm run build`, or pass --built to require it)'
 if (existsSync(builtPath)) {
   const html = readFileSync(builtPath, 'utf8')
-  const ids = sceneIds(read(PAGE))
+  const ids = [...sceneIds(pageSource), ...registeredScenes.map((scene) => scene.id)]
   const idsPresent = ids.filter((id) => html.includes(`id="${id}"`))
   if (ids.length === 0 || idsPresent.length === 0) {
     console.error(`check-scene-layouts: ${BUILT_HTML} carries none of the ${ids.length} scene ids. The instrument is not reading the page that owns the claim, so its zeros mean nothing.`)
@@ -340,6 +374,14 @@ if (existsSync(builtPath)) {
   if (idsPresent.length !== ids.length) {
     const missing = ids.filter((id) => !idsPresent.includes(id))
     problems.push(`${BUILT_HTML}  scene id(s) authored but not served: ${missing.join(', ')}`)
+  }
+  if (usesExplorer) {
+    // Preserve server rendering of every layout without a seven-panel hydration collapse.
+    const panels = [...html.matchAll(/<div\b[^>]*\bid="platform-panel-[^"]+"[^>]*>/g)]
+    const visible = panels.filter((panel) => !/\bhidden(?:[\s=>])/.test(panel[0]))
+    if (panels.length !== registeredScenes.length || visible.length !== 1) {
+      problems.push(`${BUILT_HTML} carries ${panels.length} explorer panels and ${visible.length} initially visible; expected ${registeredScenes.length} panels with exactly one visible`)
+    }
   }
   builtScope = `built output: ${BUILT_HTML} · ${wideCount} .${wideClass} · ${narrowCount} .${narrowClass} · ${idsPresent.length}/${ids.length} scene ids present`
 } else if (requireBuilt) {

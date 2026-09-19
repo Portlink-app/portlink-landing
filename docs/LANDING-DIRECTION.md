@@ -9,7 +9,8 @@ Updated: 19.09.2026. Entry point for the Refero-led homepage upgrade.
 - [x] Implement the product explorer and prove the signature interaction in the browser.
 - [x] Extend the direction through the hero and ecosystem, including motion controls.
 - [x] Verify production build, desktop, phone, keyboard, links and adjacent routes. Reduced-motion browser emulation was denied; source and built-output guards pass.
-- [ ] Commit the verified result and complete the authorized publishing path. In progress.
+- [x] Commit the verified implementation as `f104272`.
+- [ ] Publish to the live site. Blocked by automatic approval review; explicit publishing approval requested.
 
 ## Brief and decision
 
@@ -70,4 +71,6 @@ The root AGENTS.md and account-context file carried stale service routing and an
 
 Chose: native chapter tabs, finite update tracing, existing product footage and CSS modules over new rendering dependencies. Because: visitors control the detail, the product stays legible, and the existing design-system and accessibility contracts remain intact. Revisit-if: new footage or product surfaces make the present examples inaccurate.
 
-Publishing status: pending final commit and Netlify verification. No unresolved implementation work remains. The reduced-motion browser condition is explicitly unverified as described above.
+Publishing status: implementation committed as `f104272`. The production push was rejected before execution by automatic approval review: it classified publishing this requested redesign as a consequential external action needing explicit approval in this conversation. The standing repository ruling was already read and recorded; do not bypass the rejection through another transport. An explicit approval question is pending with David. No production deployment occurred in this task.
+
+After approval: use the process-local Portlink credential and `ALLOW_MAIN=1 git push origin main`, inspect the exact Netlify site listed in AGENTS.md until its published commit matches, and verify the live explorer, diagram, phone layout, contact default and Seatrade route. The optimized local preview is `http://127.0.0.1:4320/`. No unresolved implementation work remains. The reduced-motion browser condition is explicitly unverified as described above.

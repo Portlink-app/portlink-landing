@@ -1,6 +1,8 @@
 # Landing experience
 
-Updated: 19.09.2026. Entry point for the Refero-led homepage upgrade.
+Updated: 20.09.2026. Entry point for the Refero-led homepage upgrade.
+
+The latest ecosystem assessment, source evidence, implementation decision and verification are in [CONNECTED-PORT-CALL.md](CONNECTED-PORT-CALL.md). It replaces the earlier generic update illustration described in the original verification notes below.
 
 ## Progress
 
@@ -35,7 +37,7 @@ Revisit-if: product research identifies a different primary visitor task, or the
 
 1. Opening: asymmetric company statement, clear contact actions, technical chapter label. The film appears as a substantial work sample. The existing two-stage sticky film remains native scrolling. A pause control stops playback without removing the stage or changing layout.
 2. Product workbench: a full-width chapter strip selects one of the seven existing surfaces. The heading, explanatory copy and framed product change together. Visitors can choose any chapter or advance in order. Arrow keys, Home and End work; no auto-advance. Phone layouts use each scene's existing authored narrow version. Legacy fragment links open the matching chapter.
-3. Shared record: four participants surround the call record. The visitor triggers a shared update; finite paths trace out to every participant and their status changes together. The illustration is explicitly labelled. A reset makes it repeatable. On phones the same spatial relationship remains, with flexible node widths and extra vertical clearance. The existing role selector remains the only role selector.
+3. Shared record: cruise line, port agent, DMC and vessel surround the call record. Six visitor-controlled handoffs change the narrative, record details and participating teams together. Approval and quotation states remain explicit. Previous, next and restart work by keyboard. Phones retain the spatial relationship with extra vertical clearance. A shared role registry also supplies the adjacent Bento selector, which remains the only role selector.
 4. Conversion: current role selector, team evidence, two engagement paths and contact wizard remain available. No campaign promotion returns to the homepage.
 
 ## Subsystem and blast radius
@@ -48,7 +50,7 @@ Nav, PageNav, Footer and the hero link to `#dashboard`, `#roles`, `#pilot`, `#ac
 
 Generated landmine: `app/_ds/*` is vendored from the sibling design system. Never edit these files to style the landing page. Reversal: revert the task commit; existing clips and scene data remain available.
 
-Unmapped: authenticated production operations are outside this marketing repository. Their behaviour is not inferred from the demo. Magic MCP is absent from this session's complete tool inventory. No existing Graphify graph is present in this repository; the live import map above is the scope reference.
+Source-mapped on 20.09.2026: platform booking acceptance, shore intake, PDA review, handover, amendment classification and departure reconciliation. See CONNECTED-PORT-CALL.md. Authenticated production transactions remain unverified; the live app opened at sign-in. Magic MCP is absent from this session's complete tool inventory. No existing Graphify graph is present in this repository; the live import map above is the scope reference.
 
 ## Verification evidence
 

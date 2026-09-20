@@ -3,7 +3,8 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { BentoGrid, BentoCard } from '@/components/BentoGrid'
-import { Ship, Anchor, Building2, Compass, CheckCircle2 } from 'lucide-react'
+import { Anchor, CheckCircle2 } from 'lucide-react'
+import { portCallRoles, type PortCallRole } from './portCallStory'
 
 // ── Abstract mini-visuals ─────────────────────────────────────────────────────
 
@@ -237,8 +238,7 @@ function ShoreRequestCard() {
   )
 }
 
-function AuditTrail() {
-  const steps = ['Requested', 'Confirmed', 'Delivered']
+function AuditTrail({ steps = ['Requested', 'Confirmed', 'Delivered'] }: { steps?: string[] }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
       {steps.map((s, i) => (
@@ -261,7 +261,7 @@ type BentoItem = {
   accent?: boolean
 }
 
-const bentoData: Record<'cruise' | 'agent' | 'tour' | 'port', BentoItem[]> = {
+const bentoData: Record<PortCallRole, BentoItem[]> = {
   cruise: [
     {
       title: 'Full Fleet Visibility',
@@ -307,43 +307,35 @@ const bentoData: Record<'cruise' | 'agent' | 'tour' | 'port', BentoItem[]> = {
     },
     {
       title: 'Port Call Timeline',
-      description: 'Vessel status, documents, and open tasks on a single timeline. The captain sees it. You see it. Everybody sees it.',
+      description: 'Vessel status, documents and open tasks stay linked to the call, with access for the connected teams.',
       visual: <VesselList />,
       span: 'two-thirds',
     },
   ],
-  /**
-   * Ports and terminals, added 17.09.2026, and every card reuses a visual that is already on this
-   * page.
-   *
-   * ⛔ WRITTEN STRICTLY FROM WHAT S2, S5, S6 AND S7 DEMONSTRATE. Arrivals across a season and a
-   * week, who is handling each call, which certificates are current, and what your own people
-   * still have open. NOT berth allocation, NOT slot scheduling, NOT gate management: nothing on
-   * this site shows those, and the page's whole argument from `BuiltSection` down is that every
-   * screen on it is real. An invented card would cost more than a missing audience did.
-   */
-  port: [
+  // The vessel is the fourth operational participant in the actual platform.
+  // Evidence: docs/CONNECTED-PORT-CALL.md. The port-authority console is reserved.
+  vessel: [
     {
-      title: 'The Season, Then The Week',
-      description: 'Every arrival ahead of you, from the season down to the next seven days. One calendar, not a mail folder.',
+      title: 'The next call, in context',
+      description: 'See the port calls ahead and the agent handling each arrival.',
       visual: <CalendarView />,
       span: 'two-thirds',
     },
     {
-      title: 'Who Is Handling It',
-      description: 'The agent, the line and your own people on each call, on the record rather than in somebody\u2019s contacts.',
+      title: 'A handover you can follow',
+      description: 'Pick up the arrangements and history on the call shared with shoreside.',
       visual: <NetworkDiagram />,
       accent: true,
     },
     {
-      title: 'Paperwork That Is Current',
-      description: 'What is valid, what expires next, and what is still waiting for a counter-signature. Attached to the call it belongs to.',
-      visual: <AuditTrail />,
+      title: 'Changes with a decision',
+      description: 'Review proposed operational amendments with the old value, the change and its reason together.',
+      visual: <AuditTrail steps={['Proposed', 'Under review', 'Acknowledged']} />,
     },
     {
-      title: 'Your Team\u2019s Open Work',
-      description: 'The arrivals with something still open on them, and who owes it. Without a phone call to find out.',
-      visual: <VesselList />,
+      title: 'Departure, signed together',
+      description: 'Confirm the departure sections and co-sign the report with the agent before finance prepares the final account.',
+      visual: <AuditTrail steps={['Agent filled', 'Ship confirmed', 'Report co-signed']} />,
       span: 'two-thirds',
     },
   ],
@@ -361,13 +353,13 @@ const bentoData: Record<'cruise' | 'agent' | 'tour' | 'port', BentoItem[]> = {
       accent: true,
     },
     {
-      title: 'Known and Trusted',
-      description: 'Your profile and track record travel with every port call request, no cold introductions.',
+      title: 'The call behind the request',
+      description: 'Keep the port, arrival and expected passenger count with the shore programme you are quoting.',
       visual: <NetworkDiagram />,
     },
     {
       title: 'Booking Confirmation Trail',
-      description: 'Every agreed programme is documented, confirmed, and retrievable for you and the agent.',
+      description: 'Keep requests, quotes and bookings connected to the same port call.',
       visual: <AuditTrail />,
       span: 'two-thirds',
     },
@@ -376,14 +368,9 @@ const bentoData: Record<'cruise' | 'agent' | 'tour' | 'port', BentoItem[]> = {
 
 // ── Section ───────────────────────────────────────────────────────────────────
 
-type RoleKey = 'cruise' | 'agent' | 'tour' | 'port'
+type RoleKey = PortCallRole
 
-const roles: { id: RoleKey; label: string; icon: typeof Ship }[] = [
-  { id: 'cruise', label: 'Cruise line',   icon: Ship },
-  { id: 'agent',  label: 'Port agent',    icon: Anchor },
-  { id: 'tour',   label: 'Tour operator', icon: Compass },
-  { id: 'port',   label: 'Port or terminal', icon: Building2 },
-]
+const roles = portCallRoles
 
 /**
  * The per-role copy, folded in from the old `RoleSection` on 16.09.2026.
@@ -418,28 +405,28 @@ const roleCopy: Record<RoleKey, { tagline: string; headline: string; body: strin
       'Complete port call history',
     ],
   },
-  port: {
-    tagline: 'Terminal and berth coordination',
-    headline: 'Every arrival, with its paperwork already on it.',
-    body: 'See the season and the week ahead, who the agent is on each call, which permits and certificates are current, and what your own people still have open. Without a phone call to find out.',
+  vessel: {
+    tagline: 'Onboard operations',
+    headline: 'The call comes onboard with its history.',
+    body: 'Work from the call shared with the line and the port agent. Follow the handover, respond to amendments and confirm the departure report.',
     features: [
-      'Season and week ahead in one calendar',
-      'The agent and the line on every call',
-      'Permits and certificates with their expiry',
-      'Your own team\u2019s open tasks per call',
-      'Documents on the call record, not in an inbox',
+      'Upcoming port calls',
+      'Agent and shoreside contacts',
+      'Operational amendment review',
+      'Departure section confirmation',
+      'Joint departure sign-off',
     ],
   },
   tour: {
     tagline: 'Shore excursions management',
-    headline: 'Enter your tour once. Export to any format.',
-    body: 'Publish to the platform. Receive booking requests. Set deadlines that hold. No more filling in nine different RFP formats with the same information for each cruise line.',
+    headline: 'The shore programme, connected to the arrival.',
+    body: 'Keep your tour catalogue in one place. Receive shore requests, prepare quotes and manage bookings against the port call they belong to.',
     features: [
-      'One-time tour listing',
-      'Automatic deadline enforcement',
-      'Real-time booking counts',
-      'Schedule change notifications',
-      'Consistent export to any cruise line format',
+      'Tour catalogue management',
+      'Structured shore requests',
+      'Tour quotes and bookings',
+      'Expected passenger counts',
+      'Bookings linked to the port call',
     ],
   },
 }
@@ -486,7 +473,7 @@ export default function BentoSection() {
             maxWidth: 560,
             margin: '12px auto 0',
           }}>
-            The features above are the same for everyone. What changes is which of them you live in all day.
+            Each team has its own workspace, responsibilities and permissions. The port call connects their work.
           </p>
         </motion.div>
 

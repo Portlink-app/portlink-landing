@@ -1,6 +1,6 @@
 # Landing experience
 
-Updated: 20.09.2026. Entry point for the Refero-led homepage upgrade.
+Updated: 21.09.2026. Entry point for the Refero-led homepage upgrade.
 
 The latest ecosystem assessment, source evidence, implementation decision and verification are in [CONNECTED-PORT-CALL.md](CONNECTED-PORT-CALL.md). It replaces the earlier generic update illustration described in the original verification notes below.
 
@@ -91,7 +91,17 @@ the exact defect that ruling exists to prevent. The published tree is also the t
 Verified live after publication: `/`, `/innovasjon-norge/`, `/team/`, `/contact/`, `/seatrade/`,
 `/privacy/` and `/sitemap.xml` all return 200, and the explorer renders on the live front page
 (chapter labels Overview, Port calls, Review flow and Finance, with their headings, are present in
-the served HTML). Still unverified, as before: the reduced-motion browser condition, and the phone
-layout, because the shared browser profile was held by another session.
+the served HTML). The phone layout was initially unverified because the shared browser profile was
+held by another session; the subsequent public browser checks below close that gap. The
+reduced-motion browser condition remains unverified.
 
 Done, in that order, on 21.09.2026: pushed with `ALLOW_MAIN=1 git push origin main`, polled the Netlify site in AGENTS.md until its published commit matched, and verified the live explorer and every route above. The optimized local preview is `http://127.0.0.1:4320/`. No unresolved implementation work remains. The reduced-motion browser condition is explicitly unverified as described above.
+
+Subsequent public browser verification on 21.09.2026: the continuation found `main` clean at
+`6091890`, matching `origin/main`, so no repeat application deployment was needed. All six
+ecosystem handoffs passed at widths 1440, 390 and 320, each with one current step, no centre/node
+overlap and no horizontal overflow. Keyboard restart worked. At width 390, all four role tabs and
+all seven product explorer tabs worked without overflow; role selection left the ecosystem state
+unchanged. The browser error log returned `[]`. Desktop and phone compositions were visually
+inspected. These were viewport checks on the Mac Studio, not tests on remote device hardware.
+Detailed evidence and current per-device private review links are in CONNECTED-PORT-CALL.md.

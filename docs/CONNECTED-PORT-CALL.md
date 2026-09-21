@@ -1,6 +1,6 @@
 # Connected port call
 
-Updated: 20.09.2026. Assessment and implementation entry point for the ecosystem section. The parent entry point is LANDING-DIRECTION.md.
+Updated: 21.09.2026. Assessment and implementation entry point for the ecosystem section. The parent entry point is LANDING-DIRECTION.md.
 
 ## Progress
 
@@ -9,6 +9,7 @@ Updated: 20.09.2026. Assessment and implementation entry point for the ecosystem
 - [x] Implement the lifecycle and align the adjacent role copy.
 - [x] Verify the served desktop and phone experience, keyboard controls and build guards.
 - [x] Commit the verified changes with the implementation and evidence together.
+- [x] Verify the published journey and adjacent selectors on portlink.app in the browser.
 
 ## Evidence and boundaries
 
@@ -41,7 +42,7 @@ Measured imports: app/page.tsx is the only consumer of EcosystemSection and Bent
 
 The fourth Bento role currently advertises a port/terminal console that the actual product does not provide. Align it with the vessel role as part of the same correction. General company copy may still name ports as customers for commissioned software, and the contact form may accept them; neither claims a built port-authority console.
 
-Landmines: inherited inverted tokens swap in dark theme; source-only checks cannot prove node spacing; step content must fit at 320 px; the optimized server must stop before rebuilding to avoid stale chunks. Existing publication and browser reduced-motion approval blocks remain in LANDING-DIRECTION.md. Revert this task's commit to reverse the presentation change.
+Landmines: inherited inverted tokens swap in dark theme; source-only checks cannot prove node spacing; step content must fit at 320 px; the optimized server must stop before rebuilding to avoid stale chunks. Publication is complete, as recorded in LANDING-DIRECTION.md. Browser reduced-motion verification remains outstanding. Revert this task's commit to reverse the presentation change.
 
 ## Verification
 
@@ -58,12 +59,23 @@ Final optimized verification on 20.09.2026:
 - Light-theme paragraph ink: `rgb(242, 245, 249)`. In dark theme the inverted section becomes light, with both section and paragraph ink `rgb(13, 20, 32)` on `rgb(242, 245, 249)`. Both themes were visually inspected.
 - Desktop and phone compositions were visually reviewed. The phone diagram is 600 px tall to retain clear gaps around the centre record. The inherited typography guard passed; the development browser measured an 11 px minimum in this section.
 - No new dependencies, network requests, timers or autoplay. Connection traces finish after 900 ms. Source CSS removes those animations under reduced motion. The previously rejected browser preference emulation was not retried; runtime reduced-motion verification remains outside this proof.
-- The platform checkout remained clean. No customer records or messages were changed. Publication remains blocked by the prior automatic approval review pending explicit approval, as recorded in LANDING-DIRECTION.md.
+- The platform checkout remained clean. No customer records or messages were changed. Publication was blocked at this verification date; the subsequent publication and live verification are recorded below.
+
+## Published verification, 21.09.2026
+
+The later Innovasjon Norge task published the redesign with its own changes. This continuation found the checkout clean at `6091890`, matching `origin/main`, and verified the actual public page at https://portlink.app/#ecosystem. No second application deployment was needed.
+
+- All six handoffs were exercised at widths 1440, 390 and 320. Every state returned `selected: 1`, `overlap: false` and `overflow: false`; the desktop narrative and central record matched each selected handoff.
+- Enter on `Follow it again` returned `01 Confirm`, with the previous button disabled.
+- All four role tabs worked at width 390, without changing the ecosystem's selected step or producing horizontal overflow.
+- All seven product explorer tabs displayed their corresponding panels at width 390, with `overflow: false` throughout. The browser error log returned `[]`.
+- Desktop and phone compositions were visually inspected. These were browser viewport checks on the Mac Studio, not physical remote-device tests. Runtime reduced-motion and authenticated platform transactions remain outside this verification.
 
 Private review links, always presented separately:
 
-- Mac Studio: http://127.0.0.1:4320/#ecosystem
+- Mac Studio: https://nyxs-mac-studio.tail79b0ec.ts.net:4320/#ecosystem
 - MacBook Pro: https://nyxs-mac-studio.tail79b0ec.ts.net:4320/#ecosystem
-- iPhone: https://nyxs-mac-studio.tail79b0ec.ts.net:4320/#ecosystem
+- iPhone 15: https://nyxs-mac-studio.tail79b0ec.ts.net:4320/#ecosystem
+- iPhone 15 Pro Max: https://nyxs-mac-studio.tail79b0ec.ts.net:4320/#ecosystem
 
-The Tailscale endpoint was exercised from the Mac Studio browser. Remote device hardware was not used.
+Tailscale status on 21.09.2026 reported the Mac Studio, MacBook Pro and iPhone 15 online; iPhone 15 Pro Max was offline. The Tailscale endpoint was exercised from the Mac Studio browser. Remote device hardware was not used.

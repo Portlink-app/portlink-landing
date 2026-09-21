@@ -8,7 +8,7 @@ Updated: 22.09.2026. Active work entry point for the full homepage assessment an
 - [x] Reproduce the initial defects in the public browser across desktop, tablet and phone viewports.
 - [x] Implement the registered improvements.
 - [x] Run the required build guards and repeat the complete browser matrix.
-- [ ] Publish, verify consumption on the public domain and close the register. **In progress.**
+- [x] Publish, verify consumption on the public domain and close the register.
 
 ## Register
 
@@ -92,3 +92,14 @@ Visual comparison: the revised problem section uses the Refero reference’s fin
 ## Remaining coverage, not claimed passes
 
 Physical iOS/Safari and remote device browsers were not exercised. The runtime OS reduced-motion setting remains unverified; source gating, poster-only server output and MotionConfig preference handling are verified. Axe was not run through this browser interface, so there is no automated accessibility certification or numerical score. Screenshots at key compositions are in the task’s CUA outputs; no fabricated on-disk screenshot corpus is claimed. Broader device-lab certification is a separate revisit trigger, not an unimplemented registered correction.
+
+
+## Published result
+
+Application commit: e5e013bd0103bf82c0ca174562e2d2363ede4d31. Netlify production deploy 6ab1b7038ee5580008a7d616 returned state ready, published_at 2026-09-21T23:01:08.123Z and error_message null. Public https://portlink.app/#pain serves the new section. Public mobile checks verified Escape dismissal and focus return, fixed header position, root-relative footer links and the question link selecting Messages with one visible panel. The public team page renders The people building Portlink as its single h1. Captured public browser error logs returned an empty list.
+
+The optimized private preview remains at https://nyxs-mac-studio.tail79b0ec.ts.net:4320/. Tailscale reports the Mac Studio, David’s MacBook Pro (2) and iphone-15 online; iphone-15-pro-max offline. These are network status observations, not physical browser tests. All devices use the same destination URL. Existing Serve routes were preserved and Funnel was not enabled.
+
+Final reference check: the live Attio site was opened and its Build pipeline chapter control exercised. It moved the section beneath the persistent header and kept the page URL unchanged. The observed qualities were the chapter rail, clear text hierarchy, fine rules and framed product evidence. No claim is made that Attio uses our accordion or native hash behaviour. This observation supersedes the earlier native-navigation description in LANDING-DIRECTION.md for the current reference site.
+
+Final boundary: all registered corrections are implemented and verified to the stated level. Physical-device, OS preference and automated axe coverage remain explicit limitations above. No customer records or mail were changed. The development server was stopped; the optimized private preview is running.

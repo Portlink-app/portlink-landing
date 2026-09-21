@@ -84,7 +84,10 @@ const status = [
   ['Kundeinntekter', 'Ingen'],
   ['Offentlig tilskudd', 'Ingen mottatt'],
   ['Markedsaksept', 'Ikke dokumentert. Ingen betaling, signert pilotavtale, intensjonsavtale eller operativ kundebruk'],
-  ['Modenhet', 'BRL 3 og TRL 2. Egenfinansiert prototype, ikke en kommersielt lansert tjeneste'],
+  [
+    'Modenhet',
+    'BRL 3 og TRL 3. Konseptbevis foreligger som en egenfinansiert prototype. Teknologien er ikke systematisk validert, ikke testet under simulerte eller reelle driftsbetingelser, og ikke kommersielt lansert',
+  ],
   ['Grunnlag så langt', 'Fem kvalitative intervjuer på tvers av fire roller, og tidlig tilbakemelding på prototypen'],
 ]
 
@@ -355,7 +358,8 @@ export default function InnovasjonNorgeSection() {
           style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '20px' }}
         >
           Portlink AS, org.nr. 937 347 553, Schweigaards gate 15, 0191 Oslo. Siden gjelder søknad om
-          Oppstartstilskudd 1 og er sist oppdatert 21.09.2026.
+          Oppstartstilskudd 1 og er sist oppdatert 21.09.2026. Innholdet finnes også som vedlegget
+          «Det unike ved løsningen», levert i søknadsportalen.
         </p>
       </div>
     </section>

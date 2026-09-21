@@ -34,7 +34,7 @@
 
 import { useRef, useState } from 'react'
 import { ArrowDown, ArrowUpRight, Pause, Play } from 'lucide-react'
-import { useMotionAllowed, useInViewPlayback, useNarrow, useTrackStage } from './useFilm'
+import { useMotionAllowed, useInViewPlayback, useNarrow, useShortViewport, useTrackStage } from './useFilm'
 import styles from './FilmHero.module.css'
 
 type Stage = {
@@ -90,6 +90,7 @@ function StageMedia({
   motionAllowed,
   narrow,
   eager,
+  controls,
 }: {
   stage: Stage
   label: string
@@ -97,6 +98,7 @@ function StageMedia({
   motionAllowed: boolean
   narrow: boolean
   eager: boolean
+  controls: boolean
 }) {
   const ref = useInViewPlayback(playing && motionAllowed)
 
@@ -129,6 +131,7 @@ function StageMedia({
       muted
       loop
       playsInline
+      controls={controls}
       preload="metadata"
       aria-label={label}
     />
@@ -140,11 +143,13 @@ function StageStack({
   motionAllowed,
   narrow,
   paused,
+  short,
 }: {
   stage: number
   motionAllowed: boolean
   narrow: boolean
   paused: boolean
+  short: boolean
 }) {
   return (
     <div className="film-stack">
@@ -154,10 +159,11 @@ function StageStack({
             <StageMedia
               stage={s}
               label={`Portlink: ${s.label}`}
-              playing={i === stage && !paused}
+              playing={!short && i === stage && !paused}
               motionAllowed={motionAllowed}
               narrow={narrow}
               eager
+              controls={short}
             />
           </div>
           {/* Read only without the pin, where every stage is on screen at once. */}
@@ -175,8 +181,9 @@ export default function FilmHero() {
   const paneRef = useRef<HTMLDivElement>(null)
   const motionAllowed = useMotionAllowed()
   const narrow = useNarrow()
+  const short = useShortViewport()
   const [paused, setPaused] = useState(false)
-  const stage = useTrackStage(trackRef, paneRef, stages.length, motionAllowed)
+  const stage = useTrackStage(trackRef, paneRef, stages.length, motionAllowed && !short)
 
   return (
     <section id="hero" className={styles.hero}>
@@ -214,7 +221,7 @@ export default function FilmHero() {
 
         <div ref={paneRef} className={`film-pane ${styles.pane}`}>
           <div className={styles.sceneLabel}><span>Portlink in motion</span><span>0{stage + 1} / 0{stages.length}</span></div>
-          <StageStack stage={stage} motionAllowed={motionAllowed} narrow={narrow} paused={paused} />
+          <StageStack stage={stage} motionAllowed={motionAllowed} narrow={narrow} paused={paused} short={short} />
 
           {/* Real links, not decoration: a keyboard or switch user reaches stage
               two without scrolling to it, and the browser does the scrolling. */}

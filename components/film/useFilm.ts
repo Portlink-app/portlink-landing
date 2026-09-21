@@ -57,6 +57,19 @@ export function useNarrow(): boolean {
   return narrow
 }
 
+/** Short viewports show full-width stages with native playback controls. */
+export function useShortViewport(): boolean {
+  const [short, setShort] = useState(false)
+  useEffect(() => {
+    const mq = window.matchMedia('(max-height: 600px)')
+    const apply = () => setShort(mq.matches)
+    apply()
+    mq.addEventListener('change', apply)
+    return () => mq.removeEventListener('change', apply)
+  }, [])
+  return short
+}
+
 /**
  * Plays the element only while it is actually on screen.
  *

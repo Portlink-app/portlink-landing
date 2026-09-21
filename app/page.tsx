@@ -1,6 +1,5 @@
 'use client'
 
-import { useState, useEffect } from 'react'
 import Nav from '@/components/Nav'
 import FilmHero from '@/components/film/FilmHero'
 import VoyageSeenSection from '@/components/film/VoyageSeenSection'
@@ -16,15 +15,9 @@ import AccessSection from '@/components/sections/AccessSection'
 import Footer from '@/components/sections/Footer'
 
 export default function Home() {
-  const [theme, setTheme] = useState<'light' | 'dark'>('light')
-
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme)
-  }, [theme])
-
   return (
     <>
-      <Nav theme={theme} setTheme={setTheme} />
+      <Nav />
       <main id="main" tabIndex={-1}>
         <FilmHero />
         {/* The Seatrade draw block is deliberately absent from the front page — David's instruction

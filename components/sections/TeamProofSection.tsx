@@ -18,6 +18,7 @@
 import Link from 'next/link'
 import { useReveal } from '@/hooks/useReveal'
 import { everyone } from './team-members'
+import styles from './TeamProofSection.module.css'
 
 export default function TeamProofSection() {
   const sectionRef = useReveal()
@@ -55,23 +56,13 @@ export default function TeamProofSection() {
               color: 'var(--ds-text-1)',
             }}
           >
-            People who have run port calls, and people who have run a logistics business
+            Built by people who know the work.
           </h2>
         </div>
 
-        <ul
-          className="team-proof-grid reveal"
-          style={{
-            listStyle: 'none',
-            margin: 0,
-            padding: 0,
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))',
-            gap: 'clamp(24px, 3vw, 36px)',
-          }}
-        >
+        <ul className={`${styles.grid} reveal`}>
           {everyone.map((m) => (
-            <li key={m.name} style={{ textAlign: 'center' }}>
+            <li key={m.name} className={styles.person}>
               <img
                 src={m.photo}
                 alt=""
@@ -79,18 +70,9 @@ export default function TeamProofSection() {
                 height={132}
                 loading="lazy"
                 decoding="async"
-                style={{
-                  width: '66px',
-                  height: '66px',
-                  objectFit: 'cover',
-                  borderRadius: '50%',
-                  border: '1px solid var(--ds-border-1)',
-                  background: 'var(--ds-surface-3)',
-                  display: 'block',
-                  margin: '0 auto 14px',
-                }}
+                className={styles.photo}
               />
-              <div style={{ fontSize: '15px', fontWeight: 600, color: 'var(--ds-text-1)' }}>{m.name}</div>
+              <div className={styles.bio}><div style={{ fontSize: '15px', fontWeight: 600, color: 'var(--ds-text-1)' }}>{m.name}</div>
               <div style={{ fontSize: '12.5px', fontWeight: 600, color: 'var(--ds-accent-strong)', marginTop: '3px' }}>
                 {m.role}
               </div>
@@ -104,7 +86,7 @@ export default function TeamProofSection() {
                 }}
               >
                 {m.short}
-              </p>
+              </p></div>
             </li>
           ))}
         </ul>
@@ -114,7 +96,9 @@ export default function TeamProofSection() {
             href="/team"
             className="reveal"
             style={{
-              display: 'inline-block',
+              display: 'inline-flex',
+              alignItems: 'center',
+              minHeight: 44,
               fontSize: '15px',
               fontWeight: 600,
               color: 'var(--ds-primary)',

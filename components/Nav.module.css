@@ -1,0 +1,17 @@
+.header { height: 64px; }
+.header > nav { position: fixed; inset: 0 0 auto; z-index: 50; background: var(--nav-glass); border-bottom: 1px solid var(--border); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+.bar { max-width: 1200px; margin: auto; padding: 0 24px; height: 63px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.logo { min-height: 44px; display: inline-flex; align-items: center; flex-shrink: 0; }
+.logo img { object-fit: contain; }
+.desktop, .actions { display: flex; align-items: center; gap: 20px; }
+.actions { gap: 10px; }
+.desktop a { display: inline-flex; align-items: center; min-height: 44px; color: var(--text-secondary); text-decoration: none; font-size: 14px; font-weight: 500; }
+.iconButton { width: 44px; height: 44px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; border: 1px solid var(--border); background: transparent; color: var(--text-primary); cursor: pointer; flex-shrink: 0; }
+.cta { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 10px 20px; border-radius: var(--ds-radius-pill); background: var(--brand); color: var(--ds-primary-ink); font-size: 14px; font-weight: 600; text-decoration: none; white-space: nowrap; }
+.menuToggle { display: none; }
+.menu { position: absolute; top: 100%; left: 0; right: 0; max-height: calc(100dvh - 64px); overflow-y: auto; overscroll-behavior: contain; background: var(--bg); border-bottom: 1px solid var(--border); padding: 12px 24px 20px; box-shadow: 0 16px 24px rgb(0 0 0 / .08); }
+.menu[hidden] { display: none; }
+.menu a { display: flex; align-items: center; min-height: 48px; padding: 8px 0; border-bottom: 1px solid var(--border); color: var(--text-primary); text-decoration: none; font-size: 16px; }
+@media (hover: hover) { .desktop a:hover, .menu a:hover { color: var(--brand); } .cta:hover { background: var(--brand-bright); } .iconButton:hover { border-color: var(--text-secondary); } }
+@media (max-width: 1000px) { .desktop, .cta { display: none; } .menuToggle { display: inline-flex; } }
+@media (max-width: 480px) { .bar { padding-inline: 20px; } }

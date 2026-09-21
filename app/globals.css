@@ -616,10 +616,9 @@ textarea:focus-visible {
   min-height: 40px;
 }
 
-/* The reduced-motion branch: no track, no pin, no long empty scroll.
-   The stages become what they are without the film — stacked stills,
-   each with its own caption, read in order. */
-@media (prefers-reduced-motion: reduce) {
+/* Unpinned presentation for reduced motion and short viewports.
+   Each stage has its own caption. Short viewports offer native playback. */
+@media (prefers-reduced-motion: reduce), (max-height: 600px) {
   .film-track { height: auto; }
 
   .film-pane {

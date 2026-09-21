@@ -1,5 +1,7 @@
 # Landing experience
 
+The current full-device assessment and implementation is tracked in [the active improvement register](../design-review/BLUEPRINT.md). Its current status supersedes the earlier completion notes for the previous scope below.
+
 Updated: 21.09.2026. Entry point for the Refero-led homepage upgrade.
 
 The latest ecosystem assessment, source evidence, implementation decision and verification are in [CONNECTED-PORT-CALL.md](CONNECTED-PORT-CALL.md). It replaces the earlier generic update illustration described in the original verification notes below.

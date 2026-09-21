@@ -165,3 +165,48 @@ console.log(`  excluded: ${EXCLUDE_PREFIXES.join(' ')}`)
 if (broken.length || missingRequired.length) fail([...missingRequired, ...broken].join('\n  '))
 
 console.log('\ncheck:anchors clean. Every literal in-page link in scope lands on a declared id.')
+
+// Source-wide IDs cannot prove that an anchor exists on the destination ROUTE.
+// Check the actual rendered pages after build, including dynamically generated IDs.
+if (process.argv.includes('--built')) {
+  const pages = new Map()
+  const builtRoot = path.join(ROOT, '.next/server/app')
+  if (!fs.existsSync(builtRoot)) fail('build output is missing; run next build first.', 2)
+  const walk = (dir) => {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const full = path.join(dir, entry.name)
+      if (entry.isDirectory()) walk(full)
+      else if (entry.name.endsWith('.html') && !entry.name.startsWith('_')) {
+        const relative = path.relative(builtRoot, full).replace(/\.html$/, '')
+        const route = relative === 'index' ? '/' : `/${relative.replace(/\/index$/, '')}/`
+        const html = fs.readFileSync(full, 'utf8').replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '')
+        pages.set(route, { html, ids: new Set([...html.matchAll(/\bid="([^"]+)"/g)].map((m) => m[1])) })
+      }
+    }
+  }
+  const normalize = (pathname) => pathname === '/' ? '/' : `${pathname.replace(/\/$/, '')}/`
+  const missing = (href, route, targets) => {
+    const url = new URL(href.replaceAll('&amp;', '&'), `https://portlink.app${route}`)
+    if (url.origin !== 'https://portlink.app' || !url.hash || url.hash === '#') return false
+    return !targets.get(normalize(url.pathname))?.ids.has(decodeURIComponent(url.hash.slice(1)))
+  }
+  const fixture = new Map([['/', { ids: new Set(['access']) }], ['/contact/', { ids: new Set(['main']) }]])
+  if (!missing('#access', '/contact/', fixture) || missing('/#access', '/contact/', fixture)) {
+    fail('rendered route calibration failed to distinguish a broken relative fragment from a homepage fragment.', 2)
+  }
+  walk(builtRoot)
+  if (!pages.has('/') || !pages.has('/contact/')) fail('homepage or contact build output is missing.', 2)
+  let count = 0
+  const failures = []
+  for (const [route, page] of pages) {
+    const headings = [...page.html.matchAll(/<h1\b/g)].length
+    if (headings !== 1) failures.push(`${route}: expected one main heading, found ${headings}`)
+    for (const match of page.html.matchAll(/<a\b[^>]*\bhref="([^"]+)"/g)) {
+      if (!match[1].includes('#')) continue
+      count++
+      if (missing(match[1], route, pages)) failures.push(`${route}: ${match[1]}`)
+    }
+  }
+  if (failures.length) fail(`rendered links have no destination target:\n  ${failures.join('\n  ')}`)
+  console.log(`check:anchors built: ${count} fragment links resolve across ${pages.size} rendered routes; wrong-route fixture rejected.`)
+}

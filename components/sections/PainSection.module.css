@@ -1,0 +1,22 @@
+.section { background: var(--surface); padding: clamp(56px, 8vw, 96px) clamp(16px, 4vw, 24px); }
+.layout { max-width: 1100px; margin: auto; display: grid; grid-template-columns: .85fr 1.15fr; gap: clamp(32px, 6vw, 80px); }
+.intro h2 { font-size: clamp(28px, 3.2vw, 42px); font-weight: 600; color: var(--text-primary); letter-spacing: -.035em; line-height: 1.15; margin: 18px 0; max-width: 400px; }
+.intro p, .answer p { font-size: 15px; color: var(--text-secondary); line-height: 1.7; }
+.note { display: block; font-size: 12px; line-height: 1.6; color: var(--text-muted); margin-top: 24px; }
+.questions { border-top: 1px solid var(--border); }
+.question { border-bottom: 1px solid var(--border); }
+.question summary { list-style: none; display: flex; align-items: center; gap: 16px; min-height: 88px; padding: 20px 0; cursor: pointer; }
+.question summary::-webkit-details-marker { display: none; }
+.question summary:focus-visible { outline: 2px solid var(--ds-focus); outline-offset: 4px; }
+.number { color: var(--text-muted); font: 11px var(--ds-font-mono); }
+.question h3 { flex: 1; font-size: 18px; font-weight: 600; line-height: 1.4; color: var(--text-primary); }
+.question summary svg { flex-shrink: 0; color: var(--text-muted); transition: transform var(--ds-dur-2) var(--ds-ease-standard); }
+.question[open] summary svg { transform: rotate(45deg); }
+.answer { padding: 0 0 24px 32px; }
+.connected { border-left: 2px solid var(--ds-primary); padding-left: 18px; margin-top: 20px; }
+.connected > span { font: 11px var(--ds-font-mono); line-height: 1.6; color: var(--ds-accent-strong); }
+.connected p { margin-top: 8px; }
+.connected a { display: inline-flex; gap: 12px; align-items: center; min-height: 44px; margin-top: 8px; color: var(--ds-primary); font-size: 14px; font-weight: 600; text-decoration: none; }
+.connected a:hover { text-decoration: underline; }
+@media (max-width: 767px) { .layout { grid-template-columns: 1fr; gap: 28px; } .intro h2 { max-width: 360px; } .note { margin-top: 16px; } .question h3 { font-size: 16px; } .question summary { min-height: 76px; gap: 12px; } .answer { padding-left: 26px; } }
+@media (prefers-reduced-motion: reduce) { .question summary svg { transition: none; } }

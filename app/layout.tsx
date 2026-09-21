@@ -8,6 +8,7 @@ import {
   twitterDefaults,
 } from '@/lib/metadata'
 import './globals.css'
+import MotionProvider from '@/components/MotionProvider'
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -69,7 +70,8 @@ export default function RootLayout({
         <a className="skip-link" href="#main">
           Skip to content
         </a>
-        {children}
+        <MotionProvider>{children}</MotionProvider>
+        <noscript><style>{`.reveal { opacity: 1; transform: none; }`}</style></noscript>
         <script
           type="application/ld+json"
           // The object is built above from constants, so there is no interpolated input to escape.

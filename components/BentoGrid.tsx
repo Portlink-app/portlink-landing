@@ -1,6 +1,7 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React from 'react'
+import styles from './BentoGrid.module.css'
 import { motion } from 'framer-motion'
 
 interface BentoCardProps {
@@ -12,32 +13,16 @@ interface BentoCardProps {
   delay?: number
 }
 
-export function BentoCard({ title, description, visual, span = 'half', accent = false, delay = 0 }: BentoCardProps) {
-  const [isMobile, setIsMobile] = useState(false)
-
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 640)
-    check()
-    window.addEventListener('resize', check)
-    return () => window.removeEventListener('resize', check)
-  }, [])
-
-  // On mobile: always full width (1 column). Desktop: honour span.
-  const colSpan = isMobile ? '1 / -1' : {
-    full: '1 / -1',
-    half: 'span 1',
-    third: 'span 1',
-    'two-thirds': 'span 2',
-  }[span]
-
+export function BentoCard({ title, description, visual, span = 'half', delay = 0 }: BentoCardProps) {
   return (
     <motion.div
+      className={styles.card}
+      data-span={span}
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-40px' }}
-      transition={{ duration: 0.5, delay: isMobile ? 0 : delay, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.5, delay, ease: [0.22, 1, 0.36, 1] }}
       style={{
-        gridColumn: colSpan,
         background: 'var(--surface)',
         border: '1px solid var(--border)',
         borderRadius: '20px',
@@ -94,25 +79,8 @@ interface BentoGridProps {
 }
 
 export function BentoGrid({ children, columns = 3 }: BentoGridProps) {
-  const [isMobile, setIsMobile] = useState(false)
-
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 640)
-    check()
-    window.addEventListener('resize', check)
-    return () => window.removeEventListener('resize', check)
-  }, [])
-
   return (
-    <div style={{
-      display: 'grid',
-      // Mobile: single column. Tablet: 2 cols. Desktop: full columns.
-      gridTemplateColumns: isMobile
-        ? '1fr'
-        : `repeat(${columns}, 1fr)`,
-      gap: '16px',
-      width: '100%',
-    }}>
+    <div className={styles.grid} style={{ '--bento-columns': columns } as React.CSSProperties}>
       {children}
     </div>
   )

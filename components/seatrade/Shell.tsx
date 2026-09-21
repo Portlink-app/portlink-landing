@@ -38,7 +38,7 @@ export default function SeatradeShell({ children, wide = false }: { children: Re
             <span style={{ fontWeight: 500, textTransform: 'none', letterSpacing: 0 }}>{EVENT.city.split(' de ')[0]} · {EVENT.dates}</span>
           </span>
         </header>
-        {children}
+        <main id="main" tabIndex={-1}>{children}</main>
         <footer style={{ marginTop: 'var(--ds-gap-12)', paddingTop: 'var(--ds-gap-5)', borderTop: '1px solid var(--border)', fontSize: 'var(--ds-text-xs)', color: 'var(--text-muted)', lineHeight: 1.6 }}>
           © {new Date().getFullYear()} Portlink AS · The port call platform · <Link href="/" style={{ color: 'var(--text-muted)' }}>portlink.app</Link>
         </footer>

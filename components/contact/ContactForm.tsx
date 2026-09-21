@@ -38,7 +38,7 @@
  * it, which is what they did.
  */
 
-import { useId, useState, type FormEvent } from 'react'
+import { useId, useRef, useState, type FormEvent } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { CheckCircle, ChevronRight, ChevronLeft, Hammer, Ship } from 'lucide-react'
 import {
@@ -141,6 +141,7 @@ const stepHeading: React.CSSProperties = {
   fontWeight: 700,
   color: 'var(--text-primary)',
   marginBottom: 8,
+  scrollMarginTop: 88,
 }
 
 const stepLede: React.CSSProperties = {
@@ -213,6 +214,7 @@ function Field({
         autoComplete={autoComplete}
         onChange={(e) => onChange(e.target.value)}
         style={inputBase}
+        inputMode={type === 'number' ? 'numeric' : undefined}
         min={type === 'number' ? '1' : undefined}
       />
     </div>
@@ -321,6 +323,9 @@ export default function ContactForm({ intent, lockIntent = false }: ContactFormP
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState('')
   const [emailHint, setEmailHint] = useState('')
+  const headingRef = useRef<HTMLHeadingElement>(null)
+  const emailRef = useRef<HTMLInputElement>(null)
+  const pendingFocus = useRef<StepId | null>(null)
   /* No `??` tail. The caller decided, and the type made it decide. */
   const [data, setData] = useState<FormData>({ ...EMPTY, intent })
 
@@ -328,8 +333,16 @@ export default function ContactForm({ intent, lockIntent = false }: ContactFormP
     setData((d) => ({ ...d, [key]: value }))
 
   const go = (next: StepId, direction: number) => {
+    pendingFocus.current = next
     setDir(direction)
     setStep(next)
+  }
+
+  const focusStep = (entered: StepId, animation: unknown) => {
+    if (animation !== 'center' || pendingFocus.current !== entered) return
+    pendingFocus.current = null
+    headingRef.current?.focus({ preventScroll: true })
+    headingRef.current?.scrollIntoView({ block: 'start', behavior: 'instant' })
   }
 
   const totalSteps = 2
@@ -338,7 +351,7 @@ export default function ContactForm({ intent, lockIntent = false }: ContactFormP
   const submitWho = (e: FormEvent) => {
     e.preventDefault()
     const problem = pilotEmailProblem(data.email)
-    if (problem) { setEmailHint(problem); return }
+    if (problem) { setEmailHint(problem); emailRef.current?.focus(); return }
     go('detail', 1)
   }
 
@@ -375,6 +388,7 @@ export default function ContactForm({ intent, lockIntent = false }: ContactFormP
         {step === 'done' ? (
           <motion.div
             key="done"
+            onAnimationComplete={(animation) => focusStep('done', animation)}
             custom={1}
             variants={stepVariants}
             initial="enter"
@@ -384,7 +398,7 @@ export default function ContactForm({ intent, lockIntent = false }: ContactFormP
             style={{ textAlign: 'center', padding: '48px 24px' }}
           >
             <CheckCircle size={52} color="var(--brand)" style={{ display: 'block', margin: '0 auto 20px' }} />
-            <h3 style={{ fontSize: 26, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 12 }}>
+            <h3 ref={headingRef} tabIndex={-1} style={{ scrollMarginTop: 88, fontSize: 26, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 12 }}>
               {buildIntent ? 'We got it.' : 'We got your request.'}
             </h3>
             <p style={{ fontSize: 16, color: 'var(--text-secondary)', lineHeight: 1.65, marginBottom: 8 }}>
@@ -424,6 +438,7 @@ export default function ContactForm({ intent, lockIntent = false }: ContactFormP
               {step === 'who' && (
                 <motion.form
                   key="who"
+                  onAnimationComplete={(animation) => focusStep('who', animation)}
                   custom={dir}
                   variants={stepVariants}
                   initial="enter"
@@ -432,11 +447,11 @@ export default function ContactForm({ intent, lockIntent = false }: ContactFormP
                   transition={stepTransition}
                   onSubmit={submitWho}
                 >
-                  <h3 style={stepHeading}>{lockIntent ? 'About you' : 'What can we help with?'}</h3>
+                  <h3 ref={headingRef} tabIndex={-1} style={stepHeading}>{lockIntent ? 'About you' : 'What can we help with?'}</h3>
                   <p style={stepLede}>
                     {lockIntent
                       ? 'How should we reach you?'
-                      : 'Two questions about you, then one about what you need.'}
+                      : 'Your contact details, then what you need.'}
                   </p>
 
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
@@ -504,6 +519,9 @@ export default function ContactForm({ intent, lockIntent = false }: ContactFormP
                       <input
                         id={fid('email')}
                         type="email"
+                        inputMode="email"
+                        ref={emailRef}
+                        aria-invalid={!!emailHint}
                         value={data.email}
                         placeholder="jane@cruiseline.com"
                         autoComplete="email"
@@ -555,6 +573,7 @@ export default function ContactForm({ intent, lockIntent = false }: ContactFormP
               {step === 'detail' && (
                 <motion.form
                   key="detail"
+                  onAnimationComplete={(animation) => focusStep('detail', animation)}
                   custom={dir}
                   variants={stepVariants}
                   initial="enter"
@@ -563,7 +582,7 @@ export default function ContactForm({ intent, lockIntent = false }: ContactFormP
                   transition={stepTransition}
                   onSubmit={handleSubmit}
                 >
-                  <h3 style={stepHeading}>{buildIntent ? 'What do you need built?' : 'Your operation'}</h3>
+                  <h3 ref={headingRef} tabIndex={-1} style={stepHeading}>{buildIntent ? 'What do you need built?' : 'Your operation'}</h3>
                   <p style={stepLede}>
                     {buildIntent
                       ? 'The more concrete this is, the more useful our first reply will be.'

@@ -1,204 +1,80 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Menu, X, Sun, Moon } from 'lucide-react'
+import Link from 'next/link'
+import styles from './Nav.module.css'
 
 const links = [
-  { label: 'Problem', href: '#pain' },
-  { label: 'Roles', href: '#roles' },
-  { label: 'Platform', href: '#dashboard' },
-  { label: 'Pilot', href: '#pilot' },
-  { label: 'Access', href: '#access' },
-  // Real routes, not sections: the handler below only intercepts in-page anchors.
+  { label: 'Problem', href: '/#pain' },
+  { label: 'Platform', href: '/#dashboard' },
+  { label: 'Roles', href: '/#roles' },
+  { label: 'Pilot', href: '/#pilot' },
+  { label: 'Access', href: '/#access' },
   { label: 'Team', href: '/team/' },
   { label: 'Contact', href: '/contact/' },
 ]
 
-/** Native smooth scroll to anchor */
-function smoothScrollTo(href: string) {
-  document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' })
-}
-
-type NavProps = {
-  theme: 'light' | 'dark'
-  setTheme: (theme: 'light' | 'dark') => void
-}
-
-export default function Nav({ theme, setTheme }: NavProps) {
+/** One non-modal navigation disclosure for every marketing route. */
+export default function Nav() {
   const [open, setOpen] = useState(false)
+  const [theme, setTheme] = useState<'light' | 'dark'>('light')
+  const header = useRef<HTMLElement>(null)
+  const toggle = useRef<HTMLButtonElement>(null)
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme)
+  }, [theme])
+
+  useEffect(() => {
+    if (!open) return
+    const dismiss = (event: PointerEvent) => {
+      if (!header.current?.contains(event.target as Node)) setOpen(false)
+    }
+    const escape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setOpen(false)
+        toggle.current?.focus()
+      }
+    }
+    const desktop = window.matchMedia('(min-width: 1001px)')
+    const resize = () => { if (desktop.matches) setOpen(false) }
+    document.addEventListener('pointerdown', dismiss)
+    document.addEventListener('keydown', escape)
+    desktop.addEventListener('change', resize)
+    return () => {
+      document.removeEventListener('pointerdown', dismiss)
+      document.removeEventListener('keydown', escape)
+      desktop.removeEventListener('change', resize)
+    }
+  }, [open])
 
   return (
-    /* <header> is the banner landmark. The <nav> inside it keeps the fixed positioning and
-       the styles, so this wrapper changes the document's semantics and nothing about its
-       layout: a block-level element wrapping a position:fixed child occupies no space. */
-    <header>
-    <nav
-      role="navigation"
-      aria-label="Main navigation"
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 50,
-        backdropFilter: 'blur(16px)',
-        WebkitBackdropFilter: 'blur(16px)',
-        background: 'var(--nav-glass)',
-        borderBottom: '1px solid var(--border)',
-      }}
-    >
-      <div
-        style={{
-          maxWidth: '1200px',
-          margin: '0 auto',
-          padding: '0 24px',
-          height: '64px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        }}
-      >
-        {/* Logo */}
-        <a href="#" style={{ textDecoration: 'none' }}>
-          <img src="/portlink-logo.png" alt="Portlink" className="logo-img" style={{ height: '28px' }} />
-        </a>
-
-        {/* Desktop links */}
-        <div
-          className="nav-links-desktop"
-          style={{
-            display: 'flex',
-            gap: '28px',
-            alignItems: 'center',
-          }}
-        >
-          {links.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              onClick={(e) => { if (link.href.startsWith('#')) { e.preventDefault(); smoothScrollTo(link.href) } }}
-              style={{
-                color: 'var(--text-secondary)',
-                textDecoration: 'none',
-                fontSize: '14px',
-                fontWeight: 500,
-                transition: 'color var(--ds-dur-2) var(--ds-ease-standard)',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--text-primary)')}
-              onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-secondary)')}
-            >
-              {link.label}
-            </a>
-          ))}
+    <header ref={header} className={styles.header} onBlur={(event) => {
+      if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setOpen(false)
+    }}>
+      <nav aria-label="Main navigation">
+        <div className={styles.bar}>
+          <Link href="/" aria-label="Portlink home" className={styles.logo}>
+            <img src="/portlink-logo.png" alt="Portlink" className="logo-img" width={107} height={28} />
+          </Link>
+          <div className={styles.desktop}>
+            {links.map((link) => <a key={link.href} href={link.href}>{link.label}</a>)}
+          </div>
+          <div className={styles.actions}>
+            <button className={styles.iconButton} onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}>
+              {theme === 'dark' ? <Sun size={18} aria-hidden="true" /> : <Moon size={18} aria-hidden="true" />}
+            </button>
+            <a href="/contact/" className={styles.cta}>Contact us</a>
+            <button ref={toggle} className={`${styles.iconButton} ${styles.menuToggle}`} onClick={() => setOpen(!open)} aria-label={open ? 'Close menu' : 'Open menu'} aria-expanded={open} aria-controls="main-menu">
+              {open ? <X size={22} aria-hidden="true" /> : <Menu size={22} aria-hidden="true" />}
+            </button>
+          </div>
         </div>
-
-        {/* Theme toggle + CTA + Hamburger */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <button
-            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-            aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
-            style={{
-              width: '36px',
-              height: '36px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderRadius: '9999px',
-              border: '1px solid var(--border)',
-              background: 'transparent',
-              color: 'var(--text-secondary)',
-              cursor: 'pointer',
-              transition: 'border-color var(--ds-dur-2) var(--ds-ease-standard), color var(--ds-dur-2) var(--ds-ease-standard)',
-            }}
-          >
-            {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
-          </button>
-
-          <a
-            href="/contact/"
-            className="nav-cta-desktop"
-            style={{
-              background: 'var(--brand)',
-              color: 'var(--ds-primary-ink)',
-              padding: '8px 20px',
-              borderRadius: '9999px',
-              fontSize: '14px',
-              fontWeight: 600,
-              textDecoration: 'none',
-              transition: 'background var(--ds-dur-2) var(--ds-ease-standard)',
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--brand-bright)')}
-            onMouseLeave={(e) => (e.currentTarget.style.background = 'var(--brand)')}
-          >
-            Contact us
-          </a>
-
-          <button
-            className="nav-hamburger"
-            onClick={() => setOpen(!open)}
-            aria-label="Toggle navigation menu"
-            aria-expanded={open}
-            style={{
-              display: 'none',
-              background: 'none',
-              border: 'none',
-              color: 'var(--text-primary)',
-              cursor: 'pointer',
-              padding: '4px',
-            }}
-          >
-            {open ? <X size={24} /> : <Menu size={24} />}
-          </button>
+        <div id="main-menu" className={styles.menu} hidden={!open}>
+          {links.map((link) => <a key={link.href} href={link.href} onClick={() => setOpen(false)}>{link.label}</a>)}
         </div>
-      </div>
-
-      {/* Mobile menu */}
-      {open && (
-        <div
-          className="nav-mobile-menu"
-          style={{
-            background: 'var(--nav-glass)',
-            borderTop: '1px solid var(--border)',
-            padding: '16px 24px',
-          }}
-        >
-          {links.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              onClick={(e) => { setOpen(false); if (link.href.startsWith('#')) { e.preventDefault(); smoothScrollTo(link.href) } }}
-              style={{
-                display: 'block',
-                padding: '12px 0',
-                color: 'var(--text-secondary)',
-                textDecoration: 'none',
-                fontSize: '16px',
-                borderBottom: '1px solid var(--border)',
-              }}
-            >
-              {link.label}
-            </a>
-          ))}
-          <a
-            href="/contact/"
-            onClick={() => setOpen(false)}
-            style={{
-              display: 'inline-block',
-              marginTop: '16px',
-              background: 'var(--brand)',
-              color: 'var(--ds-primary-ink)',
-              padding: '10px 24px',
-              borderRadius: '9999px',
-              fontSize: '14px',
-              fontWeight: 600,
-              textDecoration: 'none',
-            }}
-          >
-            Contact us
-          </a>
-        </div>
-      )}
-    </nav>
+      </nav>
     </header>
   )
 }

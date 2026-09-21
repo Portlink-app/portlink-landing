@@ -90,7 +90,7 @@ export default function VoyageSeenSection() {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))',
             gap: 'clamp(16px, 2.5vw, 24px)',
           }}
         >

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import { BentoGrid, BentoCard } from '@/components/BentoGrid'
 import { Anchor, CheckCircle2 } from 'lucide-react'
@@ -86,7 +86,7 @@ function FleetTimeline() {
 }
 
 function CostCard() {
-  const items = [{ l: 'Port dues', v: '€4,200' }, { l: 'Pilotage', v: '€1,800' }, { l: 'Mooring', v: '€950' }]
+  const items = [{ l: 'Port dues', v: '4 200 €' }, { l: 'Pilotage', v: '1 800 €' }, { l: 'Mooring', v: '950 €' }]
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 4, width: '100%', maxWidth: 200 }}>
       {items.map(item => (
@@ -152,7 +152,7 @@ function DocumentCard() {
           fontWeight: i === 3 ? 600 : 400,
         }}>
           <span>{l}</span>
-          <span>€{[4200, 1800, 650, 6650][i].toLocaleString()}</span>
+          <span>€{[4200, 1800, 650, 6650][i].toLocaleString('nb-NO')}</span>
         </div>
       ))}
     </div>
@@ -228,7 +228,7 @@ function ShoreRequestCard() {
       borderRadius: 10, padding: '8px 12px', maxWidth: 220,
     }}>
       <div style={{ fontSize: VIZ_TEXT, color: 'var(--text-muted)', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Shore Request</div>
-      {[['Port', 'Barcelona'], ['Pax', '3,200'], ['Date', 'Apr 14']].map(([l, v]) => (
+      {[['Port', 'Barcelona'], ['Pax', '3 200'], ['Date', '14.04.']].map(([l, v]) => (
         <div key={l} style={{ ...vizRow, fontSize: VIZ_TEXT, padding: '2px 0' }}>
           <span style={{ color: 'var(--text-muted)' }}>{l}</span>
           <span style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{v}</span>
@@ -443,6 +443,7 @@ const roleCopy: Record<RoleKey, { tagline: string; headline: string; body: strin
  */
 export default function BentoSection() {
   const [role, setRole] = useState<RoleKey>('cruise')
+  const tabRefs = useRef<Array<HTMLButtonElement | null>>([])
   const cards = bentoData[role]
   const copy = roleCopy[role]
 
@@ -501,13 +502,28 @@ export default function BentoSection() {
               background: 'var(--ds-surface-2)',
               border: '1px solid var(--ds-border-1)',
             }}>
-              {roles.map((r) => {
+              {roles.map((r, index) => {
                 const Icon = r.icon
                 const active = role === r.id
                 return (
                   <button
                     key={r.id}
                     role="tab"
+                    id={`role-tab-${r.id}`}
+                    aria-controls="role-panel"
+                    tabIndex={active ? 0 : -1}
+                    ref={(node) => { tabRefs.current[index] = node }}
+                    onKeyDown={(event) => {
+                      let next = index
+                      if (event.key === 'ArrowRight') next = (index + 1) % roles.length
+                      else if (event.key === 'ArrowLeft') next = (index + roles.length - 1) % roles.length
+                      else if (event.key === 'Home') next = 0
+                      else if (event.key === 'End') next = roles.length - 1
+                      else return
+                      event.preventDefault()
+                      setRole(roles[next].id)
+                      tabRefs.current[next]?.focus()
+                    }}
                     aria-selected={active}
                     onClick={() => setRole(r.id)}
                     style={{
@@ -515,7 +531,7 @@ export default function BentoSection() {
                       alignItems: 'center',
                       gap: 7,
                       padding: '9px 18px',
-                      minHeight: 40,
+                      minHeight: 44,
                       borderRadius: 'var(--ds-radius-pill)',
                       border: 'none',
                       cursor: 'pointer',
@@ -528,7 +544,7 @@ export default function BentoSection() {
                       transition: 'background var(--ds-dur-2) var(--ds-ease-standard), color var(--ds-dur-2) var(--ds-ease-standard)',
                     }}
                   >
-                    <Icon size={15} />
+                    <Icon size={15} aria-hidden="true" />
                     {r.label}
                   </button>
                 )
@@ -536,6 +552,7 @@ export default function BentoSection() {
             </div>
           </div>
 
+          <div id="role-panel" role="tabpanel" aria-labelledby={`role-tab-${role}`} tabIndex={0}>
           <motion.div
             key={role}
             /* A fade, with no travel: this block changes because the reader
@@ -603,6 +620,7 @@ export default function BentoSection() {
               />
             ))}
           </BentoGrid>
+          </div>
         </div>
       </div>
     </section>

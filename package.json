@@ -10,7 +10,7 @@
     "lint:dashes": "node scripts/lint-dashes.mjs",
     "lint:dashes-selftest": "node scripts/lint-dashes.selftest.mjs",
     "build": "next build",
-    "postbuild": "node scripts/check-scene-layouts.mjs --built && node scripts/check-film-motion.mjs --built",
+    "postbuild": "node scripts/check-scene-layouts.mjs --built && node scripts/check-film-motion.mjs --built && node scripts/check-anchors.mjs --built",
     "start": "next start",
     "lint": "eslint",
     "ds:check": "node scripts/check-ds-version.mjs --strict",

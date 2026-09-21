@@ -88,9 +88,9 @@ export default function TeamSection({ heading = true }: { heading?: boolean }) {
             >
               Our team
             </span>
-            <h2 className="reveal" style={{ marginTop: '16px', fontSize: 'clamp(28px, 4vw, 40px)', lineHeight: 1.15 }}>
+            <h1 className="reveal" style={{ marginTop: '16px', fontSize: 'clamp(28px, 4vw, 40px)', lineHeight: 1.15 }}>
               The people building Portlink
-            </h2>
+            </h1>
             <p
               className="reveal"
               style={{

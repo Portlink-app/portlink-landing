@@ -19,6 +19,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${siteUrl}/`, changeFrequency: 'weekly', priority: 1 },
     { url: `${siteUrl}/contact/`, changeFrequency: 'monthly', priority: 0.8 },
     { url: `${siteUrl}/team/`, changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${siteUrl}/innovasjon-norge/`, changeFrequency: 'monthly', priority: 0.6 },
     { url: `${siteUrl}/seatrade/`, changeFrequency: 'weekly', priority: 0.6 },
     { url: `${siteUrl}/seatrade/terms/`, changeFrequency: 'yearly', priority: 0.2 },
   ]

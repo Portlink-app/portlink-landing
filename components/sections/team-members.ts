@@ -35,7 +35,7 @@ export const founders: Member[] = [
   {
     name: 'Kris Willassen',
     role: 'Co-Founder',
-    bio: 'Cruise port operations. A decade of itinerary planning, deployment and nautical planning at SeaDream Yacht Club and Hurtigruten Expeditions, including expedition compliance and permitting, on top of training in nautical navigation.',
+    bio: 'Cruise port operations. A decade of itinerary planning, deployment and nautical planning at SeaDream Yacht Club and Hurtigruten Expeditions, including expedition compliance and permitting, most recently as Vice President of Deployment and Port Operations.',
     short: 'A decade of itinerary planning and nautical operations at SeaDream Yacht Club and Hurtigruten Expeditions.',
     photo: '/team/kris.jpg',
   },

@@ -4,6 +4,25 @@ Updated: 22.09.2026. Active work entry point for the full homepage assessment an
 
 ## Progress
 
+### Preview availability repair, 22.09.2026
+
+- [x] Reproduce the failed URL and map its process, proxy and built assets.
+- [x] Install a repo-owned persistent service and health check.
+- [x] Verify automatic recovery, HTTPS assets and actual desktop/phone rendering.
+- [x] Record evidence and commit the repair locally. No production application change is required for this local service repair.
+
+Ranked causes: (1) confirmed missing backend, because localhost:4320 refuses connections and private HTTPS returns 502; (2) Tailscale routing or TLS failure ruled out for this request, because the expected HTTPS proxy responds; (3) missing build ruled out by the existing BUILD_ID, homepage and contact prerender entries. The public domain returns 200. Why the prior tool-owned process exited is unproven; its absence is measured.
+
+Chose: a dedicated macOS LaunchAgent for port 4320, with KeepAlive and repo-owned management/health commands. Over: another transient terminal process (same lifecycle risk), or changing Serve routes (the route is correct). Because: the preview must outlive the tool session and recover from a process exit. Revisit-if: the host or checkout moves.
+
+Blast radius before editing: the new script owns only app.portlink.landing-preview-4320, its generated plist and its local logs. It runs this checkout's existing optimized Next build on loopback. No page source, build config, production deployment or Tailscale route changes. The existing app.portlink.landing-preview service points at an older worktree on 4611 and is separate. Reversal is the new script's stop command and removal of its generated plist. Do not rebuild .next while the service is running. Graphify has no existing repository graph; the measured process/proxy/build map is the reference for this infrastructure repair.
+
+Repair evidence: private homepage returned 200 with 15 application assets loaded; contact returned 200 with 13. A controlled launchctl SIGTERM changed the supervised PID from 97032 to 98058 and runs from 1 to 2 without a bootstrap or kickstart. Both HTTPS health checks passed afterward. The stop/build/start sequence passed, including all postbuild guards, and left the new service running. npm run verify passed with 0 errors and 8 existing image warnings; the initial sandbox run was blocked by tsx IPC permissions and the approved external run passed. Existing Serve routes on 4178, 4320, 443, 8443 and 8444 were unchanged; Funnel was not enabled.
+
+Browser evidence after restoration: CUA rendered the private homepage at desktop size and at 390 × 844, with screenshots. The phone menu opened and Contact navigated to the complete form. Console error inspection returned []. After the final rebuild, the shared-record step 02 Plan ashore changed the heading to The shore programme starts with the same call. Settled document width and scrollWidth were both 390, with no overflowing descendants. Temporary viewport overrides were reset and a working private homepage tab was left open. Public https://portlink.app/ also rendered. Physical remote browsers remain untested; Tailscale reports Mac Studio, MacBook Pro and iphone-15 online, iphone-15-pro-max offline. The Mac Studio must stay awake, signed in and on Tailscale for this private URL.
+
+### Landing improvements
+
 - [x] Map the homepage, conversion journeys, shared components and references.
 - [x] Reproduce the initial defects in the public browser across desktop, tablet and phone viewports.
 - [x] Implement the registered improvements.
@@ -29,6 +48,7 @@ Keep every row and column when updating this table. A source inspection is not a
 
 | SKIP-01 | P2 | Built route check found the root skip link had no main target on the campaign pages. | One main landmark around children in SeatradeShell, shared by five routes. No form/data changes. | Fixed; static routes rendered and the build guard passes |
 | HEADING-01 | P2 | /team/ rendered no h1. TeamSection has one consumer, the team route. | Promote its existing title to h1; require one h1 per rendered page in the build guard. | Verified on the final optimized preview: one h1 and one main, title The people building Portlink |
+| PREVIEW-01 | P1 | Shared HTTPS links returned 502; no backend listened on loopback:4320 after the earlier tool-owned server exited. | Dedicated launchd service, build/ownership checks, explicit lifecycle commands and page/asset health checks in scripts/preview-service.mjs. | Fixed; automatic recovery, rebuild lifecycle and browser rendering verified |
 
 ## Decision and reference lock
 
@@ -102,4 +122,4 @@ The optimized private preview remains at https://nyxs-mac-studio.tail79b0ec.ts.n
 
 Final reference check: the live Attio site was opened and its Build pipeline chapter control exercised. It moved the section beneath the persistent header and kept the page URL unchanged. The observed qualities were the chapter rail, clear text hierarchy, fine rules and framed product evidence. No claim is made that Attio uses our accordion or native hash behaviour. This observation supersedes the earlier native-navigation description in LANDING-DIRECTION.md for the current reference site.
 
-Final boundary: all registered corrections are implemented and verified to the stated level. Physical-device, OS preference and automated axe coverage remain explicit limitations above. No customer records or mail were changed. The development server was stopped; the optimized private preview is running.
+Final boundary: all registered corrections are implemented and verified to the stated level. Physical-device, OS preference and automated axe coverage remain explicit limitations above. No customer records or mail were changed. Updated 22.09.2026: the earlier tool-owned preview later exited. The repaired optimized preview now runs under app.portlink.landing-preview-4320; use the lifecycle commands and evidence at the top of this register.

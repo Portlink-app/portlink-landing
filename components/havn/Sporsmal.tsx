@@ -71,7 +71,7 @@ export default function Sporsmal() {
     }
     setPhase('sending')
     try {
-      const res = await fetch('/api/havn', {
+      const res = await fetch('/api/havn/', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ who, answers, website }),

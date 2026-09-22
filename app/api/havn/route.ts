@@ -19,6 +19,7 @@ import { Resend } from 'resend'
 import { escapeHtml as esc, wrap } from '@/lib/email/wrap'
 import { ANSWER_MAX, GROUPS, QUESTION_BY_ID, QUESTION_IDS, WHO_MAX } from '@/lib/havn/questions'
 import { clientIp, rateLimit } from '@/lib/rateLimit'
+import { newSubmissionId, saveSubmission } from '@/lib/havn/store'
 
 export const dynamic = 'force-dynamic'
 
@@ -157,5 +158,23 @@ export async function POST(request: Request) {
     console.error('[havn] send failed', res.error)
     return NextResponse.json({ error: 'Kunne ikke sende akkurat nå. Svarene er tatt vare på, prøv igjen om litt.' }, { status: 502 })
   }
+
+  // Second copy, best effort: the same content as JSON in Netlify Blobs, for the admin import
+  // later. The email above has already gone; a store failure is logged and changes nothing for
+  // the caller.
+  try {
+    await saveSubmission({
+      id: newSubmissionId(),
+      receivedAt: sentAt.toISOString(),
+      who,
+      answers: Object.fromEntries(answers),
+      choices: Object.fromEntries(choices),
+      questionCount: QUESTION_IDS.size,
+      resendId: res.data?.id,
+    })
+  } catch (err) {
+    console.error('[havn] blob store failed', err instanceof Error ? err.message : err)
+  }
+
   return NextResponse.json({ ok: true, answered: answeredIds.size })
 }

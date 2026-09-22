@@ -2,8 +2,8 @@
 /**
  * havn-list-answers: print every submission from portlink.app/portlink+griegconnect as JSON.
  *
- *   NETLIFY_SITE_ID=… NETLIFY_AUTH_TOKEN=… node scripts/havn-list-answers.mjs          (all, JSON)
- *   NETLIFY_SITE_ID=… NETLIFY_AUTH_TOKEN=… node scripts/havn-list-answers.mjs --text   (readable)
+ *   NETLIFY_AUTH_TOKEN=… node scripts/havn-list-answers.mjs          (all, JSON)
+ *   NETLIFY_AUTH_TOKEN=… node scripts/havn-list-answers.mjs --text   (readable)
  *
  * Reads the `havn-answers` Netlify Blobs store the route writes to (lib/havn/store.ts). Read only.
  * This is the export the platform's admin import will consume; until that exists it is how the
@@ -15,10 +15,12 @@ import { getStore } from '@netlify/blobs'
 function linkedSiteId() {
   try { return JSON.parse(readFileSync(new URL('../.netlify/state.json', import.meta.url), 'utf8')).siteId } catch { return undefined }
 }
-const siteID = process.env.NETLIFY_BLOBS_SITE_ID || process.env.NETLIFY_SITE_ID || linkedSiteId()
+/** The Portlink Netlify site (`portlin-landing-2`, documented in CLAUDE.md). Not a secret; the token is. */
+const PORTLINK_SITE_ID = '34ab2932-19da-44e5-b761-0bc83acc0055'
+const siteID = process.env.NETLIFY_BLOBS_SITE_ID || process.env.NETLIFY_SITE_ID || linkedSiteId() || PORTLINK_SITE_ID
 const token = process.env.NETLIFY_BLOBS_TOKEN || process.env.NETLIFY_AUTH_TOKEN
 if (!siteID || !token) {
-  console.error('havn-list-answers: set NETLIFY_SITE_ID and NETLIFY_AUTH_TOKEN (the Portlink Netlify site and token).')
+  console.error('havn-list-answers: set NETLIFY_AUTH_TOKEN (a personal access token on the Portlink Netlify account).')
   process.exit(2)
 }
 

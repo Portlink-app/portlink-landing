@@ -99,7 +99,7 @@ export default function Sporsmal() {
             <p>{answered} av {total} svar er på vei til oss. Alt er nyttig, også det kritiske.</p>
             <p className={styles.sentNote}>Svarene ligger fortsatt på telefonen. Kommer dere på mer, kan dere fylle ut og sende igjen.</p>
             <div className={styles.sendActions}>
-              <ShareButton title="Portlink og Grieg Connect" text="Hvordan Portlink og Grieg Connect kan leve sammen om det samme anløpet, og 22 spørsmål til dere som bruker systemet hver dag." />
+              <ShareButton title="Portlink og Grieg Connect" text="Hvordan Portlink og Grieg Connect kan leve sammen om det samme anløpet, og 23 spørsmål til dere som bruker systemet hver dag." />
               <button type="button" className={styles.secondary} onClick={() => setPhase('edit')}>Tilbake til svarene</button>
             </div>
           </div>
@@ -182,7 +182,7 @@ export default function Sporsmal() {
           <div className={styles.sendRow}>
             <p>Sendes som én e-post til Portlink, og dere kan sende flere ganger. Del gjerne siden videre med andre som jobber med dette.</p>
             <div className={styles.sendActions}>
-              <ShareButton title="Portlink og Grieg Connect" text="Hvordan Portlink og Grieg Connect kan leve sammen om det samme anløpet, og 22 spørsmål til dere som bruker systemet hver dag." />
+              <ShareButton title="Portlink og Grieg Connect" text="Hvordan Portlink og Grieg Connect kan leve sammen om det samme anløpet, og 23 spørsmål til dere som bruker systemet hver dag." />
               <button type="submit" className={styles.primary} disabled={phase === 'sending'}>
                 {phase === 'sending' ? 'Sender…' : 'Send svarene'}
               </button>

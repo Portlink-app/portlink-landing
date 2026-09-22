@@ -13,7 +13,7 @@ import Hilsen from '@/components/havn/Hilsen'
 const ogHavn = '/og/havn-2026-09-22.png'
 const title = 'Portlink og Grieg Connect · Portlink'
 const description =
-  'Hvordan Portlink og Grieg Connect kan leve sammen om det samme anløpet, og 22 spørsmål til dere som bruker systemet hver dag.'
+  'Hvordan Portlink og Grieg Connect kan leve sammen om det samme anløpet, og 23 spørsmål til dere som bruker systemet hver dag.'
 
 /**
  * portlink.app/portlink+griegconnect

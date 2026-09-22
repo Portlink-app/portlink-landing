@@ -112,27 +112,32 @@ export const GROUPS: readonly QuestionGroup[] = [
         id: 'q14',
         text: 'Hvordan ser losbestillingen og taubåtbehovet ut hos dere, og hvem bestiller?',
       },
+      {
+        id: 'q15',
+        text: 'Passasjer- og mannskapslister: hvem sender dem til dere, og hvordan holdes de oppdatert?',
+        hint: 'Kommer de via SafeSeaNet, fra agenten eller på e-post? Hvor ofte endres listene etter innsending, og hvem må rette dem hos politi, toll og ISPS? En havn vi møtte på Seatrade slet mest med akkurat dette.',
+      },
     ],
   },
   {
     title: 'Havnedistriktet og trafikken',
     questions: [
       {
-        id: 'q15',
+        id: 'q16',
         text: 'Offshore supply er volumet i Kristiansund. Registrerer baseoperatørene i Grieg Connect, eller har de egne systemer?',
         hint: 'Hvordan ser et supplyanløp ut i Grieg Connect sammenlignet med et cruiseanløp?',
       },
       {
-        id: 'q16',
+        id: 'q17',
         text: 'Havna dekker mange kommuner. Hvordan registreres og faktureres et anløp på en kai der ingen jobber?',
         hint: 'Hvem ser at skipet kom, og hvem stoler dere på?',
       },
       {
-        id: 'q17',
+        id: 'q18',
         text: 'Miljøavgift, EPI og landstrøm: bruker dere Environmental Port Index for cruise, hvem sjekker rapporten, og hvordan bestilles og prises landstrøm?',
       },
       {
-        id: 'q18',
+        id: 'q19',
         text: 'Vær og vind: hvem avgjør at et skip ikke kan legge til, hvor ofte skjer det, og hvordan varsles agent, DMC og busser?',
       },
     ],
@@ -141,17 +146,17 @@ export const GROUPS: readonly QuestionGroup[] = [
     title: 'Det store bildet',
     questions: [
       {
-        id: 'q19',
+        id: 'q20',
         text: 'Hvis et nytt verktøy skulle gjøre én ting ved siden av Grieg Connect, uten å erstatte det: hva ville det vært?',
         hint: 'Og motsatt: hva er den ene tingen som må være i Grieg Connect for at det skal være verdt å logge inn et annet sted?',
       },
       {
-        id: 'q20',
+        id: 'q21',
         text: 'Slipper Grieg Connect tredjeparter inn via API-et sitt, eller er det bare ERP og Visma?',
         hint: 'Vet dere om noen agent eller rederi som er integrert maskin til maskin, som Sea-Cargo i Bergen?',
       },
       {
-        id: 'q21',
+        id: 'q22',
         text: 'Hva er den største frustrasjonen med Grieg Connect som dere har gitt opp å få fikset?',
       },
     ],
@@ -160,7 +165,7 @@ export const GROUPS: readonly QuestionGroup[] = [
     title: 'Fritt ord',
     questions: [
       {
-        id: 'q22',
+        id: 'q23',
         text: 'Er det noe vi ikke har spurt om?',
         hint: 'Tanker, ideer, ting som har irritert i årevis, eller noe dere ville gjort annerledes om dere skulle bygget dette selv. Alt er velkomment.',
       },

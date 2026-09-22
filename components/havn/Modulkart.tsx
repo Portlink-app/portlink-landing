@@ -56,7 +56,7 @@ const ROWS: { module: string; theirs: string; ours: string; kind: 'bro' | 'vaart
   {
     module: 'Port API',
     theirs: 'Sanntidsdata til ERP, BI og nasjonal rapportering.',
-    ours: 'Der en integrasjon ville gått. Spørsmål 20 handler om dette.',
+    ours: 'Der en integrasjon ville gått. Spørsmål 21 handler om dette.',
     kind: 'bro',
   },
 ]

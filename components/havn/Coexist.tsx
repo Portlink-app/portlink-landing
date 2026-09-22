@@ -113,7 +113,7 @@ export default function Coexist() {
           <AnimatedBeam containerRef={container} fromRef={hub} toRef={port} duration={3.2} delay={2.4} reverse offset={10} />
         </div>
 
-        <p className={styles.diagramLegend}>Linjene er et forslag. Ingen av dem er bygget ennå. Det er derfor vi spør.</p>
+        <p className={styles.diagramLegend}><strong>Linjene er et forslag.</strong> Ingen av dem er bygget ennå. Det er derfor vi spør.</p>
 
         <div className={styles.handshakes}>
           {HANDSHAKES.map((h, i) => (

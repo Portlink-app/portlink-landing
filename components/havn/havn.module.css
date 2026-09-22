@@ -82,7 +82,8 @@
 .beamPulse[data-reverse='true'] { animation-name: beamTravelBack; }
 @keyframes beamTravel { from { stroke-dashoffset: 1.26; } to { stroke-dashoffset: -1; } }
 @keyframes beamTravelBack { from { stroke-dashoffset: -1; } to { stroke-dashoffset: 1.26; } }
-.diagramLegend { font: 11px var(--ds-font-mono); line-height: 1.7; text-align: center; margin: 14px 0 0; opacity: .85; }
+.diagramLegend { margin: 22px auto 0; max-width: 640px; padding: 14px 20px; border: 1px solid var(--ds-inverted-text); border-radius: var(--ds-radius-md); background: var(--ds-inverted-surface); text-align: center; font-size: 16px; font-weight: 500; line-height: 1.55; letter-spacing: -.01em; }
+.diagramLegend strong { font-weight: 700; }
 
 .handshakes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; margin-top: 44px; padding-top: 32px; border-top: 1px solid var(--ds-inverted-border); }
 .handshake h3 { color: inherit; font-size: 15px; font-weight: 600; margin: 10px 0 8px; letter-spacing: -.01em; }

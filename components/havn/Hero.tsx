@@ -35,7 +35,7 @@ export default function HavnHero() {
           </div>
         </div>
         <div className={styles.heroLead}>
-          <span>23 spørsmål. Svarene lagres på telefonen underveis og sendes til oss med én knapp.</span>
+          <span>23 spørsmål. Svarene lagres underveis og sendes til oss med én knapp.</span>
           <span>Slik ser vi det for oss <ArrowDown size={13} aria-hidden="true" /></span>
         </div>
       </div>

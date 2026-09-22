@@ -136,7 +136,7 @@ export async function POST(request: Request) {
   })
   if (res.error) {
     console.error('[havn] send failed', res.error)
-    return NextResponse.json({ error: 'Kunne ikke sende akkurat nå. Svarene ligger fortsatt på telefonen, prøv igjen om litt.' }, { status: 502 })
+    return NextResponse.json({ error: 'Kunne ikke sende akkurat nå. Svarene er tatt vare på, prøv igjen om litt.' }, { status: 502 })
   }
   return NextResponse.json({ ok: true, answered: answers.size })
 }

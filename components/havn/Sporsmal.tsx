@@ -78,13 +78,13 @@ export default function Sporsmal() {
       })
       const data = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string }
       if (!res.ok || !data.ok) {
-        setError(data.error || 'Kunne ikke sende akkurat nå. Svarene ligger fortsatt på telefonen.')
+        setError(data.error || 'Kunne ikke sende akkurat nå. Svarene er tatt vare på.')
         setPhase('edit')
         return
       }
       setPhase('sent')
     } catch {
-      setError('Ingen forbindelse. Svarene ligger fortsatt på telefonen, prøv igjen når dere har dekning.')
+      setError('Ingen forbindelse. Svarene er tatt vare på, prøv igjen når dere er på nett.')
       setPhase('edit')
     }
   }
@@ -97,7 +97,7 @@ export default function Sporsmal() {
             <span className={styles.eyebrow}>Sendt</span>
             <h2 id="sporsmal-title">Tusen takk.</h2>
             <p>{answered} av {total} svar er på vei til oss. Alt er nyttig, også det kritiske.</p>
-            <p className={styles.sentNote}>Svarene ligger fortsatt på telefonen. Kommer dere på mer, kan dere fylle ut og sende igjen.</p>
+            <p className={styles.sentNote}>Svarene ligger fortsatt her i nettleseren. Kommer dere på mer, kan dere fylle ut og sende igjen.</p>
             <div className={styles.sendActions}>
               <ShareButton title="Portlink og Grieg Connect" text="Hvordan Portlink og Grieg Connect kan leve sammen om det samme anløpet, og 23 spørsmål til dere som bruker systemet hver dag." />
               <button type="button" className={styles.secondary} onClick={() => setPhase('edit')}>Tilbake til svarene</button>
@@ -120,7 +120,7 @@ export default function Sporsmal() {
         <div className={styles.progress} role="status" aria-live="polite">
           <span className={styles.progressCount}><b>{answered}</b> av {total}</span>
           <span className={styles.progressBar}><i style={{ width: `${(answered / total) * 100}%` }} /></span>
-          <span className={styles.progressSaved}>{savedAt ? `Lagret ${savedAt}` : 'Lagres på telefonen'}</span>
+          <span className={styles.progressSaved}>{savedAt ? `Lagret ${savedAt}` : 'Lagres underveis'}</span>
         </div>
 
         <form onSubmit={submit} noValidate>

@@ -22,6 +22,10 @@ const KEY = 'portlink-havn-v1'
 type Phase = 'edit' | 'sending' | 'sent'
 type Choice = string | string[]
 
+/** The open question at the end is not a theme: it stays visible on the overview, below the cards. */
+const CARD_GROUPS = GROUPS.filter((g) => g.title !== 'Fritt ord')
+const OPEN_GROUP = GROUPS.find((g) => g.title === 'Fritt ord')
+
 const SHARE_TITLE = 'Portlink og Grieg Connect'
 const SHARE_TEXT = 'Hvordan Portlink og Grieg Connect kan leve sammen om det samme anløpet, og 23 spørsmål til dere som bruker systemet hver dag.'
 
@@ -78,7 +82,7 @@ export default function Sporsmal() {
   )
   const answered = useMemo(() => QUESTIONS.filter(isDone).length, [isDone])
   const total = QUESTIONS.length
-  const doneInGroup = (gi: number) => GROUPS[gi].questions.filter(isDone).length
+  const doneInGroup = (gi: number) => CARD_GROUPS[gi].questions.filter(isDone).length
 
   const setAnswer = useCallback((id: string, value: string) => {
     setAnswers((prev) => ({ ...prev, [id]: value }))
@@ -95,6 +99,40 @@ export default function Sporsmal() {
       return { ...prev, [q.id]: cur === option ? '' : option }
     })
   }, [])
+
+  const renderQuestion = (q: Question) => {
+    const value = answers[q.id] ?? ''
+    const picked = choices[q.id]
+    return (
+      <div key={q.id} className={styles.q} data-done={isDone(q)}>
+        <span className={styles.qNum}>{q.id.slice(1).padStart(2, '0')}</span>
+        <label htmlFor={`havn-${q.id}`} className={styles.qText}>
+          {q.text}
+          {q.hint && <span className={styles.qHint}>{q.hint}</span>}
+        </label>
+        {q.options && (
+          <div className={styles.chips} role="group" aria-label={q.multi ? 'Velg en eller flere' : 'Velg ett'}>
+            {q.options.map((o) => {
+              const on = Array.isArray(picked) ? picked.includes(o) : picked === o
+              return (
+                <button key={o} type="button" className={styles.chip} aria-pressed={on} onClick={() => toggleChoice(q, o)}>
+                  {on && <Check size={13} aria-hidden="true" />}{o}
+                </button>
+              )
+            })}
+            <span className={styles.chipsNote}>{q.multi ? 'Flere kan velges.' : 'Ett valg.'} Utdyp gjerne under.</span>
+          </div>
+        )}
+        <textarea
+          id={`havn-${q.id}`}
+          value={value}
+          onChange={(e) => setAnswer(q.id, e.target.value)}
+          rows={q.options ? 2 : 3}
+          maxLength={4000}
+        />
+      </div>
+    )
+  }
 
   function openGroup(i: number | null) {
     setOpen(i)
@@ -148,7 +186,7 @@ export default function Sporsmal() {
     )
   }
 
-  const group = open === null ? null : GROUPS[open]
+  const group = open === null ? null : CARD_GROUPS[open]
 
   return (
     <section id="sporsmal" className={styles.form} aria-labelledby="sporsmal-title">
@@ -190,7 +228,7 @@ export default function Sporsmal() {
               </div>
 
               <ul className={styles.groupCards} aria-label="Temaer">
-                {GROUPS.map((g, i) => {
+                {CARD_GROUPS.map((g, i) => {
                   const done = doneInGroup(i)
                   const n = g.questions.length
                   const first = Number(g.questions[0].id.slice(1))
@@ -213,12 +251,22 @@ export default function Sporsmal() {
                   )
                 })}
               </ul>
+
+              {OPEN_GROUP && (
+                <fieldset className={`${styles.group} ${styles.openGroup}`}>
+                  <legend className={styles.groupHead}>
+                    <span className={styles.groupTitle}>{OPEN_GROUP.title}</span>
+                    <span className={styles.groupRange}>{OPEN_GROUP.questions[0].id.slice(1)}</span>
+                  </legend>
+                  {OPEN_GROUP.questions.map(renderQuestion)}
+                </fieldset>
+              )}
             </>
           ) : (
             <fieldset className={styles.group}>
               <legend className={styles.groupHead}>
                 <button type="button" className={styles.backLink} onClick={() => openGroup(null)}><ArrowLeft size={15} aria-hidden="true" /> Alle temaer</button>
-                <span className={styles.groupRange}>{open! + 1} av {GROUPS.length}</span>
+                <span className={styles.groupRange}>{open! + 1} av {CARD_GROUPS.length}</span>
               </legend>
               <div className={styles.groupTitleRow}>
                 <span className={styles.groupTitle}>{group.title}</span>
@@ -226,43 +274,11 @@ export default function Sporsmal() {
                 <span className={styles.groupRange}>{doneInGroup(open!)} av {group.questions.length} besvart</span>
               </div>
 
-              {group.questions.map((q) => {
-                const value = answers[q.id] ?? ''
-                const picked = choices[q.id]
-                return (
-                  <div key={q.id} className={styles.q} data-done={isDone(q)}>
-                    <span className={styles.qNum}>{q.id.slice(1).padStart(2, '0')}</span>
-                    <label htmlFor={`havn-${q.id}`} className={styles.qText}>
-                      {q.text}
-                      {q.hint && <span className={styles.qHint}>{q.hint}</span>}
-                    </label>
-                    {q.options && (
-                      <div className={styles.chips} role="group" aria-label={q.multi ? 'Velg en eller flere' : 'Velg ett'}>
-                        {q.options.map((o) => {
-                          const on = Array.isArray(picked) ? picked.includes(o) : picked === o
-                          return (
-                            <button key={o} type="button" className={styles.chip} aria-pressed={on} onClick={() => toggleChoice(q, o)}>
-                              {on && <Check size={13} aria-hidden="true" />}{o}
-                            </button>
-                          )
-                        })}
-                        <span className={styles.chipsNote}>{q.multi ? 'Flere kan velges.' : 'Ett valg.'} Utdyp gjerne under.</span>
-                      </div>
-                    )}
-                    <textarea
-                      id={`havn-${q.id}`}
-                      value={value}
-                      onChange={(e) => setAnswer(q.id, e.target.value)}
-                      rows={q.options ? 2 : 3}
-                      maxLength={4000}
-                    />
-                  </div>
-                )
-              })}
+              {group.questions.map(renderQuestion)}
 
               <div className={styles.groupNav}>
                 <button type="button" className={styles.secondary} disabled={open === 0} onClick={() => openGroup(open! - 1)}><ArrowLeft size={15} aria-hidden="true" /> Forrige tema</button>
-                {open! < GROUPS.length - 1 ? (
+                {open! < CARD_GROUPS.length - 1 ? (
                   <button type="button" className={styles.primary} onClick={() => openGroup(open! + 1)}>Neste tema <ArrowRight size={15} aria-hidden="true" /></button>
                 ) : (
                   <button type="button" className={styles.primary} onClick={() => openGroup(null)}>Til oversikten <ArrowRight size={15} aria-hidden="true" /></button>

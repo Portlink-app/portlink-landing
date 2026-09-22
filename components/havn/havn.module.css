@@ -188,6 +188,7 @@
 .chip:hover { background: var(--ds-surface-2); }
 .chip[aria-pressed='true'] { background: var(--ds-primary); border-color: var(--ds-primary); color: var(--ds-primary-ink); }
 .chipsNote { flex-basis: 100%; font-size: 12px; color: var(--ds-text-3); }
+.openGroup { margin-top: 30px; }
 .groupNav { display: flex; justify-content: space-between; gap: 12px; margin-top: 26px; }
 .groupNav .primary, .groupNav .secondary { gap: 8px; }
 .groupNav .secondary:disabled { opacity: .4; cursor: default; }

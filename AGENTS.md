@@ -41,8 +41,16 @@ Run `npm run build` and `npm run verify`. The build checks rendered scene pairs 
 Always include a verified Tailscale URL when sharing this preview. Current private endpoint:
 `https://nyxs-mac-studio.tail79b0ec.ts.net:4320/`, forwarding to `http://127.0.0.1:4320/`.
 The same URL is used from the Mac Studio, MacBook and iPhone when connected to Tailscale.
-The underlying optimized preview is `npm run start -- --hostname 127.0.0.1 --port 4320`.
+Manage the persistent optimized preview with `node scripts/preview-service.mjs start|stop|restart|status`.
+The script installs `app.portlink.landing-preview-4320` as a user LaunchAgent with automatic restart.
+Never share a preview backed only by a tool-owned foreground or background process.
+Before rebuilding: `node scripts/preview-service.mjs stop`; after a successful build, use `start`.
+Before sharing: `node scripts/preview-service.mjs check https://nyxs-mac-studio.tail79b0ec.ts.net:4320/`,
+then verify actual browser rendering. The health check fetches both pages and their scripts/styles/fonts.
 Inspect live status with `/Applications/Tailscale.app/Contents/MacOS/Tailscale serve status --json`.
 Preserve unrelated routes. This endpoint is private Serve, not public Funnel. Browser loading on
-this Mac was verified on 19.09.2026; a remote-device browser test was not performed.
+this Mac was verified on 22.09.2026; a remote-device browser test was not performed.
+The host must be awake, signed in and connected to Tailscale. Public `https://portlink.app/` is independent of it.
+Logs: `~/Library/Logs/PortlinkLandingPreview/server.log` and `server.err`.
+The older `app.portlink.landing-preview` label serves a separate legacy worktree on 4611; it does not own 4320.
 To remove just this endpoint: `/Applications/Tailscale.app/Contents/MacOS/Tailscale serve --https=4320 off`.

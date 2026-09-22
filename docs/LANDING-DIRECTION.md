@@ -56,7 +56,7 @@ Source-mapped on 20.09.2026: platform booking acceptance, shore intake, PDA revi
 
 ## Verification evidence
 
-Measured on 19.09.2026 in the in-app browser. The Chrome extension timed out; the in-app browser is the working surface. Development preview uses port 4319; optimized production preview uses `npm run start -- --hostname 127.0.0.1 --port 4320`. Stop the production server before rebuilding and restart it afterwards so a running server cannot serve stale chunk references.
+Measured on 19.09.2026 in the in-app browser. The Chrome extension timed out; the in-app browser is the working surface. Development preview uses port 4319. Updated 22.09.2026: the shared optimized preview uses `node scripts/preview-service.mjs start` on port 4320, supervised by launchd. Use its `stop` command before rebuilding and `start` afterwards so a running server cannot serve stale chunk references. The current availability evidence is in the active improvement register.
 
 - Desktop: every chapter reached through arrow keys, one selected tab and one visible panel, one visible Wide layout and no visible Narrow layout. Home and End select the endpoints. Direct `#finance` loads Finance. Light and dark themes visually inspected.
 - Phone: every chapter selected at 390 by 844, one visible panel and no horizontal overflow. Hero, product explorer and connected-record composition visually inspected. At width 320 the first diagram draft overlapped. Flexible node widths and a taller diagram fixed it: `nodeOverlaps: []`, `recordOverlaps: []`, `clippedNodes: []`, `overflow: false` after triggering the update.

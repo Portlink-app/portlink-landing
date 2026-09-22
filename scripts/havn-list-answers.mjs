@@ -25,7 +25,17 @@ if (!siteID || !token) {
 }
 
 const store = getStore({ name: 'havn-answers', siteID, token, consistency: 'strong' })
-const { blobs } = await store.list({ prefix: 'submission/' })
+let blobs
+try {
+  ;({ blobs } = await store.list({ prefix: 'submission/' }))
+} catch (err) {
+  const status = err && typeof err === 'object' && 'status' in err ? err.status : undefined
+  if (status === 401 || status === 403) {
+    console.error(`havn-list-answers: Netlify svarte ${status}. Tokenet er ugyldig, utlopt, eller fra en annen Netlify-konto enn Portlink (site ${siteID}).`)
+    process.exit(3)
+  }
+  throw err
+}
 const rows = []
 for (const b of blobs) {
   const s = await store.get(b.key, { type: 'json' })

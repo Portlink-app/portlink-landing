@@ -170,7 +170,18 @@
 .groupCard { width: 100%; text-align: left; display: flex; flex-direction: column; gap: 10px; padding: 16px 16px 14px; background: var(--ds-surface-1); border: 1px solid var(--ds-border-1); border-radius: var(--ds-radius-lg); font: inherit; color: var(--ds-text-1); cursor: pointer; transition: border-color var(--ds-dur-2) var(--ds-ease-standard), box-shadow var(--ds-dur-2) var(--ds-ease-standard); }
 .groupCard:hover { border-color: var(--ds-border-2); box-shadow: var(--ds-shadow-1); }
 .groupCard[data-complete='true'] { border-color: var(--ds-success); }
+.groupCard[data-complete='true'] .groupCardIcon { background: var(--ds-success-bg); color: var(--ds-success-text); }
 .groupCardTop { display: flex; align-items: center; gap: 8px; }
+.groupCardIcon { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: var(--card-tint); color: var(--card-ink); margin-right: 2px; flex-shrink: 0; }
+.groupCardBlurb { font-size: 13px; line-height: 1.5; color: var(--ds-text-3); margin-top: -4px; }
+.groupCard { --card-tint: var(--ds-surface-2); --card-ink: var(--ds-text-2); }
+.groupCard[data-tone='accent'] { --card-tint: var(--ds-accent-subtle); --card-ink: var(--ds-accent-strong); }
+.groupCard[data-tone='info'] { --card-tint: var(--ds-info-bg); --card-ink: var(--ds-info-text); }
+.groupCard[data-tone='success'] { --card-tint: var(--ds-success-bg); --card-ink: var(--ds-success-text); }
+.groupCard[data-tone='warning'] { --card-tint: var(--ds-warning-bg); --card-ink: var(--ds-warning-text); }
+.groupCard[data-tone='primary'] { --card-tint: var(--ds-primary-faint); --card-ink: var(--ds-primary); }
+.groupCard[data-tone='neutral'] { --card-tint: var(--ds-surface-3); --card-ink: var(--ds-text-2); }
+.groupCard:hover .groupCardIcon { box-shadow: 0 0 0 4px var(--card-tint); }
 .groupCardRange { font: 12px var(--ds-font-mono); color: var(--ds-text-3); }
 .groupCard strong { font-size: 16px; font-weight: 600; letter-spacing: -.01em; line-height: 1.3; }
 .groupCardMeta { display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--ds-text-3); }

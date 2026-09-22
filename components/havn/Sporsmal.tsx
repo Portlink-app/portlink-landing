@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
-import { ArrowLeft, ArrowRight, Check, ChevronRight } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Check, ChevronRight, Map, MousePointerClick, Receipt, Ship, Star, Telescope, type LucideIcon } from 'lucide-react'
 import { GROUPS, QUESTIONS, type Question } from '@/lib/havn/questions'
 import ShareButton from './ShareButton'
 import styles from './havn.module.css'
@@ -25,6 +25,20 @@ type Choice = string | string[]
 /** The open question at the end is not a theme: it stays visible on the overview, below the cards. */
 const CARD_GROUPS = GROUPS.filter((g) => g.title !== 'Fritt ord')
 const OPEN_GROUP = GROUPS.find((g) => g.title === 'Fritt ord')
+
+/**
+ * What tells the six theme cards apart: a mark, a tint and one line saying what the theme covers.
+ * Six identical white cards read as one (Kris, 22.09.2026: "monotont, vanskelig å skille temaene").
+ * Tints are the DS's semantic grounds, so they stay legible in both themes.
+ */
+const THEME: Record<string, { icon: LucideIcon; tone: string; blurb: string }> = {
+  'De fem viktigste': { icon: Star, tone: 'accent', blurb: 'Kai, klarhet, ETA, agentene og Grieg-prosjektet.' },
+  'Dag til dag i Grieg Connect': { icon: MousePointerClick, tone: 'info', blurb: 'Klikkene, kaiplanen, endringer, Port GO og migreringen.' },
+  'Penger og rapportering': { icon: Receipt, tone: 'success', blurb: 'Fra anløp til faktura, og rapporteringen til myndighetene.' },
+  'Cruise spesielt': { icon: Ship, tone: 'warning', blurb: 'Cruise mot last, los og taubåt, passasjerlister.' },
+  'Havnedistriktet og trafikken': { icon: Map, tone: 'primary', blurb: 'Supply, ubemannede kaier, miljøavgift, vær og vind.' },
+  'Det store bildet': { icon: Telescope, tone: 'neutral', blurb: 'Verktøyet ved siden av, API-et og den største frustrasjonen.' },
+}
 
 const SHARE_TITLE = 'Portlink og Grieg Connect'
 const SHARE_TEXT = 'Hvordan Portlink og Grieg Connect kan leve sammen om det samme anløpet, og 23 spørsmål til dere som bruker systemet hver dag.'
@@ -233,14 +247,18 @@ export default function Sporsmal() {
                   const n = g.questions.length
                   const first = Number(g.questions[0].id.slice(1))
                   const last = Number(g.questions[n - 1].id.slice(1))
+                  const theme = THEME[g.title]
+                  const Icon = theme?.icon
                   return (
                     <li key={g.title}>
-                      <button type="button" className={styles.groupCard} data-complete={done === n} onClick={() => openGroup(i)}>
+                      <button type="button" className={styles.groupCard} data-complete={done === n} data-tone={theme?.tone} onClick={() => openGroup(i)}>
                         <span className={styles.groupCardTop}>
+                          {Icon && <span className={styles.groupCardIcon}><Icon size={18} strokeWidth={1.75} aria-hidden="true" /></span>}
                           <span className={styles.groupCardRange}>{first === last ? first : `${first} til ${last}`}</span>
                           {g.badge && <span className={styles.pill}>{g.badge}</span>}
                         </span>
                         <strong>{g.title}</strong>
+                        {theme && <span className={styles.groupCardBlurb}>{theme.blurb}</span>}
                         <span className={styles.groupCardMeta}>
                           <span className={styles.groupCardBar}><i style={{ width: `${(done / n) * 100}%` }} /></span>
                           <span>{done === n ? <><Check size={13} aria-hidden="true" /> Ferdig</> : `${done} av ${n}`}</span>

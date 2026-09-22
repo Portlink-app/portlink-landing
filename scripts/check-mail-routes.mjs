@@ -77,6 +77,10 @@ const EXEMPT = [
     route: 'app/api/seatrade/export/route.ts',
     reason: 'Seatrade funnel: admin CSV export, sent to ADMIN_EMAIL only and never to a caller-supplied address.',
   },
+  {
+    route: 'app/api/havn/route.ts',
+    reason: 'Port-operator interview answers (portlink.app/portlink+griegconnect), sent to the constant Portlink inbox only and never to a caller-supplied address.',
+  },
 ]
 
 const rel = (p) => path.relative(ROOT, p).split(path.sep).join('/')

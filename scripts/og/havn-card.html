@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<title>Share card: portlink.app/portlink+griegconnect</title>
+<!-- Rendered to public/og/havn-2026-09-22.png at exactly 1200x630 (scripts/build-og-card.sh
+     documents the contract). Kristiansund harbour on Portlink's own chart, a navy statement panel
+     on top. The chart image is the same frame the page shows in its chart chapter. -->
+<link rel="stylesheet" href="../../app/_ds/portlink-tokens.dist.css">
+<style>
+  html, body { margin: 0; width: 1200px; height: 630px; overflow: hidden; }
+  body { position: relative; font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif; background: #0f2340; }
+  .chart { position: absolute; inset: 0; width: 1200px; height: 630px; object-fit: cover; object-position: 62% 50%; }
+  .shade { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(15,35,64,.97) 0%, rgba(15,35,64,.92) 42%, rgba(15,35,64,.15) 68%, rgba(15,35,64,0) 100%); }
+  .panel { position: absolute; left: 72px; top: 0; bottom: 0; width: 560px; display: flex; flex-direction: column; justify-content: center; color: #f2f5f9; }
+  .marks { display: flex; align-items: center; gap: 14px; margin-bottom: 34px; }
+  .marks img { height: 30px; width: auto; }
+  .marks .x { font-size: 20px; opacity: .6; }
+  .marks .gc { display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 600; letter-spacing: -.01em; }
+  .marks .gc img { height: 26px; }
+  h1 { font-size: 58px; line-height: 1.04; letter-spacing: -.045em; font-weight: 600; margin: 0 0 22px; }
+  p { font-size: 20px; line-height: 1.45; margin: 0; color: rgba(242,245,249,.82); max-width: 30ch; }
+  .url { position: absolute; left: 72px; bottom: 44px; font: 14px 'JetBrains Mono', Menlo, monospace; letter-spacing: .04em; color: rgba(242,245,249,.75); }
+  .cap { position: absolute; right: 40px; bottom: 44px; font: 12px 'JetBrains Mono', Menlo, monospace; letter-spacing: .08em; text-transform: uppercase; color: rgba(242,245,249,.85); background: rgba(15,35,64,.72); padding: 8px 12px; border-radius: 6px; }
+</style>
+</head>
+<body>
+  <img class="chart" src="../../public/havn/kristiansund-chart.jpg" alt="">
+  <div class="shade"></div>
+  <div class="panel">
+    <div class="marks">
+      <img src="../../public/portlink-logo.png" alt="Portlink" style="filter: brightness(0) invert(1)">
+      <span class="x">×</span>
+      <span class="gc"><img src="../../public/havn/grieg-connect.png" alt=""> Grieg Connect</span>
+    </div>
+    <h1>Havna har Grieg Connect. Resten av anløpet har e-post.</h1>
+    <p>Hvordan de to kan leve sammen om det samme anløpet, og 22 spørsmål til dere som bruker systemet hver dag.</p>
+  </div>
+  <div class="url">portlink.app/portlink+griegconnect</div>
+  <div class="cap">Kristiansund havn på Portlinks eget sjøkart</div>
+</body>
+</html>

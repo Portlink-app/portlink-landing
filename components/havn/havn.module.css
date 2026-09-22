@@ -164,6 +164,34 @@
 .sent p { font-size: 16px; line-height: 1.7; color: var(--ds-text-2); margin: 0 0 12px; }
 .sentNote { font-size: 14px; color: var(--ds-text-3); margin-bottom: 22px; }
 
+/* ── group cards + chips (the two-layer answer sheet) ───────────────────── */
+.formAnchor { scroll-margin-top: 110px; }
+.groupCards { list-style: none; margin: 26px 0 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.groupCard { width: 100%; text-align: left; display: flex; flex-direction: column; gap: 10px; padding: 16px 16px 14px; background: var(--ds-surface-1); border: 1px solid var(--ds-border-1); border-radius: var(--ds-radius-lg); font: inherit; color: var(--ds-text-1); cursor: pointer; transition: border-color var(--ds-dur-2) var(--ds-ease-standard), box-shadow var(--ds-dur-2) var(--ds-ease-standard); }
+.groupCard:hover { border-color: var(--ds-border-2); box-shadow: var(--ds-shadow-1); }
+.groupCard[data-complete='true'] { border-color: var(--ds-success); }
+.groupCardTop { display: flex; align-items: center; gap: 8px; }
+.groupCardRange { font: 12px var(--ds-font-mono); color: var(--ds-text-3); }
+.groupCard strong { font-size: 16px; font-weight: 600; letter-spacing: -.01em; line-height: 1.3; }
+.groupCardMeta { display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--ds-text-3); }
+.groupCardMeta > span:not(.groupCardBar) { display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
+.groupCard[data-complete='true'] .groupCardMeta > span:not(.groupCardBar) { color: var(--ds-success-text); }
+.groupCardBar { flex: 1; height: 4px; border-radius: var(--ds-radius-pill); background: var(--ds-surface-3); overflow: hidden; }
+.groupCardBar i { display: block; height: 100%; background: var(--ds-accent); transition: width var(--ds-dur-3) var(--ds-ease-standard); }
+.groupCard[data-complete='true'] .groupCardBar i { background: var(--ds-success); }
+.groupCardChevron { margin-left: auto; color: var(--ds-text-3); flex-shrink: 0; }
+.backLink { display: inline-flex; align-items: center; gap: 6px; font: inherit; font-size: 13px; font-weight: 600; color: var(--ds-primary); background: transparent; border: 0; padding: 4px 0; cursor: pointer; }
+.groupTitleRow { display: flex; align-items: baseline; gap: 10px; margin-top: 14px; }
+.groupTitleRow .groupRange { margin-left: auto; }
+.chips { grid-column: 2; display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; align-items: center; }
+.chip { display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 8px 14px; border-radius: var(--ds-radius-pill); border: 1px solid var(--ds-border-2); background: var(--ds-surface-1); color: var(--ds-text-1); font: inherit; font-size: 14px; font-weight: 500; cursor: pointer; transition: background var(--ds-dur-2) var(--ds-ease-standard), border-color var(--ds-dur-2) var(--ds-ease-standard); }
+.chip:hover { background: var(--ds-surface-2); }
+.chip[aria-pressed='true'] { background: var(--ds-primary); border-color: var(--ds-primary); color: var(--ds-primary-ink); }
+.chipsNote { flex-basis: 100%; font-size: 12px; color: var(--ds-text-3); }
+.groupNav { display: flex; justify-content: space-between; gap: 12px; margin-top: 26px; }
+.groupNav .primary, .groupNav .secondary { gap: 8px; }
+.groupNav .secondary:disabled { opacity: .4; cursor: default; }
+
 /* ── moduler ─────────────────────────────────────────────────────────────── */
 .moduler { padding: clamp(48px, 7vw, 88px) 20px; border-top: 1px solid var(--ds-border-1); }
 .modulerInner { max-width: 1160px; margin: auto; }
@@ -241,6 +269,7 @@
   .portShots, .founders { grid-template-columns: 1fr; }
   .moduler, .hilsen { padding-inline: 16px; }
   .brandPort { font-size: 14px; white-space: nowrap; }
+  .headerCta { font-size: 12px; padding: 7px 10px; }
   /* The module map stacks into cards on a phone: a three-column table at 390 px clips its own
      text behind a horizontal scroll, which reads as broken. */
   .modulerTableWrap { overflow: visible; }
@@ -253,6 +282,9 @@
   .modulerTable td { font-size: 14px; margin-bottom: 8px; }
   .modulerTable td:last-child { margin-bottom: 0; padding-top: 4px; }
   .progressSaved { display: none; }
+  .groupCards { grid-template-columns: 1fr; }
+  .groupNav { flex-direction: column-reverse; }
+  .groupNav .primary, .groupNav .secondary { width: 100%; }
   .sendRow { flex-direction: column; align-items: stretch; }
   .sendRow p { order: 2; text-align: center; }
   .sendActions { flex-direction: column; align-items: stretch; }
@@ -264,4 +296,8 @@
   .beamPulse, .beamGlow { animation: none; stroke-dasharray: none; }
   .beamGlow { display: none; }
   .beamPulse { stroke-opacity: .5; }
+}
+@media (max-width: 430px) {
+  /* Two wordmarks and a button do not fit a 375 px header: the partner name gives way to its mark. */
+  .brandPort > span { display: none; }
 }

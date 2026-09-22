@@ -16,6 +16,10 @@ export interface Question {
   text: string
   /** Optional second line: the concrete things to think about. */
   hint?: string
+  /** Tap-first answers, where the alternatives are known. Free text stays available underneath. */
+  options?: readonly string[]
+  /** More than one option may be picked (sources of an ETA, channels an agent uses). */
+  multi?: boolean
 }
 
 export interface QuestionGroup {
@@ -44,11 +48,15 @@ export const GROUPS: readonly QuestionGroup[] = [
         id: 'q3',
         text: 'Hvor kommer den faktiske ETA-en fra i praksis?',
         hint: 'SafeSeaNet, AIS, agenten eller telefonen? Hvor ofte er den feil, og hva koster det når den er feil (folk som venter på kaia, los som må ombookes)?',
+        options: ['SafeSeaNet', 'AIS', 'Agenten', 'Telefon eller e-post'],
+        multi: true,
       },
       {
         id: 'q4',
         text: 'Bruker agentene deres Port Community-portalen fra Grieg Connect, eller sender de fortsatt e-post og ringer?',
         hint: 'Hva sier agentene selv om portalen?',
+        options: ['Port Community-portalen', 'E-post', 'Telefon'],
+        multi: true,
       },
       {
         id: 'q5',
@@ -78,11 +86,13 @@ export const GROUPS: readonly QuestionGroup[] = [
       {
         id: 'q9',
         text: 'Bruker kaifolkene mobilappen Port GO ute, eller etterregistreres tjenester på kontoret etterpå?',
+        options: ['Ja, ute på kaia', 'Delvis', 'Nei, registreres på kontoret'],
       },
       {
         id: 'q10',
         text: 'Nettsiden deres sier «Portwin» og «under oppdatering». Er dere ferdig migrert til Grieg Connects nye system?',
         hint: 'Hvordan var den overgangen?',
+        options: ['Ja, ferdig', 'Delvis', 'Nei', 'Vet ikke'],
       },
     ],
   },
@@ -116,6 +126,8 @@ export const GROUPS: readonly QuestionGroup[] = [
         id: 'q15',
         text: 'Passasjer- og mannskapslister: hvem sender dem til dere, og hvordan holdes de oppdatert?',
         hint: 'Kommer de via SafeSeaNet, fra agenten eller på e-post? Hvor ofte endres listene etter innsending, og hvem må rette dem hos politi, toll og ISPS? En havn vi møtte på Seatrade slet mest med akkurat dette.',
+        options: ['SafeSeaNet', 'Fra agenten', 'På e-post', 'Vi får dem ikke'],
+        multi: true,
       },
     ],
   },
@@ -135,6 +147,7 @@ export const GROUPS: readonly QuestionGroup[] = [
       {
         id: 'q18',
         text: 'Miljøavgift, EPI og landstrøm: bruker dere Environmental Port Index for cruise, hvem sjekker rapporten, og hvordan bestilles og prises landstrøm?',
+        options: ['Havna', 'Kapteinen om bord', 'Losen', 'Flere sammen'],
       },
       {
         id: 'q19',
@@ -154,6 +167,7 @@ export const GROUPS: readonly QuestionGroup[] = [
         id: 'q21',
         text: 'Slipper Grieg Connect tredjeparter inn via API-et sitt, eller er det bare ERP og Visma?',
         hint: 'Vet dere om noen agent eller rederi som er integrert maskin til maskin, som Sea-Cargo i Bergen?',
+        options: ['Ja, tredjeparter slipper inn', 'Bare ERP og Visma', 'Vet ikke'],
       },
       {
         id: 'q22',
@@ -176,6 +190,8 @@ export const GROUPS: readonly QuestionGroup[] = [
 export const QUESTIONS: readonly Question[] = GROUPS.flatMap((g) => g.questions)
 
 export const QUESTION_IDS: ReadonlySet<string> = new Set(QUESTIONS.map((q) => q.id))
+
+export const QUESTION_BY_ID: ReadonlyMap<string, Question> = new Map(QUESTIONS.map((q) => [q.id, q]))
 
 /** Per-answer ceiling. Generous for stikkord, tight enough that a script cannot mail a novel. */
 export const ANSWER_MAX = 4000

@@ -17,7 +17,7 @@
 import { NextResponse } from 'next/server'
 import { Resend } from 'resend'
 import { escapeHtml as esc, wrap } from '@/lib/email/wrap'
-import { ANSWER_MAX, GROUPS, QUESTION_IDS, WHO_MAX } from '@/lib/havn/questions'
+import { ANSWER_MAX, GROUPS, QUESTION_BY_ID, QUESTION_IDS, WHO_MAX } from '@/lib/havn/questions'
 import { clientIp, rateLimit } from '@/lib/rateLimit'
 
 export const dynamic = 'force-dynamic'
@@ -34,6 +34,8 @@ interface Body {
   [key: string]: unknown
   who?: unknown
   answers?: unknown
+  /** Tap-first picks per question id: a string, or a string array for multi questions. */
+  choices?: unknown
   /** Honeypot. Off-screen and tab-skipped in the form, so only a script fills it. */
   website?: unknown
 }
@@ -68,8 +70,20 @@ export async function POST(request: Request) {
     const text = str(value, ANSWER_MAX)
     if (text) answers.set(key, text)
   }
-  if (answers.size === 0) {
-    return NextResponse.json({ error: 'Skriv minst ett svar før du sender.' }, { status: 400 })
+  // Choices: only known ids, only the options that question actually offers. Anything else is dropped.
+  const choices = new Map<string, string[]>()
+  const rawChoices = body.choices
+  if (rawChoices && typeof rawChoices === 'object' && !Array.isArray(rawChoices)) {
+    for (const [key, value] of Object.entries(rawChoices as Record<string, unknown>)) {
+      const q = QUESTION_BY_ID.get(key)
+      if (!q?.options) continue
+      const list = (Array.isArray(value) ? value : [value]).filter((v): v is string => typeof v === 'string' && q.options!.includes(v))
+      if (list.length) choices.set(key, q.multi ? list : list.slice(0, 1))
+    }
+  }
+  const answeredIds = new Set([...answers.keys(), ...choices.keys()])
+  if (answeredIds.size === 0) {
+    return NextResponse.json({ error: 'Svar på minst ett spørsmål før du sender.' }, { status: 400 })
   }
 
   const ip = clientIp(request)
@@ -82,20 +96,24 @@ export async function POST(request: Request) {
 
   const sentAt = new Date()
   const stamp = sentAt.toLocaleString('nb-NO', { timeZone: 'Europe/Oslo', dateStyle: 'medium', timeStyle: 'short' })
-  const subject = `Havnesvar${who ? ` fra ${who}` : ''} (${answers.size} av ${QUESTION_IDS.size})`
+  const subject = `Havnesvar${who ? ` fra ${who}` : ''} (${answeredIds.size} av ${QUESTION_IDS.size})`
 
   const htmlGroups = GROUPS.map((group) => {
     const rows = group.questions
       .map((q) => {
         const a = answers.get(q.id)
+        const c = choices.get(q.id)
         const number = q.id.slice(1).padStart(2, '0')
+        const choiceHtml = c
+          ? `<p style="margin:6px 0 0;font-size:13px;color:#1e4a6e"><strong>Valgt:</strong> ${esc(c.join(', '))}</p>`
+          : ''
         const answerHtml = a
           ? `<p style="margin:6px 0 0;font-size:14px;line-height:1.6;color:#111827;white-space:pre-wrap">${esc(a)}</p>`
-          : `<p style="margin:6px 0 0;font-size:13px;color:#94a3b8">Ikke besvart</p>`
+          : c ? '' : `<p style="margin:6px 0 0;font-size:13px;color:#94a3b8">Ikke besvart</p>`
         return `<tr><td style="padding:14px 0;border-bottom:1px solid #e2e8f0">
           <p style="margin:0;font-size:12px;color:#94a3b8;font-family:'JetBrains Mono',Menlo,monospace">${number}</p>
           <p style="margin:4px 0 0;font-size:14px;font-weight:600;color:#1e4a6e;line-height:1.45">${esc(q.text)}</p>
-          ${answerHtml}
+          ${choiceHtml}${answerHtml}
         </td></tr>`
       })
       .join('')
@@ -106,21 +124,22 @@ export async function POST(request: Request) {
   const html = wrap(
     `<p style="margin:0 0 6px;font-size:12px;color:#94a3b8">${esc(stamp)} (Oslo)</p>
      <h1 style="margin:0 0 8px;font-size:22px;color:#111827">Svar fra havnefolk</h1>
-     <p style="margin:0;font-size:14px;color:#374151;line-height:1.6">${who ? `Fra: <strong>${esc(who)}</strong>. ` : ''}${answers.size} av ${QUESTION_IDS.size} spørsmål besvart via portlink.app/portlink+griegconnect.</p>
+     <p style="margin:0;font-size:14px;color:#374151;line-height:1.6">${who ? `Fra: <strong>${esc(who)}</strong>. ` : ''}${answeredIds.size} av ${QUESTION_IDS.size} spørsmål besvart via portlink.app/portlink+griegconnect.</p>
      ${htmlGroups}`,
-    { preheader: `${answers.size} svar${who ? ` fra ${who}` : ''}` },
+    { preheader: `${answeredIds.size} svar${who ? ` fra ${who}` : ''}` },
   )
 
   const text = [
     `Svar fra havnefolk, ${stamp} (Oslo)`,
     who ? `Fra: ${who}` : '',
-    `${answers.size} av ${QUESTION_IDS.size} besvart.`,
+    `${answeredIds.size} av ${QUESTION_IDS.size} besvart.`,
     '',
     ...GROUPS.flatMap((group) => [
       `== ${group.title} ==`,
       ...group.questions.flatMap((q) => [
         `${q.id.slice(1).padStart(2, '0')}. ${q.text}`,
-        answers.get(q.id) ?? '(ikke besvart)',
+        ...(choices.get(q.id) ? [`Valgt: ${choices.get(q.id)!.join(', ')}`] : []),
+        answers.get(q.id) ?? (choices.get(q.id) ? '' : '(ikke besvart)'),
         '',
       ]),
     ]),
@@ -138,5 +157,5 @@ export async function POST(request: Request) {
     console.error('[havn] send failed', res.error)
     return NextResponse.json({ error: 'Kunne ikke sende akkurat nå. Svarene er tatt vare på, prøv igjen om litt.' }, { status: 502 })
   }
-  return NextResponse.json({ ok: true, answered: answers.size })
+  return NextResponse.json({ ok: true, answered: answeredIds.size })
 }

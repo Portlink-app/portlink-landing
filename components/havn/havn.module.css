@@ -105,10 +105,11 @@
 .chapterFigure { display: none; margin: 18px 0 0; }
 .chapterFigure img, .frame img { display: block; width: 100%; height: auto; border: 1px solid var(--ds-border-1); border-radius: var(--ds-radius-lg); box-shadow: var(--ds-shadow-3); background: var(--ds-surface-1); }
 .storySticky { position: sticky; top: 92px; }
-.frame { position: relative; }
-.frame img { position: absolute; inset: 0; opacity: 0; transition: opacity var(--ds-dur-3) var(--ds-ease-standard); }
-.frame img:first-child { position: relative; }
-.frame img[data-active='true'] { opacity: 1; }
+/* One fixed box for every chapter, whatever each screenshot's own height, so a swap never moves
+   the frame; the images cross-fade in place with a slow settle instead of a cut. */
+.frame { position: relative; aspect-ratio: 1440 / 1000; }
+.frame img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; opacity: 0; transform: scale(1.012); transition: opacity 620ms var(--ds-ease-standard), transform 620ms var(--ds-ease-standard); }
+.frame img[data-active='true'] { opacity: 1; transform: none; }
 
 .portSide { margin-top: clamp(48px, 6vw, 80px); padding-top: 40px; border-top: 1px solid var(--ds-border-1); display: grid; grid-template-columns: .8fr 1.2fr; gap: 56px; align-items: start; }
 .portSideHeading h3 { font-family: var(--ds-font-display); font-size: clamp(24px, 2.4vw, 32px); letter-spacing: -.03em; line-height: 1.2; font-weight: 600; margin: 14px 0 12px; }

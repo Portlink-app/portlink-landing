@@ -61,18 +61,35 @@ export default function Story() {
   const refs = useRef<(HTMLDivElement | null)[]>([])
   const reveal = useReveal(0.01)
 
+  // The active chapter is the one whose centre is nearest the middle of the viewport, measured on
+  // scroll through one animation frame. Deterministic: at any scroll position exactly one chapter
+  // wins, so the frame never flips back and forth at a boundary. The IntersectionObserver this
+  // replaced (22.09.2026) reported two chapters as intersecting inside its band and picked by a
+  // coarse ratio, which read as the image jumping to the next one and back once per chapter.
   useEffect(() => {
-    const io = new IntersectionObserver(
-      (entries) => {
-        const visible = entries.filter((e) => e.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0]
-        if (!visible) return
-        const idx = refs.current.indexOf(visible.target as HTMLDivElement)
-        if (idx >= 0) setActive(idx)
-      },
-      { rootMargin: '-40% 0px -40% 0px', threshold: [0, 0.25, 0.5, 0.75, 1] },
-    )
-    refs.current.forEach((el) => el && io.observe(el))
-    return () => io.disconnect()
+    let raf = 0
+    const measure = () => {
+      raf = 0
+      const mid = window.innerHeight / 2
+      let best = 0
+      let bestDist = Infinity
+      refs.current.forEach((el, i) => {
+        if (!el) return
+        const r = el.getBoundingClientRect()
+        const d = Math.abs(r.top + r.height / 2 - mid)
+        if (d < bestDist) { bestDist = d; best = i }
+      })
+      setActive((prev) => (prev === best ? prev : best))
+    }
+    const onScroll = () => { if (!raf) raf = window.requestAnimationFrame(measure) }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll)
+    onScroll()
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+      if (raf) window.cancelAnimationFrame(raf)
+    }
   }, [])
 
   return (

@@ -12,17 +12,12 @@
  *   - draw fields and storage: the Lead interface in lib/seatrade/store.ts, saved to Netlify Blobs
  *   - audience: resend.contacts.create against RESEND_AUDIENCE_ID in app/api/seatrade/route.ts
  *   - leaderboard exposure: lib/seatrade/leaderboard.ts, first name and company only
- *   - visitor identification: the Ospry tag in app/layout.tsx (lib/ospry.ts). What it does is the
- *     vendor's published summary at OSPRY_LEGAL_URL, attributed to Ospry on the page, because the
- *     tag's own behaviour could not be measured yet (docs/OSPRY.md). Ospry's terms require this
- *     section: privacy language that describes the tag, and a route to the opt-out.
  * If one of those changes, this page is wrong and must change in the same commit.
  */
 import Link from 'next/link'
 import PageNav from '@/components/PageNav'
 import Footer from '@/components/sections/Footer'
 import { ADMIN_EMAIL, TERMS_PATH } from '@/lib/seatrade/config'
-import { OSPRY_LEGAL_URL } from '@/lib/ospry'
 
 export const metadata = {
   title: 'Privacy · Portlink',
@@ -42,10 +37,8 @@ export default function Privacy() {
             Privacy
           </h1>
           <p style={{ ...p, color: 'var(--text-muted)' }}>
-            Two forms on this website collect personal data, and one tag from a visitor identification
-            service can recognise business visitors if you allow it. This page says what each one takes,
-            what happens to it, and how to have it removed. Nothing else on the site collects anything
-            about you.
+            Two forms on this website collect personal data. This page says what each one takes, what
+            happens to it, and how to have it removed. Nothing else on the site collects anything about you.
           </p>
 
           <h2 style={h}>Requesting pilot access</h2>
@@ -82,22 +75,6 @@ export default function Privacy() {
             entries</strong>. It never shows an email address, an email domain or your benchmark score, and
             people who have unsubscribed are not listed at all. Ask us and we will take you off the board
             while keeping your entries.
-          </p>
-
-          <h2 style={h}>Recognising business visitors</h2>
-          <p style={p}>
-            Every page carries a tag from Ospry, a service of Legion Code Inc. in the United States. It
-            tells us which companies visit the site and which pages they read. For visitors located in the
-            United States it can also name the person; for everyone else it stops at the company.
-          </p>
-          <p style={p}>
-            Ospry states that its consent banner asks first, and that nothing identifies you until you
-            accept it. For the identification results, Ospry and the data providers behind it each act as
-            an independent controller, so their own policies govern that data. Ospry lets anyone opt out and
-            have their data deleted, whether or not they have an account, and honours Global Privacy
-            Control signals. Its policies, including how to opt out, are
-            at <a href={OSPRY_LEGAL_URL} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--brand)' }}>ospry.ai/legal</a>.
-            To have anything we received about you deleted on our side, write to the address below.
           </p>
 
           <h2 style={h}>Where it is stored, and who else sees it</h2>

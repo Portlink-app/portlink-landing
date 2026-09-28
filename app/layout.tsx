@@ -9,7 +9,6 @@ import {
 } from '@/lib/metadata'
 import './globals.css'
 import MotionProvider from '@/components/MotionProvider'
-import { OSPRY_TAG_SRC } from '@/lib/ospry'
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -64,12 +63,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" data-theme="light">
-      <head>
-        {/* Ospry visitor identification, first in <head> as the vendor asks. Async, so it never
-            blocks render, and the root layout persists across client navigations, so it loads once
-            per visit. Its consent banner gates identification; see lib/ospry.ts and docs/OSPRY.md. */}
-        <script async src={OSPRY_TAG_SRC} />
-      </head>
       <body>
         {/* First focusable thing on the page. Without it a keyboard or switch user tabs the whole
             navigation before reaching any content, on every visit and every page. It is offscreen

@@ -12,7 +12,7 @@
  *   - draw fields and storage: the Lead interface in lib/seatrade/store.ts, saved to Netlify Blobs
  *   - audience: resend.contacts.create against RESEND_AUDIENCE_ID in app/api/seatrade/route.ts
  *   - leaderboard exposure: lib/seatrade/leaderboard.ts, first name and company only
- *   - visitor identification: loaded only by lib/consent.ts after Allow. What it records (pages,
+ *   - visitor identification: loaded only by lib/consent.ts after its category is switched on. What it records (pages,
  *     submitted form fields, `lgn_*` cookie and storage, beacon to i.lspxl.com) was read out of the
  *     pixel's served source on 28.09.2026 (docs/OSPRY.md); the controller and opt-out facts are the
  *     vendor's own summary at OSPRY_LEGAL_URL. Ospry's terms require this section.
@@ -88,7 +88,7 @@ export default function Privacy() {
           <h2 style={h}>Recognising business visitors, only if you allow it</h2>
           <p style={p}>
             We use Ospry, a service of Legion Code Inc. in the United States, to learn which companies
-            visit this site. It loads only after you choose Allow, and never on the Seatrade pages. Until
+            visit this site. It loads only after you switch on Company insight (or choose Accept all), and never on the Seatrade pages. Until
             then nothing of theirs is on the page, and if your browser sends Global Privacy Control we
             treat that as a no and do not ask.
           </p>
@@ -107,10 +107,10 @@ export default function Privacy() {
             at <a href={OSPRY_LEGAL_URL} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--brand)' }}>ospry.ai/legal</a>.
           </p>
           <p style={p}>
-            Change your mind here at any time. Declining after allowing removes their cookies and
+            Change your mind here at any time. Switching it off after allowing removes their cookies and
             storage from your browser and reloads the page without the tag. To have anything we received
             deleted on our side, write to the address below. Your choice itself is kept in one cookie of
-            ours, <code>pl_consent</code>, for a year after Allow and six months after Decline.
+            ours, <code>pl_consent</code>, for a year if you allow anything and six months if you reject everything.
           </p>
           <ConsentControls />
 

@@ -4,17 +4,23 @@ Entry doc for the Ospry tag and the consent banner that gates it. Added 28.09.20
 
 ## How it works now
 
-- **Nothing of Ospry's is in any page until the visitor clicks Allow.** `lib/consent.ts` is the only
+- **Nothing of Ospry's is in any page until the visitor switches on "Company insight" (or Accept all).** `lib/consent.ts` is the only
   code that inserts the tag. `scripts/check-ospry.mjs --built` (postbuild) fails the build if the tag
   or any Ospry host reaches rendered HTML.
 - **The banner** (`components/consent/ConsentManager.tsx`, mounted in `app/layout.tsx`) asks once the
   visitor has engaged: scrolled past 60 % of the first screen, opened a second page, or stayed 12 s.
-- **Allow / Decline**, one click each, identical styling. The choice is kept in the first-party cookie
-  `pl_consent=<choice>.v<CONSENT_VERSION>.<ms>`: 365 days after Allow, 180 after Decline.
+- **Layered (since 28.09.2026, CONSENT_VERSION 2).** First layer: one sentence ("Optional cookies let a
+  US partner show us which company is visiting. Nothing optional runs until you choose."), **Accept all**
+  and **Reject all** as identical buttons, and **Settings**. Settings shows one row per category with a
+  switch (`ConsentPreferences.tsx`, the same component `/privacy/#choices` renders), plus the Necessary
+  row that is always on. Categories live in `CATEGORIES` in `lib/consent.ts`, each with its own load and
+  clear; **adding a future cookie = one row there**, and a stored choice missing a registered category
+  counts as no choice, so a new category is always asked. Cookie: `pl_consent=v<CONSENT_VERSION>.<ms>.<id>-<0|1>_…`,
+  365 days if anything is allowed, 180 if everything is refused.
   Bump `CONSENT_VERSION` whenever the banner wording or the tag's behaviour changes; older choices are
   then asked again.
-- **Withdrawal:** footer "Cookie settings" on every page, and `/privacy/#choices`. Declining after
-  allowing calls `SightConsent.revoke()`, deletes every `lgn_*` cookie, localStorage and sessionStorage
+- **Withdrawal:** footer "Cookie settings" (opens straight on the switches) on every page, and
+  `/privacy/#choices`. Switching a category off after it loaded calls `SightConsent.revoke()`, deletes every `lgn_*` cookie, localStorage and sessionStorage
   key, and reloads the page without the tag.
 - **Global Privacy Control** = a standing no: never asked, nothing loads.
 - **Not on `/seatrade/*`.** The draw is archived (David, 28.09.2026); the landing page is the scope.
@@ -60,14 +66,14 @@ Nouwens et al. CHI 2020; vendor benchmarks from Didomi, Usercentrics, Cookiebot)
 
 | Rule | Why | Where |
 |---|---|---|
-| Decline on the first layer, same size, colour and weight as Allow | LAW (EDPB taskforce, Datatilsynet; CNIL fines) | one `.button` class for both |
+| Reject all on the first layer, same size, colour and weight as Accept all | LAW (EDPB taskforce, Datatilsynet; CNIL fines) | one `.button` class for both |
 | No cookie wall, page fully usable with the card open | LAW | non-modal card, no overlay |
 | Withdraw as easily as consenting | LAW, GDPR art. 7(3) | footer + `/privacy/#choices` |
-| Specific, plain disclosure on the first layer: who, what, US person-level | LAW (informed) and trust | banner body |
+| First layer states the purpose and that a US partner does it; the vendor, what it records and US person-level identification are one click away in Settings (EDPB: layered information is allowed when the first layer carries the purpose) | LAW (informed), minimum text (David, 28.09.2026: "do what is required but not more") | banner lead + CATEGORIES descriptions |
 | Ask after engagement, not on arrival | Lawful because nothing loads before consent; a visitor who has read the page trusts us more than one who has just landed, and reflexive dismissal (Cookiebot: 1,4 s decision time in 2025) is what an arrival banner gets | `ENGAGE_*` in ConsentManager |
 | Honest value in the visitor's terms ("follow up only with teams who are really looking") | plain purpose framing, no false benefit | banner body |
 | Non-blocking card, bottom-left | lower friction and bounce than a modal; Utz 2019 bottom-left interaction | `.banner` |
-| One purpose, one binary choice | granularity is satisfied: there is nothing else to consent to | |
+| One switch per purpose category, none pre-ticked | granularity (GDPR art. 4(11), EDPB 05/2020) and room for future cookies | `CATEGORIES` |
 | Honour GPC | not mandated in the EEA; safer, and Ospry honours it too | `hasGpc()` |
 | AVOID: pre-ticked, scroll-as-consent, asymmetric buttons, "we value your privacy" boilerplate, re-asking after Decline within 6 months | LAW / dark pattern | |
 

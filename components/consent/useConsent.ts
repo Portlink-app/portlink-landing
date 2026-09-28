@@ -1,11 +1,12 @@
 'use client'
 
-import { useSyncExternalStore } from 'react'
-import { hasGpc, readConsent, subscribe, type ConsentState } from '@/lib/consent'
+import { useMemo, useSyncExternalStore } from 'react'
+import { hasGpc, parseChoices, readConsentKey, subscribe, type Choices } from '@/lib/consent'
 
-/** The visitor's current choice, live across every component that shows it. 'unset' on the server. */
-export function useConsent(): { state: ConsentState; gpc: boolean } {
-  const state = useSyncExternalStore(subscribe, readConsent, () => 'unset' as const)
+/** The visitor's current choices, live across every component that shows them. Null until chosen. */
+export function useConsent(): { choices: Choices | null; gpc: boolean } {
+  const key = useSyncExternalStore(subscribe, readConsentKey, () => 'unset')
   const gpc = useSyncExternalStore(subscribe, hasGpc, () => false)
-  return { state, gpc }
+  const choices = useMemo(() => parseChoices(key), [key])
+  return { choices, gpc }
 }

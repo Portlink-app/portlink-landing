@@ -1,0 +1,70 @@
+/* Consent banner and the standing controls on /privacy/. Tokens only.
+   Allow and Decline share ONE class on purpose: equal size, colour, weight and position rules. A
+   visual difference between them is the deceptive pattern the EDPB taskforce names, and it is
+   also what makes a "yes" worth nothing as evidence. */
+
+.banner {
+  position: fixed;
+  z-index: 60;
+  left: 24px;
+  bottom: 24px;
+  width: min(400px, calc(100vw - 48px));
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface-plain);
+  box-shadow: var(--shadow-3);
+  color: var(--text-primary);
+  animation: rise 360ms var(--ds-ease-standard, ease-out) both;
+}
+
+.banner:focus { outline: none; }
+
+.title { margin: 0 0 8px; font-size: 16px; font-weight: 600; line-height: 1.4; }
+
+.body { margin: 0 0 16px; font-size: 14px; line-height: 1.6; color: var(--text-secondary); }
+
+.body a, .more { color: var(--brand); text-decoration: underline; text-underline-offset: 2px; }
+
+.actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 10px 16px;
+  border: 1px solid var(--text-primary);
+  border-radius: var(--ds-radius-pill);
+  background: var(--surface-plain);
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.button:focus-visible { outline: 2px solid var(--ds-focus); outline-offset: 2px; }
+
+.button[aria-pressed='true'] { background: var(--text-primary); color: var(--surface-plain); }
+
+.fine { margin: 12px 0 0; font-size: 12px; line-height: 1.5; color: var(--text-muted); }
+
+.controls { margin: 20px 0 8px; padding: 16px; border: 1px solid var(--border); border-radius: var(--radius-md); }
+
+.controlsState { margin: 0 0 12px; font-size: 15px; color: var(--text-primary); }
+
+.controls .actions { max-width: 320px; }
+
+@media (hover: hover) {
+  .button:hover { border-color: var(--brand); color: var(--brand); }
+  .button[aria-pressed='true']:hover { color: var(--surface-plain); background: var(--brand); }
+}
+
+@media (max-width: 600px) {
+  .banner { left: 16px; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom)); width: auto; padding: 16px; }
+}
+
+@keyframes rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) { .banner { animation: none; } }

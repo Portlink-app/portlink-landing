@@ -9,6 +9,7 @@ import {
 } from '@/lib/metadata'
 import './globals.css'
 import MotionProvider from '@/components/MotionProvider'
+import ConsentManager from '@/components/consent/ConsentManager'
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -71,6 +72,9 @@ export default function RootLayout({
           Skip to content
         </a>
         <MotionProvider>{children}</MotionProvider>
+        {/* The consent banner, and the only thing allowed to load the Ospry tag, after a yes.
+            lib/consent.ts says why the tag is never in server HTML. */}
+        <ConsentManager />
         <noscript><style>{`.reveal { opacity: 1; transform: none; }`}</style></noscript>
         <script
           type="application/ld+json"

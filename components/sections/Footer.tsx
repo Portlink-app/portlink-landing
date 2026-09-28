@@ -1,5 +1,6 @@
 import styles from './Footer.module.css'
 import Link from 'next/link'
+import CookieSettingsButton from '@/components/consent/CookieSettingsButton'
 
 const navLinks = {
   Product: [
@@ -34,7 +35,7 @@ export default function Footer() {
         ))}
       </div>
       <div className={styles.legal}>
-        <p>© {new Date().getFullYear()} Portlink AS. All rights reserved.</p>
+        <p>© {new Date().getFullYear()} Portlink AS. All rights reserved. <CookieSettingsButton className={styles.settings} /></p>
         <p>Made in Oslo, Norway</p>
       </div>
     </footer>

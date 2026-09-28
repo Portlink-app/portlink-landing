@@ -8,3 +8,5 @@
 .grid a:hover { color: var(--text-primary); text-decoration: underline; }
 .legal { max-width: 1100px; margin: 36px auto 0; padding-top: 24px; border-top: 1px solid var(--border); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; color: var(--text-muted); font-size: 13px; }
 @media (max-width: 600px) { .footer { padding: 36px 20px 28px; } .grid { grid-template-columns: 1fr 1fr; gap: 20px 16px; } .identity { grid-column: 1 / -1; } .legal { margin-top: 24px; } }
+.settings { margin-left: 12px; padding: 0; min-height: 24px; border: 0; background: none; color: inherit; font: inherit; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
+.settings:hover { color: var(--text-primary); }

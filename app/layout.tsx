@@ -10,6 +10,7 @@ import {
 import './globals.css'
 import MotionProvider from '@/components/MotionProvider'
 import ConsentManager from '@/components/consent/ConsentManager'
+import VisitorTracker from '@/components/intel/VisitorTracker'
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -72,9 +73,12 @@ export default function RootLayout({
           Skip to content
         </a>
         <MotionProvider>{children}</MotionProvider>
-        {/* The consent banner, and the only thing allowed to load the Ospry tag, after a yes.
-            lib/consent.ts says why the tag is never in server HTML. */}
+        {/* The consent banner, and the only thing allowed to load an optional tag, after a yes.
+            lib/consent.ts says why no such tag is ever in server HTML. */}
         <ConsentManager />
+        {/* First-party visitor intelligence: company-level for every visitor, no cookie of its own.
+            docs/VISITOR-INTELLIGENCE.md. */}
+        <VisitorTracker />
         <noscript><style>{`.reveal { opacity: 1; transform: none; }`}</style></noscript>
         <script
           type="application/ld+json"

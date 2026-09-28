@@ -22,7 +22,7 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/api/', '/seatrade/me', '/seatrade/unsubscribed'],
+        disallow: ['/api/', '/leads', '/seatrade/me', '/seatrade/unsubscribed'],
       },
     ],
     sitemap: `${siteUrl}/sitemap.xml`,

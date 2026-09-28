@@ -1,11 +1,15 @@
-# Ospry visitor identification on portlink.app
+# Consent on portlink.app (and the retired Ospry integration)
 
-Entry doc for the Ospry tag and the consent banner that gates it. Added 28.09.2026 at David's request.
+Entry doc for the consent banner. **Ospry was retired on 29.09.2026** and replaced by our own visitor
+intelligence (`docs/VISITOR-INTELLIGENCE.md`); its consent row `insight` became `remember`
+("Remember me", our own `pl_vid` cookie), CONSENT_VERSION 4. The Ospry sections below are kept as the
+record of why no optional tag may ever be in server HTML (`scripts/check-consent-gate.mjs`). Leftover
+`lgn_*` cookies are cleared on every visit by `loadAllowed()`.
 
 ## How it works now
 
 - **Nothing of Ospry's is in any page until the visitor switches on "Company insight" (or Accept all).** `lib/consent.ts` is the only
-  code that inserts the tag. `scripts/check-ospry.mjs --built` (postbuild) fails the build if the tag
+  code that inserts the tag. `scripts/check-consent-gate.mjs --built` (postbuild) fails the build if the tag
   or any Ospry host reaches rendered HTML.
 - **The banner** (`components/consent/ConsentManager.tsx`, mounted in `app/layout.tsx`) asks once the
   visitor has engaged: scrolled past 60 % of the first screen, opened a second page, or stayed 12 s.
@@ -41,7 +45,7 @@ Entry doc for the Ospry tag and the consent banner that gates it. Added 28.09.20
 - Switching Analytics off sets `ga-disable-G-41922W5K8H`, updates consent to denied, clears `_ga*`, reloads.
 - Verified locally 28.09.2026: Analytics only loads gtag and sends `g/collect` with Ospry absent;
   Accept all adds Ospry; switching Analytics off reloads with no `_ga` cookie and no gtag.
-- `check-ospry.mjs --built` refuses googletagmanager.com / google-analytics.com in server HTML too.
+- `check-consent-gate.mjs --built` refuses googletagmanager.com / google-analytics.com in server HTML too.
 
 ## What the tag does, read from its served source 28.09.2026
 
@@ -73,7 +77,7 @@ interest for company-level data: ekomloven §3-15 requires consent for the cooki
 pixel writes, whatever the GDPR basis.
 **Because:** it is the only form compliant by construction, and it keeps the design and the opt-in
 levers in our hands.
-**Revisit if:** Ospry's dashboard turns its own banner on (`npm run check:ospry` prints it). Then turn
+**Revisit if:** Ospry's dashboard turns its own banner on (`npm run check:consent-gate` prints it). Then turn
 it off again, or visitors get asked twice.
 
 ## Consent design: what raises "Allow" lawfully
@@ -104,7 +108,7 @@ opt-out link https://portlink.app/privacy/#choices. Keep **"Configure CMP banner
 ## Verify
 
 - `npm run build` (runs the `--built` gate) and `npm run verify`.
-- `npm run check:ospry`: endpoint state, vendor-banner flag, and no tag in live HTML.
+- `npm run check:consent-gate`: endpoint state, vendor-banner flag, and no tag in live HTML.
 - Browser, clean profile, on portlink.app: no `lspxl` request before a choice; Decline, nothing;
   Allow, `px.lspxl.com/c` and `/s` load and a beacon goes to `i.lspxl.com`; Cookie settings, Decline:
   page reloads, no `lgn_*` left.
@@ -119,4 +123,4 @@ scripts `https://px.lspxl.com`, connect `https://i.lspxl.com https://popup.lspxl
 
 `lib/ospry.ts` (id, URLs) · `lib/consent.ts` (state, loading, withdrawal) ·
 `components/consent/*` (banner, privacy controls, footer button, styles) ·
-`app/privacy/page.tsx` · `scripts/check-ospry.mjs`.
+`app/privacy/page.tsx` · `scripts/check-consent-gate.mjs`.

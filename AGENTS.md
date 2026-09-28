@@ -12,7 +12,7 @@ Verified 19.09.2026 against GitHub and the Netlify site API. This routing supers
 | Netlify | account `admin-irpjrvy`, site `portlin-landing-2`, id `34ab2932-19da-44e5-b761-0bc83acc0055`, domain `https://portlink.app`, builds `main` | site API id, account_slug, custom_domain and build_settings |
 | Resend | Portlink account, contact and Seatrade mail, runtime `RESEND_API_KEY` | existing mail guards; do not send verification mail |
 | Netlify Blobs | `seatrade-leads`, on the site above | existing Seatrade entry documentation |
-| Ospry | visitor identification tag, loaded only after the visitor clicks Allow in our consent banner (account `8aa13ecc-57d0-43d5-94ee-8b0bd224ffa8`) | `npm run check:ospry`; entry doc `docs/OSPRY.md` |
+| Visitor intelligence | own first-party lead tracking: `/api/intel/*`, `/leads/`, Blobs store `visitor-intel`, hourly scheduled function `intel-cron` | `docs/VISITOR-INTELLIGENCE.md`; `npm run check:consent-gate` |
 | Supabase | none for the landing site | the registry's Portlink product database is outside this repository |
 
 **Credentials:** references only. Portlink vault `cypqkqoeuibf4f6aud47v3qooa`.
@@ -22,10 +22,11 @@ Verified 19.09.2026 against GitHub and the Netlify site API. This routing supers
 | GitHub | `op://cypqkqoeuibf4f6aud47v3qooa/owl6advkmjvx2bjpzi3y6duyha/credential` |
 | Netlify | `op://cypqkqoeuibf4f6aud47v3qooa/a7h7xyjwjlfmzsc4oaf6gmuoym/credential` |
 | Resend | `op://cypqkqoeuibf4f6aud47v3qooa/lhylbglnfx7vy7yenlxn2tfehm/credential` |
+| INTEL_SECRET (visitor intelligence) | `op://cypqkqoeuibf4f6aud47v3qooa/3jup4j5ayriz63j6ocfwqyczo4/password` |
 
 Use `/Users/nyx/.Codex/bin/secret`. Feed values directly into the consuming process; never log them. Verify GitHub login is `portlinkadmin` for each session. The default connector and shell account can be `GitDABA`, which is outside this project's scope. Use a process-local Portlink credential rather than switching the machine's global account.
 
-**Runtime configuration:** Netlify manages `RESEND_API_KEY` and `ADMIN_EMAIL`; Blobs credentials are platform-provided in production. Their values do not belong in these documents.
+**Runtime configuration:** Netlify manages `RESEND_API_KEY`, `ADMIN_EMAIL` and `INTEL_SECRET`; Blobs credentials are platform-provided in production. Their values do not belong in these documents.
 
 **Hard separation:** only this org repository and this Netlify site. The `v2` remote is stale and deploys nothing. No neighbouring project's database, credentials or hosting belongs in this task.
 

@@ -1,0 +1,24 @@
+/* /leads: an internal working page. Site tokens only, dense and plain on purpose. */
+.page { max-width: 1200px; margin: 0 auto; padding: 32px 24px 80px; color: var(--text-primary); background: var(--bg); font-size: 14px; }
+.head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 20px; }
+.head h1 { margin: 0; font-size: 28px; font-weight: 700; }
+.head nav { display: flex; gap: 6px; flex-wrap: wrap; }
+.head nav a { padding: 6px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text-secondary); text-decoration: none; }
+.head nav a[aria-current='page'] { border-color: var(--text-primary); color: var(--text-primary); font-weight: 600; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 28px; }
+.stats p { margin: 0; padding: 14px 16px; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--surface-plain); color: var(--text-secondary); }
+.stats strong { display: block; font-size: 24px; color: var(--text-primary); }
+.page section { margin-bottom: 32px; }
+.page section h2 { margin: 0 0 8px; font-size: 18px; font-weight: 600; }
+.table { width: 100%; border-collapse: collapse; background: var(--surface-plain); }
+.table th, .table td { padding: 10px 12px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+.table th { font-size: 12px; font-weight: 600; color: var(--text-secondary); }
+.table summary { cursor: pointer; }
+.muted { color: var(--text-muted); }
+.tag { display: inline-block; margin-left: 6px; padding: 1px 8px; border-radius: var(--radius-sm); background: var(--brand-faint); color: var(--brand); font-size: 12px; font-weight: 600; }
+.visits { margin: 8px 0 0; padding-left: 18px; line-height: 1.6; }
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+@media (max-width: 800px) {
+  .split { grid-template-columns: 1fr; }
+  .table { display: block; overflow-x: auto; }
+}

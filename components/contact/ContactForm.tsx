@@ -40,6 +40,7 @@
 
 import { useId, useRef, useState, type FormEvent } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { reportIdentity } from '@/lib/intel/client'
 import { CheckCircle, ChevronRight, ChevronLeft, Hammer, Ship } from 'lucide-react'
 import {
   ORG_TYPE_LABEL,
@@ -367,6 +368,9 @@ export default function ContactForm({ intent, lockIntent = false }: ContactFormP
       })
       const payload = (await res.json().catch(() => null)) as { ok?: boolean; error?: string } | null
       if (!res.ok || !payload?.ok) throw new Error(payload?.error || 'Something went wrong. Please try again.')
+      // Visitor intelligence: link this visitor's pages to the person, only if they switched on
+      // "Remember me". Without it this does nothing. docs/VISITOR-INTELLIGENCE.md.
+      reportIdentity({ email: data.email, name: data.name, company: data.company, role: data.role })
       go('done', 1)
     } catch (err) {
       setSubmitError(err instanceof Error ? err.message : 'Something went wrong. Please try again.')

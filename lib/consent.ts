@@ -1,6 +1,6 @@
 /**
  * The visitor's cookie choices, and the only code that may load an optional tag. Client only.
- * Entry doc: docs/OSPRY.md.
+ * Entry doc: docs/CONSENT.md.
  *
  * LAYERED, ONE CATEGORY PER PURPOSE (28.09.2026). The first layer says one sentence and offers
  * Accept all / Reject all as equals; the per-cookie detail lives in the settings layer, one switch
@@ -12,22 +12,23 @@
  * Ospry serves for this account has its own banner switched off, and the pixel it loads, finding no
  * consent platform on the page, grants consent to itself after 1.2 seconds and identifies the
  * visitor. The only gate that holds by construction is ours: the script element does not exist
- * until the visitor has switched its category on. scripts/check-ospry.mjs fails the build if the
+ * until the visitor has switched its category on. scripts/check-consent-gate.mjs fails the build if the
  * tag ever reaches rendered HTML again.
  *
  * The choice lives in a first-party cookie, `pl_consent`, which stores nothing but the choice
  * itself. Remembering a refusal is strictly necessary and needs no consent of its own.
  */
-import { OSPRY_TAG_SRC } from './ospry'
+import { currentVid, ensureVid, forgetVid } from './intel/client'
 import { analyticsLoaded, disableAnalytics, loadAnalytics } from './analytics'
 
 /**
  * Bump when the banner's wording or what a tag does changes. Stored with every choice, so a
  * recorded yes can be tied to the exact text in git the visitor agreed to, and an older yes is
  * asked again rather than stretched over something it never covered. 2 = the layered banner,
- * 3 = Google Analytics added and the first layer made general.
+ * 3 = Google Analytics added and the first layer made general, 4 = Ospry replaced by our own
+ * "Remember me" and the first layer reworded (docs/VISITOR-INTELLIGENCE.md).
  */
-export const CONSENT_VERSION = 3
+export const CONSENT_VERSION = 4
 const COOKIE = 'pl_consent'
 /** How long a choice is remembered: a year if anything was allowed, six months if all refused. */
 const KEEP_DAYS = { anyAllowed: 365, allRefused: 180 }
@@ -46,8 +47,8 @@ type Category = {
 }
 
 /**
- * Removes every cookie and storage key with this prefix. Ospry stores `lgn_*` (measured from its
- * source on 28.09.2026); Google Analytics stores `_ga` and `_ga_<stream>` on the site's root domain.
+ * Removes every cookie and storage key with this prefix. Google Analytics stores `_ga` and
+ * `_ga_<stream>` on the site's root domain; the retired Ospry pixel stored `lgn_*` (28.09.2026).
  */
 function clearByPrefix(prefix: string) {
   const host = location.hostname
@@ -66,8 +67,6 @@ function clearByPrefix(prefix: string) {
   }
 }
 
-const ospryLoaded = () => !!document.querySelector(`script[src="${OSPRY_TAG_SRC}"]`)
-
 export const CATEGORIES = [
   {
     id: 'analytics',
@@ -84,37 +83,21 @@ export const CATEGORIES = [
     },
   },
   {
-    id: 'insight',
-    name: 'Company insight',
+    id: 'remember',
+    name: 'Remember me',
     description:
-      'Ospry, a US service, shows us which company is visiting, what you read and what you send ' +
-      'through our forms. In the US it can also name you. Its cookies start with lgn_ and last ' +
-      'up to a year.',
-    load() {
-      if (ospryLoaded()) return
-      // Tell the pixel consent exists before it runs, so it fires on the visit that granted it
-      // rather than after its own 1.2 second fallback. It reads this object on load.
-      window.SightConsent = { ...(window.SightConsent ?? {}), granted: true, denied: false }
-      const s = document.createElement('script')
-      s.async = true
-      s.src = OSPRY_TAG_SRC
-      document.head.appendChild(s)
-    },
-    isLoaded: ospryLoaded,
-    clear() {
-      try {
-        window.SightConsent?.revoke?.()
-      } catch {
-        // The pixel's own revoke is a courtesy; the reload in choose() is what actually stops it.
-      }
-      clearByPrefix('lgn_')
-    },
+      'A Portlink cookie (pl_vid) links your visits, and links them to you if you send us our contact ' +
+      'form or open a link we emailed you, so our follow-up matches what you read. It stays with ' +
+      'Portlink, is never shared, and lasts up to 13 months.',
+    load: ensureVid,
+    isLoaded: () => !!currentVid(),
+    clear: forgetVid,
   },
 ] as const satisfies readonly Category[]
 
 export type CategoryId = (typeof CATEGORIES)[number]['id']
 export type Choices = Record<CategoryId, boolean>
-/** The raw stored choice, e.g. "insight-1", or 'unset'. A string so React can compare snapshots. */
+/** The raw stored choice, e.g. "analytics-1_remember-0", or 'unset'. A string so React can compare snapshots. */
 export type ConsentKey = string
 
 type Listener = () => void
@@ -122,9 +105,6 @@ const listeners = new Set<Listener>()
 let openRequested = false
 
 declare global {
-  interface Window {
-    SightConsent?: { granted?: boolean; denied?: boolean; revoke?: () => void }
-  }
   interface Navigator {
     globalPrivacyControl?: boolean
   }
@@ -146,7 +126,7 @@ export function readConsentKey(): ConsentKey {
   return parseChoices(m[2]) ? m[2] : 'unset'
 }
 
-/** "insight-1" → { insight: true }. Null when any registered category is missing. */
+/** "analytics-1_remember-0" → { analytics: true, remember: false }. Null when any registered category is missing. */
 export function parseChoices(key: ConsentKey): Choices | null {
   if (key === 'unset') return null
   const stored = Object.fromEntries(key.split('_').map((p) => [p.slice(0, -2), p.endsWith('-1')]))
@@ -191,6 +171,9 @@ export function closeRequested() {
 
 /** Loads every allowed tag once. Safe to call repeatedly; does nothing without a stored yes. */
 export function loadAllowed() {
+  // Ospry was retired on 29.09.2026. Visitors who allowed it before then still carry its lgn_*
+  // cookie and storage; remove them on every visit so nothing of it outlives the tool.
+  clearByPrefix('lgn_')
   if (hasGpc()) return
   const choices = parseChoices(readConsentKey())
   if (!choices) return

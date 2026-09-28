@@ -1,7 +1,7 @@
 'use client'
 
 /**
- * The consent banner, mounted once in the root layout. Entry doc: docs/OSPRY.md.
+ * The consent banner, mounted once in the root layout. Entry doc: docs/CONSENT.md.
  *
  * What it does, in order:
  *   1. On /seatrade/* (archived draw), or when the browser sends Global Privacy Control: nothing.
@@ -11,7 +11,7 @@
  *      per-category switches (ConsentPreferences), the same component /privacy/ uses.
  *   4. The footer's "Cookie settings" and the privacy page reopen it through requestOpen().
  *
- * WHY IT WAITS (see docs/OSPRY.md, "Consent design"). Nothing of Ospry's loads before a yes, so
+ * WHY IT WAITS (see docs/CONSENT.md, "Consent design"). Nothing optional loads before a yes, so
  * the timing of the question is free, and asking a visitor who has just arrived and knows nothing
  * about us yet is asking at the moment trust is lowest. The card appears after a first real sign
  * of interest: a scroll past most of the first screen, a second page, or ENGAGE_MS on the page.
@@ -68,9 +68,8 @@ export default function ConsentManager() {
       {layer === 'first' ? (
         <>
           <p id="consent-title" className={styles.lead}>
-            We&rsquo;d like to use optional cookies to see how the site is used and which companies
-            visit, so we can improve it and follow up with the right teams. Nothing optional runs
-            until you choose.
+            We&rsquo;d like to use optional cookies to measure how the site is used and to remember
+            your visits, so our follow-up matches what you read. Nothing optional runs until you choose.
           </p>
           <div className={styles.actions}>
             <button type="button" className={styles.button} onClick={() => choose(allChoices(true))}>Accept all</button>

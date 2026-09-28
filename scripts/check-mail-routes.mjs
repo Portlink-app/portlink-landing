@@ -78,6 +78,10 @@ const EXEMPT = [
     reason: 'Seatrade funnel: admin CSV export, sent to ADMIN_EMAIL only and never to a caller-supplied address.',
   },
   {
+    route: 'app/api/intel/cron/route.ts',
+    reason: 'Visitor intelligence: hot-lead alerts and the daily digest, sent to ADMIN_EMAIL only, never to a caller-supplied address, and 404 without the INTEL_SECRET header.',
+  },
+  {
     route: 'app/api/havn/route.ts',
     reason: 'Port-operator interview answers (portlink.app/portlink+griegconnect), sent to the constant Portlink inbox only and never to a caller-supplied address.',
   },

@@ -32,6 +32,16 @@ export default function ConsentPreferences({ idPrefix }: { idPrefix: string }) {
           </div>
           <span className={styles.always}>Always on</span>
         </li>
+        <li className={styles.row}>
+          <div>
+            <p className={styles.rowName} id={`${idPrefix}-company`}>Company-level visits</p>
+            <p className={styles.rowText}>
+              Without any cookie, we note which organisation&rsquo;s network a visit comes from and the pages
+              read. No IP address or personal detail is kept. <a className={styles.more} href="/privacy/#objection">Object here</a>.
+            </p>
+          </div>
+          <span className={styles.always}>No cookie</span>
+        </li>
         {CATEGORIES.map((c) => (
           <li key={c.id} className={styles.row}>
             <div>

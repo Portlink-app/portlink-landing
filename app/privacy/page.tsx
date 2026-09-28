@@ -12,17 +12,19 @@
  *   - draw fields and storage: the Lead interface in lib/seatrade/store.ts, saved to Netlify Blobs
  *   - audience: resend.contacts.create against RESEND_AUDIENCE_ID in app/api/seatrade/route.ts
  *   - leaderboard exposure: lib/seatrade/leaderboard.ts, first name and company only
- *   - visitor identification: loaded only by lib/consent.ts after its category is switched on. What it records (pages,
- *     submitted form fields, `lgn_*` cookie and storage, beacon to i.lspxl.com) was read out of the
- *     pixel's served source on 28.09.2026 (docs/OSPRY.md); the controller and opt-out facts are the
- *     vendor's own summary at OSPRY_LEGAL_URL. Ospry's terms require this section.
+ *   - company recognition: app/api/intel/v/route.ts (stores the org, never the IP) and lib/intel/org.ts
+ *     (truncates to /24 or /48 before RIPEstat, RDAP and PeeringDB); retention RETENTION_DAYS in
+ *     lib/intel/config.ts; the objection cookie OPTOUT_COOKIE and Sec-GPC both stop recording.
+ *   - Remember me: the `remember` row in lib/consent.ts, the pl_vid cookie (VID_DAYS), linking only
+ *     via reportIdentity after our own contact form or a signed link (lib/intel/token.ts);
+ *     switching it off erases the link and those events (forgetVisitor in lib/intel/store.ts).
  * If one of those changes, this page is wrong and must change in the same commit.
  */
 import Link from 'next/link'
 import PageNav from '@/components/PageNav'
 import Footer from '@/components/sections/Footer'
 import { ADMIN_EMAIL, TERMS_PATH } from '@/lib/seatrade/config'
-import { OSPRY_LEGAL_URL } from '@/lib/ospry'
+import IntelObjection from '@/components/intel/IntelObjection'
 import ConsentControls from '@/components/consent/ConsentControls'
 
 export const metadata = {
@@ -43,10 +45,10 @@ export default function Privacy() {
             Privacy
           </h1>
           <p style={{ ...p, color: 'var(--text-muted)' }}>
-            Two forms on this website collect personal data. Two optional tools, Google Analytics and a
-            visitor identification tag, run only if you allow them. This page says what each one takes,
-            what happens to it, and how to have it removed. Nothing else on the site collects anything
-            about you.
+            Two forms on this website collect personal data. We also record which companies visit, without
+            cookies, and two optional features run only if you allow them: Google Analytics and Remember
+            me. This page says what each one takes, what happens to it, and how to have it removed.
+            Nothing else on the site collects anything about you.
           </p>
 
           <h2 style={h}>Requesting pilot access</h2>
@@ -96,32 +98,44 @@ export default function Privacy() {
             advertising. Google acts as our processor under its data processing terms.
           </p>
 
-          <h2 style={h}>Recognising business visitors, only if you allow it</h2>
+          <h2 style={h}>Which companies visit</h2>
           <p style={p}>
-            We use Ospry, a service of Legion Code Inc. in the United States, to learn which companies
-            visit this site. It loads only after you switch on Company insight (or choose Accept all), and never on the Seatrade pages. Until
-            then nothing of theirs is on the page, and if your browser sends Global Privacy Control we
-            treat that as a no and do not ask.
+            To learn which organisations are interested in Portlink, we record visits at company level.
+            When a page loads, our own server looks up who owns the network the visit comes from, the
+            same way an email server checks where a message came from. For that lookup the address is
+            shortened to its network part (the last block removed) and sent to public internet registries:
+            RIPE NCC in the Netherlands, the regional registry for that network, and PeeringDB. We keep
+            the organisation&rsquo;s name and domain, your country and city, the pages you read, how far
+            you scrolled, the time spent, and where you came from. We never store your IP address, and
+            nothing is saved in your browser for this.
           </p>
           <p style={p}>
-            Once allowed, it records the pages you read on this site, and when you send one of our forms
-            it receives what you typed into it. For visitors located in the United States it can name the
-            person; for everyone else it stops at the company. It stores an identifier in cookies and local
-            storage whose names start with <code>lgn_</code>, kept for up to a year, and sends visit data
-            to lspxl.com.
+            Visits from home broadband, mobile networks, VPNs and cloud services show only as that
+            provider and are not treated as a company. We keep these records for up to 13 months. Our
+            basis is legitimate interest: knowing which businesses look at a business-to-business
+            product, without identifying you personally. If your browser sends Global Privacy Control,
+            or you object below, nothing is recorded at all.
+          </p>
+          <IntelObjection />
+
+          <h2 style={h}>Remember me, only if you allow it</h2>
+          <p style={p}>
+            If you switch on Remember me (or Accept all), we set one cookie of our own, <code>pl_vid</code>,
+            for up to 13 months. It links your visits to each other, and to you by name if you send us
+            the contact form or open a link we emailed you personally. That lets our follow-up be about
+            what you actually read. It stays with Portlink and is never shared or sold. Switch it off
+            here or under Cookie settings and we delete the link to you and every visit recorded under
+            that cookie, and the cookie itself.
           </p>
           <p style={p}>
-            For the identification results, Ospry and the data providers behind it each act as an
-            independent controller, so their own policies govern that data. Ospry lets anyone opt out and
-            have their data deleted, whether or not they have an account, and honours Global Privacy
-            Control. Its policies, including how to opt out, are
-            at <a href={OSPRY_LEGAL_URL} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--brand)' }}>ospry.ai/legal</a>.
+            Separately, the links in emails we send you one to one may carry a personal code. Opening
+            one tells us that you opened it and which page you landed on, as email click tracking does,
+            even without Remember me.
           </p>
           <p style={p}>
-            Change your mind here at any time, for either tool. Switching one off after allowing it
-            removes its cookies and storage from your browser and reloads the page without it. To have anything we received
-            deleted on our side, write to the address below. Your choice itself is kept in one cookie of
-            ours, <code>pl_consent</code>, for a year if you allow anything and six months if you reject everything.
+            Your cookie choices are kept in one cookie of ours, <code>pl_consent</code>, for a year if
+            you allow anything and six months if you reject everything. To have anything we recorded
+            about you deleted, write to the address below.
           </p>
           <ConsentControls />
 

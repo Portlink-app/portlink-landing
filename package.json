@@ -10,7 +10,7 @@
     "lint:dashes": "node scripts/lint-dashes.mjs",
     "lint:dashes-selftest": "node scripts/lint-dashes.selftest.mjs",
     "build": "next build",
-    "postbuild": "node scripts/check-scene-layouts.mjs --built && node scripts/check-film-motion.mjs --built && node scripts/check-anchors.mjs --built && node scripts/check-ospry.mjs --built",
+    "postbuild": "node scripts/check-scene-layouts.mjs --built && node scripts/check-film-motion.mjs --built && node scripts/check-anchors.mjs --built && node scripts/check-consent-gate.mjs --built",
     "start": "next start",
     "lint": "eslint",
     "ds:check": "node scripts/check-ds-version.mjs --strict",
@@ -23,7 +23,7 @@
     "check:contact-intent": "node scripts/check-contact-intent.mjs",
     "check:scene-layouts": "node scripts/check-scene-layouts.mjs",
     "check:film-motion": "node scripts/check-film-motion.mjs",
-    "check:ospry": "node scripts/check-ospry.mjs --live"
+    "check:consent-gate": "node scripts/check-consent-gate.mjs --live"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",

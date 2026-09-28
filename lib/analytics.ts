@@ -1,6 +1,6 @@
 /**
  * Google Analytics 4 for portlink.app. Loaded ONLY by the `analytics` row in lib/consent.ts, after
- * the visitor switches Analytics on. Entry doc: docs/OSPRY.md ("Google Analytics").
+ * the visitor switches Analytics on. Entry doc: docs/CONSENT.md ("Google Analytics").
  *
  * GA account "Portlink AS", created 28.09.2026 under David's Google login (davidbakke85@gmail.com,
  * which he uses for all his projects), property "portlink.app" (Norway, NOK, Norway time), web

@@ -43,8 +43,8 @@ export default function Privacy() {
             Privacy
           </h1>
           <p style={{ ...p, color: 'var(--text-muted)' }}>
-            Two forms on this website collect personal data, and one visitor identification tag can
-            recognise business visitors, but only if you allow it. This page says what each one takes,
+            Two forms on this website collect personal data. Two optional tools, Google Analytics and a
+            visitor identification tag, run only if you allow them. This page says what each one takes,
             what happens to it, and how to have it removed. Nothing else on the site collects anything
             about you.
           </p>
@@ -85,6 +85,17 @@ export default function Privacy() {
             while keeping your entries.
           </p>
 
+          <h2 style={h}>Measuring how the site is used, only if you allow it</h2>
+          <p style={p}>
+            With Analytics switched on (or Accept all), we use Google Analytics from Google Ireland
+            Limited, whose data can also be processed by Google LLC in the United States. It counts visits
+            and shows which pages are read, for how long, and how people found the site. Google receives
+            your IP address and browser and device details, and stores cookies whose names start
+            with <code>_ga</code>, kept for up to 13 months. We have switched off Google signals, ad
+            personalisation and every optional data-sharing setting, and we do not use it for
+            advertising. Google acts as our processor under its data processing terms.
+          </p>
+
           <h2 style={h}>Recognising business visitors, only if you allow it</h2>
           <p style={p}>
             We use Ospry, a service of Legion Code Inc. in the United States, to learn which companies
@@ -107,8 +118,8 @@ export default function Privacy() {
             at <a href={OSPRY_LEGAL_URL} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--brand)' }}>ospry.ai/legal</a>.
           </p>
           <p style={p}>
-            Change your mind here at any time. Switching it off after allowing removes their cookies and
-            storage from your browser and reloads the page without the tag. To have anything we received
+            Change your mind here at any time, for either tool. Switching one off after allowing it
+            removes its cookies and storage from your browser and reloads the page without it. To have anything we received
             deleted on our side, write to the address below. Your choice itself is kept in one cookie of
             ours, <code>pl_consent</code>, for a year if you allow anything and six months if you reject everything.
           </p>

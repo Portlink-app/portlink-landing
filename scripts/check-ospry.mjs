@@ -34,7 +34,8 @@ const id = source.match(/OSPRY_ACCOUNT_ID = '([0-9a-f-]{36})'/)?.[1]
 const tpl = source.match(/OSPRY_TAG_SRC = `([^`]+)`/)?.[1]
 if (!id || !tpl) fail('could not read OSPRY_ACCOUNT_ID / OSPRY_TAG_SRC out of lib/ospry.ts.', 2)
 const SRC = tpl.replace('${OSPRY_ACCOUNT_ID}', id)
-const HOSTS = /https:\/\/(px|i|t|sec|popup)\.lspxl\.com|https:\/\/cdn\.lgncmp\.com/
+// Every optional tag the consent registry in lib/consent.ts loads: Ospry and Google Analytics.
+const HOSTS = /https:\/\/(px|i|t|sec|popup)\.lspxl\.com|https:\/\/cdn\.lgncmp\.com|https:\/\/www\.googletagmanager\.com|google-analytics\.com/
 
 /** Script or preload elements in one page that point at Ospry. Empty = clean. */
 function offenders(html) {
@@ -46,6 +47,7 @@ function offenders(html) {
 // Self-test first: a check that cannot see the tag must not report a clean page.
 if (!offenders(`<head><script async="" src="${SRC}"></script></head>`).length) fail('self-test: the tag in <head> was not seen.', 2)
 if (!offenders('<link rel="preload" as="script" href="https://cdn.lgncmp.com/cmp/v3/loader.js">').length) fail('self-test: a preload of the vendor CDN was not seen.', 2)
+if (!offenders('<script async src="https://www.googletagmanager.com/gtag/js?id=G-X"></script>').length) fail('self-test: gtag.js in a page was not seen.', 2)
 if (offenders('<head><script src="/_next/static/chunks/a.js"></script></head>').length) fail('self-test: a first-party script was refused.', 2)
 
 if (process.argv.includes('--built')) {
@@ -67,7 +69,7 @@ if (process.argv.includes('--built')) {
   walk(builtRoot)
   if (count === 0) fail('no prerendered HTML found under .next/server/app.', 2)
   if (bad.length) fail(`the Ospry tag is in server HTML, so it would load before consent:\n  ${bad.join('\n  ')}`)
-  console.log(`check:ospry built: no Ospry tag in any of ${count} prerendered pages, it loads only after consent; self-test passed.`)
+  console.log(`check:ospry built: no Ospry or Google Analytics tag in any of ${count} prerendered pages, it loads only after consent; self-test passed.`)
 } else if (process.argv.includes('--live')) {
   const arg = process.argv[process.argv.indexOf('--live') + 1] ?? ''
   const base = arg.startsWith('http') ? arg.replace(/\/$/, '') : 'https://portlink.app'

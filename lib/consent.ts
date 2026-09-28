@@ -19,13 +19,15 @@
  * itself. Remembering a refusal is strictly necessary and needs no consent of its own.
  */
 import { OSPRY_TAG_SRC } from './ospry'
+import { analyticsLoaded, disableAnalytics, loadAnalytics } from './analytics'
 
 /**
  * Bump when the banner's wording or what a tag does changes. Stored with every choice, so a
  * recorded yes can be tied to the exact text in git the visitor agreed to, and an older yes is
- * asked again rather than stretched over something it never covered. 2 = the layered banner.
+ * asked again rather than stretched over something it never covered. 2 = the layered banner,
+ * 3 = Google Analytics added and the first layer made general.
  */
-export const CONSENT_VERSION = 2
+export const CONSENT_VERSION = 3
 const COOKIE = 'pl_consent'
 /** How long a choice is remembered: a year if anything was allowed, six months if all refused. */
 const KEEP_DAYS = { anyAllowed: 365, allRefused: 180 }
@@ -43,7 +45,10 @@ type Category = {
   clear: () => void
 }
 
-/** Everything the Ospry pixel stores on this origin, measured from its source on 28.09.2026: `lgn_*`. */
+/**
+ * Removes every cookie and storage key with this prefix. Ospry stores `lgn_*` (measured from its
+ * source on 28.09.2026); Google Analytics stores `_ga` and `_ga_<stream>` on the site's root domain.
+ */
 function clearByPrefix(prefix: string) {
   const host = location.hostname
   const domains = ['', host, `.${host}`, `.${host.split('.').slice(-2).join('.')}`]
@@ -65,11 +70,26 @@ const ospryLoaded = () => !!document.querySelector(`script[src="${OSPRY_TAG_SRC}
 
 export const CATEGORIES = [
   {
+    id: 'analytics',
+    name: 'Analytics',
+    description:
+      'Google Analytics counts visits and shows which pages are read and how people found us. ' +
+      'Google receives your IP address and device details; we do not use it for advertising. ' +
+      'Its cookies start with _ga and last up to 13 months.',
+    load: loadAnalytics,
+    isLoaded: analyticsLoaded,
+    clear() {
+      disableAnalytics()
+      clearByPrefix('_ga')
+    },
+  },
+  {
     id: 'insight',
     name: 'Company insight',
     description:
       'Ospry, a US service, shows us which company is visiting, what you read and what you send ' +
-      'through our forms. In the US it can also name you. Its cookies start with lgn_.',
+      'through our forms. In the US it can also name you. Its cookies start with lgn_ and last ' +
+      'up to a year.',
     load() {
       if (ospryLoaded()) return
       // Tell the pixel consent exists before it runs, so it fires on the visit that granted it

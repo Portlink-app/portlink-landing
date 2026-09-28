@@ -9,8 +9,10 @@ Entry doc for the Ospry tag and the consent banner that gates it. Added 28.09.20
   or any Ospry host reaches rendered HTML.
 - **The banner** (`components/consent/ConsentManager.tsx`, mounted in `app/layout.tsx`) asks once the
   visitor has engaged: scrolled past 60 % of the first screen, opened a second page, or stayed 12 s.
-- **Layered (since 28.09.2026, CONSENT_VERSION 2).** First layer: one sentence ("Optional cookies let a
-  US partner show us which company is visiting. Nothing optional runs until you choose."), **Accept all**
+- **Layered (since 28.09.2026; CONSENT_VERSION 3 since Google Analytics was added).** First layer: one
+  general sentence ("We'd like to use optional cookies to see how the site is used and which companies
+  visit, so we can improve it and follow up with the right teams. Nothing optional runs until you
+  choose."), **Accept all**
   and **Reject all** as identical buttons, and **Settings**. Settings shows one row per category with a
   switch (`ConsentPreferences.tsx`, the same component `/privacy/#choices` renders), plus the Necessary
   row that is always on. Categories live in `CATEGORIES` in `lib/consent.ts`, each with its own load and
@@ -24,6 +26,22 @@ Entry doc for the Ospry tag and the consent banner that gates it. Added 28.09.20
   key, and reloads the page without the tag.
 - **Global Privacy Control** = a standing no: never asked, nothing loads.
 - **Not on `/seatrade/*`.** The draw is archived (David, 28.09.2026); the landing page is the scope.
+
+## Google Analytics (category `analytics`, added 28.09.2026)
+
+- GA account **Portlink AS** under David's Google login (davidbakke85@gmail.com, which he uses for all
+  projects), property **portlink.app** (Norway, NOK, Norway time), web stream https://portlink.app,
+  stream id 15861671503, measurement id **`G-41922W5K8H`** (in `lib/analytics.ts`). Created with all
+  four account data-sharing settings OFF; GA Terms (Norway) and the GDPR Data Processing Terms accepted
+  with David's approval. Enhanced measurement on (page views incl. history changes, scrolls, outbound
+  clicks, site search, video, file downloads, form interactions; no field values).
+- Consent Mode **basic**: gtag.js is only inserted after Analytics is on, so no cookieless pings before
+  consent. `ad_storage`, `ad_user_data`, `ad_personalization` denied; Google signals and ad
+  personalisation off; `_ga` cookies capped at 13 months (`cookie_expires`).
+- Switching Analytics off sets `ga-disable-G-41922W5K8H`, updates consent to denied, clears `_ga*`, reloads.
+- Verified locally 28.09.2026: Analytics only loads gtag and sends `g/collect` with Ospry absent;
+  Accept all adds Ospry; switching Analytics off reloads with no `_ga` cookie and no gtag.
+- `check-ospry.mjs --built` refuses googletagmanager.com / google-analytics.com in server HTML too.
 
 ## What the tag does, read from its served source 28.09.2026
 

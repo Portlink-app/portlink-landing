@@ -38,14 +38,17 @@ export default function ConsentManager() {
   const [firstPath] = useState(pathname)
   const excluded = isExcludedPath(pathname)
 
-  useEffect(() => subscribe(() => setReopened(isOpenRequested())), [])
+  // Reopening from the footer goes straight to the switches: that is what the visitor came for.
+  // Set in the store callback, not in an effect on `reopened`, so it is one render, not two.
+  useEffect(() => subscribe(() => {
+    const open = isOpenRequested()
+    setReopened(open)
+    if (open) setLayer('settings')
+  }), [])
 
   useEffect(() => {
     if (!excluded && choices) loadAllowed()
   }, [excluded, choices])
-
-  // Reopening from the footer goes straight to the switches: that is what the visitor came for.
-  useEffect(() => { if (reopened) setLayer('settings') }, [reopened])
 
   // Engagement: a second page counts at once; otherwise scroll depth or time on page.
   const secondPage = pathname !== firstPath
@@ -65,8 +68,9 @@ export default function ConsentManager() {
       {layer === 'first' ? (
         <>
           <p id="consent-title" className={styles.lead}>
-            Optional cookies let a US partner show us which company is visiting. Nothing optional
-            runs until you choose.
+            We&rsquo;d like to use optional cookies to see how the site is used and which companies
+            visit, so we can improve it and follow up with the right teams. Nothing optional runs
+            until you choose.
           </p>
           <div className={styles.actions}>
             <button type="button" className={styles.button} onClick={() => choose(allChoices(true))}>Accept all</button>

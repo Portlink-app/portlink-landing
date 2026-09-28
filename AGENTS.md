@@ -12,6 +12,7 @@ Verified 19.09.2026 against GitHub and the Netlify site API. This routing supers
 | Netlify | account `admin-irpjrvy`, site `portlin-landing-2`, id `34ab2932-19da-44e5-b761-0bc83acc0055`, domain `https://portlink.app`, builds `main` | site API id, account_slug, custom_domain and build_settings |
 | Resend | Portlink account, contact and Seatrade mail, runtime `RESEND_API_KEY` | existing mail guards; do not send verification mail |
 | Netlify Blobs | `seatrade-leads`, on the site above | existing Seatrade entry documentation |
+| Ospry | visitor identification tag in `<head>` on every page (account `8aa13ecc-57d0-43d5-94ee-8b0bd224ffa8`) | `npm run check:ospry`; entry doc `docs/OSPRY.md` |
 | Supabase | none for the landing site | the registry's Portlink product database is outside this repository |
 
 **Credentials:** references only. Portlink vault `cypqkqoeuibf4f6aud47v3qooa`.

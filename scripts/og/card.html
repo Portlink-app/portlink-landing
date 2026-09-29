@@ -7,9 +7,9 @@
   Why a page: the card has to be in the design system, and the design system is CSS. This links
   the vendored token file directly, so --ds-canvas, --ds-text-1 and --ds-primary here are the same
   values the site renders with, and a Consolidated release changes the card by changing the tokens.
-  It also picks up the site's real font stack, which matters more than it looks: nothing in this
-  repo loads Plus Jakarta Sans or Inter, so every visitor sees the ui-sans-serif fallback, and a
-  card drawn in some other face would be off-brand against the site as it actually ships.
+  It also picks up the site's real font stack by name. Note that the site DOES render Plus Jakarta
+  Sans (self-hosted from app/_fonts/, see docs/CONSENT.md), while this page loads only the token
+  file, so the card renders the stack's fallback unless the headless Chrome has the family installed.
 
   Rendered by scripts/build-og-card.sh through the same headless Chrome page-probe uses.
   Do not hand-edit public/og/*.png; edit this and re-run that script.

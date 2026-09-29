@@ -31,6 +31,25 @@ record of why no optional tag may ever be in server HTML (`scripts/check-consent
 - **Global Privacy Control** = a standing no: never asked, nothing loads.
 - **Not on `/seatrade/*`.** The draw is archived (David, 28.09.2026); the landing page is the scope.
 
+## Fonts: self-hosted, never from Google (since 29.09.2026)
+
+- Until 29.09.2026 `app/globals.css` `@import`ed three stylesheets from fonts.googleapis.com. Tailwind
+  hoisted them into the shared CSS chunk, so **every page on every route** made 10 to 12 requests to
+  fonts.googleapis.com and fonts.gstatic.com before the banner could be answered, handing each
+  visitor's IP to Google (LG München I, 20.01.2022, 3 O 17493/20). `check-consent-gate.mjs` never saw
+  it: it reads `<script>`/`<link>` tags in HTML, and this lived in CSS.
+- Now `app/_fonts/` holds the woff2 files and a `fonts.css` with Google's own `@font-face` rules
+  verbatim, only `url()` changed. Same families, weights, subsets and `font-display` (Jakarta
+  `optional`, Inter and JetBrains Mono `swap`); 0 differing pixels in 16 before/after screenshots
+  (8 routes at 1440 px and 375 px). Regenerate with `npm run fonts:sync`, never by hand.
+- Why not `next/font/google`: it renames each family to a hashed name, so every DS font token would
+  need a local override (CONSUMERS.md allows none), and its size-adjusted fallbacks change the swap
+  rendering.
+- Guard: `scripts/check-font-hosts.mjs` in prebuild and verify (authored source), postbuild
+  (`--built`: server HTML plus every built CSS and JS file, and it requires the three self-hosted
+  faces to be present), and `npm run check:font-hosts:live` against portlink.app. There is no consent
+  category for fonts, so these hosts are refused outright, not gated.
+
 ## Google Analytics (category `analytics`, added 28.09.2026)
 
 - GA account **Portlink AS** under David's Google login (davidbakke85@gmail.com, which he uses for all

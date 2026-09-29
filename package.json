@@ -4,13 +4,13 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "prebuild": "node scripts/check-ds-version.mjs && node scripts/lint-dashes.mjs && node scripts/check-clip-modes.mjs --if-available && npm run check:leaderboard && npm run check:access && npm run check:eligibility && npm run check:anchors && npm run check:mail-routes && npm run check:viz-type && npm run check:contact-intent",
+    "prebuild": "node scripts/check-ds-version.mjs && node scripts/lint-dashes.mjs && node scripts/check-clip-modes.mjs --if-available && npm run check:leaderboard && npm run check:access && npm run check:eligibility && npm run check:anchors && npm run check:mail-routes && npm run check:viz-type && npm run check:contact-intent && npm run check:font-hosts",
     "check:clips": "node scripts/check-clip-modes.mjs",
-    "verify": "npm run lint:dashes && npm run lint:dashes-selftest && npm run check:clips && npm run check:leaderboard && npm run check:access && npm run check:eligibility && npm run check:anchors && npm run check:mail-routes && npm run check:viz-type && npm run check:contact-intent && npm run check:scene-layouts && npm run check:film-motion && npm run lint",
+    "verify": "npm run lint:dashes && npm run lint:dashes-selftest && npm run check:clips && npm run check:leaderboard && npm run check:access && npm run check:eligibility && npm run check:anchors && npm run check:mail-routes && npm run check:viz-type && npm run check:contact-intent && npm run check:scene-layouts && npm run check:film-motion && npm run check:font-hosts && npm run lint",
     "lint:dashes": "node scripts/lint-dashes.mjs",
     "lint:dashes-selftest": "node scripts/lint-dashes.selftest.mjs",
     "build": "next build",
-    "postbuild": "node scripts/check-scene-layouts.mjs --built && node scripts/check-film-motion.mjs --built && node scripts/check-anchors.mjs --built && node scripts/check-consent-gate.mjs --built",
+    "postbuild": "node scripts/check-scene-layouts.mjs --built && node scripts/check-film-motion.mjs --built && node scripts/check-anchors.mjs --built && node scripts/check-consent-gate.mjs --built && node scripts/check-font-hosts.mjs --built",
     "start": "next start",
     "lint": "eslint",
     "ds:check": "node scripts/check-ds-version.mjs --strict",
@@ -23,7 +23,10 @@
     "check:contact-intent": "node scripts/check-contact-intent.mjs",
     "check:scene-layouts": "node scripts/check-scene-layouts.mjs",
     "check:film-motion": "node scripts/check-film-motion.mjs",
-    "check:consent-gate": "node scripts/check-consent-gate.mjs --live"
+    "check:consent-gate": "node scripts/check-consent-gate.mjs --live",
+    "check:font-hosts": "node scripts/check-font-hosts.mjs",
+    "check:font-hosts:live": "node scripts/check-font-hosts.mjs --live",
+    "fonts:sync": "node scripts/sync-fonts.mjs"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",

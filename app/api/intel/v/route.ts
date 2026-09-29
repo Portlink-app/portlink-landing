@@ -13,7 +13,7 @@
  */
 import { createHash } from 'node:crypto'
 import { NextResponse } from 'next/server'
-import { clientIp, rateLimit } from '@/lib/rateLimit'
+import { clientGeo, clientIp, rateLimit } from '@/lib/rateLimit'
 import { OPTOUT_COOKIE, UNTRACKED_PREFIXES, VID_COOKIE } from '@/lib/intel/config'
 import { resolveOrg } from '@/lib/intel/org'
 import { daySalt, day, forgetVisitor, putEvent, setIdentity, type EventType, type IntelEvent } from '@/lib/intel/store'
@@ -31,18 +31,6 @@ const str = (v: unknown, max: number) => (typeof v === 'string' ? v.trim().slice
 function cookie(request: Request, name: string): string {
   const m = (request.headers.get('cookie') ?? '').match(new RegExp(`(?:^|;\\s*)${name}=([^;]+)`))
   return m ? decodeURIComponent(m[1]) : ''
-}
-
-/** Netlify's geo header: base64 JSON with country and city. Coarse location, never the IP. */
-function geo(request: Request): { country?: string; city?: string } {
-  const raw = request.headers.get('x-nf-geo')
-  if (!raw) return {}
-  try {
-    const g = JSON.parse(Buffer.from(raw, 'base64').toString('utf8')) as { country?: { code?: string }; city?: string }
-    return { country: g.country?.code, city: g.city }
-  } catch {
-    return {}
-  }
 }
 
 export async function POST(request: Request) {
@@ -76,7 +64,7 @@ export async function POST(request: Request) {
     const salt = await daySalt(day())
     const vk = createHash('sha256').update(`${salt}|${ip ?? ''}|${ua}`).digest('base64url').slice(0, 22)
 
-    const ev: IntelEvent = { ts: new Date().toISOString(), t, vk, vid, p: p || undefined, ...geo(request) }
+    const ev: IntelEvent = { ts: new Date().toISOString(), t, vk, vid, p: p || undefined, ...clientGeo(request) }
     const title = str(body.title, 160)
     if (title) ev.title = title
     const ref = str(body.ref, 200)

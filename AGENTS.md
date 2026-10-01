@@ -2,33 +2,9 @@
 
 ## Services and connections
 
-Verified 19.09.2026 against GitHub and the Netlify site API. This routing supersedes the old Connections table and the pre-transfer remote note in CLAUDE.md.
+The one authoritative service table for this repository is [CLAUDE.md, Services and connections](CLAUDE.md#services-and-connections). This file deliberately keeps no second copy: two tables drift (consolidated 01.10.2026). Read that section before any external action, then confirm the exact account, site and project with a scoped read.
 
-**Architecture:** Next.js App Router marketing site on Netlify. The homepage and contact, team and privacy pages share the vendored Portlink design system. Contact and pilot requests use Resend. The separate Seatrade funnel uses Resend and Netlify Blobs. No Supabase database belongs to this repository.
-
-| Service | This repo uses | Verify with |
-|---|---|---|
-| GitHub | account `portlinkadmin`, org repository `Portlink-app/portlink-landing`, origin `https://github.com/Portlink-app/portlink-landing.git`, default `main` | authenticated `/user` and repository API, `git remote -v` |
-| Netlify | account `admin-irpjrvy`, site `portlin-landing-2`, id `34ab2932-19da-44e5-b761-0bc83acc0055`, domain `https://portlink.app`, builds `main` | site API id, account_slug, custom_domain and build_settings |
-| Resend | Portlink account, contact and Seatrade mail, runtime `RESEND_API_KEY` | existing mail guards; do not send verification mail |
-| Netlify Blobs | `seatrade-leads`, on the site above | existing Seatrade entry documentation |
-| Supabase | none for the landing site | the registry's Portlink product database is outside this repository |
-
-**Credentials:** references only. Portlink vault `cypqkqoeuibf4f6aud47v3qooa`.
-
-| Need | Reference |
-|---|---|
-| GitHub | `op://cypqkqoeuibf4f6aud47v3qooa/owl6advkmjvx2bjpzi3y6duyha/credential` |
-| Netlify | `op://cypqkqoeuibf4f6aud47v3qooa/a7h7xyjwjlfmzsc4oaf6gmuoym/credential` |
-| Resend | `op://cypqkqoeuibf4f6aud47v3qooa/lhylbglnfx7vy7yenlxn2tfehm/credential` |
-
-Use `/Users/nyx/.Codex/bin/secret`. Feed values directly into the consuming process; never log them. Verify GitHub login is `portlinkadmin` for each session. The default connector and shell account can be `GitDABA`, which is outside this project's scope. Use a process-local Portlink credential rather than switching the machine's global account.
-
-**Runtime configuration:** Netlify manages `RESEND_API_KEY` and `ADMIN_EMAIL`; Blobs credentials are platform-provided in production. Their values do not belong in these documents.
-
-**Hard separation:** only this org repository and this Netlify site. The `v2` remote is stale and deploys nothing. No neighbouring project's database, credentials or hosting belongs in this task.
-
-**Publishing:** the explicit ruling recorded in CLAUDE.md on 17.09.2026 applies. A change David requested is carried through to the live domain without an intermediate ask. After verification, publishing is `ALLOW_MAIN=1 git push origin main`. Agent-initiated publication, DNS changes and design-system version bumps still require David's approval. Never push a shared checkout containing another session's unpushed work.
+Run `python3 /Users/nyx/Projects/_assessment-2026-10-01/scripts/project-route.py "$PWD"` first, and `python3 /Users/nyx/Projects/_assessment-2026-10-01/scripts/verify-service-routes.py --project <this root>` for a live, value-free identity check of the declared services. Portfolio gaps: /Users/nyx/Projects/_assessment-2026-10-01/SERVICE-ROUTING.md.
 
 ## Homepage work entry point
 

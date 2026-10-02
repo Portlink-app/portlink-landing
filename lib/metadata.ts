@@ -19,7 +19,7 @@ import { siteUrl } from './site'
 
 /* Dated file, served immutable for a year: a re-cut lands at a new path rather than fighting a
    cached entry on a name that never changes. Rebuild with scripts/build-og-card.sh, never by hand. */
-export const ogImage = '/og/portlink-2026-09-16.png'
+export const ogImage = '/og/portlink-2026-10-02.png'
 
 export const siteTitle = 'Portlink · The Port Call Platform'
 export const siteDescription =

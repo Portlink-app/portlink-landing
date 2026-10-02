@@ -7,13 +7,15 @@
   Why a page: the card has to be in the design system, and the design system is CSS. This links
   the vendored token file directly, so --ds-canvas, --ds-text-1 and --ds-primary here are the same
   values the site renders with, and a Consolidated release changes the card by changing the tokens.
-  It also picks up the site's real font stack by name. Note that the site DOES render Plus Jakarta
-  Sans (self-hosted from app/_fonts/, see docs/CONSENT.md), while this page loads only the token
-  file, so the card renders the stack's fallback unless the headless Chrome has the family installed.
+  It also links app/_fonts/fonts.css, the same self-hosted faces the site serves, so the card is set
+  in Plus Jakarta Sans like the page it previews. Until 02.10.2026 it linked only the tokens, and since
+  no machine here has the family installed, every card was rendered in the system fallback (SF Pro).
+  scripts/build-og-card.sh now refuses to write a card whose fonts did not load.
 
   Rendered by scripts/build-og-card.sh through the same headless Chrome page-probe uses.
   Do not hand-edit public/og/*.png; edit this and re-run that script.
 -->
+<link rel="stylesheet" href="../../app/_fonts/fonts.css">
 <link rel="stylesheet" href="../../app/_ds/portlink-tokens.dist.css">
 <style>
   html, body { margin: 0; padding: 0; }

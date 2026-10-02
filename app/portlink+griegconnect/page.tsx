@@ -10,7 +10,7 @@ import Hilsen from '@/components/havn/Hilsen'
 
 /* Dated file, served immutable for a year like the site card: a re-cut lands at a new path. Built
    from scripts/og/havn-card.html. */
-const ogHavn = '/og/havn-2026-09-22.png'
+const ogHavn = '/og/havn-2026-10-02.png'
 const title = 'Portlink og Grieg Connect · Portlink'
 const description =
   'Hvordan Portlink og Grieg Connect kan leve sammen om det samme anløpet, og 23 spørsmål til dere som bruker systemet hver dag.'

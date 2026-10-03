@@ -4,7 +4,7 @@
 
 The one authoritative service table for this repository is [CLAUDE.md, Services and connections](CLAUDE.md#services-and-connections). This file deliberately keeps no second copy: two tables drift (consolidated 01.10.2026). Read that section before any external action, then confirm the exact account, site and project with a scoped read.
 
-Run `python3 /Users/nyx/Projects/_assessment-2026-10-01/scripts/project-route.py "$PWD"` first, and `python3 /Users/nyx/Projects/_assessment-2026-10-01/scripts/verify-service-routes.py --project <this root>` for a live, value-free identity check of the declared services. Portfolio gaps: /Users/nyx/Projects/_assessment-2026-10-01/SERVICE-ROUTING.md.
+Run `/Users/nyx/Projects/_admin/bin/project-route "$PWD"` first, and `/Users/nyx/Projects/_admin/bin/verify-service-routes --project <this root>` for a live, value-free identity check of the declared services. Portfolio gaps: /Users/nyx/Projects/_admin/assessment-2026-10-01/SERVICE-ROUTING.md.
 
 ## Homepage work entry point
 

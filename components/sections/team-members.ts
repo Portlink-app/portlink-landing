@@ -11,7 +11,9 @@
  * Founders first, then advisors. Both founders carry the same role and the same shape of sentence:
  * no CEO, no chair, nothing that ranks one above the other (David, 15.09.2026). The advisors are
  * presented through Handberg Holding, not Pallefabrik (Kris, 11.10.2026); no link until the holding
- * company has a page of its own to point at.
+ * company has a page of its own to point at. Their biographies match the founders' in shape and
+ * length (Kris, 11.10.2026): Dann's from his registered roles (proff.dk, ownr.dk) and TV Midtvest's
+ * 2022 portrait of him, Leo's from his LinkedIn. Leo's "three decades" is counted from his CV, which starts at Gerber Technology in 1994.
  */
 export type Member = {
   name: string
@@ -47,14 +49,16 @@ export const advisors: Member[] = [
     name: 'Dann Handberg Madsen',
     role: 'Co-Owner & Advisor',
     affiliation: 'CEO and owner, Handberg Holding',
-    short: 'CEO and owner of Handberg Holding.',
+    bio: 'Industry and ownership. From the graphic industry to timber and forestry. Today he owns Handberg Holding and a group of companies, among them je.dk, SkovPro and Feldborg Savværk.',
+    short: 'Owner of Handberg Holding, with companies from je.dk to SkovPro and Feldborg Savværk.',
     photo: '/team/dann.jpg',
   },
   {
     name: 'Leo Hansen',
     role: 'Advisor',
     affiliation: 'CFO, Handberg Holding',
-    short: 'CFO of Handberg Holding.',
+    bio: 'Finance and leadership. Three decades in finance, as CFO of Handberg Holding, Aurion and Nupark Innovation, CEO of Solid Production and the Nupark Accelerace investment fund, and ERP lead at Vestas.',
+    short: 'Three decades in finance, as CFO of Handberg Holding, Aurion and Nupark Innovation.',
     photo: '/team/leo.jpg',
   },
 ]

@@ -9,8 +9,9 @@
  * ⛔ NO FIGURE HERE THAT IS NOT SOURCED. Each line carries only what the person's own CV states.
  * "Sixteen years" and "a decade" are theirs; nothing else gets a number until somebody sources one.
  * Founders first, then advisors. Both founders carry the same role and the same shape of sentence:
- * no CEO, no chair, nothing that ranks one above the other (David, 15.09.2026). The advisors'
- * positions are the ones they publish themselves at pallefabrik.dk.
+ * no CEO, no chair, nothing that ranks one above the other (David, 15.09.2026). The advisors are
+ * presented through Handberg Holding, not Pallefabrik (Kris, 11.10.2026); no link until the holding
+ * company has a page of its own to point at.
  */
 export type Member = {
   name: string
@@ -45,17 +46,15 @@ export const advisors: Member[] = [
   {
     name: 'Dann Handberg Madsen',
     role: 'Advisor and Investor',
-    affiliation: 'CEO and owner, Pallefabrik',
-    short: 'CEO and owner of Pallefabrik, a logistics business he grew himself.',
-    href: 'https://www.pallefabrik.dk/kontakt-os',
+    affiliation: 'CEO and owner, Handberg Holding',
+    short: 'CEO and owner of Handberg Holding.',
     photo: '/team/dann.jpg',
   },
   {
     name: 'Leo Hansen',
     role: 'Advisor',
-    affiliation: 'CFO, Pallefabrik',
-    short: 'CFO of Pallefabrik.',
-    href: 'https://www.pallefabrik.dk/kontakt-os',
+    affiliation: 'CFO, Handberg Holding',
+    short: 'CFO of Handberg Holding.',
     photo: '/team/leo.jpg',
   },
 ]

@@ -45,7 +45,7 @@ export const founders: Member[] = [
 export const advisors: Member[] = [
   {
     name: 'Dann Handberg Madsen',
-    role: 'Advisor and Investor',
+    role: 'Co-Owner & Advisor',
     affiliation: 'CEO and owner, Handberg Holding',
     short: 'CEO and owner of Handberg Holding.',
     photo: '/team/dann.jpg',

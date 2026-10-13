@@ -15,11 +15,12 @@ design system is copied in rather than fetched at runtime. Funnel entry doc:
 
 | Service | This repo uses | Verify with |
 |---|---|---|
-| GitHub | **`Portlink-app/portlink-landing`** (the **org**), public, default branch `main`. The local `origin` still says `https://github.com/portlinkadmin/portlink-landing.git` — the repo was **transferred to the org** and GitHub redirects the old path, which is why both work and why the Netlify site reports the org URL. Push as the person working: **David = `GitDABA`**, Kris = `Nautiqs` (since 28.09.2026; `portlinkadmin` is now a read-only org member for automatic services and cannot push) | `gh repo view portlinkadmin/portlink-landing` → resolves to `Portlink-app/portlink-landing` |
+| GitHub | **`Portlink-app/portlink-landing`** (the **org**), public, default branch `main`. Local `origin` is `https://github.com/Portlink-app/portlink-landing.git` (measured 13.10.2026; the pre-transfer path still redirects). Push as the person working: **David = `GitDABA`**, Kris = `Nautiqs` (since 28.09.2026; `portlinkadmin` is now a read-only org member for automatic services and cannot push) | `git remote -v`; `gh repo view Portlink-app/portlink-landing` with the named login |
 | GitHub — second remote | `v2` → `https://github.com/portlinkadmin/portlink-landing-v2.git`, public, last pushed 20.03.2026. **Not the live site.** Never `git push v2` expecting a deploy | `git remote -v` · `gh repo view portlinkadmin/portlink-landing-v2` |
 | Netlify | account **Portlink** (`admin-irpjrvy`) · site **`portlin-landing-2`** — note the typo, "portlin", not "portlink" — (`34ab2932-19da-44e5-b761-0bc83acc0055`) · **https://portlink.app** · builds `main` from the org repo | `GET /api/v1/sites` with the **Portlink** token |
 | Resend | account **Portlink**, domain `portlink.app` verified (eu-west-1), sender `pilot@portlink.app`, audiences *General* + *Seatrade Med 2026* (`462446b9-df54-4ce1-ace1-8cf07e3b4d7b`) | `GET https://api.resend.com/domains` with the key below |
 | Netlify Blobs | store `seatrade-leads` on the site above, site-wide (shared by drafts and production) | `node scripts/seatrade-delete-lead.mjs --list` |
+| Visitor intelligence | own first-party lead tracking: `/api/intel/*`, `/leads/`, Blobs store `visitor-intel`, hourly scheduled function `intel-cron`; Netlify manages `INTEL_SECRET` | `docs/VISITOR-INTELLIGENCE.md`; `npm run check:consent-gate` |
 | Supabase / Stripe / SMS / CI | **none** | `ls .github/workflows` → absent |
 
 **Deploy trigger, stated plainly:** Netlify auto-deploys `main` from the **org** repo to
@@ -41,17 +42,22 @@ is not blocked from publishing: land a change David asked for with
 `ALLOW_MAIN=1 git push origin main` once it is proven. Keep the pull-request form for a change
 nobody asked for, because that one is David's and the pull request is the thing he approves.
 
-**Credentials — references only, never values.** Vault `cypqkqoeuibf4f6aud47v3qooa` (*Portlink*):
+**Credentials: references only, never values.** Vault `cypqkqoeuibf4f6aud47v3qooa` (*Portlink*):
 
-| Need | `op://` reference |
+| Need | Route |
 |---|---|
-| GitHub PAT (Portlink) | `op://cypqkqoeuibf4f6aud47v3qooa/owl6advkmjvx2bjpzi3y6duyha/credential` |
+| GitHub (read, push a task branch) | no vault token. The named gh keyring login from the table above: `GH_TOKEN="$(gh auth token --user GitDABA)" gh …` (Kris: `Nautiqs`). Never `gh auth switch` and never the ambient active account |
 | Netlify API token (Portlink) | `op://cypqkqoeuibf4f6aud47v3qooa/a7h7xyjwjlfmzsc4oaf6gmuoym/credential` |
 | Resend API key (Portlink) | `op://cypqkqoeuibf4f6aud47v3qooa/lhylbglnfx7vy7yenlxn2tfehm/credential` |
+| INTEL_SECRET (visitor intelligence) | `op://cypqkqoeuibf4f6aud47v3qooa/3jup4j5ayriz63j6ocfwqyczo4/password` |
 
-`op://Portlink/…` also works (single-word vault name), unlike `op://Bakke & Co/…`, which `op`
-rejects. Read with `op read '<ref>' --no-newline` and pipe straight into the consuming command;
-never echo, log or paste a value.
+The former `GitHub PAT (Portlink)` item (`owl6advkmjvx2bjpzi3y6duyha`) belongs to `portlinkadmin` and
+reads this repo as pull-only since 28.09.2026 (measured 13.10.2026: `push:false`). It is not a route
+for any GitHub action here; do not reintroduce it.
+
+Read a value only through the secret wrapper and pipe it straight into the consumer:
+`~/.claude/bin/secret probe '<ref>'` proves the reference resolves (byte count, never the value);
+`~/.claude/bin/secret get '<ref>' | <consumer>` uses it. Never echo, log or paste a value.
 
 **Runtime environment (Netlify site env, all contexts):** `RESEND_API_KEY` (same value as the
 1Password item above) and `ADMIN_EMAIL` (where pilot requests, Seatrade lead notifications and CSV
@@ -59,17 +65,13 @@ exports land; `post@davidbakke.no` as of 14.09.2026). Nothing else. Netlify Blob
 on Netlify; locally run `netlify dev` (the checkout is linked to the site) or export
 `NETLIFY_SITE_ID` + `NETLIFY_AUTH_TOKEN`.
 
-**Hard separation:** GitHub `portlinkadmin` / the `Portlink-app` org, and the **Portlink** Netlify
-account. The **Bakke & Co** side of this machine — GitHub `GitDABA`, the Bakke & Co Netlify
-account, vault `7tr6yo3acnhdlbltgkzexw7rce` — is a different company and is out of bounds. `gh`'s
-active account defaults to `GitDABA`; check it every time, because a wrong-account push here lands
-in the wrong company's history. No Supabase project belongs to this repo.
+**Hard separation:** this repo uses only the `Portlink-app` GitHub organisation through the named
+login above, the **Portlink** Netlify account and the Portlink vault. Any other Netlify account,
+vault or GitHub organisation on this machine is out of bounds. Check the identity with the named
+login before every external action, because a wrong-account push lands in the wrong history. No
+Supabase project belongs to this repo. `npm run check:service-docs` refuses the retired routes.
 
-**Worth tidying, David's call:** the local `origin` points at the pre-transfer path. It works
-through GitHub's redirect, but it makes every tool report a different owner than the one that owns
-the repo. Repointing it (`git remote set-url origin https://github.com/Portlink-app/portlink-landing.git`)
-is local and reversible — left undone here deliberately, since changing a remote is not a
-documentation change.
+**Remote routing verified 13.10.2026:** origin already uses `https://github.com/Portlink-app/portlink-landing.git`. The former pre-transfer-origin cleanup item is closed. Recheck current identity before external work.
 
 **Irreversible steps and who owns them:**
 

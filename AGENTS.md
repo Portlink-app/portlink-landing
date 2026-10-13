@@ -2,35 +2,9 @@
 
 ## Services and connections
 
-Verified 19.09.2026 against GitHub and the Netlify site API. This routing supersedes the old Connections table and the pre-transfer remote note in CLAUDE.md.
+The one authoritative service table for this repository is [CLAUDE.md, Services and connections](CLAUDE.md#services-and-connections). This file deliberately keeps no second copy: two tables drift (consolidated 01.10.2026). Read that section before any external action, then confirm the exact account, site and project with a scoped read.
 
-**Architecture:** Next.js App Router marketing site on Netlify. The homepage and contact, team and privacy pages share the vendored Portlink design system. Contact and pilot requests use Resend. The separate Seatrade funnel uses Resend and Netlify Blobs. No Supabase database belongs to this repository.
-
-| Service | This repo uses | Verify with |
-|---|---|---|
-| GitHub | account `portlinkadmin`, org repository `Portlink-app/portlink-landing`, origin `https://github.com/Portlink-app/portlink-landing.git`, default `main` | authenticated `/user` and repository API, `git remote -v` |
-| Netlify | account `admin-irpjrvy`, site `portlin-landing-2`, id `34ab2932-19da-44e5-b761-0bc83acc0055`, domain `https://portlink.app`, builds `main` | site API id, account_slug, custom_domain and build_settings |
-| Resend | Portlink account, contact and Seatrade mail, runtime `RESEND_API_KEY` | existing mail guards; do not send verification mail |
-| Netlify Blobs | `seatrade-leads`, on the site above | existing Seatrade entry documentation |
-| Visitor intelligence | own first-party lead tracking: `/api/intel/*`, `/leads/`, Blobs store `visitor-intel`, hourly scheduled function `intel-cron` | `docs/VISITOR-INTELLIGENCE.md`; `npm run check:consent-gate` |
-| Supabase | none for the landing site | the registry's Portlink product database is outside this repository |
-
-**Credentials:** references only. Portlink vault `cypqkqoeuibf4f6aud47v3qooa`.
-
-| Need | Reference |
-|---|---|
-| GitHub | `op://cypqkqoeuibf4f6aud47v3qooa/owl6advkmjvx2bjpzi3y6duyha/credential` |
-| Netlify | `op://cypqkqoeuibf4f6aud47v3qooa/a7h7xyjwjlfmzsc4oaf6gmuoym/credential` |
-| Resend | `op://cypqkqoeuibf4f6aud47v3qooa/lhylbglnfx7vy7yenlxn2tfehm/credential` |
-| INTEL_SECRET (visitor intelligence) | `op://cypqkqoeuibf4f6aud47v3qooa/3jup4j5ayriz63j6ocfwqyczo4/password` |
-
-Use `/Users/nyx/.Codex/bin/secret`. Feed values directly into the consuming process; never log them. Verify GitHub login is `portlinkadmin` for each session. The default connector and shell account can be `GitDABA`, which is outside this project's scope. Use a process-local Portlink credential rather than switching the machine's global account.
-
-**Runtime configuration:** Netlify manages `RESEND_API_KEY`, `ADMIN_EMAIL` and `INTEL_SECRET`; Blobs credentials are platform-provided in production. Their values do not belong in these documents.
-
-**Hard separation:** only this org repository and this Netlify site. The `v2` remote is stale and deploys nothing. No neighbouring project's database, credentials or hosting belongs in this task.
-
-**Publishing:** the explicit ruling recorded in CLAUDE.md on 17.09.2026 applies. A change David requested is carried through to the live domain without an intermediate ask. After verification, publishing is `ALLOW_MAIN=1 git push origin main`. Agent-initiated publication, DNS changes and design-system version bumps still require David's approval. Never push a shared checkout containing another session's unpushed work.
+Run `/Users/nyx/Projects/_admin/bin/project-route "$PWD"` first, and `/Users/nyx/Projects/_admin/bin/verify-service-routes --project <this root>` for a live, value-free identity check of the declared services. Portfolio gaps: /Users/nyx/Projects/_admin/assessment-2026-10-01/SERVICE-ROUTING.md.
 
 ## Homepage work entry point
 
@@ -43,8 +17,16 @@ Run `npm run build` and `npm run verify`. The build checks rendered scene pairs 
 Always include a verified Tailscale URL when sharing this preview. Current private endpoint:
 `https://nyxs-mac-studio.tail79b0ec.ts.net:4320/`, forwarding to `http://127.0.0.1:4320/`.
 The same URL is used from the Mac Studio, MacBook and iPhone when connected to Tailscale.
-The underlying optimized preview is `npm run start -- --hostname 127.0.0.1 --port 4320`.
+Manage the persistent optimized preview with `node scripts/preview-service.mjs start|stop|restart|status`.
+The script installs `app.portlink.landing-preview-4320` as a user LaunchAgent with automatic restart.
+Never share a preview backed only by a tool-owned foreground or background process.
+Before rebuilding: `node scripts/preview-service.mjs stop`; after a successful build, use `start`.
+Before sharing: `node scripts/preview-service.mjs check https://nyxs-mac-studio.tail79b0ec.ts.net:4320/`,
+then verify actual browser rendering. The health check fetches both pages and their scripts/styles/fonts.
 Inspect live status with `/Applications/Tailscale.app/Contents/MacOS/Tailscale serve status --json`.
 Preserve unrelated routes. This endpoint is private Serve, not public Funnel. Browser loading on
-this Mac was verified on 19.09.2026; a remote-device browser test was not performed.
+this Mac was verified on 22.09.2026; a remote-device browser test was not performed.
+The host must be awake, signed in and connected to Tailscale. Public `https://portlink.app/` is independent of it.
+Logs: `~/Library/Logs/PortlinkLandingPreview/server.log` and `server.err`.
+The older `app.portlink.landing-preview` label serves a separate legacy worktree on 4611; it does not own 4320.
 To remove just this endpoint: `/Applications/Tailscale.app/Contents/MacOS/Tailscale serve --https=4320 off`.

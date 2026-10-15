@@ -31,6 +31,7 @@
 import { CheckCircle2 } from 'lucide-react'
 import { useReveal } from '@/hooks/useReveal'
 import { CONTACT_PROMISES } from '@/lib/contact/promises'
+import { selfServeUrl } from '@/lib/site'
 
 /** The pilot's terms. One copy, on one page, in one place. */
 const pilotTerms = [
@@ -147,12 +148,25 @@ export default function TwoDoorsSection() {
                 </li>
               ))}
             </ul>
-            <a
-              href="#access"
-              style={ctaStyle}
-            >
-              Request pilot access
-            </a>
+            {/* With self-serve open, the primary action is the trial; the pilot request stays one
+                line below it, because a team that wants us to set them up still has that door. */}
+            {selfServeUrl ? (
+              <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 10 }}>
+                <a href={`${selfServeUrl}/start`} style={{ ...ctaStyle, marginTop: 0 }}>
+                  Start a 90-day trial
+                </a>
+                <a href="#access" style={{ fontSize: 14, fontWeight: 600, color: 'var(--ds-text-2)' }}>
+                  Or request pilot access
+                </a>
+              </div>
+            ) : (
+              <a
+                href="#access"
+                style={ctaStyle}
+              >
+                Request pilot access
+              </a>
+            )}
           </div>
 
           {/* Door B: the company */}

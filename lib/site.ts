@@ -25,3 +25,11 @@ export const siteUrl =
 
 /** True only on the production deploy of the real domain. */
 export const isProduction = process.env.CONTEXT === 'production'
+
+/**
+ * The self-serve sign-up on the platform (`platform.portlink.app/start`), or null while it is not
+ * open. Set NEXT_PUBLIC_SELF_SERVE_URL on the Netlify site to show the trial door; unset, the page is
+ * exactly what it was, because the platform side only takes real payments once its Stripe account is
+ * live (portlink-platform `docs/BILLING_GO_LIVE.md`). Read at build time, like every NEXT_PUBLIC_ value.
+ */
+export const selfServeUrl: string | null = process.env.NEXT_PUBLIC_SELF_SERVE_URL?.replace(/\/$/, '') || null

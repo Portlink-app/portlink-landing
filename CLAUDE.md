@@ -59,6 +59,11 @@ exports land; `post@davidbakke.no` as of 14.09.2026). Nothing else. Netlify Blob
 on Netlify; locally run `netlify dev` (the checkout is linked to the site) or export
 `NETLIFY_SITE_ID` + `NETLIFY_AUTH_TOKEN`.
 
+**Local secrets:** `npm run dev` runs `scripts/dev.sh`, which starts `next dev` under
+`op run --env-file=.env.op`, so `RESEND_API_KEY` comes from 1Password and `.env.local` holds only
+`ADMIN_EMAIL`. Never write a key back into `.env.local`. Without `op` (or with `PL_DEV_NO_OP=1`) it is
+plain `next dev`, and mail routes then run without a key.
+
 **Hard separation:** GitHub `portlinkadmin` / the `Portlink-app` org, and the **Portlink** Netlify
 account. The **Bakke & Co** side of this machine — GitHub `GitDABA`, the Bakke & Co Netlify
 account, vault `7tr6yo3acnhdlbltgkzexw7rce` — is a different company and is out of bounds. `gh`'s

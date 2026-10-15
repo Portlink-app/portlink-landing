@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "sh scripts/dev.sh",
     "prebuild": "node scripts/check-ds-version.mjs && node scripts/lint-dashes.mjs && node scripts/check-clip-modes.mjs --if-available && npm run check:leaderboard && npm run check:access && npm run check:eligibility && npm run check:anchors && npm run check:mail-routes && npm run check:viz-type && npm run check:contact-intent && npm run check:font-hosts && npm run check:client-ip",
     "check:clips": "node scripts/check-clip-modes.mjs",
     "verify": "npm run lint:dashes && npm run lint:dashes-selftest && npm run check:clips && npm run check:leaderboard && npm run check:access && npm run check:eligibility && npm run check:anchors && npm run check:mail-routes && npm run check:viz-type && npm run check:contact-intent && npm run check:scene-layouts && npm run check:film-motion && npm run check:font-hosts && npm run check:client-ip && npm run lint",

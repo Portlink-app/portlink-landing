@@ -15,7 +15,7 @@ design system is copied in rather than fetched at runtime. Funnel entry doc:
 
 | Service | This repo uses | Verify with |
 |---|---|---|
-| GitHub | **`Portlink-app/portlink-landing`** (the **org**), public, default branch `main`. The local `origin` still says `https://github.com/portlinkadmin/portlink-landing.git` — the repo was **transferred to the org** and GitHub redirects the old path, which is why both work and why the Netlify site reports the org URL. Push as the person working: **David = `GitDABA`**, Kris = `Nautiqs` (since 28.09.2026; `portlinkadmin` is now a read-only org member for automatic services and cannot push) | `gh repo view portlinkadmin/portlink-landing` → resolves to `Portlink-app/portlink-landing` |
+| GitHub | **`Portlink-app/portlink-landing`** (the **org**), public, default branch `main`. The local `origin` still says `https://github.com/portlinkadmin/portlink-landing.git` — the repo was **transferred to the org** and GitHub redirects the old path, which is why both work and why the Netlify site reports the org URL. Push as the person working: **David = `Bakke-Co`** (renamed from GitDABA on 25.10.2026, account 20335443), Kris = `Nautiqs` (since 28.09.2026; `portlinkadmin` is now a read-only org member for automatic services and cannot push) | `gh repo view portlinkadmin/portlink-landing` → resolves to `Portlink-app/portlink-landing` |
 | GitHub — second remote | `v2` → `https://github.com/portlinkadmin/portlink-landing-v2.git`, public, last pushed 20.03.2026. **Not the live site.** Never `git push v2` expecting a deploy | `git remote -v` · `gh repo view portlinkadmin/portlink-landing-v2` |
 | Netlify | account **Portlink** (`admin-irpjrvy`) · site **`portlin-landing-2`** — note the typo, "portlin", not "portlink" — (`34ab2932-19da-44e5-b761-0bc83acc0055`) · **https://portlink.app** · builds `main` from the org repo | `GET /api/v1/sites` with the **Portlink** token |
 | Resend | account **Portlink**, domain `portlink.app` verified (eu-west-1), sender `pilot@portlink.app`, audiences *General* + *Seatrade Med 2026* (`462446b9-df54-4ce1-ace1-8cf07e3b4d7b`) | `GET https://api.resend.com/domains` with the key below |
@@ -65,9 +65,9 @@ on Netlify; locally run `netlify dev` (the checkout is linked to the site) or ex
 plain `next dev`, and mail routes then run without a key.
 
 **Hard separation:** GitHub `portlinkadmin` / the `Portlink-app` org, and the **Portlink** Netlify
-account. The **Bakke & Co** side of this machine — GitHub `GitDABA`, the Bakke & Co Netlify
+account. The **Bakke & Co** side of this machine — GitHub `Bakke-Co`, the Bakke & Co Netlify
 account, vault `7tr6yo3acnhdlbltgkzexw7rce` — is a different company and is out of bounds. `gh`'s
-active account defaults to `GitDABA`; check it every time, because a wrong-account push here lands
+active account defaults to `Bakke-Co`; check it every time, because a wrong-account push here lands
 in the wrong company's history. No Supabase project belongs to this repo.
 
 **Worth tidying, David's call:** the local `origin` points at the pre-transfer path. It works

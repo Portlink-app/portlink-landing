@@ -219,6 +219,14 @@ console.log('accept')
   await check('no header can be smuggled into a subject line', () => {
     for (const b of bodies) assert.equal(/[\r\n]/.test(b.subject), false, 'newline in a subject')
   })
+  /* The homepage's only pilot mount is "Book a 20-minute demo" (conversion Batch 1, 01.11.2026), so
+     the visitor's confirmation must answer a demo request, not an application. */
+  await check('the visitor confirmation answers a demo request', () => {
+    const toVisitor = bodies.find(b => String(b.to).includes('nordicportagency'))
+    assert.match(toVisitor.subject, /^We received your demo request, /)
+    assert.match(toVisitor.html, /20-minute demo/)
+    assert.doesNotMatch(toVisitor.html, /application|pilot request/i)
+  })
   delete process.env.RESEND_API_KEY
 }
 

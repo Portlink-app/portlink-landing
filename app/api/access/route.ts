@@ -143,10 +143,12 @@ const buildConfirmation = {
 
 /** The three steps, per intent. Index 0 is step 1; the order is the order the reader sees. */
 const nextSteps: Record<ContactIntent, string[]> = {
+  /* Since conversion Batch 1 (01.11.2026) the only `pilot` mount is the homepage's "Book a
+     20-minute demo" section, so this mail answers a demo request, and the pilot is what follows. */
   pilot: [
-    'We look at your application and see if it is a good fit for the current cohort.',
-    'If selected, we set up a short call to learn about your setup.',
-    'We onboard you personally. No help articles, no self-serve.',
+    'David or Kris replies within 48 hours with times for a 20-minute demo.',
+    'We spend the 20 minutes on your kind of port call, using what you told us about your operation.',
+    'If it fits, the pilot follows and we onboard you personally. No help articles, no self-serve.',
   ],
   /* Read from `lib/contact/promises.ts`, the same list `/contact/` and door B of TwoDoorsSection
      render. The page promising one thing and the mail promising another is the single most
@@ -160,7 +162,7 @@ function buildConfirmationEmail(data: AccessRequest): string {
   const opening =
     data.intent === 'build'
       ? `We have your message from <strong>${esc(data.company)}</strong> and will get back to you within 48 hours.`
-      : `Thanks for putting in a request for the Portlink pilot. We have your application for <strong>${esc(data.company)}</strong> and will get back to you within 48 hours.`
+      : `Thanks for asking for a 20-minute demo of Portlink. We have your request for <strong>${esc(data.company)}</strong> and will get back to you within 48 hours to set a time.`
 
   const steps = nextSteps[data.intent]
     .map((text, i) => `
@@ -411,7 +413,7 @@ export async function POST(request: Request) {
       to: data.email,
       subject: intent === 'build'
         ? `We got your message, ${data.name.split(' ')[0]}`
-        : `We received your pilot request, ${data.name.split(' ')[0]}`,
+        : `We received your demo request, ${data.name.split(' ')[0]}`,
       html: buildConfirmationEmail(data),
     }),
     resend.emails.send({

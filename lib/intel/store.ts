@@ -30,7 +30,7 @@ export function intelStore(): Store {
   return cached
 }
 
-export type EventType = 'pv' | 'scroll' | 'form' | 'leave' | 'identify' | 'link' | 'forget'
+export type EventType = 'pv' | 'scroll' | 'cta' | 'form' | 'leave' | 'identify' | 'link' | 'forget'
 
 export interface Org {
   /** What the site shows: the curated ICP name, else the network holder's organisation name. */
@@ -65,6 +65,8 @@ export interface IntelEvent {
   utm?: Record<string, string>
   ms?: number
   formId?: string
+  /** For `cta`: which call to action, from its `data-cta` attribute. */
+  cta?: string
   country?: string
   city?: string
   org?: Org

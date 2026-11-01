@@ -1,7 +1,7 @@
 'use client'
 
 /**
- * Records page views, deep scrolls, form sends and time on page for visitor intelligence. Mounted
+ * Records page views, deep scrolls, call-to-action clicks, form sends and time on page for visitor intelligence. Mounted
  * once in the root layout. No cookie, no storage of its own: see lib/intel/client.ts and the
  * collector app/api/intel/v/route.ts. Entry doc: docs/VISITOR-INTELLIGENCE.md.
  */
@@ -65,6 +65,13 @@ export default function VisitorTracker() {
       const f = e.target as HTMLFormElement | null
       if (f?.tagName === 'FORM') send({ t: 'form', p: pathname, formId: f.id || f.getAttribute('name') || f.getAttribute('aria-label') || 'form' })
     }
+    // Any element carrying `data-cta` is a funnel action (conversion Batch 1, 01.11.2026). Its value
+    // names where on the page it sits, so the digest can tell the hero from the header.
+    const onClick = (e: MouseEvent) => {
+      const el = (e.target as Element | null)?.closest?.('[data-cta]')
+      const cta = el?.getAttribute('data-cta')
+      if (cta) send({ t: 'cta', p: pathname, cta })
+    }
     let left = false
     const leave = () => {
       if (left) return
@@ -75,12 +82,14 @@ export default function VisitorTracker() {
 
     window.addEventListener('scroll', onScroll, { passive: true })
     document.addEventListener('submit', onSubmit, true)
+    document.addEventListener('click', onClick, true)
     document.addEventListener('visibilitychange', onHide)
     window.addEventListener('pagehide', leave)
     return () => {
       window.clearTimeout(timer)
       window.removeEventListener('scroll', onScroll)
       document.removeEventListener('submit', onSubmit, true)
+      document.removeEventListener('click', onClick, true)
       document.removeEventListener('visibilitychange', onHide)
       window.removeEventListener('pagehide', leave)
       leave()

@@ -11,6 +11,7 @@
 .menuToggle { display: none; }
 .menu { position: absolute; top: 100%; left: 0; right: 0; max-height: calc(100dvh - 64px); overflow-y: auto; overscroll-behavior: contain; background: var(--bg); border-bottom: 1px solid var(--border); padding: 12px 24px 20px; box-shadow: 0 16px 24px rgb(0 0 0 / .08); }
 .menu[hidden] { display: none; }
+.menu a.menuCta { font-weight: 600; color: var(--ds-text-1); border-bottom: 0; }
 .menu a { display: flex; align-items: center; min-height: 48px; padding: 8px 0; border-bottom: 1px solid var(--border); color: var(--text-primary); text-decoration: none; font-size: 16px; }
 @media (hover: hover) { .desktop a:hover, .menu a:hover { color: var(--brand); } .cta:hover { background: var(--brand-bright); } .iconButton:hover { border-color: var(--text-secondary); } }
 @media (max-width: 1000px) { .desktop, .cta { display: none; } .menuToggle { display: inline-flex; } }

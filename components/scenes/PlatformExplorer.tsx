@@ -56,7 +56,7 @@ export default function PlatformExplorer() {
       <div className={styles.inner}>
         <div className={styles.labelRow}>
           <span className="section-eyebrow">Inside the platform</span>
-          <span className={styles.instruction}>Choose a surface. See how it works.</span>
+          <span className={styles.instruction}>Choose a surface. Previews use illustrative data.</span>
         </div>
         <div className={styles.tabs} role="tablist" aria-label="Platform surfaces">
           {chapters.map((chapter, index) => {

@@ -9,7 +9,7 @@
 import { NextResponse } from 'next/server'
 import { Resend } from 'resend'
 import { HOT_SCORE, RETENTION_DAYS } from '@/lib/intel/config'
-import { buildCompanies, buildPeople, buildVisits, companyKey, type CompanyRow } from '@/lib/intel/aggregate'
+import { buildCompanies, buildPeople, buildVisits, companyKey, funnel, type CompanyRow, type Funnel } from '@/lib/intel/aggregate'
 import { alreadyAlerted, day, getMeta, listEvents, markAlerted, setMeta, sweep } from '@/lib/intel/store'
 import { isAdminSecret } from '@/lib/intel/token'
 import { escapeHtml as esc, wrap } from '@/lib/email/wrap'
@@ -28,6 +28,13 @@ function companyBlock(c: CompanyRow): string {
   return `<p style="margin:0 0 14px"><strong>${esc(c.name)}</strong>${c.domain ? ` · ${esc(c.domain)}` : ''}${c.icp ? ' · <strong>target account</strong>' : ''}<br>
 Score ${c.score} · ${c.visits} visit${c.visits === 1 ? '' : 's'} · ${c.visitors} visitor${c.visitors === 1 ? '' : 's'}<br>
 ${c.reasons.length ? `Why: ${esc(c.reasons.join(', '))}<br>` : ''}Pages: ${pages}${people ? `<br>People: ${people}` : ''}</p>`
+}
+
+/** One line a founder can read in the mail: each stage with its share of visits. */
+function funnelLine(f: Funnel): string {
+  const pct = (n: number) => (f.visits ? `${Math.round((n / f.visits) * 100)} %` : '0 %')
+  const ctas = Object.entries(f.ctas).sort((a, b) => b[1] - a[1]).map(([k, n]) => `${esc(k)} ${n}`).join(', ')
+  return `<p style="margin:0 0 14px"><strong>Funnel</strong><br>Visits ${f.visits} · read to 75 % ${f.deepScroll} (${pct(f.deepScroll)}) · clicked a call to action ${f.ctaClick} (${pct(f.ctaClick)}) · started the form ${f.formStarted} (${pct(f.formStarted)}) · request sent ${f.formSent} (${pct(f.formSent)})${ctas ? `<br>Which: ${ctas}` : ''}</p>`
 }
 
 export async function POST(request: Request) {
@@ -67,6 +74,7 @@ export async function POST(request: Request) {
         to: ADMIN_EMAIL,
         subject: `portlink.app last 24 h: ${companies.length} compan${companies.length === 1 ? 'y' : 'ies'}, ${recent.length} visits`,
         html: wrap(`<p>${recent.length} visits in the last 24 hours, ${companies.length} from named companies${people.length ? `, ${people.length} identified people` : ''}.</p>
+${funnelLine(funnel(recent))}
 ${companies.slice(0, 15).map(companyBlock).join('') || '<p>No named companies.</p>'}
 ${people.length ? `<p><strong>People</strong><br>${people.map((p) => esc(`${p.name ?? p.email} (${p.company ?? 'no company'}) · ${p.visits} visit(s)`)).join('<br>')}</p>` : ''}
 <p><a href="${loginLink()}">Open the leads page</a></p>`),

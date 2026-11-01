@@ -17,7 +17,11 @@ export interface Visit {
   person?: Person
   pages: { p: string; title?: string; ts: string }[]
   scrolls: number
+  /** Call-to-action clicks (`data-cta`), and which ones. */
+  ctas: string[]
   forms: number
+  /** Requests /api/access accepted (`form` events with formId `sent-*`). */
+  sent: number
   ms: number
   ref?: string
   utm?: Record<string, string>
@@ -68,7 +72,7 @@ export async function buildVisits(events: IntelEvent[]): Promise<Visit[]> {
     const k = `${e.ts.slice(0, 10)}:${e.vk}`
     let v = byKey.get(k)
     if (!v) {
-      v = { key: k, day: e.ts.slice(0, 10), start: e.ts, end: e.ts, pages: [], scrolls: 0, forms: 0, ms: 0, linked: false, score: 0, reasons: [] }
+      v = { key: k, day: e.ts.slice(0, 10), start: e.ts, end: e.ts, pages: [], scrolls: 0, ctas: [], forms: 0, sent: 0, ms: 0, linked: false, score: 0, reasons: [] }
       byKey.set(k, v)
     }
     v.end = e.ts
@@ -80,7 +84,9 @@ export async function buildVisits(events: IntelEvent[]): Promise<Visit[]> {
     v.utm ??= e.utm
     if (e.t === 'pv' && e.p) v.pages.push({ p: e.p, title: e.title, ts: e.ts })
     if (e.t === 'scroll') v.scrolls++
+    if (e.t === 'cta' && e.cta) v.ctas.push(e.cta)
     if (e.t === 'form') v.forms++
+    if (e.t === 'form' && e.formId?.startsWith('sent-')) v.sent++
     if (e.t === 'leave') v.ms += e.ms ?? 0
     if ((e.t === 'identify' || e.t === 'link') && e.person) {
       v.person = e.person
@@ -193,4 +199,23 @@ export function topPages(visits: Visit[]): { p: string; views: number; visitors:
     m.set(pg.p, r)
   }
   return [...m.entries()].map(([p, r]) => ({ p, views: r.views, visitors: r.visitors.size })).sort((a, b) => b.views - a.views)
+}
+
+/**
+ * The conversion funnel, per visit (conversion Batch 1, 01.11.2026): how many visits reached 75 %
+ * scroll, clicked a call to action, started the contact form (any submit) and had a request
+ * accepted. Each stage counts visits, not events, so a double click is one visit.
+ */
+export interface Funnel { visits: number; deepScroll: number; ctaClick: number; formStarted: number; formSent: number; ctas: Record<string, number> }
+
+export function funnel(visits: Visit[]): Funnel {
+  const f: Funnel = { visits: visits.length, deepScroll: 0, ctaClick: 0, formStarted: 0, formSent: 0, ctas: {} }
+  for (const v of visits) {
+    if (v.scrolls) f.deepScroll++
+    if (v.ctas.length) f.ctaClick++
+    if (v.forms) f.formStarted++
+    if (v.sent) f.formSent++
+    for (const c of new Set(v.ctas)) f.ctas[c] = (f.ctas[c] ?? 0) + 1
+  }
+  return f
 }

@@ -14,6 +14,14 @@ Development root: 1aa79d6ca78caa015867db5494317cdda0b9a6e0563452aa10a3efc03a2b82
 - [ ] Complete remaining consumers and the repository/client/theme/mobile gates.
 - [ ] Hand the verified landing branch to Starboard for publication, then verify the deployed artifact and conversion path.
 
+## Landing integrity change assessment
+
+Scope before editing: replace the version/existence-only logic in scripts/check-ds-version.mjs, reached by npm prebuild and ds:check, and add its mutation self-test to npm verify. README documents these consumers. Five files currently comprise app/_ds, including the generated manifest and both component-CSS filenames. No vendor bytes, visual source, mail transport or data paths change. Reversal is the gate/test/documentation commit only.
+
+Ranked approaches: use an independently reviewed full-tree pin in the existing gate now, then replace that legacy pin with Gate A's accepted release identity at intake; checking only the co-located manifest is rejected because coordinated rehashing passes; fetching a moving sibling/latest package during every build is rejected because it is neither reproducible nor a trusted immutable pin. The current legacy pin is anchored to reviewed landing main a77b3e9ffec74168b7f384fdc7e7547d58f3af90, not represented as a D14 release. Version, full file set and exact bytes must match. Updating the gate's trusted anchor remains a reviewed source change; this is not signature verification or a replacement for Tiller's upstream release-history controls.
+
+Landmines: Next runs the gate before compilation; Netlify has no sibling checkout; aliases can differ from the manifest's two entries; extra files and symlinks must fail; manifest-only updates must fail; an invalid or unsupported version must not be accepted by prefix matching. Strict/quiet callers must keep working. Self-tests use isolated copies and no customer or repository vendor mutation.
+
 Visual integration is dependency-blocked, not complete. This is input to Tiller's manifest, not a second package registry. No provisional values or generated files have been edited.
 
 ## Sources and ownership
@@ -190,3 +198,36 @@ Embark generated signup/invite links feed the custom React Email paths; generate
 | Embark admin icons | web/src/app/admin-icon/[variant]/route.tsx | Independent ImageResponse and uploaded-logo rendering; retain tenant asset. |
 
 This is source caller-family coverage, not exhaustive branch execution. Live hosted configuration, tenant settings, asset bytes, historical exports and deployment destinations are still unmeasured. No product changes, messages, campaigns or hosted-template writes were performed.
+
+## Mixed-version and rollback disposition
+
+The current preparation state is deliberately mixed: landing legacy v4.1.2 at a77b3e9ffec74168b7f384fdc7e7547d58f3af90; Platform and Embark portable 1.0.0 at the source pins above. These identify source snapshots, not a measured production deployment rollback. No new cross-version runtime contract is approved by this record.
+
+During Gate A preparation, retain those consumers intact. This gate-only change preserves all five landing vendor files byte-for-byte and does not change application, mail, fonts, APIs, schemas, consent or tenant identity. Its compatibility interval ends when the accepted Gate A intake replaces the legacy anchor and adapters. If the upstream handoff changes public token/output semantics, remeasure every affected adapter before publication; do not interpret this temporary coexistence as final D14 acceptance.
+
+Landing source rollback is a77b3e9ffec74168b7f384fdc7e7547d58f3af90, with full vendor tree SHA-256 3a1c382405cc0ffbc58eb9b32a671d7403f4d57970c177ac7c57a29b4e5ce3ce. Starboard must record the corresponding production deploy ID before a visual release. Keep dated OG assets available for cached consumers. Historical scheduled emails and archived PDFs retain their original bytes; no retroactive rewrite or resend. Their exception owner is Starboard, with revisit on a specific correction requirement, not on a token-package update alone.
+
+Platform/Embark source rollback candidates are the pinned snapshots above; their existing release owners select actual deploy artifacts and check schema/runtime compatibility. This task changes no data schema and authorizes no tenant setting mutation. Hosted auth templates need export/version capture before any approved update; until then their rollback is unknown and publication is blocked.
+
+| Finding | Disposition | Remaining closure |
+|---|---|---|
+| R1 | Delivery-path and asset source census recorded, including independent plain-text and hosted paths. | Hosted contents, deployed asset pins and runtime evidence remain open; no inference from repository source. |
+| R2 | Calibrated landing CTA/footer failures recorded; existing real demo/build renderer is exercised by intercepted mail guard. | Consume Tiller's complete pair contract and prove all affected rendered pairs and real clients after intake. |
+| R3 | Landing corruption gate and mutation controls implemented against the current trusted legacy artifact. | Sextant review; Tiller's upstream immutable release/history controls; accepted Gate A anchor before D14 intake. Updating the verifier source itself remains a trusted-code review boundary. |
+| R4 | Per-template tenant/company policy recorded, including tenant staff invites and output assets. | Existing Embark owner executes two-tenant/unset-brand and widget/editor/render matrix against accepted shared contract. |
+
+Local verification trap: Turbopack refuses a node_modules symlink outside the worktree even when lockfiles match. Use an isolated local dependency copy, not a bundler override. The CLI mutation test also covers macOS temporary-path aliases through canonical script-path detection.
+
+## Integrity implementation verification, 01.11.2026
+
+The earlier no-product-change statement describes the source-inventory phase. This follow-up changes the consumer integrity gate and verification wiring only. Application and vendor bytes remain unchanged. The reviewed-code anchor is outside the replaceable vendor manifest; it is not a signature or an upstream release-history verifier.
+
+| Provenance | Check | Result |
+|---|---|---|
+| M | Complete npm run verify on the gate candidate | Exit 0; ten integrity self-tests pass; ESLint has zero errors and sixteen existing image warnings. Access-route mail checks intercept delivery rather than sending. |
+| M | Complete npm run build including prebuild and postbuild | Exit 0 after replacing the external dependency symlink with a local copy. Sandbox IPC denial required an approved execution environment, not a source workaround. |
+| M | Built-output checks | Seven product scenes retain both layouts; ninety fragment links resolve across nine routes; consent and self-hosted font checks pass. |
+| M | git diff --check and vendor diff | Whitespace check passes; no app/_ds changes. |
+| M | Full-tree mutation controls | Pristine pass; byte/value changes, forged manifest, aliases, missing/extra entries, symlinks and untrusted version bump rejected. Default, strict and quiet CLI modes reject corruption without a sibling checkout. |
+
+These checks ran on the candidate based on 976ad245bbf1aadbf9cad42dab720f1c6be4dab5, before the evidence commit. The callback supplies the resulting immutable head. This is a landing R3 contribution ready for independent exact-head review, not Gate A approval or a live D14 release. Hosted configuration, real email clients, tenant rendering and deployed rollback identities remain open as listed above.

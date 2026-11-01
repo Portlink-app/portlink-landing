@@ -1,5 +1,9 @@
 # portlink-landing — CHANGELOG
 
+## DS v4.1.2 — 2026-11-01 — muted text meets AA on the canvas
+
+Vendored DS v4.1.2 into `app/_ds/` (one value). Light `--ds-text-3` moves from `#6b7382` (4,36:1 on `--ds-canvas`, documented 5,1:1) to `#616876` (5,12:1). Every `.ds-subtle`, placeholder, table-muted, `--text-muted` and Havn label on the light canvas now passes WCAG AA. Dark theme unchanged. The DS build now fails on any text token below 4,5:1 or below its documented ratio.
+
 ## v4.1.0 — 2026-04-14 — DS consumer migration (Phase 3)
 
 Landing is now a pure consumer of `portlink-design-system` v4.1. No tokens are defined locally (except the Tailwind `@theme` bridge that re-exposes DS tokens as Tailwind theme values). Every hex literal outside the transactional email template has been replaced with a DS variable reference. Brand visual shifts from the old warm sepia + teal palette to the v4 **Mist + Navy** palette automatically via the DS token distribution.

@@ -609,8 +609,8 @@ textarea:focus-visible {
   text-align: center;
   font-size: 13px;
   line-height: 1.5;
-  /* --ds-text-2, not -3: the DS documents -3 as 5,1:1 against --ds-canvas, and it measures 4,36:1
-     (#6b7382 on #f2f5f9; Lighthouse, 01.11.2026). Labels on the canvas take -2 until the DS fixes -3. */
+  /* --ds-text-2: chosen in #21 while -3 measured 4,36:1 on the canvas. DS v4.1.2 fixed -3 to 5,12:1
+     (#616876 on #f2f5f9, 01.11.2026), so -3 is AA-safe here again if the hierarchy wants it. */
   color: var(--ds-text-2);
   margin: 0;
   max-width: 44ch;

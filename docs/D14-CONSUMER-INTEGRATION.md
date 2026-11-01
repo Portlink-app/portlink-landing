@@ -113,3 +113,22 @@ Embark web/src/lib/email-content.ts reads tenant site_settings.email_brand, tena
 Gate A immutable adapter API, release/hash and composition; semantic mapping of the measured legacy roles and generated component styles; current Embark claims and company/operator classification beyond SignupConfirm; real client availability; complete email/PDF render matrices; production deploy artifacts. These remain explicit gates.
 
 Coordination update read from the parent plan: shared-output publication is serialized after Nautiqs' #2842; Starboard owns obtaining its landed commit/package boundary. Tiller continues independent contract, verifier and asset work, then supplies the accepted Gate A pin. This is relayed dependency state, not an independent PR verification. Resume implementation here when that pin arrives; no second goal or timer.
+
+## Independent review intake
+
+Sextant's consolidated review is RESEARCH/SEXTANT_D14_CROSS_SURFACE_REVIEW_2026-11-01.md in the Buzz workspace, callback afc6b89903bf824b06e79eb6e3dc66646f476d2ff49a7db1d0a85db1f255bdd1. Findings R1 through R4 remain open until implementation and acceptance evidence exists.
+
+| Evidence | Additional delivery path | Owner, target and verification |
+|---|---|---|
+| M | app/api/seatrade/export/route.ts | Keel: plain-text admin message with CSV attachment; intentional non-visual output. Preserve export schema, recipient and throttle. Never invoke its GET endpoint as a read check: it sends mail. Verify using synthetic intercepted transport only. |
+| M | scripts/og/card.html | Keel: site social card; consumes legacy CSS/local fonts and public/portlink-logo.png plus the real hero poster. Regenerate through scripts/build-og-card.sh after Gate A, never edit the PNG. Update lib/metadata.ts to a new dated output path because OG files are immutable-cached. |
+| M | scripts/og/havn-card.html | Keel: co-branded questionnaire card; preserve partner mark/content, apply only the governed company adapter. New dated output is referenced by app/portlink+griegconnect/page.tsx. |
+| M | scripts/build-og-card.sh | Keel consumer build tool: currently requires Plus Jakarta Sans to load. Must validate the approved Gate A fonts instead when migrated; retain 1200 by 630 output and loaded-font assertions. |
+| M | Landing email logo | Absolute URL https://portlink.app/portlink-logo.png in lib/email/wrap.ts. Pin the accepted asset, verify actual fetched bytes and images-off alt fallback at acceptance. No asset identity inferred from its URL. |
+| R | Embark hosted reset-password email | Trigger: web/src/app/(admin)/admin/login/page.tsx calls Supabase resetPasswordForEmail. Existing Embark owner and Starboard must establish hosted template contents, branding owner, source/export pin and authorized publication route. Repository shared-layout changes cannot prove adoption. Hosted content remains uninspected and acceptance-blocked. |
+| R | Embark staff invite | AdminInvite uses workspace brand from api/admin/invite-user, unlike company-owned SignupConfirm. Existing Embark owner preserves tenant identity. Acceptance covers two synthetic tenants plus unset brand, guest confirmation, operational mail, default/branded widget and editor chrome/preview. |
+| R | Platform external PDF assets | Offer-pack renderer loads public/fonts/offer-pack TTFs directly. Tiller governs output-profile/font choice; Keel verifies delivered PDF glyphs, layout and logo preservation with synthetic inputs. Package parity alone is insufficient. |
+
+Landing sends deploy through the landing Netlify application and its existing Resend transport; OG/logo assets deploy on the same public site. Platform and Embark runtime/deployment identities must be measured at their own release boundaries. All rows above are pending acceptance unless explicitly labelled an intentional plain-text exception.
+
+Contrast calculation calibrated against black/white 21.000000 and white/white 1.000000. Landing CTA 4.420220 and footer 2.450636 reproduce the rounded baseline. R2 requires all rendered text/link/surface pairs, not just CTA. R3 requires trusted release anchoring and coordinated-checksum mutation controls; keep that shared-tooling change with Tiller, and consume the accepted verifier in the landing gate.

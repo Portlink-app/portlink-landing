@@ -40,7 +40,7 @@
 
 import { useId, useRef, useState, type FormEvent } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { reportIdentity } from '@/lib/intel/client'
+import { reportIdentity, send } from '@/lib/intel/client'
 import { CheckCircle, ChevronRight, ChevronLeft, Hammer, Ship } from 'lucide-react'
 import {
   ORG_TYPE_LABEL,
@@ -371,6 +371,9 @@ export default function ContactForm({ intent, lockIntent = false }: ContactFormP
       // Visitor intelligence: link this visitor's pages to the person, only if they switched on
       // "Remember me". Without it this does nothing. docs/VISITOR-INTELLIGENCE.md.
       reportIdentity({ email: data.email, name: data.name, company: data.company, role: data.role })
+      // The funnel's last step: a request the API accepted, as opposed to a submit attempt, which
+      // VisitorTracker already records for every step. Same first-party tracker, same refusals.
+      send({ t: 'form', p: location.pathname, formId: `sent-${data.intent}` })
       go('done', 1)
     } catch (err) {
       setSubmitError(err instanceof Error ? err.message : 'Something went wrong. Please try again.')
@@ -410,7 +413,7 @@ export default function ContactForm({ intent, lockIntent = false }: ContactFormP
               <strong style={{ color: 'var(--text-primary)' }}>{data.email}</strong>.{' '}
               {buildIntent
                 ? 'David or Kris will read it and reply within 48 hours.'
-                : 'Our team will review your application and get back to you within 48 hours.'}
+                : 'David or Kris will reply within 48 hours to set a time.'}
             </p>
             <p style={{ fontSize: 14, color: 'var(--text-muted)', lineHeight: 1.55 }}>
               Check your spam folder if you do not see it.
@@ -442,6 +445,7 @@ export default function ContactForm({ intent, lockIntent = false }: ContactFormP
               {step === 'who' && (
                 <motion.form
                   key="who"
+                  name="contact-who"
                   onAnimationComplete={(animation) => focusStep('who', animation)}
                   custom={dir}
                   variants={stepVariants}
@@ -577,6 +581,7 @@ export default function ContactForm({ intent, lockIntent = false }: ContactFormP
               {step === 'detail' && (
                 <motion.form
                   key="detail"
+                  name="contact-detail"
                   onAnimationComplete={(animation) => focusStep('detail', animation)}
                   custom={dir}
                   variants={stepVariants}
@@ -590,7 +595,7 @@ export default function ContactForm({ intent, lockIntent = false }: ContactFormP
                   <p style={stepLede}>
                     {buildIntent
                       ? 'The more concrete this is, the more useful our first reply will be.'
-                      : 'Help us understand your setup so we can tailor the pilot.'}
+                      : 'So the 20 minutes are spent on your kind of port call.'}
                   </p>
 
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
@@ -714,7 +719,7 @@ export default function ContactForm({ intent, lockIntent = false }: ContactFormP
                       onMouseEnter={(e) => { if (!submitting) e.currentTarget.style.background = 'var(--brand-bright)' }}
                       onMouseLeave={(e) => { if (!submitting) e.currentTarget.style.background = 'var(--brand)' }}
                     >
-                      {submitting ? 'Sending' : buildIntent ? 'Send it' : 'Request access'}
+                      {submitting ? 'Sending' : buildIntent ? 'Send it' : 'Request the demo'}
                       {!submitting && <ChevronRight size={15} />}
                     </button>
                   </div>

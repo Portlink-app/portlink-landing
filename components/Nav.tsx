@@ -8,12 +8,15 @@ import styles from './Nav.module.css'
 const links = [
   { label: 'Problem', href: '/#pain' },
   { label: 'Platform', href: '/#dashboard' },
-  { label: 'Roles', href: '/#roles' },
+  { label: 'How it connects', href: '/#ecosystem' },
   { label: 'Pilot', href: '/#pilot' },
-  { label: 'Access', href: '/#access' },
   { label: 'Team', href: '/team/' },
   { label: 'Contact', href: '/contact/' },
 ]
+
+/** The one primary action, worded the same everywhere (conversion Batch 1, 01.11.2026). A plain
+    anchor like the rows above, so the browser keeps native fragment navigation (LINK-01). */
+const demo = { label: 'Book a 20-minute demo', href: '/#access' }
 
 /** One non-modal navigation disclosure for every marketing route. */
 export default function Nav() {
@@ -65,7 +68,7 @@ export default function Nav() {
             <button className={styles.iconButton} onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}>
               {theme === 'dark' ? <Sun size={18} aria-hidden="true" /> : <Moon size={18} aria-hidden="true" />}
             </button>
-            <a href="/contact/" className={styles.cta}>Contact us</a>
+            <a href={demo.href} className={styles.cta} data-cta="demo-nav">{demo.label}</a>
             <button ref={toggle} className={`${styles.iconButton} ${styles.menuToggle}`} onClick={() => setOpen(!open)} aria-label={open ? 'Close menu' : 'Open menu'} aria-expanded={open} aria-controls="main-menu">
               {open ? <X size={22} aria-hidden="true" /> : <Menu size={22} aria-hidden="true" />}
             </button>
@@ -73,6 +76,7 @@ export default function Nav() {
         </div>
         <div id="main-menu" className={styles.menu} hidden={!open}>
           {links.map((link) => <a key={link.href} href={link.href} onClick={() => setOpen(false)}>{link.label}</a>)}
+          <a href={demo.href} className={styles.menuCta} data-cta="demo-menu" onClick={() => setOpen(false)}>{demo.label}</a>
         </div>
       </nav>
     </header>

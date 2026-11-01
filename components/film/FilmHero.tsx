@@ -33,7 +33,7 @@
  */
 
 import { useRef, useState } from 'react'
-import { ArrowDown, ArrowUpRight, Pause, Play } from 'lucide-react'
+import { ArrowDown, Pause, Play } from 'lucide-react'
 import { useMotionAllowed, useInViewPlayback, useNarrow, useShortViewport, useTrackStage } from './useFilm'
 import styles from './FilmHero.module.css'
 
@@ -188,19 +188,26 @@ export default function FilmHero() {
   return (
     <section id="hero" className={styles.hero}>
       <div className={styles.intro}>
-        <div className={styles.eyebrow}><span className="section-eyebrow">Maritime software engineering</span><span>Oslo, Norway</span></div>
+        {/* Conversion Batch 1, 01.11.2026 (goal portlink-landing-conversion-2026-11-01). The H1 used to
+            sell the team ("Maritime software. Built by people who know port calls.") and a visitor met
+            the outcome only in the body copy; 63 % of October's visits left from this screen.
+            Chose: the outcome in the H1, the team as the sub-line's last sentence, one action.
+            Over: keeping the company claim in the H1, or a proof strip with figures.
+            Because: every clause is a handoff the platform implements (docs/CONNECTED-PORT-CALL.md:
+              booking, amendments, PDA review, departure close-out), and no customer, pilot or
+              figure is confirmed for publication yet.
+            Revisit-if: the 14 and 28 day re-measure shows no change in one-page exits, or the
+              founders confirm proof that belongs directly under this. */}
         <div className={styles.copyGrid}>
-          <h1>Maritime software.<br />Built by people<br />who know port calls.</h1>
+          <h1>Plan, run and close every port call from one shared record.</h1>
           <div className={styles.aside}>
-            <p>We have run the port calls. Now we build the software behind them.</p>
-            <p>Portlink is our platform for the cruise and port industry. The same team builds what ports, agents, cruise lines and tour operators need next.</p>
+            <p>Cruise lines, port agents, tour operators and vessels work from the same call. Requests, changes and the disbursement account stay with it. Built by people who have run port calls.</p>
             <div className={styles.actions}>
-              <a href="/contact/" className={styles.primary}>Tell us what you need <ArrowUpRight size={17} aria-hidden="true" /></a>
-              <a href="#dashboard" className={styles.secondary}>Explore the platform <ArrowDown size={16} aria-hidden="true" /></a>
+              <a href="#access" className={styles.primary} data-cta="demo-hero">Book a 20-minute demo <ArrowDown size={16} aria-hidden="true" /></a>
+              <a href="#dashboard" className={styles.secondary} data-cta="explore-hero">See the platform</a>
             </div>
           </div>
         </div>
-        <div className={styles.filmLead}><span>Built here. Working below.</span><span>Scroll to follow a voyage <ArrowDown size={14} aria-hidden="true" /></span></div>
       </div>
 
       <div

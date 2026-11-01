@@ -1,7 +1,7 @@
 /**
  * POST /api/intel/v: the visitor-intelligence collector. Entry doc: docs/VISITOR-INTELLIGENCE.md.
  *
- * Receives one small JSON event per page view, deep scroll, form send or page exit from
+ * Receives one small JSON event per page view, deep scroll, call-to-action click, form send or page exit from
  * components/intel/VisitorTracker.tsx, and stores it with the company that owns the visitor's
  * network. What it deliberately does NOT do:
  *   - store an IP, whole or truncated, next to the event (only the org it resolved to);
@@ -21,7 +21,7 @@ import { readLinkToken } from '@/lib/intel/token'
 
 export const dynamic = 'force-dynamic'
 
-const TYPES: EventType[] = ['pv', 'scroll', 'form', 'leave', 'identify', 'link', 'forget']
+const TYPES: EventType[] = ['pv', 'scroll', 'cta', 'form', 'leave', 'identify', 'link', 'forget']
 const BOT = /bot|crawl|spider|slurp|headless|lighthouse|preview|facebookexternalhit|embedly|monitor|curl|wget|python-requests|axios|node-fetch|go-http/i
 const PER_IP = { limit: 120, windowMs: 10 * 60 * 1000 }
 const done = () => new NextResponse(null, { status: 204 })
@@ -79,6 +79,10 @@ export async function POST(request: Request) {
     }
     if (t === 'leave') ev.ms = Math.max(0, Math.min(Number(body.ms) || 0, 6 * 3600_000))
     if (t === 'form') ev.formId = str(body.formId, 60) || undefined
+    if (t === 'cta') {
+      ev.cta = str(body.cta, 40)
+      if (!/^[a-z0-9-]+$/.test(ev.cta)) return done()
+    }
 
     if (t === 'link') {
       const id = readLinkToken(str(body.token, 1200))

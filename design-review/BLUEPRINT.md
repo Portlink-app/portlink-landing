@@ -103,3 +103,40 @@ The optimized private preview remains at https://nyxs-mac-studio.tail79b0ec.ts.n
 Final reference check: the live Attio site was opened and its Build pipeline chapter control exercised. It moved the section beneath the persistent header and kept the page URL unchanged. The observed qualities were the chapter rail, clear text hierarchy, fine rules and framed product evidence. No claim is made that Attio uses our accordion or native hash behaviour. This observation supersedes the earlier native-navigation description in LANDING-DIRECTION.md for the current reference site.
 
 Final boundary: all registered corrections are implemented and verified to the stated level. Physical-device, OS preference and automated axe coverage remain explicit limitations above. No customer records or mail were changed. The development server was stopped; the optimized private preview is running.
+
+# Conversion Batch 1 (01.11.2026)
+
+Goal `portlink-landing-conversion-2026-11-01`, owner Keel, acceptance and re-measure Starboard.
+Brief: `~/.buzz/PLANS/PORTLINK_LANDING_CONVERSION_BATCH1_2026-11-01.md`; evidence:
+`~/.buzz/RESEARCH/PORTLINK_LANDING_CONVERSION_AUDIT_2026-11-01.md` (105 visits 28.09 to 31.10, 0 form
+submissions, 63 % one-page exits, LCP 1 057 ms). Speed was not the problem; message, first screen and
+action were.
+
+## Register
+
+Keep every row and column when updating this table.
+
+| ID | Audit item | Correction | Status |
+|---|---|---|---|
+| CONV-01 | 1 Outcome hero | H1 "Plan, run and close every port call from one shared record." Every clause maps to an implemented handoff in docs/CONNECTED-PORT-CALL.md. Team credibility is the sub-line's last sentence. Eyebrow row and film lead-in removed. | Implemented, built, browser verified locally |
+| CONV-02 | 2 Product on the first phone screen | Hero intro tightened. The product film frame starts at y=473 on 390 x 844 (371 px of product visible) against y=777 (67 px) on the live page; at 320 x 740, 197 px against 0. | Implemented, measured locally |
+| CONV-03 | 3 One action | "Book a 20-minute demo" in header, phone menu, hero and footer, all to `#access`. AccessSection is the demo request on the unchanged pilot form (intent `pilot`, same payload and mail). Pilot terms (`id="pilot"`), the 90-day trial when live and the build enquiry are secondary paths beside it. Form copy for the pilot intent says demo. | Implemented, browser verified locally |
+| CONV-04 | 4 Proof strip | Not built: waits for founder-confirmed facts relayed by Starboard. | Open, blocked on founders |
+| CONV-05 | 5 Shorter page | 1440 x 900: 11 540 to 7 607 px. 390 x 844: 14 380 to 9 644. FounderBar, BuiltSection and TwoDoorsSection folded; VoyageSeenSection and BentoSection unmounted (files kept). | Implemented, measured locally |
+| CONV-06 | 6 Contrast | `--ds-text-3` measures 4,36:1 on `--ds-canvas` although the DS documents 5,1:1. Canvas labels (film stage label, film caption, explorer instruction, chapter and footer labels) moved to `--ds-text-2`. The DS value itself lives outside this repo (vendored, not bumped). Lighthouse accessibility 100 mobile and desktop on the local production build. | Implemented; DS token defect routed to Starboard |
+| CONV-07 | 7 Measurement | `data-cta` on every action; VisitorTracker sends `cta` events; the collector stores them; ContactForm sends `form` with `formId: sent-<intent>` after the API accepts; the two form steps carry `name` so they are told apart. `funnel()` in lib/intel/aggregate.ts and one Funnel line in the existing daily digest. No new vendor, cookie or job. | Implemented; browser beacons verified locally with a mocked /api/access; store-side proof on a deployed build |
+
+Known gaps, accepted in this batch: the confirmation mail for a demo request still says "pilot request"
+(the /api/access mail contract was out of scope; routed to Starboard). The header demo button shows from
+1001 px; phones get it in the hero and the menu. The funnel is browser-reported and a forged POST can
+inflate it; Resend's send log stays the authoritative count of requests. `/#roles` now lands on the
+ecosystem section, which names the same four participants.
+
+Chose / Over / Because / Revisit-if for the action and the hero are recorded in
+`components/sections/AccessSection.tsx` and `components/film/FilmHero.tsx`; for the cuts in `app/page.tsx`.
+
+## Measurement loop
+
+Baseline is the audit above. Re-measure 14 and 28 days after this is live with the digest's Funnel line
+and the `.scratch/landing-intel/agg.mjs` pattern. The strongest rival (low, untargeted traffic) is not
+settled by this batch.

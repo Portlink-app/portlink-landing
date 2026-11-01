@@ -5,9 +5,9 @@ import CookieSettingsButton from '@/components/consent/CookieSettingsButton'
 const navLinks = {
   Product: [
     { label: 'Platform', href: '/#dashboard' },
-    { label: 'Roles', href: '/#roles' },
+    { label: 'How it connects', href: '/#ecosystem' },
     { label: 'Pilot program', href: '/#pilot' },
-    { label: 'Request access', href: '/#access' },
+    { label: 'Book a 20-minute demo', href: '/#access' },
   ],
   Company: [
     { label: 'Team', href: '/team/' },
@@ -29,7 +29,7 @@ export default function Footer() {
           <nav key={category} aria-label={`${category} links`}>
             <h2>{category}</h2>
             <ul>{links.map((link) => (
-              <li key={link.href}><a href={link.href} {...(link.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>{link.label}</a></li>
+              <li key={link.href}><a href={link.href} {...(link.href === '/#access' ? { 'data-cta': 'demo-footer' } : {})} {...(link.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>{link.label}</a></li>
             ))}</ul>
           </nav>
         ))}

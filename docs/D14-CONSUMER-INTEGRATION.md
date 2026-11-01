@@ -132,3 +132,61 @@ Sextant's consolidated review is RESEARCH/SEXTANT_D14_CROSS_SURFACE_REVIEW_2026-
 Landing sends deploy through the landing Netlify application and its existing Resend transport; OG/logo assets deploy on the same public site. Platform and Embark runtime/deployment identities must be measured at their own release boundaries. All rows above are pending acceptance unless explicitly labelled an intentional plain-text exception.
 
 Contrast calculation calibrated against black/white 21.000000 and white/white 1.000000. Landing CTA 4.420220 and footer 2.450636 reproduce the rounded baseline. R2 requires all rendered text/link/surface pairs, not just CTA. R3 requires trusted release anchoring and coordinated-checksum mutation controls; keep that shared-tooling change with Tiller, and consume the accepted verifier in the landing gate.
+
+Executed source-baseline checks on this documentation-only branch: scripts/check-mail-routes.mjs passed, with 14 API route files and eight Resend-importing routes, calibrated against three positive imports and three near misses. The unsubscribe route cancels mail rather than rendering a new body. scripts/check-ds-version.mjs --strict passed for v4.1.2; this does not close R3's byte-integrity finding. Full product build/tests and post-change client proof are not claimed.
+
+## Caller-family census supplement
+
+All rows in this section are R: source findings from the inventory worker at the Platform and Embark pins above, not deployed or client evidence. Keel owns Platform integration verification; Embark changes retain its existing claim/owner process. Tiller owns shared identity/profile decisions. Each listed HTML/PDF/image output needs an accepted profile or owner-approved exception and runtime artifact pin before closure.
+
+| Platform caller family | Audience and branding boundary |
+|---|---|
+| src/lib/invites/issue.ts | invite_workspace to supplied invitee email; includes workspace logo_url alongside company shell. |
+| src/modules/admin/invite.actions.ts | account_welcome to invitee email, operator replyTo. |
+| src/lib/cron/feedback-replies.ts | feedback_reply to submitter account email. |
+| src/lib/billing/lifecycle.ts | Workspace admins, billing-signup fallback, buyer, deletion subject or agreement recipients. Winback is marketing; account deletion final; other billing templates service. Preserve unsubscribe for marketing. |
+| src/modules/inbox/create.actions.ts, actions.ts, magic-link.ts | Booking and shore-request received/pending/accepted/rejected messages to assigned user, requesting/fulfilling workspace or external invite email. |
+| src/modules/finance/actions.ts, departure-report-on-board.actions.ts | PDA and departure-report state messages to counterparty workspaces. |
+| src/modules/amendments/actions.ts | Requests to vessel-owning workspace members; decisions to requester. |
+| src/modules/voyages/review-flow.actions.ts, booking.actions.ts | Stage owners/role members and booking operational roles. |
+| src/lib/notifications/handover.ts, port-call-lifecycle.ts | Vessel/cruise-line and shoreside/port-agent workspace recipients. |
+| src/lib/cron/cutoff.ts, certificates.ts, digest.ts, ais-alerts.ts | DMC workspace, vessel workspace, individual digest user and target workspace respectively. AIS target provenance still needs deeper tracing if modified. |
+| src/modules/finance/money.actions.ts | supplier_invoice_requested to supplier email, agent replyTo; agency identity remains in content. |
+| src/modules/operators/actions.ts | operator_refresh_submitted to workspace recipients; deeper wsId provenance remains untraced. |
+| src/modules/tours/actions.ts | Quote, call and exception messages to DMC, cruise-line or requesting workspace. |
+| src/modules/voyages/release.actions.ts | Internal recipients and subscribed external emails. |
+| src/modules/fleet/claim.actions.ts | Superadmins and claimant profiles. |
+| src/modules/wheelhouse/card-actions.ts | Assigned/mentioned/commented messages filtered to active workspace members. |
+| src/lib/fb/notify.ts, called by api/v1/feedback | Independent direct Resend plain-text notice to FEEDBACK_NOTIFY_TO. Intentional non-visual exception; do not wrap it merely to enforce D14. |
+| src/lib/auth/magic-link.ts | Hosted Supabase signInWithOtp, reached by login, billing provision/start and onboarding invite flows. Versioned source supabase/templates/magic_link.html; supabase/config.toml declares the local content path and hosted mailer_templates_magic_link_content setting. Live hosted equality is unverified. This is separate from the similarly named renderer catalogue entry. |
+
+Platform shell logo is https://platform.portlink.app/portlink-logo.png. Verify hosted bytes at release. No operational literal call was found for magic_link_sign_in or supplier_confirmation_requested outside renderer/types/catalogue/generated declarations in the worker's searched src and supabase scope; retain them in renderer coverage and do not claim absence of runtime use.
+
+| Embark template | Caller and audience | Brand policy |
+|---|---|---|
+| SignupConfirm | api/signup to signup email | Company-owned; no operator brand. |
+| AdminInvite | api/admin/invite-user and grant-login to invited admin/guide | Tenant brand, including staff mail. |
+| BookingConfirmation | admin/create-booking, public/start-booking and payments webhook to booking contact | Tenant brand, company reply/BCC. |
+| Cancellation | admin/cancel-departure to booking contact | Tenant brand, company reply/BCC. |
+| Refund | admin/refund-booking to booking contact | Tenant brand, company reply/BCC. |
+| ThankYouReview | admin/cron/email-review-requests to booking contact | Tenant brand. |
+| GuideManifest | admin/cron/email-guide-manifests to guide email | Tenant brand and manifest PDF attachment. |
+| InquiryNotification | public/contact action to company email, visitor replyTo | Tenant brand. |
+| Test path | admin/send-test-email to authenticated gate email | Uses existing tenant context; do not invoke as verification without send authority. |
+| Hosted recovery | Admin login resetPasswordForEmail | Hosted template not inspected; classify with existing owner before publication. |
+
+Embark generated signup/invite links feed the custom React Email paths; generateLink itself does not establish hosted email rendering. Workspace-scoped brand loading remains unchanged.
+
+| Additional output | Caller / consumption | Required boundary |
+|---|---|---|
+| Platform departure archive | departure-report-archive renders then uploads PDF | Existing historical exports are not regenerated by this task; new-output profile pin and archived artifact version must be distinguishable. |
+| Platform offer-pack fonts | public/fonts/offer-pack/Newsreader16pt-Regular.ttf, Newsreader16pt-Italic.ttf, Newsreader72pt-Regular.ttf, InstrumentSans-Regular.ttf, InstrumentSans-Medium.ttf, InstrumentSans-SemiBold.ttf | Independent physical assets; explicit output-profile decision and rendered glyph/layout proof. |
+| Platform social image | src/app/layout.tsx references public/opengraph-image.png | Static company asset, 1200 by 630; source and release ownership need confirmation before replacement. |
+| Embark manifest PDF | api/admin/departure/[id]/manifest and email-guide-manifests cron | Workspace name, locale, time zone and house format; preserve departure-owner check. |
+| Embark report PDF | api/admin/departure/[id]/report | Workspace brandName; preserve departure-owner check. |
+| Embark QR PDF | api/admin/tour-review-qr | Brand logo/name from loadEmailBrand and workspace display settings. |
+| Embark home/tour OG | public/opengraph-image.tsx and public/tours/[slug]/opengraph-image.tsx | Tenant identity and tour data; independent ImageResponse styling. Existing owner classifies family styling versus tenant presentation. |
+| Embark supplied OG images | web/src/lib/metadata.ts | User-supplied storage images transformed to 1200 by 630; preserve customer content. |
+| Embark admin icons | web/src/app/admin-icon/[variant]/route.tsx | Independent ImageResponse and uploaded-logo rendering; retain tenant asset. |
+
+This is source caller-family coverage, not exhaustive branch execution. Live hosted configuration, tenant settings, asset bytes, historical exports and deployment destinations are still unmeasured. No product changes, messages, campaigns or hosted-template writes were performed.

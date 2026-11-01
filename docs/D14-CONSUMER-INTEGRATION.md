@@ -220,6 +220,23 @@ Local verification trap: Turbopack refuses a node_modules symlink outside the wo
 
 ## Integrity implementation verification, 01.11.2026
 
+### P1 source binding follow-up
+
+Implemented: bind the declared revision to content-addressed Git commit/tree/blob objects, not the candidate digest. Scope is the existing verifier, its tests and this record; npm prebuild and verify already invoke the verifier, and Netlify invokes npm run build. Reversal is the previous task commit; no vendor or application changes are needed.
+
+Chose: independently hash Git objects from the declared immutable source and compare the full artifact/version. Over: another mutable checksum file (same circular trust); a mandatory network fetch on every check (unnecessary when content-addressed objects are present). Because: the declared commit cryptographically binds its trees and blobs, even if a candidate changes its expected digest. Missing objects must be fetched from the fixed Portlink remote or fail closed. Revisit-if: Gate A moves the artifact to Platform or changes its layout. Git replacement objects, missing history in shallow builds, symlinks and source-unavailable builds are explicit failure paths. No source-check bypass or manual-review exception is permitted.
+
+Trust boundary: Git's immutable object identity is the source evidence. The verifier hashes each traversed object, beginning with the declared commit, then its directory trees and artifact blobs. The candidate expected SHA-256 is only a consistency assertion. Neither it nor the manifest can authenticate the source. Local objects may satisfy the check because their content is bound to that commit identity; missing or invalid objects trigger a fresh fixed-remote fetch. Failure to obtain and validate source blocks the build. The verifier itself still requires review and protected release execution; mutable candidate code cannot authenticate its own arbitrary replacement or removal. This is source/artifact binding, not upstream release approval or version-history governance.
+
+| Provenance | P1 follow-up evidence | Result |
+|---|---|---|
+| M | Candidate npm run verify and npm run build | Both exit 0; zero lint errors and sixteen existing warnings. No vendor/application changes. |
+| M | Source-aware controls | Thirteen grouped controls include both coordinated expected-digest forgeries rejected through actual npm build prebuild, and missing-checkout source retrieval. |
+| M | Legitimate update control | Independently sourced v4.1.1 at bdcfed1de067f7fa515eee4c36d5c2045729b2cb and v4.1.2 at a77b3e9ffec74168b7f384fdc7e7547d58f3af90 both pass with their corresponding source/artifact/version. |
+| R | Independent acceptance | Sextant must re-review the revised exact head; no merge, publication or Gate A approval is claimed. |
+
+Progress: implementation complete; full verification complete on candidate; exact-head reproduction and independent review handoff next. Earlier evidence below describes the superseded fixed-pin candidate and does not establish P1 closure.
+
 The earlier no-product-change statement describes the source-inventory phase. This follow-up changes the consumer integrity gate and verification wiring only. Application and vendor bytes remain unchanged. The reviewed-code anchor is outside the replaceable vendor manifest; it is not a signature or an upstream release-history verifier.
 
 | Provenance | Check | Result |

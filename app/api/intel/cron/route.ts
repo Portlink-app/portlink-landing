@@ -34,7 +34,7 @@ ${c.reasons.length ? `Why: ${esc(c.reasons.join(', '))}<br>` : ''}Pages: ${pages
 function funnelLine(f: Funnel): string {
   const pct = (n: number) => (f.visits ? `${Math.round((n / f.visits) * 100)} %` : '0 %')
   const ctas = Object.entries(f.ctas).sort((a, b) => b[1] - a[1]).map(([k, n]) => `${esc(k)} ${n}`).join(', ')
-  return `<p style="margin:0 0 14px"><strong>Funnel</strong><br>Visits ${f.visits} · read to 75 % ${f.deepScroll} (${pct(f.deepScroll)}) · clicked a call to action ${f.ctaClick} (${pct(f.ctaClick)}) · started the form ${f.formStarted} (${pct(f.formStarted)}) · request sent ${f.formSent} (${pct(f.formSent)})${ctas ? `<br>Which: ${ctas}` : ''}</p>`
+  return `<p style="margin:0 0 14px"><strong>Funnel</strong> (as reported by browsers; Resend holds the authoritative count of requests sent)<br>Visits ${f.visits} · read to 75 % ${f.deepScroll} (${pct(f.deepScroll)}) · clicked a call to action ${f.ctaClick} (${pct(f.ctaClick)}) · started the form ${f.formStarted} (${pct(f.formStarted)}) · request sent ${f.formSent} (${pct(f.formSent)})${ctas ? `<br>Which: ${ctas}` : ''}</p>`
 }
 
 export async function POST(request: Request) {

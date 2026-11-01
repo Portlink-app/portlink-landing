@@ -14,6 +14,9 @@ export default function EcosystemSection() {
 
   return (
     <section id="ecosystem" className={styles.section} aria-labelledby="ecosystem-title">
+      {/* `/#roles` was BentoSection's anchor until conversion Batch 1 unmounted it (01.11.2026). Links
+          already shared keep landing on the four participants. */}
+      <span id="roles" aria-hidden="true" />
       <div className={styles.inner}>
         <div className={styles.heading}>
           <div>

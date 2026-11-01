@@ -201,7 +201,7 @@ export default function FilmHero() {
         <div className={styles.copyGrid}>
           <h1>Plan, run and close every port call from one shared record.</h1>
           <div className={styles.aside}>
-            <p>Cruise lines, port agents, tour operators and vessels work from the same call: requests, changes and the disbursement account in one place. Built by people who have run port calls.</p>
+            <p>Cruise lines, port agents, tour operators and vessels work from the same call. Requests, changes and the disbursement account stay with it. Built by people who have run port calls.</p>
             <div className={styles.actions}>
               <a href="#access" className={styles.primary} data-cta="demo-hero">Book a 20-minute demo <ArrowDown size={16} aria-hidden="true" /></a>
               <a href="#dashboard" className={styles.secondary} data-cta="explore-hero">See the platform</a>

@@ -1,4 +1,4 @@
-:root{--sea:var(--family-accent);--butter-yellow:var(--sea);--butter-blue:var(--sea)}
+:root{--sea:var(--family-brand);--butter-yellow:var(--sea);--butter-blue:var(--sea)}
 body{background:var(--family-surface-1);overflow-x:clip}
 a{text-decoration:none} h1,h2,h3{text-wrap:balance}
 *:focus-visible{outline:3px solid var(--family-accent);outline-offset:4px}
@@ -108,3 +108,24 @@ dialog img{width:auto;max-width:100%;max-height:73svh;object-fit:contain}
 @media(prefers-reduced-motion:reduce){.film-track{height:auto}.film-track figure{position:static}}
 
 #product-film{scroll-margin-top:8rem}
+
+#navigation [class*="__HeaderLogo-"]{display:flex;align-items:center;gap:1rem}
+#navigation .wordmark{display:inline-flex;align-items:center}
+#navigation .portlink-logo{width:10.7rem;height:auto;max-width:none}
+.product-name{font:500 1.6rem/1.1 'DieGrotesk',sans-serif;color:var(--family-brand);border-left:1px solid var(--family-edge-1);padding-left:1rem}
+.footer-mark{display:grid;gap:1.5rem;padding:4rem 0 2rem}
+.footer-mark .portlink-logo{width:min(100%,83.3rem);height:auto}
+.footer-mark .product-name{font-size:2.4rem;border:0;padding:0}
+#walkthrough .record-label{background:var(--family-brand)}
+@media(max-width:767px){
+ #navigation .portlink-logo{width:7.8rem}
+ #navigation .product-name{font-size:1.4rem;padding-left:.7rem}
+}
+@media(max-width:767px){
+ body[data-product="embark"] #navigation nav{display:none}
+ body[data-product="embark"] #navigation [class*="__ContainerMain-"]{padding-inline:1rem}
+}
+@media(max-width:359px){#navigation .portlink-logo{width:6.6rem}#navigation .product-name{font-size:1.2rem}}
+[class*="__ButtonMain-"] [class*="__ButtonContent-"]::after{background-color:var(--family-brand)}
+[class*="__ButtonMain-"] a:is(:hover,:focus-visible) [class*="__ButtonContent-"]::after{background-color:var(--family-accent-hover)}
+[class*="__ButtonMain-"] [class*="__ButtonContent-"]::before{animation:none;box-shadow:none}

@@ -41,7 +41,11 @@ def render(product, portrait):
             # A held result and a single move into the supporting screen for each cut.
             base = Image.new('RGB',(w,h),C['surface-2'])
             draw=ImageDraw.Draw(base)
-            draw.text((pad,32),product.capitalize(),font=font(28,True),fill=C['text-1'])
+            mark=Image.open(DEST.parents[1]/'portlink-logo.png').convert('RGBA')
+            mark.thumbnail((126,34),Image.Resampling.LANCZOS)
+            base.paste(mark,(pad,30),mark)
+            if product=='embark':
+                draw.text((pad+mark.width+15,35),'/ Embark',font=font(24),fill=C['brand'])
             draw.text((w-pad,38),f'0{index+1} / 03',font=font(22),fill=C['accent'],anchor='ra')
             draw.line((pad,80,w-pad,80),fill=C['edge-1'],width=2)
             draw.text((pad,105),title,font=font(26),fill=C['accent'])

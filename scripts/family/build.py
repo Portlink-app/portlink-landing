@@ -42,6 +42,9 @@ def media_url(name):
 def picture(src,alt):
     return f'<img src="{media_url(src)}" alt="{escape(alt,quote=True)}" loading="lazy" decoding="async">'
 
+def portlink_logo():
+    return '<img class="portlink-logo" src="/portlink-logo.png" alt="Portlink" width="833" height="219">'
+
 def action(text,href,header=False):
     area='HeaderRight' if header else 'HomeHeroContent'
     el=deepcopy(part(part(source,area),'ButtonMain'))
@@ -61,7 +64,8 @@ def compile_page(key,p):
     contents(head,f'<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><link rel="icon" href="/icon-192.png"><title>{p["name"]} | {p["headline"]}</title><meta name="description" content="{p["description"]}"><link rel="stylesheet" href="{ASSETS}palette.css"><link rel="stylesheet" href="{ASSETS}butter.css"><link rel="stylesheet" href="{ASSETS}products.css"><script type="module" src="{ASSETS}keyring.js"></script><script defer src="{ASSETS}products.js"></script>')
     main=doc.xpath('//main')[0]
     nav=section('HeaderContainer','navigation');logo=part(nav,'HeaderLogo')
-    contents(logo,f'<a class="wordmark" href="{"/" if key=="portlink" else "/embark/"}">{p["name"]}</a>')
+    endorsement='<span class="product-name">Embark</span>' if key=='embark' else ''
+    contents(logo,f'<a class="wordmark" href="/" aria-label="Portlink home">{portlink_logo()}</a>{endorsement}')
     links=[('Features','#features'),('Walkthrough','#walkthrough'),(p['other'],p['other_url'])]
     menu=part(nav,'HeaderMenu')
     contents(menu,''.join(f'<li><a href="{url}">{name}</a></li>' for name,url in links))
@@ -145,7 +149,7 @@ def compile_page(key,p):
     contents(grid[1],f'<p class="iFhYZQ">Talk with Portlink</p><h2 class="gzrrIS">{p["close"]}</h2>'+action(p['cta'],p['contact']))
     main.append(close)
     footer=section('FooterMain','footer');outer=part(footer,'ContainerMain')
-    contents(outer,f'<div class="footer-links"><a href="/">Portlink</a><a href="/embark/">Embark</a><a href="{p["contact"]}">Contact</a><a href="https://portlink.app/privacy/">Privacy</a></div><div class="footer-mark">{p["name"]}</div><p>Portlink AS · Oslo, Norway</p>')
+    contents(outer,f'<div class="footer-links"><a href="/">Portlink</a><a href="/embark/">Embark</a><a href="{p["contact"]}">Contact</a><a href="https://portlink.app/privacy/">Privacy</a></div><div class="footer-mark">{endorsement}<a href="/" aria-label="Portlink home">{portlink_logo()}</a></div><p>Portlink AS · Oslo, Norway</p>')
     main.append(footer)
     # Version posters and video sources as well as reusable product stills.
     for node in doc.xpath('//*[@src or @poster or @data-portrait-poster]'):

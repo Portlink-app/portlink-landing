@@ -5,6 +5,7 @@ from html import escape
 from lxml import etree, html
 import shutil
 from content import PRODUCTS
+from palette import stylesheet, adapt_reference
 
 ROOT=Path(__file__).resolve().parents[2]
 BASE=ROOT/'design-review/butter-baseline/site'
@@ -49,7 +50,7 @@ def compile_page(key,p):
     doc=html.fromstring('<html lang="en"><head></head><body><main id="main" tabindex="-1"></main></body></html>')
     doc.find('body').set('data-product',key)
     head=doc.find('head')
-    contents(head,f'<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><link rel="icon" href="/icon-192.png"><title>{p["name"]} | {p["headline"]}</title><meta name="description" content="{p["description"]}"><link rel="stylesheet" href="{ASSETS}butter.css"><link rel="stylesheet" href="{ASSETS}products.css"><script type="module" src="{ASSETS}keyring.js"></script><script defer src="{ASSETS}products.js"></script>')
+    contents(head,f'<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><link rel="icon" href="/icon-192.png"><title>{p["name"]} | {p["headline"]}</title><meta name="description" content="{p["description"]}"><link rel="stylesheet" href="{ASSETS}palette.css"><link rel="stylesheet" href="{ASSETS}butter.css"><link rel="stylesheet" href="{ASSETS}products.css"><script type="module" src="{ASSETS}keyring.js"></script><script defer src="{ASSETS}products.js"></script>')
     main=doc.xpath('//main')[0]
     nav=section('HeaderContainer','navigation');logo=part(nav,'HeaderLogo')
     contents(logo,f'<a class="wordmark" href="{"/" if key=="portlink" else "/embark/"}">{p["name"]}</a>')
@@ -131,7 +132,8 @@ def compile_page(key,p):
 
 if __name__=='__main__':
     fonts=next((BASE/'_next/static/css').glob('2836*.css')).read_text().replace('/_next/static/media/',ASSETS)
-    (OUT/'assets/butter.css').write_text(fonts+'\n'+source.xpath('//style')[0].text)
+    (OUT/'assets/butter.css').write_text(fonts+'\n'+adapt_reference(source.xpath('//style')[0].text))
+    (OUT/'assets/palette.css').write_text(stylesheet())
     for font in (BASE/'_next/static/media').glob('*.woff2'):shutil.copyfile(font,OUT/'assets'/font.name)
     shutil.copyfile(ROOT/'public/family/fjord-cruise.jpg',OUT/'media/fjord.jpg')
     for key,p in PRODUCTS.items():compile_page(key,p)

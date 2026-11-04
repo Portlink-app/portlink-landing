@@ -41,3 +41,9 @@ The private preview now uses the captured Butter homepage for both routes, befor
 ## Product adaptation now under review
 
 Both review URLs now have distinct content, original responsive section markup, locally served type and media, a teal product-specific 3D keyring, an eight-second scrubbed product tour and reciprocal network handoffs. The captured reference is kept for comparison. The review server now serves the product outputs. See the baseline README for editing and verification.
+
+## Shared palette and release handoff, 04.11.2026
+
+The Portlink and Embark marketing pages are built and available for private review. Both use the light D14 accent #176d7a, pale teal for feature imagery, neutral ink and grey surfaces. scripts/family/palette.json pins the marketing subset from @portlink/tokens 1.0.0, presets/d14.css (Git blob d0e6bb6711477dae9e9327436eb1d3f5fa98b1ed). The page builder binds the reference stylesheet to these roles, the 3D materials read the same CSS values, and the video compositor reads the same JSON. Photography and screenshots retain their source colours.
+
+Keel's D14 consumer integration covers the production homepage, email, release identity and verification. This private build is available as the homepage design input. It does not certify the wider D14 release. Reconcile the layout, seven legacy product fragments including #compliance, demo form and conversion tracking against the public route before release. Publication is held for David's command.

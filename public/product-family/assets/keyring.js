@@ -10,9 +10,11 @@ function start(){
   const scene=new T.Scene(), camera=new T.PerspectiveCamera(32,1,.1,40);
   camera.position.set(0,0,8.7);
   const rig=new T.Group();scene.add(rig);
-  const metal=new T.MeshStandardMaterial({color:0xdbe4e4,metalness:.88,roughness:.18});
-  const teal=new T.MeshStandardMaterial({color:0x176676,metalness:.34,roughness:.25});
-  const ivory=new T.MeshStandardMaterial({color:0xf2efe8,metalness:.20,roughness:.26});
+  const css=getComputedStyle(host);
+  const color=role=>css.getPropertyValue('--family-'+role).trim();
+  const metal=new T.MeshStandardMaterial({color:color('edge-1'),metalness:.88,roughness:.18});
+  const teal=new T.MeshStandardMaterial({color:color('accent'),metalness:.34,roughness:.25});
+  const ivory=new T.MeshStandardMaterial({color:color('surface-2'),metalness:.20,roughness:.26});
   const studio=document.createElement('canvas');studio.width=512;studio.height=256;
   const ctx=studio.getContext('2d');ctx.fillStyle='#444e50';ctx.fillRect(0,0,512,256);
   for(const [x,y,w,h,col] of [[0,0,512,78,'#f9faf7'],[26,20,60,215,'#fbffff'],[120,76,40,134,'#101819'],[270,60,110,142,'#ffffff'],[420,160,83,60,'#203032']]){
@@ -36,7 +38,7 @@ function start(){
     const hole=new T.Path();hole.absarc(0,-.16,.07,0,Math.PI*2,true);sh.holes.push(hole);
     const slab=new T.Mesh(new T.ExtrudeGeometry(sh,{depth:.12,bevelEnabled:true,bevelSize:.045,bevelThickness:.04,bevelSegments:4}),mat);g.add(slab);
     const c=document.createElement('canvas');c.width=512;c.height=640;const a=c.getContext('2d');
-    const ink=mat===teal?'#ffffff':'#17434c';a.fillStyle=ink;a.textAlign='center';
+    const ink=mat===teal?color('surface-1'):color('text-1');a.fillStyle=ink;a.textAlign='center';
     a.font='bold 118px Arial';a.fillText(label,256,270,455);a.fillRect(70,310,372,5);
     a.font='bold 46px Arial';a.fillText(sub,256,389,450);a.font='30px monospace';a.fillText('GL  /  014',256,471);
     const tx=new T.CanvasTexture(c);tx.colorSpace=T.SRGBColorSpace;

@@ -37,3 +37,7 @@ For a public release, check the current state of the deployed trade integration 
 ## Current review starting point
 
 The private preview now uses the captured Butter homepage for both routes, before product adaptation. The content plan above is for the subsequent pass. The baseline and its runtime dependencies are documented in [butter-baseline/README.md](butter-baseline/README.md).
+
+## Product adaptation now under review
+
+Both review URLs now have distinct content, original responsive section markup, locally served type and media, a teal product-specific 3D keyring, an eight-second scrubbed product tour and reciprocal network handoffs. The captured reference is kept for comparison. The review server now serves the product outputs. See the baseline README for editing and verification.

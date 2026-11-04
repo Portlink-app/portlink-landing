@@ -16,7 +16,15 @@ const eslintConfig = defineConfig([
     // eslint config does not read .gitignore, so `npm run lint` in a checkout
     // that has ever built produced 100+ errors from vendored bundles.
     ".netlify/**",
+    // Vendored third-party bundles (three.js r-min builds, licence alongside).
+    // They ship byte-for-byte as published and are not our source.
+    "public/**/*.min.js",
   ]),
+  {
+    // CommonJS scripts load dependencies with require() by definition.
+    files: ["**/*.cjs"],
+    rules: { "@typescript-eslint/no-require-imports": "off" },
+  },
 ]);
 
 export default eslintConfig;

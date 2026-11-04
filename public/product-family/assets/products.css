@@ -27,8 +27,8 @@ a{text-decoration:none} h1,h2,h3{text-wrap:balance}
 figure figcaption{font:1.35rem 'ABCDiatype',sans-serif;margin-top:1.4rem}
 .photograph img,.end-photo img{width:100%;height:clamp(30rem,42vw,70rem);object-fit:cover}
 .photograph figcaption{padding:0 2rem 1.5rem}
-#walkthrough{height:230svh;position:relative;overflow:visible;margin:0;background:var(--family-surface-2)}
-#walkthrough [class*="__StoryThreeInner-"]{height:100%;min-height:0}
+#walkthrough{height:180svh;position:relative;overflow:visible;margin:0;background:var(--family-surface-2)}
+#walkthrough [class*="__StoryThreeInner-"]{display:block;height:100%;min-height:0;will-change:auto}
 #walkthrough [class*="__StoryThreePin-"]{position:sticky;top:0;min-height:100svh;height:auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3rem;padding:6rem 4vw}
 .story-head{text-align:center}.story-head h2{max-width:23ch;margin:1rem auto;font-size:clamp(3rem,4.7vw,7rem)}
 .player{width:min(100%,78rem);color:var(--family-text-1);background:var(--family-surface-1);border-radius:1.3rem;overflow:hidden;box-shadow:0 1.2rem 5rem color-mix(in srgb,var(--family-text-1) 8%,transparent)}
@@ -129,3 +129,13 @@ dialog img{width:auto;max-width:100%;max-height:73svh;object-fit:contain}
 [class*="__ButtonMain-"] [class*="__ButtonContent-"]::after{background-color:var(--family-brand)}
 [class*="__ButtonMain-"] a:is(:hover,:focus-visible) [class*="__ButtonContent-"]::after{background-color:var(--family-accent-hover)}
 [class*="__ButtonMain-"] [class*="__ButtonContent-"]::before{animation:none;box-shadow:none}
+
+#product,#trade{padding-block:clamp(5rem,8vw,13rem)}
+#overview [class*="__StatementContainer-"]{height:auto;min-height:0;padding-block:clamp(6rem,10vw,16rem)}
+.handoff{display:flex;align-items:flex-start;padding:2rem 1rem;background:var(--family-surface-1)}
+.handoff-stop{position:relative;flex:1;text-align:center;color:var(--family-text-2);font:1.4rem/1.2 'DieGrotesk',sans-serif}
+.handoff-stop:not(:last-child)::after{content:'';position:absolute;top:2rem;left:calc(50% + 3.5rem);width:calc(100% - 7rem);border-top:2px dotted var(--family-edge-1)}
+.handoff-stop svg{width:6rem;height:4rem;margin:0 auto .6rem;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.handoff-stop[aria-current=true]{color:var(--family-brand);font-weight:700}
+.handoff-stop[aria-current=true] svg{background:var(--family-accent-subtle);border-radius:.75rem}
+@media(max-width:700px){.handoff{padding:1.2rem .5rem}.handoff-stop{font-size:1.2rem}}

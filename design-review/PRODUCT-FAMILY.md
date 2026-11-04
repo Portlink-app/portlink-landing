@@ -57,3 +57,7 @@ The preview server now serves MP4 byte ranges. Before this fix the native player
 The reported Port calls screenshot matched the earlier obscured capture pixel for pixel. Each corrected Portlink screen is now reproducible through scripts/family/capture-portlink.cjs, which paints only the selected scene. Run it against the platform explorer, then rebuild the films and pages. The page compiler includes a content hash in every media URL so a replaced image, poster or film receives a fresh browser cache key, including in the gallery lightbox.
 
 The served Portlink logo matches the live homepage asset byte for byte. The header, footer and both film layouts use that artwork. Embark keeps its product name alongside the parent mark. Primary actions and the walkthrough bar use the logo’s dominant opaque pixel, #0B4F6C. Interactive highlights retain D14 teal #176D7A.
+
+## Walkthrough spacing review
+
+Butter’s horizontal track had retained flex stretching after conversion to a vertical sticky walkthrough. On the Embark phone layout, the first label started 733 px into the section. Removing the stretch and reducing the runway brings it to 142 px. Both pages now show an illustrated participant sequence that follows the selected chapter. The product and trade sections also use shorter responsive padding. Retain the film runway for seek control. The remaining editorial opportunity is a rights-cleared field photograph showing an operator or guide at work in place of the repeated fjord image.

@@ -8,6 +8,7 @@ from lxml import etree, html
 import shutil
 from content import PRODUCTS
 from film_story import STORIES, BEAT
+from handoff import handoff
 from palette import stylesheet, adapt_reference
 
 ROOT=Path(__file__).resolve().parents[2]
@@ -111,7 +112,7 @@ def compile_page(key,p):
     contents(grid[0],'<figure class="photograph">'+picture('fjord.jpg','A mountain-lined fjord seen from the water')+'<figcaption>Icefjord by boat · Illustrative excursion</figcaption></figure>')
     paragraphs(grid[1],p['second'],p['second_title'],p['second_body']);main.append(second)
     story=section('StoryThreeMain','walkthrough');pin=part(story,'StoryThreePin')
-    contents(pin,'<div class="story-head"><p class="iFhYZQ">An illustrative walkthrough</p><h2 class="gbMovY">'+p['story']+'</h2></div><div class="player"><div class="record-label">Ilulissat / Icefjord by boat</div>'+''.join(f'<div class="record" data-scene="{i}" {"" if i==0 else "hidden"}><small>{s[0]}</small><h3>{s[1]}</h3><p>{s[2]}<span>{s[3]}</span></p></div>' for i,s in enumerate(p['steps']))+'<nav aria-label="Walkthrough chapters">'+''.join(f'<button type="button" data-jump="{i}" aria-pressed="{str(i==0).lower()}">0{i+1} · {s[1]}</button>' for i,s in enumerate(p['steps']))+'</nav></div>');main.append(story)
+    contents(pin,'<div class="story-head"><p class="iFhYZQ">An illustrative walkthrough</p><h2 class="gbMovY">'+p['story']+'</h2></div><div class="player">'+handoff(key)+'<div class="record-label">Ilulissat / Icefjord by boat</div>'+''.join(f'<div class="record" data-scene="{i}" {"" if i==0 else "hidden"}><small>{s[0]}</small><h3>{s[1]}</h3><p>{s[2]}<span>{s[3]}</span></p></div>' for i,s in enumerate(p['steps']))+'<nav aria-label="Walkthrough chapters">'+''.join(f'<button type="button" data-jump="{i}" aria-pressed="{str(i==0).lower()}">0{i+1} · {s[1]}</button>' for i,s in enumerate(p['steps']))+'</nav></div>');main.append(story)
     cards=section('FeatureCardsMain','features');paragraphs(cards,'Explore features',p['features'])
     for cta in cards.xpath('.//*[contains(@class,"__FeatureCardsCta-")]'): cta.drop_tree()
     for i,card in enumerate(cards.xpath('.//*[contains(@class,"__FeatureCardWrapper-")]')):

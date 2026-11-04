@@ -5,6 +5,7 @@ let active=-1,queued=false;
 function select(index){
   if(index===active)return;
   active=index;
+  walk.querySelectorAll('[data-stop]').forEach((el,i)=>el.setAttribute('aria-current',String(i===index)));
   records.forEach((el,i)=>el.hidden=i!==index);
   buttons.forEach((el,i)=>el.setAttribute('aria-pressed',String(i===index)));
 }

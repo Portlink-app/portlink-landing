@@ -1,5 +1,7 @@
 """Compile product copy into the acquired homepage's section and grid markup."""
 from pathlib import Path
+from hashlib import sha256
+from functools import lru_cache
 from copy import deepcopy
 from html import escape
 from lxml import etree, html
@@ -32,8 +34,13 @@ def section(name,anchor):
     el.set('id',anchor)
     return el
 
+@lru_cache
+def media_url(name):
+    fingerprint=sha256((OUT/'media'/name).read_bytes()).hexdigest()[:16]
+    return f'{MEDIA}{name}?v={fingerprint}'
+
 def picture(src,alt):
-    return f'<img src="{MEDIA}{src}" alt="{escape(alt,quote=True)}" loading="lazy" decoding="async">'
+    return f'<img src="{media_url(src)}" alt="{escape(alt,quote=True)}" loading="lazy" decoding="async">'
 
 def action(text,href,header=False):
     area='HeaderRight' if header else 'HomeHeroContent'
@@ -140,6 +147,12 @@ def compile_page(key,p):
     footer=section('FooterMain','footer');outer=part(footer,'ContainerMain')
     contents(outer,f'<div class="footer-links"><a href="/">Portlink</a><a href="/embark/">Embark</a><a href="{p["contact"]}">Contact</a><a href="https://portlink.app/privacy/">Privacy</a></div><div class="footer-mark">{p["name"]}</div><p>Portlink AS · Oslo, Norway</p>')
     main.append(footer)
+    # Version posters and video sources as well as reusable product stills.
+    for node in doc.xpath('//*[@src or @poster or @data-portrait-poster]'):
+        for attr in ('src','poster','data-portrait-poster'):
+            url=node.get(attr,'')
+            if url.startswith(MEDIA) and '?' not in url:
+                node.set(attr,media_url(url[len(MEDIA):]))
     (OUT/(key+'.html')).write_bytes(html.tostring(doc,method='html',encoding='utf-8',doctype='<!doctype html>'))
 
 if __name__=='__main__':

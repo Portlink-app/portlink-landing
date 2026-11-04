@@ -35,9 +35,34 @@ function seekFilm(){
   if(Math.abs(film.currentTime-time)>.045)film.currentTime=time;
 }
 function queueSeek(){if(!busy){busy=true;requestAnimationFrame(seekFilm)}}
-film.addEventListener('play',()=>manual=true);
-film.addEventListener('pointerdown',()=>manual=true);
-film.addEventListener('keydown',()=>manual=true);
+const portrait=matchMedia('(max-width: 700px)');
+const widePoster=film.poster;
+function choosePoster(){film.poster=portrait.matches?film.dataset.portraitPoster:widePoster}
+choosePoster();
+portrait.addEventListener('change',()=>{
+  const time=film.currentTime,playing=!film.paused;
+  choosePoster();
+  film.addEventListener('loadedmetadata',()=>{
+    film.currentTime=Math.min(time,film.duration);
+    if(playing)film.play().catch(()=>{});
+  },{once:true});
+  film.load();
+});
+const resume=track.querySelector('.film-resume');
+const chapters=[...track.querySelectorAll('[data-film-time]')];
+function takeControl(){manual=true;resume.hidden=motion.matches}
+resume.addEventListener('click',()=>{film.pause();manual=false;resume.hidden=true;queueSeek()});
+for(const type of ['play','pointerdown','keydown'])film.addEventListener(type,takeControl);
+chapters.forEach(button=>button.addEventListener('click',()=>{
+  takeControl();film.pause();film.currentTime=Number(button.dataset.filmTime);
+}));
+function updateChapter(){
+  chapters.forEach((button,index)=>{
+    const start=Number(button.dataset.filmTime),end=Number(chapters[index+1]?.dataset.filmTime??Infinity);
+    button.setAttribute('aria-current',String(film.currentTime>=start && film.currentTime<end));
+  });
+}
+film.addEventListener('timeupdate',updateChapter);updateChapter();
 film.addEventListener('loadedmetadata',queueSeek);
 film.addEventListener('seeked',queueSeek);
 addEventListener('scroll',queueSeek,{passive:true});

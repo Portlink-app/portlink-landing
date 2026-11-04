@@ -5,6 +5,7 @@ from html import escape
 from lxml import etree, html
 import shutil
 from content import PRODUCTS
+from film_story import STORIES, BEAT
 from palette import stylesheet, adapt_reference
 
 ROOT=Path(__file__).resolve().parents[2]
@@ -73,9 +74,20 @@ def compile_page(key,p):
     main.append(ticker)
     statement=section('StatementTimelineMain','overview')
     write(statement.xpath('.//h2')[0],p['statement'])
-    tl=part(statement,'TimelineContainer');contents(tl,'<div class="timeline">'+''.join(f'<span><b>{i:02}</b>{s[1]}</span>' for i,s in enumerate(p['steps'],1))+'</div>')
-    film=html.fromstring(f'<div class="film-track"><figure><video playsinline muted controls preload="metadata" poster="{MEDIA}{key}-tour.jpg" aria-label="{p["name"]} sample-data product tour"><source src="{MEDIA}{key}-tour.mp4" type="video/mp4"></video><figcaption>Product tour · Scroll to advance or use the player controls · Sample data</figcaption></figure></div>')
-    tl.addnext(film)
+    chapters=STORIES[key]
+    controls=''.join(f'<button type="button" data-film-time="{i*BEAT}">{i+1}. {escape(beat[1])}</button>' for i,beat in enumerate(chapters))
+    transcript=''.join(f'<li><strong>{escape(beat[2])}.</strong> {escape(beat[4])}</li>' for beat in chapters)
+    film=html.fromstring(f'''<div class="film-track" id="product-film"><figure>
+        <video playsinline muted controls preload="metadata" poster="{MEDIA}{key}-tour.jpg" data-portrait-poster="{MEDIA}{key}-tour-portrait.jpg" aria-label="{p["name"]} sample-data product tour">
+          <source media="(max-width: 700px)" src="{MEDIA}{key}-tour-portrait.mp4" type="video/mp4">
+          <source src="{MEDIA}{key}-tour.mp4" type="video/mp4">
+        </video>
+        <figcaption>Product tour · Illustrative data</figcaption>
+        <nav class="film-chapters" aria-label="Film chapters">{controls}</nav>
+        <button type="button" class="film-resume" hidden>Resume scroll control</button>
+        </figure></div>''')
+    part(statement,'TimelineContainer').getparent().replace(part(statement,'TimelineContainer'),film)
+    film.addnext(html.fromstring(f'<details class="film-transcript"><summary>Read the film transcript</summary><ol>{transcript}</ol></details>'))
     main.append(statement)
     ext='jpg' if key=='embark' else 'png'
     def shot(i):return key+'-'+p['cards'][i][2]+'.'+ext

@@ -33,3 +33,7 @@ The homepage and the new /embark/ route share a hero and record walkthrough. Pre
 The two pages are implemented together in the landing repository. The sample records advance with scroll on desktop and sit directly beside their captions on phones. The Embark enquiry opens a message to the existing Portlink pilot inbox with Embark in the subject. Desktop and phone browser checks exercised every chapter in both directions and followed both product links. The checks used reduced-motion emulation. The production build checked legacy fragments, the existing seven product chapters, consent and font hosting.
 
 For a public release, check the current state of the deployed trade integration before strengthening any illustrative copy. Add a genuine operator quote or additional field photography only once the operator clears it for marketing.
+
+## Current review starting point
+
+The private preview now uses the captured Butter homepage for both routes, before product adaptation. The content plan above is for the subsequent pass. The baseline and its runtime dependencies are documented in [butter-baseline/README.md](butter-baseline/README.md).

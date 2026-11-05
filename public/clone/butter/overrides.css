@@ -22,3 +22,6 @@
    05.11.2026). !important because the colour comes from per-variant component classes. */
 .bt .iFhYZQ { color: rgba(15, 15, 15, .68) !important; }
 .bt p[color="rgba(15,15,15,0.3)"] { color: rgba(15, 15, 15, .62) !important; }
+
+/* Footer: the product name inherited the mark's -0.07em tracking and read as a smudge above the logo. */
+.bt .footer-mark .product-name { letter-spacing: 0; line-height: 1.2; }

@@ -1,5 +1,21 @@
 # Portlink Landing Page
 
+## Current release and integrity contract
+
+The landing currently vendors legacy v4.1.2, pinned to landing commit a77b3e9ffec74168b7f384fdc7e7547d58f3af90. D14 migration and source pins live in [the consumer integration record](docs/D14-CONSUMER-INTEGRATION.md). The next design-system intake comes from Portlink Platform's reviewed Gate A contract, not a moving sibling checkout.
+
+scripts/check-ds-version.mjs is the existing prebuild gate. It checks the version, full file set and exact bytes against the declared source commit's Git objects, independently recomputing every traversed commit/tree/blob identity. The candidate digest must match both the artifact and that source. This includes the component alias and manifest itself. Default and strict modes both fail on corruption, missing/extra files or symlinks, including on Netlify without a sibling repository. A local version bump or recomputed manifest and expected digest cannot authorize replacement bytes at an unchanged source revision.
+
+The local Git object database is only a content-addressed cache, not a mutable baseline. Replacement objects are disabled and object hashes are recomputed. If source objects are absent or invalid, the gate fetches the exact revision from the fixed Portlink landing HTTPS remote into a disposable bare repository. Source access failure blocks the build; it never falls back to candidate checksums. Shallow/source-archive builds therefore need Git and network access. The self-tests also fetch historical source controls. Netlify's existing npm run build invokes this check through prebuild; no separate CI workflow exists.
+
+Run npm run ds:check and npm run ds:selftest. Both are included in npm run verify. The self-test includes pristine, byte mutation, coordinated manifest rehashing, alias mutation, missing/extra entries, symlinks, unchanged-version value changes, a separately authorized bumped fixture and real CLI execution without a sibling checkout. npm run build runs the gate before Next compilation.
+
+An accepted D14 intake updates the anchor through source review together with the adapter and upstream release evidence. Tiller owns new shared roles and upstream release-history controls. The consumer pin is not signature verification and cannot independently approve a changed upstream release. Do not edit generated vendor files. Publication follows the existing owner boundary; task-branch push is not production deployment.
+
+## Historical legacy-system documentation
+
+The original distribution instructions below describe the pre-D14 sibling workflow. They are retained as historical context and are superseded by the current release and integrity contract above, including their old version and warn-only statements. Do not use them for a new intake.
+
 Public marketing site for [Portlink](https://portlink.app) — operational coordination infrastructure for the cruise industry. Next.js 16, App Router, deployed via Netlify.
 
 Consumes the Portlink Design System **v4.1.1** (see `app/_ds/VERSION`).

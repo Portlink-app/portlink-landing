@@ -24,6 +24,17 @@
  *      never carry one, a copied production bundle always does;
  *   5. any file whose sha256 matches a third-party asset captured from a reference site.
  *
+ *   6. anything under public/clone/: the product-page clones' reference stylesheets and faces.
+ *
+ * WHEN IT REFUSES. A production build refuses (exit 1): Netlify sets CONTEXT=production for the
+ * build that publishes portlink.app, and `--strict` or PROVENANCE_STRICT=1 does the same anywhere.
+ * Every other build (deploy previews, branch deploys, local verify) prints the same findings as a
+ * PREVIEW warning and exits 0. Chose: preview-only enforcement. Over: refusing every build.
+ * Because: David, 05.11.2026 kl. 11.42: the product pages are built as literal clones of their
+ * references and the third-party files are replaced at the end, so previews must build with them;
+ * the publish is where they must never pass. Revisit-if: the clones' swap lands (public/clone/ is
+ * empty), then return to refusing every build.
+ *
  * Adding a family is a deliberate act: self-host it through scripts/sync-fonts.mjs (licence
  * checked), or copy it from our own @portlink/tokens package with its licence, and add it to
  * FAMILIES below in the same commit.
@@ -33,6 +44,8 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
+const STRICT = process.argv.includes('--strict') || process.env.PROVENANCE_STRICT === '1' || process.env.CONTEXT === 'production'
+const CLONE_DIR = 'public/clone/'
 const rootArg = process.argv.indexOf('--root')
 const ROOT = rootArg > -1 ? path.resolve(process.argv[rootArg + 1] ?? '') : path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const DIRS = ['app', 'components', 'lib', 'hooks', 'public']
@@ -42,7 +55,7 @@ const FAMILIES = [
   { file: 'inter-', css: 'Inter' },
   { file: 'jetbrains-mono-', css: 'JetBrains Mono' },
   { file: 'plus-jakarta-sans-', css: 'Plus Jakarta Sans' },
-  // D14 product faces, copied from our own @portlink/tokens 1.3.0 (app/(product)/layout.tsx says how).
+  // D14 product faces, copied from our own @portlink/tokens 1.3.0 with their OFL licences; the clone pages' swap target.
   { file: 'schibsted-grotesk-', css: 'Schibsted Grotesk' },
   { file: 'manrope-', css: 'Manrope' },
 ]
@@ -118,11 +131,16 @@ for (const file of files) {
   const bytes = fs.readFileSync(file)
   const sha = crypto.createHash('sha256').update(bytes).digest('hex')
   const found = FOREIGN.has(sha) ? [FOREIGN.get(sha)] : []
+  if (rel.startsWith(CLONE_DIR)) found.push('reference clone material (replace before production)')
   if (FONT_FILE.test(rel)) { fonts++; found.push(...fontHits(rel)) }
   else if (TEXT_FILE.test(rel)) found.push(...textHits(bytes.toString('utf8')))
   if (found.length) bad.push(`${rel}: ${found.join('; ')}`)
 }
 // Known positive: our own fonts must be visible, or the font rules above measured nothing.
 if (!fonts) fail(`no font files found under ${FONT_DIR}/; the scan cannot see fonts.`, 2)
-if (bad.length) fail(`third-party material in shipped source:\n  ${bad.join('\n  ')}\nObserve reference sites; never ship their files. See the header of this script.`)
+if (bad.length && STRICT) fail(`third-party material in shipped source:\n  ${bad.join('\n  ')}\nObserve reference sites; never ship their files. See the header of this script.`)
+if (bad.length) {
+  console.warn(`check:provenance: PREVIEW, not production: ${bad.length} file(s) would block a production build:\n  ${bad.join('\n  ')}`)
+  process.exit(0)
+}
 console.log(`check:provenance: ${files.length} files clean (${fonts} fonts, all ours in ${FONT_DIR}/); self-test passed.`)

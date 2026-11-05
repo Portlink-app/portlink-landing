@@ -1,204 +1,430 @@
+/**
+ * /portlink: product page for cruise lines, port agents and DMCs.
+ *
+ * Clone method (David, 05.11.2026 kl. 11.42, plan PORTLINK_PRODUCT_LANDING_PAGES_2026-11-05):
+ * waabi.ai's homepage rebuilt literally (its markup, class lists, section order, scroll scenes and
+ * type scale), then rebranded with Portlink's colour, logo, copy and real product recordings.
+ * The stylesheet is Waabi's own build, scoped under `.wb` by scripts/clone/scope-css.mjs, and the
+ * two faces are Waabi's. Both are preview-only: the provenance guard refuses them in a production
+ * build, and replacing them is the last step before main. Entry doc: docs/PRODUCT-PAGES.md.
+ *
+ * Every class below exists in public/clone/waabi/waabi.css (the landing's own Tailwind does not
+ * scan this folder, globals.css `@source not`); new rules live in overrides.css as `wbx-*`.
+ */
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { ogDefaults, twitterDefaults } from '@/lib/metadata'
-import ProductMotion from '@/components/product/ProductMotion'
-import RoleLens from '@/components/product/RoleLens'
-import { PRODUCT_PAGE_ROBOTS, DEMO_HREF, DEMO_LABEL } from '@/components/product/config'
-
-const title = 'Portlink: run the port call from one record'
-const description =
-  'Cruise line, port agent, DMC and ship work in the same port-call record: readiness, tours, the departure report and the final account, each seeing their part.'
+import { preload } from 'react-dom'
+import { DEMO_HREF, DEMO_LABEL, PRODUCT_PAGE_ROBOTS } from '@/components/product/config'
+import WaabiMotion from '@/components/clone/waabi/WaabiMotion'
+import SeatLens from '@/components/clone/waabi/SeatLens'
+import SplitTabs from '@/components/clone/waabi/SplitTabs'
+import { SPLIT } from '@/components/clone/waabi/content'
+import Film from '@/components/clone/Film'
 
 export const metadata: Metadata = {
-  title,
-  description,
+  title: 'Portlink: run the port call from one record',
+  description:
+    'Portlink is the shared port-call record for cruise lines, port agents, DMCs and ships: readiness, berth, shore excursions, the departure report and the final account in one place.',
   alternates: { canonical: '/portlink/' },
   robots: PRODUCT_PAGE_ROBOTS,
-  openGraph: { ...ogDefaults, url: '/portlink/', title, description },
-  twitter: { ...twitterDefaults, title, description },
 }
 
-const READY = [
-  { item: 'Agent appointed', owner: 'you', chip: 'Done', tone: 'c-ok' },
-  { item: 'Berth', owner: 'port via agent', chip: 'Confirmed', tone: 'c-ok' },
-  { item: 'PDA sent', owner: 'agent', chip: 'Sent', tone: 'c-ok' },
-  { item: 'Clearance filed', owner: 'agent', chip: 'Filed', tone: 'c-ok' },
-  { item: 'Pilot booked', owner: 'agent', chip: 'Booked', tone: 'c-ok' },
-  { item: 'Tugs booked', owner: 'agent', chip: 'Due in 1 d', tone: 'c-warn' },
-  { item: 'Documents uploaded', owner: 'you', chip: 'Overdue 1 d', tone: 'c-bad' },
-]
+const V = '/video/landing-2026-09-15'
+const P = '/product'
+const H = '/havn'
 
-function Meter({ done, of }: { done: number; of: number }) {
+/** The pill-free button of the reference, in Portlink's ink action colour (overrides.css). */
+function Action({ href, cta, children, light }: { href: string; cta: string; children: React.ReactNode; light?: boolean }) {
   return (
-    <div className="meter" role="img" aria-label={`${done} of ${of} arranged`}>
-      {Array.from({ length: of }, (_, i) => <i key={i} className={i < done ? 'd' : undefined} />)}
-    </div>
+    <Link
+      href={href}
+      data-cta={cta}
+      className={`flex h-36 shrink-0 items-center justify-center px-24 md:h-48 ${light ? 'bg-white text-black' : 'bg-pink text-white'}`}
+    >
+      <span className="type-s-11 md:type-s-12 leading-[140%] tracking-[0.024rem]">{children}</span>
+    </Link>
   )
 }
 
-export default function PortlinkPage() {
+/** A muted, looping product recording with its poster; the poster is what reduced motion and no-script see. */
+function Loop({ src, poster, className = 'size-full object-cover' }: { src: string; poster: string; className?: string }) {
   return (
-    <div className="pp" id="pp-portlink">
-      <header className="p-hero" id="f-hero">
-        <div className="wrap">
-          <div className="bar">
-            <Link className="mark" href="/">Portlink</Link>
-            <nav aria-label="Page">
-              <a href="#f-ready">Port calls</a>
-              <a href="#f-lens">Who sees what</a>
-              <a href="#f-money">Finance</a>
-              <a href="/embark/">Embark</a>
-            </nav>
-            <a className="btn" href={DEMO_HREF} data-cta="demo-portlink-nav">{DEMO_LABEL}</a>
-          </div>
-          <div className="grid" id="main">
-            <div className="copy">
-              <h1>Run the port call from one record</h1>
-              <p className="lede">Cruise line, port agent, DMC and ship work in the same record: berth, pilot, tours and the final account, each seeing their part.</p>
-              <div className="actions">
-                <a className="btn" href={DEMO_HREF} data-cta="demo-portlink-hero">{DEMO_LABEL}</a>
-                <a className="link" href="#f-lens" data-cta="explore-portlink-hero">See who sees what</a>
+    <Film className={className} src={src} poster={poster} />
+  )
+}
+
+function Tile({ children, extra = '' }: { children: React.ReactNode; extra?: string }) {
+  return (
+    <div className={`rounded-calc bg-cream relative h-133 w-133 overflow-clip md:h-[calc(133/1440*100vw)] md:w-[calc(133/1440*100vw)] ${extra}`}>
+      {children}
+    </div>
+  )
+}
+const img = (src: string) => <img className="h-full w-full object-cover" src={src} alt="" loading="lazy" />
+
+const TILE_COLUMNS: { cls: string; tiles: React.ReactNode[] }[] = [
+  { cls: '-left-340 md:left-24', tiles: [img(`${H}/app-portcall.jpg`), <Loop key="b" src={`${V}/hero-B`} poster={`${V}/hero-B.jpg`} />, img(`${P}/fjord-cruise-800.webp`), img(`${H}/app-pda.jpg`)] },
+  { cls: '-left-110 md:left-[calc(16.667%)]', tiles: [img(`${P}/sea-kayak-800.webp`), <Loop key="a" src={`${V}/hero-A`} poster={`${V}/hero-A.jpg`} />, img(`${H}/app-voyage.jpg`), img(`${P}/whale-safari-800.webp`)] },
+  { cls: '-right-110 md:right-[calc(16.667%)]', tiles: [img(`${H}/app-chart.jpg`), img(`${P}/glacier-hike-800.webp`), <Loop key="d" src={`${V}/hero-D`} poster={`${V}/hero-D.jpg`} />, img(`${H}/app-portcall.jpg`)] },
+  { cls: '-right-340 md:right-24', tiles: [img(`${P}/whale-safari-800.webp`), <Loop key="c" src={`${V}/hero-C`} poster={`${V}/hero-C.jpg`} />, img(`${H}/app-pda.jpg`), img(`${P}/fjord-cruise-800.webp`)] },
+]
+
+const CARDS = [
+  { kicker: 'Plan', title: 'The season, port by port', href: '#f-split', video: `${V}/hero-A`, poster: `${V}/hero-A.jpg` },
+  { kicker: 'Arrive', title: 'The port call, ready in time', href: '#f-seats', video: `${V}/hero-D`, poster: `${V}/hero-D.jpg` },
+  { kicker: 'Settle', title: 'The final account, line by line', href: '#f-day', still: `${H}/app-pda.jpg` },
+]
+
+const DAY = [
+  { time: '48 h before', tags: ['Readiness', 'Agent'], title: '5 of 7 arranged: berth, PDA and clearance done, pilot and tugs booked next', src: `${H}/app-portcall.jpg` },
+  { time: '09.10', tags: ['Shore excursions', 'Embark'], title: 'Tours go ashore with the operator, confirmed in Embark by the DMC', src: `${P}/sea-kayak-800.webp` },
+  { time: '17.30', tags: ['Departure report'], title: 'The agent signs, then the ship signs, on one phone at the gangway', src: `${P}/fjord-cruise-800.webp` },
+  { time: '21.00', tags: ['Final account'], title: 'FDA 401 250 kr against PDA 412 380 kr: 11 130 kr under, line by line', src: `${H}/app-pda.jpg` },
+  { time: 'Next call', tags: ['Voyage'], title: 'The same record carries the next port, already in the voyage plan', src: `${H}/app-voyage.jpg` },
+]
+
+export default function PortlinkPage() {
+  // The hero headline is the LCP and is set in these two faces: fetch them with the stylesheets.
+  preload('/clone/waabi/fonts/zagma-book.woff2', { as: 'font', type: 'font/woff2', crossOrigin: 'anonymous' })
+  preload('/clone/waabi/fonts/neuehaas-65.woff2', { as: 'font', type: 'font/woff2', crossOrigin: 'anonymous' })
+  return (
+    <div className="wb" id="main">
+      <link rel="stylesheet" href="/clone/waabi/waabi.css" precedence="clone" />
+      <link rel="stylesheet" href="/clone/waabi/overrides.css" precedence="clone-x" />
+      <WaabiMotion />
+      <noscript dangerouslySetInnerHTML={{ __html: '<style>.wb .wbx-herolede{opacity:1}</style>' }} />
+
+      <div className="wbx-announce">
+        <span>Let&apos;s talk about your next season</span>
+        <Link href={DEMO_HREF} data-cta="demo-portlink-announce">Book a demo ↗</Link>
+      </div>
+
+      <header className="css-header fixed right-0 left-0 z-500 mx-auto flex flex-col items-center justify-center sm:top-34 sm:w-338 sm:gap-10 top-24 w-[calc(100vw-2.4rem)] wbx-header">
+        <div className="relative flex w-full items-start overflow-clip sm:bg-black/15 sm:p-1 bg-black/15 p-1 h-55">
+          <div className="relative h-full w-full bg-white pt-0">
+            <div className="item-start relative flex h-full w-full pr-13 pl-28">
+              <div className="flex w-full justify-between">
+                <div className="flex gap-25 items-center">
+                  <Link aria-label="Portlink home" className="flex h-53 w-auto items-center" href="/">
+                    <img src="/portlink-logo.png" alt="Portlink" width={92} height={24} />
+                  </Link>
+                  <span className="font-neue inline-flex text-[1.5rem] leading-[160%] tracking-[0.015rem]">Port calls</span>
+                </div>
+                <Link href={DEMO_HREF} data-cta="demo-portlink-nav" className="wbx-navcta">Demo</Link>
               </div>
             </div>
-            <div className="rec" data-ui>
-              <div className="hd"><b>Nordkyst at Bergen</b><span className="meta">Skolten 3 · Fri 22 May · ETA kl. 07.40 · ETD kl. 17.30</span></div>
-              <div className="tabs" aria-hidden="true">
-                {['Overview', 'Readiness', 'Finance', 'Programme', 'Services', 'Tasks', 'Comms'].map((t, i) => (
-                  <span key={t} className={i === 0 ? 'on' : undefined}>{t}</span>
-                ))}
-              </div>
-              <div className="hd" style={{ paddingTop: 20 }}><span className="fig">Arrives in 2 days</span></div>
-              <Meter done={5} of={7} />
-              {[READY[0], READY[1], READY[2], READY[5], { ...READY[6], chip: 'Overdue' }].map((r) => (
-                <div className="row" key={r.item}><span>{r.item}</span><span className="o">{r.item === 'Agent appointed' ? 'Vestkyst Agency' : r.owner}</span><span className={`chip ${r.tone}`}>{r.chip}</span></div>
-              ))}
-            </div>
           </div>
+          <div className="bg-pink absolute right-25 bottom-0 left-25 h-2 origin-left wbx-progress" />
         </div>
       </header>
 
-      <main>
-        <section className="ch" id="f-ready" aria-labelledby="h-ready">
-          <div className="wrap grid split-6">
-            <div className="copy">
-              <h2 id="h-ready">Seven things before arrival</h2>
-              <p className="body">Agent, berth, PDA, clearance, pilot, tugs and documents. Each has an owner and a due day, so nobody chases an email thread to find out if the pilot is booked.</p>
-              <div className="clockwrap"><p className="clock">48 h</p><p className="clockcap">Before arrival</p></div>
-            </div>
-            <div className="frag" data-ui>
-              <div className="hd"><b>What has to happen before 22 May</b><span className="meta">5 of 7 arranged</span></div>
-              <Meter done={5} of={7} />
-              {READY.map((r) => (
-                <div className="row" key={r.item}><span>{r.item}</span><span className="o">{r.owner}</span><span className={`chip ${r.tone}`}>{r.chip}</span></div>
-              ))}
-              <div className="who">
-                <div><b>Cruise line</b>Nordkyst Line</div>
-                <div><b>Agent</b>Vestkyst Agency</div>
-                <div><b>DMC</b>Fjordland DMC</div>
-                <div><b>Ship</b>MS Nordkyst</div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="ch f-day" id="f-lens" aria-label="Each seat sees its own record">
-          <RoleLens />
-        </section>
-
-        <section className="ch tours" id="f-tours" aria-labelledby="h-tours">
-          <div className="wrap grid">
-            <div className="pic">
-              {/* eslint-disable-next-line @next/next/no-img-element -- static export of a pre-sized webp; next/image is unoptimized on this site */}
-              <img
-                src="/product/fjord-cruise-1600.webp"
-                srcSet="/product/fjord-cruise-800.webp 800w, /product/fjord-cruise-1600.webp 1600w"
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                width={1600}
-                height={1000}
-                loading="lazy"
-                decoding="async"
-                alt="Tour boat on a Norwegian fjord below steep green mountains"
-              />
-            </div>
-            <div className="copy">
-              <h2 id="h-tours">Tours agreed with the operator</h2>
-              <p className="body">The DMC finds tour operators by port and asks for terms in Embark. The programme lands on the call, with seats and guides, and the cruise line signs it off.</p>
-              <div className="clockwrap"><p className="clock">09.10</p><p className="clockcap">First tour ashore</p></div>
-              <div className="frag" data-ui>
-                <div className="row"><span>Fjord cruise to Mostraumen</span><span className="o">Fjordland DMC</span><span className="chip c-ok">Signed</span></div>
-                <div className="row"><span>Bergen on foot</span><span className="o">Fjordland DMC</span><span className="chip c-warn">In review</span></div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="ch sign f-dusk" id="f-sign" aria-labelledby="h-sign">
-          <div className="wrap grid">
-            <div className="copy">
-              <h2 id="h-sign">Signed at the table, then sailed</h2>
-              <p className="body">The agent and the purser go through what was used alongside on one phone. The agent signs, then the ship signs, and the report feeds the final account.</p>
-              <div className="clockwrap"><p className="clock">17.30</p><p className="clockcap">All aboard</p></div>
-            </div>
-            <div className="ph">
-              <div className="phone">
-                <div data-ui>
-                  <div className="hd"><b>Departure report</b></div>
-                  {['Fresh water, 180 t', 'Waste, 6 m³', 'Tugs, 2 × in', 'Line handling'].map((l) => (
-                    <div className="row two" key={l}><span>{l}</span><span className="chip c-mute">Used</span></div>
-                  ))}
-                  <div className="sig">
-                    <div className="line">
-                      <svg width="150" height="34" viewBox="0 0 150 34" aria-hidden="true"><path d="M2 26c10-14 18-22 24-10s4 14 12 2 12-16 18-6 6 12 16 0 14-8 22-2 18 4 30-4" fill="none" stroke="#131313" strokeWidth="2.2" strokeLinecap="round" /></svg>
+      <main className="relative min-h-svh w-full">
+        <div className="flex flex-col">
+          {/* 1. Hero: the product working, full bleed, the headline over it (Waabi "Built to think"). */}
+          <section id="overview" className="relative flex w-full flex-col">
+            <section className="text-background relative z-50 mb-[-75vh] h-[250vh] w-full md:h-[250vh]">
+              <div className="relative h-full w-full">
+                <div className="sticky top-0 left-0 h-svh w-full">
+                  <div className="absolute top-0 left-0 h-dvh w-full">
+                    <div className="absolute inset-0 will-change-transform wbx-herozoom">
+                      <div className="absolute inset-0 size-full">
+                        <Film src={`${V}/hero-C`} phoneSrc={`${V}/m-A-portrait`} poster={`${V}/hero-C.jpg`} eager />
+                      </div>
+                      <div className="absolute inset-0 bg-black/35" />
                     </div>
-                    <span className="sub">Agent, Vestkyst Agency · signed kl. 17.12</span>
                   </div>
-                  <div className="sig"><div className="line" /><span className="sub">Ship, purser · waiting</span></div>
+                  <div className="px-calc absolute top-0 flex h-svh w-full items-end justify-start pb-40 md:pb-90 wbx-herolede">
+                    <div className="relative flex flex-col gap-y-24">
+                      <p className="type-z-24 md:type-z-40 max-w-295 text-balance md:max-w-495 text-white">
+                        Portlink runs the cruise port call for the line, the agent, the DMC and the ship.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="w-calc pointer-events-auto relative mt-[-100lvh] mb-[100lvh] flex h-lvh items-end justify-start py-[var(--padding-y)]">
+                  <div className="flex w-full flex-col items-start gap-24 pointer-events-auto">
+                    <h1 className="text-[7.2rem] leading-[85%] tracking-[-0.288rem] md:text-[min(14vw,15rem)] md:tracking-[min(-0.5vw,-0.6rem)] text-balance text-white" data-words>
+                      <span className="flex flex-col">
+                        {/* signature-ok: the per-word entrance is waabi.ai's own hero motion (400ms, cubic-bezier(.19,1,.22,1)), cloned on David's instruction */}
+                        <span className="text-left"><span className="wbx-w" style={{ '--i': 0 } as React.CSSProperties}>One</span> <span className="wbx-w" style={{ '--i': 1 } as React.CSSProperties}>call.</span></span>
+                        <span className="text-left"><span className="wbx-w" style={{ '--i': 2 } as React.CSSProperties}>One</span> <span className="wbx-w" style={{ '--i': 3 } as React.CSSProperties}>record.</span></span>
+                      </span>
+                    </h1>
+                    <div className="flex gap-12">
+                      <Action href={DEMO_HREF} cta="demo-portlink-hero">{DEMO_LABEL}</Action>
+                      <Action href="#f-split" cta="explore-portlink-hero" light>See how it works</Action>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* 2. Tiles fly apart around the statement (Waabi "We built our own road"). */}
+            <section className="bg-background relative w-full overflow-clip h-[150vh]" data-scene="tiles">
+              <div className="absolute inset-0 origin-top">
+                {TILE_COLUMNS.map((col, c) => (
+                  <div key={c} className={`absolute flex-col justify-between flex ${col.cls} h-[150vh] will-change-transform wbx-col`} style={{ '--c': c } as React.CSSProperties}>
+                    {col.tiles.map((t, i) => <Tile key={i}>{t}</Tile>)}
+                  </div>
+                ))}
+              </div>
+              <div className="flex-center absolute inset-0 flex-col">
+                <div className="flex-center relative">
+                  <div className="relative flex max-w-295 flex-col items-center justify-center gap-18 text-center md:max-w-full">
+                    <div className="absolute aspect-square w-full rounded-full"><div className="absolute size-full rounded-full bg-white blur-2xl" /></div>
+                    <p className="type-z-18 md:type-z-24 relative text-black/50">We built the record the call runs on.</p>
+                    <p className="type-z-18 md:type-z-24 text-dark relative max-w-558 overflow-clip">
+                      Readiness, berth, shore excursions, the departure report and the money sit in one port-call
+                      record. The cruise line, the port agent, the DMC and the ship each open it from their own
+                      seat, and nobody types the call twice.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* 3. Sticky split with three claims (Waabi "Unlocking scale": Safe, Scalable, Practical). */}
+            <section id="f-split" className="bg-background text-foreground relative w-full max-md:py-(--padding-y) md:h-[200vh]" data-scene="split" data-active="0">
+              <div className="w-calc relative md:h-full md:px-90 max-md:hidden">
+                <div className="flex w-full gap-40 max-md:flex-col md:h-full md:justify-between">
+                  <div className="relative flex flex-1 flex-col md:h-full md:max-w-527">
+                    <div className="md:sticky md:top-0 md:flex md:h-screen md:items-center">
+                      <div className="relative w-full">
+                        <div className="rounded-calc relative aspect-square w-full overflow-clip bg-cream">
+                          {SPLIT.map((s, i) => (
+                            <div key={s.title} className="rounded-calc absolute inset-0 overflow-clip wbx-splitmedia" data-i={i}>
+                              {s.video ? <Loop src={s.video} poster={s.poster!} /> : <img className="h-full w-full object-cover object-left-top" src={s.still} alt={s.alt} loading="lazy" />}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="relative flex flex-1 flex-col md:h-[200vh] md:max-w-370">
+                    <div className="md:flex md:h-screen md:flex-wrap md:items-center">
+                      <div className="flex w-full flex-col gap-20 md:gap-24">
+                        <h2 className="type-z-28 md:type-z-60 text-balance">Ready before the ship is.</h2>
+                        <p className="text-s-14 md:text-s-15 text-pretty text-black/55 wbx-body">
+                          Seven things make a call ready, and each has an owner. Portlink shows who has done what,
+                          48 hours before arrival, without a status meeting.
+                        </p>
+                      </div>
+                    </div>
+                    <div className="sticky top-0 hidden md:flex md:h-screen md:flex-col md:items-start md:justify-center md:gap-20 pointer-events-none -mt-[50svh]">
+                      {SPLIT.map((s, i) => (
+                        <button key={s.title} type="button" className="pointer-events-auto flex w-full cursor-pointer flex-col gap-20 text-left wbx-splititem" data-i={i}>
+                          <span className="type-z-24 md:type-z-40">{s.title}</span>
+                          <span className="overflow-hidden wbx-splitbody"><span className="text-s-14 md:text-s-15 text-pretty text-black/55 block">{s.body}</span></span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="w-full py-(--padding-y) md:hidden">
+                <div className="w-calc flex flex-col gap-40">
+                  <h2 className="type-z-34 text-balance">Ready before the ship is.</h2>
+                  <SplitTabs />
+                </div>
+              </div>
+            </section>
+          </section>
+
+          {/* 4. Full-bleed picture with the big statement (Waabi "The technology behind Waabi"). */}
+          <section id="technology" className="relative flex w-full flex-col">
+            <section className="relative h-svh w-full overflow-clip px-24">
+              <div className="relative h-full w-full">
+                <div className="rounded-calc absolute inset-0 h-full w-full overflow-clip text-white">
+                  <div className="absolute inset-0">
+                    <img className="absolute inset-0 h-full w-full object-cover" src={`${V}/hero-D.jpg`} alt="" loading="lazy" />
+                    <div className="absolute inset-0 bg-black/50" />
+                  </div>
+                  <div className="relative flex h-full w-full flex-col items-start justify-end gap-24 pb-40 md:gap-48 md:pb-105">
+                    <div className="flex w-full justify-center">
+                      <h2 className="w-calc text-[5.5rem] leading-[90%] tracking-[-0.22rem] md:text-[max(9rem,min(9vw,13rem))] md:tracking-[max(-0.6rem,min(-0.3vw,-0.52rem))] text-balance">
+                        The record behind every call.
+                      </h2>
+                    </div>
+                    <div className="w-calc flex justify-start">
+                      <Action href="#f-seats" cta="explore-portlink-tech">See each seat</Action>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* 5. Three cards (Waabi World, Mixed Reality Testing, Waabi Driver). */}
+            <section className="flex w-full gap-24 p-24 max-lg:flex-col">
+              {CARDS.map((c) => (
+                <div key={c.title} className="group flex-center aspect-[351/221] w-full overflow-clip rounded-[1.2rem] lg:aspect-[448/620]">
+                  <a className="group/arrow group relative flex h-full w-full flex-col justify-end bg-black" href={c.href}>
+                    <div className="absolute inset-0 h-full w-full object-cover ease-snappy transition-transform duration-500 group-hover:scale-120 opacity-80">
+                      {c.video ? <Loop src={c.video} poster={c.poster!} /> : <img className="size-full object-cover object-left-top" src={c.still} alt="" loading="lazy" />}
+                    </div>
+                    <div className="relative z-2 px-28 pb-24 text-white md:px-48 md:pb-36 wbx-cardtext">
+                      <div className="relative flex flex-col gap-4 md:gap-8">
+                        <p className="type-s-11 md:type-s-12">{c.kicker}</p>
+                        <h3 className="type-z-24 md:type-z-40 text-balance md:pr-50">{c.title}</h3>
+                        <span className="flex-center size-32 rounded-full border-1 border-current/15 md:size-50 group-hover/arrow:bg-pink group-hover/arrow:border-current/0 absolute right-0 bottom-0 wbx-arrow" />
+                      </div>
+                    </div>
+                  </a>
+                </div>
+              ))}
+            </section>
+          </section>
+
+          {/* 6. Full-bleed photograph with copy on the left (Waabi "Setting new standards for AV safety"). */}
+          <section className="relative min-h-svh w-full overflow-clip text-white">
+            <div className="absolute inset-0 overflow-clip">
+              <img className="h-full w-full object-cover" src={`${P}/fjord-cruise-1600.webp`} alt="A cruise ship in a Norwegian fjord" loading="lazy" />
+              <div className="absolute inset-0 bg-linear-to-b from-black/50 to-transparent" />
+            </div>
+            <div className="relative z-2 px-40 py-60 md:p-103">
+              <div className="w-calc">
+                <div className="flex w-full flex-col items-start gap-24 md:max-w-525 md:gap-48">
+                  <h2 className="type-z-34 md:type-z-80 text-pretty">Signed on one phone at departure.</h2>
+                  <div className="whitespace-pre-line type-z-18 md:type-z-24 text-current/60 wbx-onphoto">
+                    <span>The agent signs, then the ship signs. </span>
+                    <span>The final account starts from <strong>what both signed</strong>, not from a spreadsheet sent the week after.</span>
+                  </div>
+                  <Action href={DEMO_HREF} cta="demo-portlink-departure">{DEMO_LABEL}</Action>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* 7. Tabs over a picture (Waabi "Trusted by": partners → seats). The live thing. */}
+          <section id="f-seats" className="relative flex w-full flex-col">
+            <section className="relative min-h-screen w-full overflow-clip bg-white py-[var(--padding-y)]">
+              <div className="flex flex-col items-center gap-48 md:gap-96">
+                <div className="w-calc flex gap-30 max-lg:flex-col md:gap-48 xl:gap-240">
+                  <div className="flex flex-col gap-y-48">
+                    <h2 className="type-z-34 md:type-z-80 text-balance">Each seat sees its own record.</h2>
+                  </div>
+                  <div className="max-lg:w-calc flex flex-col justify-end gap-30 lg:max-w-447 lg:gap-48 lg:pl-48">
+                    <div className="whitespace-pre-line type-z-18 md:type-z-24 text-current/50 wbx-muted">
+                      Pick a seat. The record keeps the same call and shows that seat the tabs it works in, by
+                      the same rule the product uses.
+                    </div>
+                  </div>
+                </div>
+                <SeatLens image={`${H}/app-portcall.jpg`} />
+              </div>
+            </section>
+          </section>
+
+          {/* 8. Carousel (Waabi "Insights" → the day of one call). */}
+          <section id="f-day" className="relative flex w-full flex-col relative w-full overflow-clip bg-cream py-(--padding-y)">
+            <div className="flex flex-col gap-30 md:gap-48">
+              <div className="w-calc grid grid-cols-2 gap-y-24 md:gap-y-48">
+                <div className="order-1 md:col-span-2">
+                  <h2 className="type-z-34 md:type-z-80 text-balance">The day of a call.</h2>
+                </div>
+                <div className="order-3 max-md:col-span-2 md:order-2">
+                  <p className="type-s-14 md:type-s-15 text-balance text-black/50 wbx-muted">
+                    One port call in Bergen, from readiness two days out to the final account at 21.00.
+                  </p>
+                </div>
+                <div className="order-2 flex items-end gap-24 justify-self-end md:order-3">
+                  <div className="flex items-center gap-8 md:gap-12">
+                    <button type="button" aria-label="Previous" data-carousel="prev" className="flex-center size-32 rounded-full border-1 border-current/15 md:size-50 hover:bg-pink hover:border-current/0 hover:text-white wbx-arrow wbx-arrow-l" />
+                    <button type="button" aria-label="Next" data-carousel="next" className="flex-center size-32 rounded-full border-1 border-current/15 md:size-50 hover:bg-pink hover:border-current/0 hover:text-white wbx-arrow" />
+                  </div>
+                </div>
+              </div>
+              <div className="flex w-full flex-nowrap">
+                <div className="px-calc flex snap-x snap-mandatory flex-nowrap gap-28 md:gap-24 wbx-track" data-carousel="track" tabIndex={0} aria-label="The day of a call">
+                  {DAY.map((d) => (
+                    <article key={d.time} className="group relative flex shrink-0 snap-start flex-col items-start justify-start gap-16 border-b border-current/15 pb-24 w-[calc(100vw-8rem)] md:w-450">
+                      <div className="relative flex w-full flex-col items-start justify-start gap-12 md:gap-16">
+                        <div className="rounded-calc relative w-full overflow-clip bg-current flex aspect-[295/221] items-center justify-center md:aspect-[448/336]">
+                          <div className="ease-snappy relative h-full w-full transition-transform duration-500 group-hover:scale-110">
+                            <img className="absolute h-full w-full object-cover object-left-top" src={d.src} alt="" loading="lazy" />
+                          </div>
+                        </div>
+                        <div className="relative flex w-full flex-row flex-wrap items-center justify-start gap-16">
+                          <div className="flex flex-wrap items-center gap-6">
+                            {d.tags.map((t) => (
+                              <div key={t} className="flex-center h-26 gap-6 shrink-0 rounded-[4rem] px-11 bg-[#DEDCD9] wbx-tag"><span className="type-s-10">{t}</span></div>
+                            ))}
+                          </div>
+                          <span className="type-s-11 md:type-s-12 whitespace-nowrap text-current/50 wbx-muted">{d.time}</span>
+                        </div>
+                        <h3 className="type-z-18 md:type-z-24 max-w-600 text-current">{d.title}</h3>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* 9. Closing statement over a collage (Waabi "Build Physical AI with us"). */}
+          <section id="demo" className="relative flex w-full flex-col overflow-clip bg-white py-[var(--padding-y)] lg:min-h-screen">
+            <div className="flex flex-col gap-65 md:gap-96">
+              <div className="flex flex-col gap-32">
+                <div className="flex w-full justify-center text-balance">
+                  <h2 className="w-calc text-[5.5rem] leading-[90%] tracking-[-0.22rem] md:text-[max(9rem,min(9vw,13rem))] md:tracking-[max(-0.6rem,min(-0.3vw,-0.52rem))] text-balance">
+                    Bring us your next call.
+                  </h2>
+                </div>
+                <div className="w-calc flex gap-12">
+                  <Action href={DEMO_HREF} cta="demo-portlink-close">{DEMO_LABEL}</Action>
+                  <Action href="/embark/" cta="embark-portlink-close" light>Embark for tour operators</Action>
+                </div>
+              </div>
+              <div className="relative flex w-full px-24">
+                <div className="rounded-calc relative flex h-[35vw] w-full items-center overflow-clip">
+                  <div className="absolute left-0 h-[17vw] w-[23vw]"><div className="size-full overflow-clip bg-gray-300">{img(`${P}/glacier-hike-800.webp`)}</div></div>
+                  <div className="absolute left-[calc(calc(100%-(47vw+(39vw*0.5)+(31vw*0.5))))] h-[23vw] w-[31vw]"><div className="size-full overflow-clip bg-gray-300">{img(`${H}/app-chart.jpg`)}</div></div>
+                  <div className="absolute left-[calc(calc(100%-(47vw+(39vw*0.5))))] h-[29vw] w-[39vw]"><div className="size-full overflow-clip bg-gray-300">{img(`${H}/app-voyage.jpg`)}</div></div>
+                  <div className="absolute left-[calc(calc(100%-47vw))] h-[35vw] w-[47vw]"><div className="size-full overflow-clip bg-gray-300">{img(`${P}/fjord-cruise-1600.webp`)}</div></div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </main>
+
+      <footer className="relative w-full overflow-clip">
+        <div className="relative w-full bg-pink text-white lg:h-[60rem]">
+          <div className="relative flex size-full flex-col justify-between gap-64 pt-60 pb-30 lg:gap-0 lg:pt-80 lg:pb-80">
+            <div className="w-calc relative flex flex-col gap-30 lg:flex-row lg:justify-between lg:gap-0">
+              <div className="flex w-full flex-col gap-30 lg:w-[68.4rem] lg:gap-32">
+                <div className="flex flex-col gap-16">
+                  <h2 className="text-[2.4rem] leading-[110%] tracking-[-0.072rem] text-balance md:max-w-[40%] md:text-[4rem] md:tracking-[-0.12rem]">One record for the whole call.</h2>
+                  <p className="font-neue text-[1.4rem] leading-[140%] tracking-[0.028rem] md:text-[1.5rem] md:tracking-[0.015rem]">
+                    Photographs: Unsplash licence (fjord-cruise by Pascal Debrunner, sea-kayak by Brandon McDonald,
+                    whale-safari by Francesco Ungaro, glacier-hike by Colin + Meg). Product images are Portlink.
+                  </p>
+                </div>
+              </div>
+              <div className="flex w-full flex-col gap-12 lg:w-[32.5rem] lg:gap-24">
+                <div className="type-s-11 md:type-s-12 text-current/60">Portlink</div>
+                <nav className="flex flex-col gap-4" aria-label="Footer">
+                  <ul>
+                    <li><Link className="type-z-20 inline-flex transition-colors hover:text-current/80" href="/">Home</Link></li>
+                    <li><Link className="type-z-20 inline-flex transition-colors hover:text-current/80" href="/embark/">Embark</Link></li>
+                    <li><Link className="type-z-20 inline-flex transition-colors hover:text-current/80" href={DEMO_HREF} data-cta="demo-portlink-footer">Book a demo</Link></li>
+                  </ul>
+                </nav>
+              </div>
+            </div>
+            <div className="w-calc relative flex flex-col gap-30 lg:flex-row lg:items-end lg:justify-between lg:gap-0">
+              <div className="order-1 flex h-[8rem] w-full items-center justify-start lg:order-2 lg:h-[14rem] lg:w-[52.6rem] lg:justify-end">
+                <img src="/portlink-logo.png" alt="" className="wbx-footlogo" width={420} height={110} />
+              </div>
+              <div className="order-2 flex flex-col gap-8 lg:order-1">
+                <div className="type-s-11 lg:type-s-11 md:type-s-12 text-current/60">© 2026 Portlink AS</div>
+                <div className="type-s-11 lg:type-s-11 md:type-s-12 flex gap-12 lg:gap-24">
+                  <Link href="/privacy/" className="transition-colors hover:text-current/80">Privacy</Link>
                 </div>
               </div>
             </div>
           </div>
-        </section>
-
-        <section className="ch f-night" id="f-money" aria-labelledby="h-money">
-          <div className="wrap grid split-5">
-            <div className="copy">
-              <h2 id="h-money">See the gap before the invoice</h2>
-              <p className="body">The proforma, what was used alongside and the final disbursement account sit side by side on the call. On this call the final account came in 11 130 kr under the estimate, and everyone can see why.</p>
-              <div className="clockwrap"><p className="clock">21.00</p><p className="clockcap">Under way to Ålesund</p></div>
-            </div>
-            <div className="frag" data-ui>
-              <div className="hd"><b>Money on this call</b></div>
-              <div className="ledger">
-                <div><span className="k">PDA</span><p className="fig">412 380 kr</p><span className="chip c-ok">Approved</span><p className="sub">Proforma estimate</p></div>
-                <div><span className="k">Departure report</span><p className="fig">398 910 kr</p><span className="chip c-ok">Signed</span><p className="sub">What was used alongside</p></div>
-                <div><span className="k">FDA</span><p className="fig">401 250 kr</p><span className="chip c-acc">Sent</span><p className="sub">Final disbursement account</p></div>
-              </div>
-              <div className="diff"><span>FDA against PDA</span><span className="fig">−11 130 kr</span></div>
-            </div>
-          </div>
-          <div className="wrap grid bridge" id="demo">
-            <div className="copy">
-              <h2>Try it on your next season</h2>
-              <p className="body">Bring one real port call. We set it up with your agent and show each seat its own record in 20 minutes.</p>
-              <div className="actions">
-                <a className="btn" href={DEMO_HREF} data-cta="demo-portlink-close">{DEMO_LABEL}</a>
-                <a className="link" href="/embark/" data-cta="embark-portlink-close">Tour operator? Embark</a>
-              </div>
-            </div>
-          </div>
-          <footer className="wrap foot">
-            <nav className="footnav" aria-label="Footer">
-              <a href="/contact/">Contact</a>
-              <a href="/privacy/">Privacy</a>
-              <a href="/embark/">Embark</a>
-              <Link href="/">Portlink AS</Link>
-            </nav>
-            <p className="name" aria-hidden="true">Portlink</p>
-            <p className="credit">Photo: Pascal Debrunner, Unsplash licence. Vessel, line, agency and amounts are sample data.</p>
-          </footer>
-        </section>
-      </main>
-      <ProductMotion rootId="pp-portlink" />
+        </div>
+      </footer>
     </div>
   )
 }

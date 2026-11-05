@@ -25,7 +25,8 @@
  *   5. any file whose sha256 matches a third-party asset captured from a reference site.
  *
  * Adding a family is a deliberate act: self-host it through scripts/sync-fonts.mjs (licence
- * checked) and add it to FAMILIES below in the same commit.
+ * checked), or copy it from our own @portlink/tokens package with its licence, and add it to
+ * FAMILIES below in the same commit.
  */
 import crypto from 'node:crypto'
 import fs from 'node:fs'
@@ -41,6 +42,9 @@ const FAMILIES = [
   { file: 'inter-', css: 'Inter' },
   { file: 'jetbrains-mono-', css: 'JetBrains Mono' },
   { file: 'plus-jakarta-sans-', css: 'Plus Jakarta Sans' },
+  // D14 product faces, copied from our own @portlink/tokens 1.3.0 (app/(product)/layout.tsx says how).
+  { file: 'schibsted-grotesk-', css: 'Schibsted Grotesk' },
+  { file: 'manrope-', css: 'Manrope' },
 ]
 const FONT_DIR = 'app/_fonts'
 const FONT_FILE = /\.(woff2?|ttf|otf|eot)$/i

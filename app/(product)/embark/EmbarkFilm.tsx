@@ -27,7 +27,6 @@ export default function EmbarkFilm() {
       ref={ref}
       playsInline
       muted
-      controls
       preload="metadata"
       poster={`${M}/embark-tour.jpg?v=5fc4b539d587e1ba`}
       data-portrait-poster={`${M}/embark-tour-portrait.jpg?v=1ad9058c51deb87e`}

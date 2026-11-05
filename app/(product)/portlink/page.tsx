@@ -128,7 +128,7 @@ export default function PortlinkPage() {
                   <div className="absolute top-0 left-0 h-dvh w-full">
                     <div className="absolute inset-0 will-change-transform wbx-herozoom">
                       <div className="absolute inset-0 size-full">
-                        <Film src={`${V}/hero-C`} phoneSrc={`${V}/m-A-portrait`} poster={`${V}/hero-C.jpg`} eager />
+                        <Film src={`${V}/hero-C`} poster={`${V}/hero-C.jpg`} eager />
                       </div>
                       <div className="absolute inset-0 bg-black/35" />
                     </div>

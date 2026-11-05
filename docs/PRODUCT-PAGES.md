@@ -54,6 +54,16 @@ own CSS, move what remains out of `public/clone/`, and the guard passes.
   hydration. Revisit-if: never; the rise is still Waabi's.
 - Chose: Embark's keyring script at idle (`lazyOnload`). Over: after hydration. Because: the PNG stands in and is the
   LCP. Revisit-if: the keyring needs to start before first interaction.
+- Chose: phone hero plays the dark chart film (`hero-C`) as desktop does. Over: the light voyage-builder portrait
+  film with a heavier scrim. Because: white type measured 2,43 to 2,68:1 over the light capture (Starboard,
+  05.11.2026). Revisit-if: a dark portrait recording exists.
+- Chose: the product stills carry a fictional fleet (Aster Brisa, Aster Solvind and others; agent Molo Agents),
+  relabelled in the pixels with Inter fitted to the original glyphs. Over: a reshoot. Because: the demo data named
+  a real cruise line's ships, a real coastal fleet and a real Genoa agency, which reads as a customer claim on a
+  public page; no demo organisation with fictional names exists to reshoot from. Also fixes the /havn story, which
+  uses the same three files. Revisit-if: the platform's demo seed gets fictional names; then reshoot.
+- Chose: the Embark tour film without native controls. Over: controls. Because: the film is scrubbed by scroll
+  (`products.js`), never autoplays, so controls only added chrome. Revisit-if: the film starts autoplaying.
 - Money: the day card states PDA 412 380 kr, FDA 401 250 kr, 11 130 kr under, as the copy does.
 
 ## Still unmapped

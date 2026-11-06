@@ -2189,3 +2189,7 @@
   letter-spacing: 0;
   line-height: 1.2;
 }
+
+.bt #overview {
+  overflow: clip;
+}

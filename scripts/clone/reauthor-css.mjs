@@ -36,6 +36,13 @@ const r = (p) => fs.readFileSync(path.join(ROOT, p), 'utf8')
 // The reference inputs as they stood before the swap: read from that commit, so the run is repeatable.
 const FROM = '6c178db'
 const before = (p) => execFileSync('git', ['show', `${FROM}:${p}`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 1 << 26 })
+// Corrections to the reference, applied to the output so a re-run reproduces them. Each must match
+// exactly once, or the run stops: a silent miss would ship the reference's defect again.
+const correct = (css, fixes) => fixes.reduce((out, [from, to]) => {
+  const n = out.split(from).length - 1
+  if (n !== 1) throw new Error(`correction matched ${n} times: ${from.slice(0, 60)}`)
+  return out.replace(from, to)
+}, css)
 const w = (p, s) => { fs.mkdirSync(path.dirname(path.join(ROOT, p)), { recursive: true }); fs.writeFileSync(path.join(ROOT, p), s) }
 const kebab = (s) => s.replace(/([a-z0-9])([A-Z])/g, '$1-$2').replace(/([A-Z])([A-Z][a-z])/g, '$1-$2').toLowerCase()
 const unesc = (s) => s.replace(/\\([0-9a-fA-F]{1,6}\s?)/g, (_, h) => String.fromCodePoint(parseInt(h, 16))).replace(/\\(.)/g, '$1')
@@ -142,7 +149,11 @@ const header = (page, ref) => `/* ${page}: Portlink's stylesheet for this page. 
   const facesCss = faces === 'open'
     ? `.bt {\n  /* Archivo at 90% width sets the reference grotesque's line lengths and breaks (docs/PRODUCT-PAGES.md\n     "Faces"). Red Hat Mono has no width axis and is unaffected. */\n  font-stretch: 90%;\n  /* The reference grotesque's zero width: what its ch-sized columns measured. */\n  --em-ch: 0.6253em;\n}\n`
     : ''
-  w('public/product-pages/embark.css', header('/embark', "butter.video's homepage") + '\n' + facesCss + base + '\n/* Page additions */\n' + ovr)
+  // The film's stage is sticky inside #overview, which the reference clips with overflow:hidden. That
+  // makes the section the sticky element's scroll container, so the stage scrolled away with the
+  // page (measured 06.11.2026 on deploy-preview-29). clip keeps the clipping without that.
+  const film = '\n.bt #overview {\n  overflow: clip;\n}\n'
+  w('public/product-pages/embark.css', header('/embark', "butter.video's homepage") + '\n' + facesCss + base + '\n/* Page additions */\n' + ovr + film)
   console.log(`embark: ${map.size} classes renamed, ${base.split('\n').length + ovr.split('\n').length} lines`)
 }
 
@@ -173,6 +184,10 @@ const header = (page, ref) => `/* ${page}: Portlink's stylesheet for this page. 
     : `.wb {\n  --font-display: "Zagma", "Zagma Fallback", serif;\n  --font-text: "NeueHaas", "NeueHaas Fallback", sans-serif;\n}\n`
   const leftCss = (base + ovr).match(/Zagma|NeueHaas|zagma|neuehaas|-module__|type-[zs]-\d/g)
   if (leftCss && faces === 'open') throw new Error(`portlink: reference residue in CSS: ${[...new Set(leftCss)].join(' ')}`)
-  w('public/product-pages/portlink.css', header('/portlink', "waabi.ai's homepage") + '\n' + facesCss + base + '\n/* Page additions */\n' + ovr)
+  const ovrFixed = correct(ovr, [[
+    '  .wb .wbx-herolede {\n    opacity: 1;\n  }\n',
+    '  /* The lede shares the hero\'s sticky screen with the headline. Fully shown from the top it sat on\n     the headline for anyone who reduces motion (measured 06.11.2026); with the script it keeps the\n     scroll-linked opacity, which moves nothing. Without the script it is shown as before. */\n  .wb:not(.wbx-js) .wbx-herolede {\n    opacity: 1;\n  }\n',
+  ]])
+  w('public/product-pages/portlink.css', header('/portlink', "waabi.ai's homepage") + '\n' + facesCss + base + '\n/* Page additions */\n' + ovrFixed)
   console.log(`portlink: ${base.split('\n').length + ovr.split('\n').length} lines`)
 }

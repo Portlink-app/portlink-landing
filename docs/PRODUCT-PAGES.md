@@ -80,6 +80,11 @@ grotesque columns therefore keep the reference measure as `calc(N * var(--em-ch)
 - Chose: under reduced motion the hero lede keeps its scroll-linked opacity when the script runs. Over: shown from the
   top. Because: shown from the top it covered the headline for visitors who reduce motion (measured 06.11.2026, also on
   `6c178db`); opacity moves nothing. Revisit-if: never.
+- Chose: `.bt #overview { overflow: clip }`. Over: the reference's `overflow: hidden`. Because: hidden made the
+  section the scroll container of the film's sticky stage, so the stage scrolled away and left a blank band of about
+  1,5 screens (measured 06.11.2026 on deploy-preview-29; the same rule is in `6c178db`); clip clips the same pixels without
+  that. Both this and the lede rule are applied by `scripts/clone/reauthor-css.mjs`, so a re-run keeps them.
+  Revisit-if: the film leaves `#overview`.
 - Chose: Embark from PR #26's Butter port. Over: a fresh cloner run. Because: #26 was already butter.video rebuilt
   with Embark content and product media; reusing it keeps one Butter port. Revisit-if: Butter's homepage changes.
 - Chose: hero headline rises by CSS at full opacity. Over: Waabi's fade from 0. Because: the fade held the LCP behind

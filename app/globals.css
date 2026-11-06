@@ -28,9 +28,9 @@
 
 /* --- Tailwind v4 --- */
 @import "tailwindcss";
-/* The product-page clones (/portlink, /embark) are styled by their reference's own scoped build in
-   public/clone/; generating landing utilities from their class lists would put a second, differently
-   scaled rule behind every one of them. docs/PRODUCT-PAGES.md "Clone method". */
+/* The product pages (/portlink, /embark) are styled by their own scoped stylesheets in
+   public/product-pages/; generating landing utilities from their class lists would put a second,
+   differently scaled rule behind every one of them. docs/PRODUCT-PAGES.md "Clone method". */
 @source not "../components/clone";
 @source not "./(product)";
 

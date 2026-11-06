@@ -26,12 +26,12 @@ export default function SeatLens({ image }: { image: string }) {
               onClick={() => setSeat(s.id)}
               className={`relative h-33 shrink-0 items-center border-b-2 px-10 ${seat === s.id ? 'border-pink text-current' : 'border-transparent text-current/25 wbx-dim'}`}
             >
-              <span className="type-s-14 md:type-s-15">{s.label}</span>
+              <span className="type-text-14 md:type-text-15">{s.label}</span>
             </button>
           ))}
         </div>
         <div className="relative flex flex-col gap-24" aria-live="polite">
-          <p className="type-h-18 md:type-z-24">{SEAT_NOTE[seat]}</p>
+          <p className="type-h-18 md:type-display-24">{SEAT_NOTE[seat]}</p>
           <ul className="wbx-tabs" aria-label="Tabs this seat sees">
             {TABS.map((t) => {
               const on = t.seats.includes(seat)

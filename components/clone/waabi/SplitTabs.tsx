@@ -18,7 +18,7 @@ export default function SplitTabs() {
         )}
       </div>
       <div className="flex flex-col gap-20" aria-live="polite">
-        <p className="type-z-24">{s.title}</p>
+        <p className="type-display-24">{s.title}</p>
         <p className="text-s-14 text-pretty text-black/50 wbx-body">{s.body}</p>
         <div className="relative h-1 w-full overflow-clip bg-black/15">
           <div className="bg-pink absolute bottom-0 left-0 h-2 w-full wbx-rule" style={{ transform: `scaleX(${(i + 1) / SPLIT.length})` }} />
@@ -28,7 +28,7 @@ export default function SplitTabs() {
             <button type="button" aria-label="Previous" onClick={() => go(-1)} className="flex-center size-32 rounded-full border-1 border-current/15 wbx-arrow wbx-arrow-l" />
             <button type="button" aria-label="Next" onClick={() => go(1)} className="flex-center size-32 rounded-full border-1 border-current/15 wbx-arrow" />
           </div>
-          <span className="type-s-11 text-current/50 wbx-muted">{i + 1} of {SPLIT.length}</span>
+          <span className="type-text-11 text-current/50 wbx-muted">{i + 1} of {SPLIT.length}</span>
         </div>
       </div>
     </>

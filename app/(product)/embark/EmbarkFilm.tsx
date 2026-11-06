@@ -1,14 +1,14 @@
 'use client'
 /**
  * Mounts Embark's product film into the server-rendered poster slot `[data-embark-film]` (written by
- * scripts/clone/port-embark-26.mjs), only for visitors who have not asked for reduced motion
+ * components/clone/butter/embark-body.ts), only for visitors who have not asked for reduced motion
  * (check-film-motion). products.js scrubs it with the scroll once it hears `embark-film`.
  */
 import { useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { useMotionAllowed } from '@/components/film/useFilm'
 
-const M = '/clone/butter/media'
+const M = '/product-pages/embark/media'
 
 export default function EmbarkFilm() {
   const motionAllowed = useMotionAllowed()

@@ -4,7 +4,7 @@
  * lede that fades in as the headline leaves (the headline's word rise is CSS alone), the tile columns
  * that drift apart around the statement, the sticky split that steps through three claims, and
  * the carousel's prev/next. Everything here writes CSS custom properties or data attributes; the
- * look lives in public/clone/waabi/overrides.css, and reduced motion is handled there.
+ * look lives in public/product-pages/portlink.css ("Page additions"), and reduced motion is handled there.
  */
 import { useEffect } from 'react'
 

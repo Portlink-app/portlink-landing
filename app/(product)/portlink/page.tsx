@@ -4,16 +4,15 @@
  * Clone method (David, 05.11.2026 kl. 11.42, plan PORTLINK_PRODUCT_LANDING_PAGES_2026-11-05):
  * waabi.ai's homepage rebuilt literally (its markup, class lists, section order, scroll scenes and
  * type scale), then rebranded with Portlink's colour, logo, copy and real product recordings.
- * The stylesheet is Waabi's own build, scoped under `.wb` by scripts/clone/scope-css.mjs, and the
- * two faces are Waabi's. Both are preview-only: the provenance guard refuses them in a production
- * build, and replacing them is the last step before main. Entry doc: docs/PRODUCT-PAGES.md.
+ * The stylesheet is ours, public/product-pages/portlink.css, scoped under `.wb`, set in our open
+ * faces (Source Serif 4 and Inter, app/_fonts/). No reference file ships: the provenance guard
+ * refuses one in every build. Entry doc: docs/PRODUCT-PAGES.md.
  *
- * Every class below exists in public/clone/waabi/waabi.css (the landing's own Tailwind does not
- * scan this folder, globals.css `@source not`); new rules live in overrides.css as `wbx-*`.
+ * Every class below exists in public/product-pages/portlink.css (the landing's own Tailwind does
+ * not scan this folder, globals.css `@source not`); page-specific rules are its `wbx-*` section.
  */
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { preload } from 'react-dom'
 import { DEMO_HREF, DEMO_LABEL, PRODUCT_PAGE_ROBOTS } from '@/components/product/config'
 import WaabiMotion from '@/components/clone/waabi/WaabiMotion'
 import SeatLens from '@/components/clone/waabi/SeatLens'
@@ -41,7 +40,7 @@ function Action({ href, cta, children, light }: { href: string; cta: string; chi
       data-cta={cta}
       className={`flex h-36 shrink-0 items-center justify-center px-24 md:h-48 ${light ? 'bg-white text-black' : 'bg-pink text-white'}`}
     >
-      <span className="type-s-11 md:type-s-12 leading-[140%] tracking-[0.024rem]">{children}</span>
+      <span className="type-text-11 md:type-text-12 leading-[140%] tracking-[0.024rem]">{children}</span>
     </Link>
   )
 }
@@ -84,13 +83,9 @@ const DAY = [
 ]
 
 export default function PortlinkPage() {
-  // The hero headline is the LCP and is set in these two faces: fetch them with the stylesheets.
-  preload('/clone/waabi/fonts/zagma-book.woff2', { as: 'font', type: 'font/woff2', crossOrigin: 'anonymous' })
-  preload('/clone/waabi/fonts/neuehaas-65.woff2', { as: 'font', type: 'font/woff2', crossOrigin: 'anonymous' })
   return (
     <div className="wb" id="main">
-      <link rel="stylesheet" href="/clone/waabi/waabi.css" precedence="clone" />
-      <link rel="stylesheet" href="/clone/waabi/overrides.css" precedence="clone-x" />
+      <link rel="stylesheet" href="/product-pages/portlink.css" precedence="product-page" />
       <WaabiMotion />
       <noscript dangerouslySetInnerHTML={{ __html: '<style>.wb .wbx-herolede{opacity:1}</style>' }} />
 
@@ -108,7 +103,7 @@ export default function PortlinkPage() {
                   <Link aria-label="Portlink home" className="flex h-53 w-auto items-center" href="/">
                     <img src="/portlink-logo.png" alt="Portlink" width={92} height={24} />
                   </Link>
-                  <span className="font-neue inline-flex text-[1.5rem] leading-[160%] tracking-[0.015rem]">Port calls</span>
+                  <span className="font-text inline-flex text-[1.5rem] leading-[160%] tracking-[0.015rem]">Port calls</span>
                 </div>
                 <Link href={DEMO_HREF} data-cta="demo-portlink-nav" className="wbx-navcta">Demo</Link>
               </div>
@@ -135,7 +130,7 @@ export default function PortlinkPage() {
                   </div>
                   <div className="px-calc absolute top-0 flex h-svh w-full items-end justify-start pb-40 md:pb-90 wbx-herolede">
                     <div className="relative flex flex-col gap-y-24">
-                      <p className="type-z-24 md:type-z-40 max-w-295 text-balance md:max-w-495 text-white">
+                      <p className="type-display-24 md:type-display-40 max-w-295 text-balance md:max-w-495 text-white">
                         Portlink runs the cruise port call for the line, the agent, the DMC and the ship.
                       </p>
                     </div>
@@ -172,8 +167,8 @@ export default function PortlinkPage() {
                 <div className="flex-center relative">
                   <div className="relative flex max-w-295 flex-col items-center justify-center gap-18 text-center md:max-w-full">
                     <div className="absolute aspect-square w-full rounded-full"><div className="absolute size-full rounded-full bg-white blur-2xl" /></div>
-                    <p className="type-z-18 md:type-z-24 relative text-black/50">We built the record the call runs on.</p>
-                    <p className="type-z-18 md:type-z-24 text-dark relative max-w-558 overflow-clip">
+                    <p className="type-display-18 md:type-display-24 relative text-black/50">We built the record the call runs on.</p>
+                    <p className="type-display-18 md:type-display-24 text-dark relative max-w-558 overflow-clip">
                       Readiness, berth, shore excursions, the departure report and the money sit in one port-call
                       record. The cruise line, the port agent, the DMC and the ship each open it from their own
                       seat, and nobody types the call twice.
@@ -203,7 +198,7 @@ export default function PortlinkPage() {
                   <div className="relative flex flex-1 flex-col md:h-[200vh] md:max-w-370">
                     <div className="md:flex md:h-screen md:flex-wrap md:items-center">
                       <div className="flex w-full flex-col gap-20 md:gap-24">
-                        <h2 className="type-z-28 md:type-z-60 text-balance">Ready before the ship is.</h2>
+                        <h2 className="type-display-28 md:type-display-60 text-balance">Ready before the ship is.</h2>
                         <p className="text-s-14 md:text-s-15 text-pretty text-black/55 wbx-body">
                           Seven things make a call ready, and each has an owner. Portlink shows who has done what,
                           48 hours before arrival, without a status meeting.
@@ -213,7 +208,7 @@ export default function PortlinkPage() {
                     <div className="sticky top-0 hidden md:flex md:h-screen md:flex-col md:items-start md:justify-center md:gap-20 pointer-events-none -mt-[50svh]">
                       {SPLIT.map((s, i) => (
                         <button key={s.title} type="button" className="pointer-events-auto flex w-full cursor-pointer flex-col gap-20 text-left wbx-splititem" data-i={i}>
-                          <span className="type-z-24 md:type-z-40">{s.title}</span>
+                          <span className="type-display-24 md:type-display-40">{s.title}</span>
                           <span className="overflow-hidden wbx-splitbody"><span className="text-s-14 md:text-s-15 text-pretty text-black/55 block">{s.body}</span></span>
                         </button>
                       ))}
@@ -223,7 +218,7 @@ export default function PortlinkPage() {
               </div>
               <div className="w-full py-(--padding-y) md:hidden">
                 <div className="w-calc flex flex-col gap-40">
-                  <h2 className="type-z-34 text-balance">Ready before the ship is.</h2>
+                  <h2 className="type-display-34 text-balance">Ready before the ship is.</h2>
                   <SplitTabs />
                 </div>
               </div>
@@ -263,8 +258,8 @@ export default function PortlinkPage() {
                     </div>
                     <div className="relative z-2 px-28 pb-24 text-white md:px-48 md:pb-36 wbx-cardtext">
                       <div className="relative flex flex-col gap-4 md:gap-8">
-                        <p className="type-s-11 md:type-s-12">{c.kicker}</p>
-                        <h3 className="type-z-24 md:type-z-40 text-balance md:pr-50">{c.title}</h3>
+                        <p className="type-text-11 md:type-text-12">{c.kicker}</p>
+                        <h3 className="type-display-24 md:type-display-40 text-balance md:pr-50">{c.title}</h3>
                         <span className="flex-center size-32 rounded-full border-1 border-current/15 md:size-50 group-hover/arrow:bg-pink group-hover/arrow:border-current/0 absolute right-0 bottom-0 wbx-arrow" />
                       </div>
                     </div>
@@ -283,8 +278,8 @@ export default function PortlinkPage() {
             <div className="relative z-2 px-40 py-60 md:p-103">
               <div className="w-calc">
                 <div className="flex w-full flex-col items-start gap-24 md:max-w-525 md:gap-48">
-                  <h2 className="type-z-34 md:type-z-80 text-pretty">Signed on one phone at departure.</h2>
-                  <div className="whitespace-pre-line type-z-18 md:type-z-24 text-current/60 wbx-onphoto">
+                  <h2 className="type-display-34 md:type-display-80 text-pretty">Signed on one phone at departure.</h2>
+                  <div className="whitespace-pre-line type-display-18 md:type-display-24 text-current/60 wbx-onphoto">
                     <span>The agent signs, then the ship signs. </span>
                     <span>The final account starts from <strong>what both signed</strong>, not from a spreadsheet sent the week after.</span>
                   </div>
@@ -300,10 +295,10 @@ export default function PortlinkPage() {
               <div className="flex flex-col items-center gap-48 md:gap-96">
                 <div className="w-calc flex gap-30 max-lg:flex-col md:gap-48 xl:gap-240">
                   <div className="flex flex-col gap-y-48">
-                    <h2 className="type-z-34 md:type-z-80 text-balance">Each seat sees its own record.</h2>
+                    <h2 className="type-display-34 md:type-display-80 text-balance">Each seat sees its own record.</h2>
                   </div>
                   <div className="max-lg:w-calc flex flex-col justify-end gap-30 lg:max-w-447 lg:gap-48 lg:pl-48">
-                    <div className="whitespace-pre-line type-z-18 md:type-z-24 text-current/50 wbx-muted">
+                    <div className="whitespace-pre-line type-display-18 md:type-display-24 text-current/50 wbx-muted">
                       Pick a seat. The record keeps the same call and shows that seat the tabs it works in, by
                       the same rule the product uses.
                     </div>
@@ -319,10 +314,10 @@ export default function PortlinkPage() {
             <div className="flex flex-col gap-30 md:gap-48">
               <div className="w-calc grid grid-cols-2 gap-y-24 md:gap-y-48">
                 <div className="order-1 md:col-span-2">
-                  <h2 className="type-z-34 md:type-z-80 text-balance">The day of a call.</h2>
+                  <h2 className="type-display-34 md:type-display-80 text-balance">The day of a call.</h2>
                 </div>
                 <div className="order-3 max-md:col-span-2 md:order-2">
-                  <p className="type-s-14 md:type-s-15 text-balance text-black/50 wbx-muted">
+                  <p className="type-text-14 md:type-text-15 text-balance text-black/50 wbx-muted">
                     One port call in Bergen, from readiness two days out to the final account at 21.00.
                   </p>
                 </div>
@@ -346,12 +341,12 @@ export default function PortlinkPage() {
                         <div className="relative flex w-full flex-row flex-wrap items-center justify-start gap-16">
                           <div className="flex flex-wrap items-center gap-6">
                             {d.tags.map((t) => (
-                              <div key={t} className="flex-center h-26 gap-6 shrink-0 rounded-[4rem] px-11 bg-[#DEDCD9] wbx-tag"><span className="type-s-10">{t}</span></div>
+                              <div key={t} className="flex-center h-26 gap-6 shrink-0 rounded-[4rem] px-11 bg-[#DEDCD9] wbx-tag"><span className="type-text-10">{t}</span></div>
                             ))}
                           </div>
-                          <span className="type-s-11 md:type-s-12 whitespace-nowrap text-current/50 wbx-muted">{d.time}</span>
+                          <span className="type-text-11 md:type-text-12 whitespace-nowrap text-current/50 wbx-muted">{d.time}</span>
                         </div>
-                        <h3 className="type-z-18 md:type-z-24 max-w-600 text-current">{d.title}</h3>
+                        <h3 className="type-display-18 md:type-display-24 max-w-600 text-current">{d.title}</h3>
                       </div>
                     </article>
                   ))}
@@ -394,19 +389,19 @@ export default function PortlinkPage() {
               <div className="flex w-full flex-col gap-30 lg:w-[68.4rem] lg:gap-32">
                 <div className="flex flex-col gap-16">
                   <h2 className="text-[2.4rem] leading-[110%] tracking-[-0.072rem] text-balance md:max-w-[40%] md:text-[4rem] md:tracking-[-0.12rem]">One record for the whole call.</h2>
-                  <p className="font-neue text-[1.4rem] leading-[140%] tracking-[0.028rem] md:text-[1.5rem] md:tracking-[0.015rem]">
+                  <p className="font-text text-[1.4rem] leading-[140%] tracking-[0.028rem] md:text-[1.5rem] md:tracking-[0.015rem]">
                     Photographs: Unsplash licence (fjord-cruise by Pascal Debrunner, sea-kayak by Brandon McDonald,
                     whale-safari by Francesco Ungaro, glacier-hike by Colin + Meg). Product images are Portlink.
                   </p>
                 </div>
               </div>
               <div className="flex w-full flex-col gap-12 lg:w-[32.5rem] lg:gap-24">
-                <div className="type-s-11 md:type-s-12 text-current/60">Portlink</div>
+                <div className="type-text-11 md:type-text-12 text-current/60">Portlink</div>
                 <nav className="flex flex-col gap-4" aria-label="Footer">
                   <ul>
-                    <li><Link className="type-z-20 inline-flex transition-colors hover:text-current/80" href="/">Home</Link></li>
-                    <li><Link className="type-z-20 inline-flex transition-colors hover:text-current/80" href="/embark/">Embark</Link></li>
-                    <li><Link className="type-z-20 inline-flex transition-colors hover:text-current/80" href={DEMO_HREF} data-cta="demo-portlink-footer">Book a demo</Link></li>
+                    <li><Link className="type-display-20 inline-flex transition-colors hover:text-current/80" href="/">Home</Link></li>
+                    <li><Link className="type-display-20 inline-flex transition-colors hover:text-current/80" href="/embark/">Embark</Link></li>
+                    <li><Link className="type-display-20 inline-flex transition-colors hover:text-current/80" href={DEMO_HREF} data-cta="demo-portlink-footer">Book a demo</Link></li>
                   </ul>
                 </nav>
               </div>
@@ -416,8 +411,8 @@ export default function PortlinkPage() {
                 <img src="/portlink-logo.png" alt="" className="wbx-footlogo" width={420} height={110} />
               </div>
               <div className="order-2 flex flex-col gap-8 lg:order-1">
-                <div className="type-s-11 lg:type-s-11 md:type-s-12 text-current/60">© 2026 Portlink AS</div>
-                <div className="type-s-11 lg:type-s-11 md:type-s-12 flex gap-12 lg:gap-24">
+                <div className="type-text-11 lg:type-text-11 md:type-text-12 text-current/60">© 2026 Portlink AS</div>
+                <div className="type-text-11 lg:type-text-11 md:type-text-12 flex gap-12 lg:gap-24">
                   <Link href="/privacy/" className="transition-colors hover:text-current/80">Privacy</Link>
                 </div>
               </div>

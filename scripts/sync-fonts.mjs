@@ -37,7 +37,16 @@ const SHEETS = [
   'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=optional',
   'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap',
   'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap',
+  // The product pages (/portlink, /embark), added 06.11.2026: the open faces closest in metrics to
+  // the reference faces they replace (docs/PRODUCT-PAGES.md "Faces"). Nothing else uses them, and an
+  // @font-face downloads nothing until text is set in it.
+  'https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,300..500&display=swap',
+  'https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..700&display=swap',
+  'https://fonts.googleapis.com/css2?family=Red+Hat+Mono:wght@400&display=swap',
 ]
+// Faces copied from our own @portlink/tokens package rather than Google: this script must not
+// delete them as strays (scripts/check-provenance.mjs FAMILIES lists them).
+const NOT_OURS_TO_SYNC = /^(schibsted-grotesk|manrope)-/
 // css2 answers per user agent; a current Chrome gets woff2 split by unicode-range, which is what
 // every modern browser was being served.
 const UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36'
@@ -77,7 +86,7 @@ for (const sheet of SHEETS) {
 
 fs.mkdirSync(OUT, { recursive: true })
 const keep = new Set(files.values())
-for (const f of fs.readdirSync(OUT)) if (f.endsWith('.woff2') && !keep.has(f)) fs.unlinkSync(path.join(OUT, f))
+for (const f of fs.readdirSync(OUT)) if (f.endsWith('.woff2') && !keep.has(f) && !NOT_OURS_TO_SYNC.test(f)) fs.unlinkSync(path.join(OUT, f))
 for (const [src, name] of files) {
   const dest = path.join(OUT, name)
   const buf = await get(src, 'buffer')

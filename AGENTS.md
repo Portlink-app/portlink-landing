@@ -24,7 +24,7 @@ Verified 19.09.2026 against GitHub and the Netlify site API. This routing supers
 | Resend | `op://cypqkqoeuibf4f6aud47v3qooa/lhylbglnfx7vy7yenlxn2tfehm/credential` |
 | INTEL_SECRET (visitor intelligence) | `op://cypqkqoeuibf4f6aud47v3qooa/3jup4j5ayriz63j6ocfwqyczo4/password` |
 
-Use `/Users/nyx/.Codex/bin/secret`. Feed values directly into the consuming process; never log them. Verify GitHub login is `portlinkadmin` for each session. The default connector and shell account can be `GitDABA`, which is outside this project's scope. Use a process-local Portlink credential rather than switching the machine's global account.
+Use `/Users/nyx/.Codex/bin/secret`. Feed values directly into the consuming process; never log them. Verify GitHub login is `portlinkadmin` for each session. The default connector and shell account can be `Bakke-Co`, which is outside this project's scope. Use a process-local Portlink credential rather than switching the machine's global account.
 
 **Runtime configuration:** Netlify manages `RESEND_API_KEY`, `ADMIN_EMAIL` and `INTEL_SECRET`; Blobs credentials are platform-provided in production. Their values do not belong in these documents.
 

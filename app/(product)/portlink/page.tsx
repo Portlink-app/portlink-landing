@@ -26,14 +26,6 @@ export default function PortlinkProductPage() {
         {/* CHAPTER 1: Three-Layer Mirror Hero (0 ms Instant Text + Back Layer Photo + 140px Bottom Seam Overhang) */}
         <section className="pp-chapter pp-chapter--night pp-hero" id="overview">
           <div className="pp-hero-back" aria-hidden="true">
-            <img
-              src="/product/fjord-cruise-1600.webp"
-              alt=""
-              width={1600}
-              height={1067}
-              decoding="async"
-              className="pp-hero-back-img"
-            />
             <div className="pp-hero-back-scrim pp-hero-back-scrim--dark" />
           </div>
 
@@ -85,7 +77,7 @@ export default function PortlinkProductPage() {
                   alt={PORTLINK_D14_ASSETS.ch1Hero.alt}
                   width={PORTLINK_D14_ASSETS.ch1Hero.width}
                   height={PORTLINK_D14_ASSETS.ch1Hero.height}
-                  fetchPriority="high"
+                  decoding="async"
                   className="pp-stage-img"
                 />
               </div>
@@ -154,6 +146,8 @@ export default function PortlinkProductPage() {
                 src={PORTLINK_D14_ASSETS.ch3VoyageAis.filmBase}
                 poster={PORTLINK_D14_ASSETS.ch3VoyageAis.desktop}
                 alt={PORTLINK_D14_ASSETS.ch3VoyageAis.alt}
+                width={PORTLINK_D14_ASSETS.ch3VoyageAis.width}
+                height={PORTLINK_D14_ASSETS.ch3VoyageAis.height}
                 className="pp-stage-img"
               />
             </div>

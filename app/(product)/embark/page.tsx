@@ -26,14 +26,6 @@ export default function EmbarkProductPage() {
         {/* CHAPTER 1: Three-Layer Mirror Hero (0 ms Instant Text + Back Layer Photo + 140px Bottom Seam Overhang) */}
         <section className="pp-chapter pp-chapter--embark-day pp-hero" id="hero">
           <div className="pp-hero-back pp-hero-back--light" aria-hidden="true">
-            <img
-              src="/product/fjord-cruise-1600.webp"
-              alt=""
-              width={1600}
-              height={1067}
-              decoding="async"
-              className="pp-hero-back-img"
-            />
             <div className="pp-hero-back-scrim pp-hero-back-scrim--light" />
           </div>
 
@@ -90,7 +82,7 @@ export default function EmbarkProductPage() {
                   alt={EMBARK_D14_ASSETS.ch1Hero.alt}
                   width={EMBARK_D14_ASSETS.ch1Hero.width}
                   height={EMBARK_D14_ASSETS.ch1Hero.height}
-                  fetchPriority="high"
+                  decoding="async"
                   className="pp-stage-img"
                 />
               </div>
@@ -159,6 +151,8 @@ export default function EmbarkProductPage() {
                 src={EMBARK_D14_ASSETS.ch3DispatchRoster.filmBase}
                 poster={EMBARK_D14_ASSETS.ch3DispatchRoster.desktop}
                 alt={EMBARK_D14_ASSETS.ch3DispatchRoster.alt}
+                width={EMBARK_D14_ASSETS.ch3DispatchRoster.width}
+                height={EMBARK_D14_ASSETS.ch3DispatchRoster.height}
                 className="pp-stage-img"
               />
             </div>

@@ -20,9 +20,10 @@ Stage & color specification: `/Users/nyx/.buzz/RESEARCH/PORTLINK_PRODUCT_LANDING
 | `components/product/ProductHeader.tsx` | Shared single-line 72px top header bar with `Portlink` / `Embark` product switcher, chapter anchor links, persistent `Motion: On / Off` toggle (`aria-pressed`), and primary `Book a 20-minute demo` CTA (`data-cta`). |
 | `components/product/PortlinkLiveWorkspaceSample.tsx` | Phase B.1 interactive Free Sample for `/portlink`: `<PortlinkLiveWorkspaceSample />` (4 seats: `Cruise Line Ops`, `Port Agent`, `Shorex DMC`, `Ship Master` x 4 call timeline stages, enforcing `SECTION_VIS` role gating) and `<PortlinkPdaFdaDiffSample />` (interactive PDA `412 380,00 kr` → signed gangway consumption `-11 130,00 kr` → FDA `401 250,00 kr` ledger). |
 | `components/product/EmbarkQuayCheckInSample.tsx` | Phase B.2 interactive Free Sample for `/embark`: `<EmbarkQuayCheckInSample />` (live quay check-in `6 of 12` → `12 of 12` aboard, boat capacity swap `RIB Havørn (12 seats)` ⇄ `MS Fjordsyn (24 seats)`, guide assignment, and incoming Portlink DMC allocation) and `<EmbarkCruiseTradeBridge />` (two-sided Portlink DMC request ⇄ Embark operator confirmation). |
-| `components/product/d14Assets.ts` | Canonical Phase 5 2x Retina D14 asset bindings (`/product-pages/d14/*.png` and 60fps MP4 clips `portlink-voyage-ais-d14.mp4`, `embark-dispatch-d14.mp4`). |
+| `components/clone/Film.tsx` | Reduced-motion-guarded, IntersectionObserver-gated `<Film />` stage (`rootMargin: '300px 0px'`, pausing playback offscreen so offscreen Chapter 3 videos never contend with hero LCP). |
+| `components/product/d14Assets.ts` | Canonical Phase 5 2x Retina D14 asset bindings (`/product-pages/d14/*.webp` and 60fps MP4 clips `portlink-voyage-ais-d14.mp4`, `embark-dispatch-d14.mp4`). |
 | `components/film/useFilm.ts` | Reduced-motion and viewport hooks (`useMotionAllowed`, `setManualMotion`) honouring both `prefers-reduced-motion: reduce` and the manual `Motion: On / Off` header toggle. |
-| `components/product/config.ts` | `PRODUCT_PAGES_NOINDEX`: keeps both routes `noindex,nofollow` and out of `app/sitemap.ts` until Phase D final sign-off. |
+| `components/product/config.ts` | `PRODUCT_PAGE_ROBOTS`: sets `{ index: true, follow: true }` alongside `/portlink/` and `/embark/` in `app/sitemap.ts` (`priority: 0.9`, `changeFrequency: 'weekly'`). |
 
 ---
 
@@ -42,3 +43,8 @@ Stage & color specification: `/Users/nyx/.buzz/RESEARCH/PORTLINK_PRODUCT_LANDING
 - **Over:** A page-local state prop threaded only to a subset of components.
 - **Because:** Putting the manual motion override inside `useMotionAllowed()` means every `<Film />` video component and every CSS transition across the site obeys both OS-level `prefers-reduced-motion: reduce` and the visitor's one-click `Motion: On / Off` header toggle by construction (`scripts/check-film-motion.mjs` stays green).
 - **Revisit-if:** Never; first-class reduced-motion and manual pause are permanent accessibility requirements.
+
+- **Chose:** 2x Retina WebP (`cwebp -q 90 -sharp_yuv`) for the 8 active D14 stills, `IntersectionObserver` (`rootMargin: '300px 0px'`) lazy-mounting and offscreen pause on non-`eager` `<Film />` stages, and full-viewport CSS `background-image` (`top: -140px` behind the sticky opaque `.pp-header`, `fjord-cruise-1600.webp` desktop / `fjord-cruise-800.webp` `<768px`) on `.pp-hero-back`.
+- **Over:** Uncompressed `530 KB` to `777 KB` PNGs, immediate `<video autoPlay>` mount at `scrollY === 0` for Chapter 3 stages `~2 500 px` below the fold, and an `inset: 0` `<img>` or partial-viewport box (`top: 118px`) inside `.pp-hero-back`.
+- **Because:** Eagerly mounting Chapter 3 `<Film />` pulled `1,08 MB` to `1,36 MB` over the mobile 4G pipe during initial hero load, while a `.pp-hero-back` box starting below the `118px` header missed Blink's full-viewport wallpaper exclusion (`visual_rect.Contains(viewport_rect)`), turning a subtle background texture into a `7,1 s` / `11,5 s` LCP bottleneck. Extending `.pp-hero-back` behind the opaque header, lazy-gating `<Film />`, and converting active D14 stills to 2x WebP make the `0 ms` hero `<h1>` the true LCP element (`~0,9 s` LCP, Lighthouse Mobile Performance `100`) with zero visual change.
+- **Revisit-if:** Adding AVIF variants alongside WebP reduces stage transfer by another `>= 25%` without softening D14 14px table glyphs.

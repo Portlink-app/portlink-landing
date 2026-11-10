@@ -414,21 +414,17 @@
 
 .pp-hero-back {
   position: absolute;
-  inset: 0;
+  top: -140px;
+  right: 0;
+  bottom: 0;
+  left: 0;
   z-index: 1;
   overflow: hidden;
   pointer-events: none;
-}
-
-.pp-hero-back-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: right 38%;
-}
-
-.pp-hero-back--light .pp-hero-back-img {
-  filter: brightness(1.08) saturate(0.72);
+  background-image: url('/product/fjord-cruise-1600.webp');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .pp-hero-back-scrim {
@@ -1610,6 +1606,9 @@
 }
 
 @media (max-width: 767px) {
+  .pp-hero-back {
+    background-image: url('/product/fjord-cruise-800.webp');
+  }
   .pp-header-inner {
     flex-direction: column;
     align-items: stretch;

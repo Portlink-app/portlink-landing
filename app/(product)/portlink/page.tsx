@@ -12,7 +12,7 @@ import {
 export const metadata: Metadata = {
   title: 'Portlink: Run Every Port Call from One Shared Record',
   description:
-    'Cruise lines, port agents, shorex DMCs, and vessels coordinate berth readiness, live AIS voyages, gangway departure sign-off, and PDA-to-FDA settlement in one shared record.',
+    'Cruise lines, port agents, shorex DMCs, and vessels coordinate berth readiness, fairway voyage routing, gangway departure sign-off, and PDA-to-FDA settlement in one shared record.',
   alternates: { canonical: '/portlink/' },
   robots: PRODUCT_PAGE_ROBOTS,
 }
@@ -106,38 +106,38 @@ export default function PortlinkProductPage() {
           </div>
         </section>
 
-        {/* CHAPTER 3: Voyage Planner & Live AIS Fleet Stage */}
+        {/* CHAPTER 3: Voyage & Nautical Chart Stage (RouteEditor + VoyageMap + Kystverket Fairways) */}
         <section className="pp-chapter pp-chapter--night" id="voyage-ais">
           <div className="pp-wrap">
             <div className="pp-chapter-intro">
               <div>
                 <div className="pp-chapter-tag">
-                  <span>Chapter 03 · Voyage &amp; Live AIS</span>
+                  <span>Chapter 03 · Voyage &amp; Nautical Chart</span>
                   <span aria-hidden="true">·</span>
-                  <span>Bergen → Geiranger → Ålesund → Tromsø</span>
+                  <span>Bergen → Florø → Ålesund → Molde</span>
                 </div>
-                <h2>Plan the season itinerary and track every hull live.</h2>
+                <h2>Route along Norwegian fairways and scrub every passage window.</h2>
               </div>
               <p className="pp-chapter-sub">
-                Calculate sea-lane leg distances, ECA fuel windows, and live Norwegian AIS positions in one voyage workspace. When a berth window shifts, downstream port calls recalculate immediately.
+                Snap multi-port legs to Kystverket Hovedled fairways on a survey-grade Norwegian nautical chart, verify daylight arrival windows, and scrub vessel position across the entire voyage. When a berth window shifts, downstream port calls recalculate immediately.
               </p>
             </div>
 
             <div className="pp-callout-strip">
               <div className="pp-callout-pill">
-                <span className="pp-callout-pill-kicker">Norwegian Coastal Leg</span>
-                <strong className="pp-mono">382 NM · 14,2 kn</strong>
-                <span>Bergen Skolten 3 to Geiranger Anchorage &amp; Ålesund Prestebrygga</span>
+                <span className="pp-callout-pill-kicker">Kystverket Hovedled Fairways</span>
+                <strong className="pp-mono">257,0 NM · 4 Ports</strong>
+                <span>Bergen (NOBGO) to Florø, Stadlandet, Ålesund, and Molde with 0 land crossings</span>
               </div>
               <div className="pp-callout-pill">
-                <span className="pp-callout-pill-kicker">Fuel &amp; ECA Boundary</span>
-                <strong className="pp-mono">0,10% Sulphur ECA</strong>
-                <span>Automated MGO consumption window and berth arrival slack calculation</span>
+                <span className="pp-callout-pill-kicker">Follow-Water Autorouting</span>
+                <strong className="pp-mono">120 Fairway Waypoints</strong>
+                <span>Snaps passage legs to official coastal lanes with 42,0 m minimum fairway depth and daylight arrival checks</span>
               </div>
               <div className="pp-callout-pill">
-                <span className="pp-callout-pill-kicker">Live Telemetry Feed</span>
-                <strong className="pp-mono">AIS + Pilot Boarding</strong>
-                <span>Real-time hull position, SOG/COG telemetry, and VTS pilot boarding ETA</span>
+                <span className="pp-callout-pill-kicker">Voyage Position Scrubber</span>
+                <strong className="pp-mono">SHIP AT Timeline · SOG / COG</strong>
+                <span>Scrub any timestamp along the polyline to inspect live coordinates, sailed distance, and next-port ETA</span>
               </div>
             </div>
 

@@ -21,7 +21,7 @@ export const PORTLINK_D14_ASSETS = {
     filmBase: `${D14_BASE}/portlink-voyage-ais-d14`,
     width: 2880,
     height: 1800,
-    alt: 'Portlink Voyage Planner and live AIS fleet chart from Bergen to Geiranger, Ålesund, and Tromsø (382 NM)',
+    alt: 'Portlink Voyage and Nautical Chart workspace with Kystverket Hovedled fairways, follow-water autorouting, and SHIP AT position scrubber from Bergen to Florø, Ålesund, and Molde (257,0 NM)',
   },
   ch4GangwaySignoff: {
     mobile: `${D14_BASE}/portlink-ch4-gangway-signoff-mobile-780x1688.webp`,

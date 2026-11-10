@@ -16,15 +16,30 @@ import type { RefObject } from 'react'
  * Rendering the still first costs the motion visitor nothing: the poster is the
  * same file the <video> would have shown while it buffered.
  */
+export const MOTION_CHANGE_EVENT = 'portlink:motion-change'
+
+export function setManualMotion(enabled: boolean): void {
+  if (typeof document === 'undefined') return
+  document.documentElement.dataset.motion = enabled ? 'on' : 'off'
+  window.dispatchEvent(new CustomEvent(MOTION_CHANGE_EVENT, { detail: { enabled } }))
+}
+
 export function useMotionAllowed(): boolean {
   const [allowed, setAllowed] = useState(false)
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
-    const apply = () => setAllowed(!mq.matches)
+    const apply = () => {
+      const manualOff = document.documentElement.dataset.motion === 'off'
+      setAllowed(!mq.matches && !manualOff)
+    }
     apply()
     mq.addEventListener('change', apply)
-    return () => mq.removeEventListener('change', apply)
+    window.addEventListener(MOTION_CHANGE_EVENT, apply)
+    return () => {
+      mq.removeEventListener('change', apply)
+      window.removeEventListener(MOTION_CHANGE_EVENT, apply)
+    }
   }, [])
 
   return allowed

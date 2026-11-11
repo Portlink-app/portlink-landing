@@ -105,3 +105,27 @@ This is still the fallback comparator. C6 expedition framing, authentic product 
 performance acceptance, complete signed trial/access verification and authorised publication remain
 open. Full-page company audit also exposes older lower-page typography and composition findings;
 those findings are recorded with the consolidated evidence, not dismissed by a clean source lint.
+
+## Consumption and company follow-up, 11.11.2026
+
+Preview head 6192c9b1db3e55c348d215dd208fc326acdbeb14 has two additional measured
+proofs: Tab-only entry followed by ArrowRight exposes every final ledger cell at 390px;
+one labelled synthetic demo-portlink-hero CTA is persisted in the configured visitor-intel
+store. No form, personal data, mail endpoint or cron was used. This is collector persistence,
+not trial conversion or signed-access acceptance. Full evidence is in the Buzz workspace
+WORK_LOGS/KEEL_ACQUISITION_20261111/consumption/STATE.md.
+
+The company composition now inherits D14 Schibsted/Manrope through a consumer wrapper.
+One font declaration serves all three openings and the two product layouts; the company
+page can remain a server composition around existing interactive children. Pain and explorer
+copy use readable sizes with fewer decorative labels. The opening product headings retain
+their intended scale, and the lower Platform photo selects a responsive source.
+
+Chose existing consumer font aliases over editing generated design-system tokens or global
+consent typography. Because those global consumers have a broader scope than this correction.
+Revisit-if a measured cross-page typography review accepts replacing the legacy root fonts.
+
+The controlled browser baseline and after-run show company font downloads falling from five
+to four, but no material LCP improvement. This does not close the Lighthouse performance gate.
+The company audit still retains older film, ecosystem, team and footer findings; no visual
+acceptance or cinematic completion is claimed. Reversal is this increment's revert.

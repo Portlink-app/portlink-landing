@@ -1,5 +1,5 @@
-'use client'
-
+import { display, body } from '@/components/acquisition/fonts'
+import styles from '@/components/acquisition/CompanyComposition.module.css'
 import Nav from '@/components/Nav'
 import FilmHero from '@/components/film/FilmHero'
 import AcquisitionOpening from '@/components/acquisition/AcquisitionOpening'
@@ -12,7 +12,7 @@ import Footer from '@/components/sections/Footer'
 
 export default function Home() {
   return (
-    <>
+    <div className={`${styles.root} ${display.variable} ${body.variable}`}>
       <Nav />
       <main id="main" tabIndex={-1}>
         <AcquisitionOpening page="company" />
@@ -39,6 +39,6 @@ export default function Home() {
         <AccessSection />
       </main>
       <Footer />
-    </>
+    </div>
   )
 }

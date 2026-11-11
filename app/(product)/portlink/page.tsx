@@ -64,6 +64,8 @@ export default function PortlinkProductPage() {
             <div className="pp-gangway-stage">
               <img
                 src="/product/fjord-cruise-1600.webp"
+                srcSet="/product/fjord-cruise-800.webp 800w, /product/fjord-cruise-1600.webp 1600w"
+                sizes="(max-width: 767px) calc(100vw - 40px), 94vw"
                 alt="Cruise vessel alongside a Norwegian fjord quay"
                 width={1600}
                 height={1067}

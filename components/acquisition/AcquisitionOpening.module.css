@@ -23,7 +23,7 @@
 .panel{position:absolute;left:28px;bottom:28px;width:min(550px,calc(100% - 56px));padding:26px;background:var(--surface);color:var(--surface-ink);border-radius:16px}
 .panel p:first-child{margin-top:0}.panel strong{font-size:28px;line-height:1.15}.panel a{font-weight:600}
 .caption{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:12px}.caption button{background:transparent;color:inherit}
-.products{display:grid;grid-template-columns:1fr 1fr 1fr;gap:40px;padding-top:48px}.products h2{font-size:28px}
+.products{display:grid;grid-template-columns:1fr 1fr 1fr;gap:40px;padding-top:48px}.root.root .products h2{font-size:28px}
 .chapter{background:var(--surface);color:var(--surface-ink);padding:72px var(--gutter)}
 .chapterHead,.proof{display:grid;grid-template-columns:1fr 1.2fr;gap:56px;max-width:1504px;margin:auto;align-items:center}
 .chapterHead{margin-bottom:32px}.steps{max-width:1504px;margin:0 auto 24px}.steps button,.controls button{background:#e2e8f0;color:#0c1829}

@@ -1,14 +1,12 @@
 'use client'
 /* eslint-disable @next/next/no-img-element, @next/next/no-html-link-for-pages */
 import { useEffect, useState } from 'react'
-import localFont from 'next/font/local'
+import { display, body } from './fonts'
 import { portCallRoles, type PortCallRole } from '@/components/sections/portCallStory'
 import { setManualMotion, useMotionAllowed } from '@/components/film/useFilm'
 import contract from './contract.json'
 import styles from './AcquisitionOpening.module.css'
 
-const display = localFont({ src: '../../app/_fonts/schibsted-grotesk-latin.woff2', variable: '--acq-display', display: 'optional' })
-const body = localFont({ src: '../../app/_fonts/manrope-latin.woff2', variable: '--acq-body', display: 'optional' })
 
 type Role = keyof typeof contract.roles
 type Product = 'platform' | 'embark'

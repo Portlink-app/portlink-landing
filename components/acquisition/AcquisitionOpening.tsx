@@ -1,6 +1,7 @@
 'use client'
 /* eslint-disable @next/next/no-img-element, @next/next/no-html-link-for-pages */
 import { useEffect, useState } from 'react'
+import { getImageProps } from 'next/image'
 import { display, body } from './fonts'
 import { portCallRoles, type PortCallRole } from '@/components/sections/portCallStory'
 import { setManualMotion, useMotionAllowed } from '@/components/film/useFilm'
@@ -25,6 +26,10 @@ export default function AcquisitionOpening({ page }: { page: 'company' | Product
   const selected = contract.roles[role]
   const prefix = `discovery-${product}-`
   const scenery = product === 'embark' ? 'operator' : 'coast'
+  const { props: phoneScenery } = getImageProps({
+    src: `/acquisition/${scenery}-phone.webp`, alt: '', width: 640, height: 960,
+    quality: 75, sizes: '(max-width: 767px) calc(100vw - 40px), 640px',
+  })
   const changedCapacity = product === 'embark' && index > 0
 
   useEffect(() => {
@@ -73,7 +78,7 @@ export default function AcquisitionOpening({ page }: { page: 'company' | Product
       </div>
       <div className={styles.stage} data-scene={product} data-chapter={state.id}>
         <picture className={styles.scenery}>
-          <source media="(max-width: 767px)" srcSet={`/acquisition/${scenery}-phone.webp`} />
+          <source media="(max-width: 767px)" srcSet={phoneScenery.srcSet} sizes={phoneScenery.sizes} />
           <img className={styles.landscape} src={`/acquisition/${scenery}-wide.webp`} alt="" width={1536} height={1024} fetchPriority="high" />
         </picture>
         <div className={styles.actors} aria-label={product === 'embark' ? 'Independent operation' : 'Separate supporting organisations'}>

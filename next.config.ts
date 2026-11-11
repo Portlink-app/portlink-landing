@@ -33,7 +33,18 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   trailingSlash: true,
-  images: { unoptimized: true },
+  images: {
+    // Only the acquisition phone crops use optimisation. Keep candidates within their native width.
+    localPatterns: [
+      { pathname: '/acquisition/coast-phone.webp', search: '' },
+      { pathname: '/acquisition/operator-phone.webp', search: '' },
+    ],
+    remotePatterns: [],
+    deviceSizes: [400, 640],
+    imageSizes: [],
+    qualities: [75],
+    formats: ['image/avif', 'image/webp'],
+  },
   async headers() {
     return [
       { source: '/:path*', headers: securityHeaders },

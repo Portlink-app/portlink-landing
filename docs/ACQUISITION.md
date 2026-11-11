@@ -204,3 +204,18 @@ selection/hash behaviour and server-rendered fallback before moving any code.
 
 Starboard owns acceptance. Release follows acceptance through the authorised execution lane.
 Cinematic framing, authentic product evidence, performance and full trial/access gates remain open.
+
+
+## Responsive phone scenery
+
+The shared picture keeps the original wide image for desktop. Next getImageProps supplies
+400px and native640px phone candidates at quality75; the browser chooses for viewport and DPR.
+The image endpoint permits only the two local phone crops, with AVIF/WebP negotiation and no
+remote sources. Existing raw img consumers bypass it. These width limits belong to these assets;
+review native dimensions and all consumers before adding another optimized image.
+
+Chose framework delivery over host-specific markup or forcing400px on dense phones. Because
+local and hosted previews must exercise the same markup and high-density fidelity must remain.
+Revisit-if endpoint negotiation, image fidelity or repeatable page performance regresses.
+Controlled response-rewrite probes supported this candidate, but are not release acceptance.
+Evidence: WORK_LOGS/KEEL_ACQUISITION_20261111/scenery-control/STATE.md in the Buzz workspace.

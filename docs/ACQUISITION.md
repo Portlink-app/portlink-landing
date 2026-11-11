@@ -176,3 +176,9 @@ a second renderer. Because first-frame review is authorised while effects remain
 performance. Four compressed files under public/acquisition are illustrative campaign assets, each
 below the 250 KB poster budget. Their README records provenance. Frame review, performance,
 authentic product evidence and full signed trial/access acceptance remain open.
+
+The browser icon generator now keeps 16/32/48px ICO frames and the separate existing
+180/192/512px PNG app icons. Removing the redundant uncompressed 256px ICO frame reduces the
+favicon from 285478 to 15086 bytes. Retained frames are pixel-identical, and all three PNG hashes
+are unchanged. A 32 KiB generator guard prevents recurrence. This is a measured byte reduction,
+not an inferred mobile LCP pass; CSS, fonts and preview tooling remain separate candidates.

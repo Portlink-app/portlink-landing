@@ -57,6 +57,12 @@ tile 512 public/icon-512.png
 
 # The browser tab, replacing the framework default. Multi-resolution so a 16px tab and a 48px
 # bookmark bar each get a frame rendered at their own size rather than a downscale of one.
-for s in 16 32 48 256; do tile "$s" "$TMP/f$s.png" >/dev/null; done
-magick "$TMP/f16.png" "$TMP/f32.png" "$TMP/f48.png" "$TMP/f256.png" app/favicon.ico
+# High-resolution app icons are PNGs above; a 256px BMP inside ICO adds 264 KB.
+for s in 16 32 48; do tile "$s" "$TMP/f$s.png" >/dev/null; done
+magick "$TMP/f16.png" "$TMP/f32.png" "$TMP/f48.png" app/favicon.ico
 echo "  app/favicon.ico $(magick identify app/favicon.ico | wc -l | tr -d ' ') frames $(wc -c < app/favicon.ico | tr -d ' ') byte"
+# Keep a future high-resolution bitmap from silently inflating every page load again.
+if [ "$(wc -c < app/favicon.ico)" -gt 32768 ]; then
+  echo "build-icons: browser favicon exceeds the 32 KiB budget; use the PNG app icons for larger sizes" >&2
+  exit 1
+fi

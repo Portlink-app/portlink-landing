@@ -32,7 +32,7 @@
  * is the chart.
  */
 
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ArrowDown, Pause, Play } from 'lucide-react'
 import { useMotionAllowed, useInViewPlayback, useNarrow, useShortViewport, useTrackStage } from './useFilm'
 import styles from './FilmHero.module.css'
@@ -144,12 +144,14 @@ function StageStack({
   narrow,
   paused,
   short,
+  eager,
 }: {
   stage: number
   motionAllowed: boolean
   narrow: boolean
   paused: boolean
   short: boolean
+  eager: boolean
 }) {
   return (
     <div className="film-stack">
@@ -162,7 +164,7 @@ function StageStack({
               playing={!short && i === stage && !paused}
               motionAllowed={motionAllowed}
               narrow={narrow}
-              eager
+              eager={eager}
               controls={short}
             />
           </div>
@@ -183,6 +185,19 @@ export default function FilmHero({ mediaOnly = false }: { mediaOnly?: boolean })
   const narrow = useNarrow()
   const short = useShortViewport()
   const [paused, setPaused] = useState(false)
+  const [nearFilm, setNearFilm] = useState(!mediaOnly)
+
+  useEffect(() => {
+    if (!mediaOnly || nearFilm || !trackRef.current) return
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        setNearFilm(true)
+        observer.disconnect()
+      }
+    }, { rootMargin: '300px' })
+    observer.observe(trackRef.current)
+    return () => observer.disconnect()
+  }, [mediaOnly, nearFilm])
   const stage = useTrackStage(trackRef, paneRef, stages.length, motionAllowed && !short)
 
   return (
@@ -228,8 +243,8 @@ export default function FilmHero({ mediaOnly = false }: { mediaOnly?: boolean })
         ))}
 
         <div ref={paneRef} className={`film-pane ${styles.pane}`}>
-          <div className={styles.sceneLabel}><span>Portlink in motion</span><span>0{stage + 1} / 0{stages.length}</span></div>
-          <StageStack stage={stage} motionAllowed={motionAllowed} narrow={narrow} paused={paused} short={short} />
+          <div className={styles.sceneLabel}>Voyage planning in Platform</div>
+          <StageStack stage={stage} motionAllowed={motionAllowed && nearFilm} narrow={narrow} paused={paused} short={short} eager={!mediaOnly} />
 
           {/* Real links, not decoration: a keyboard or switch user reaches stage
               two without scrolling to it, and the browser does the scrolling. */}

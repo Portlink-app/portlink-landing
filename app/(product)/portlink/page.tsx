@@ -133,7 +133,7 @@ export default function PortlinkProductPage() {
                 </span>
                 <h3>Running tours?</h3>
                 <p style={{ color: '#CBD5E1' }}>
-                  Embark runs daily departures, boat and guide capacity, direct website bookings with Vipps and Stripe, for independent tour operations.
+                  Embark supports planning departures, bookings and capacity for independent tour operators.
                 </p>
                 <div>
                   <a href="/embark/" className="pp-secondary-link" data-cta="crosslink-portlink-to-embark">

@@ -129,3 +129,27 @@ The controlled browser baseline and after-run show company font downloads fallin
 to four, but no material LCP improvement. This does not close the Lighthouse performance gate.
 The company audit still retains older film, ecosystem, team and footer findings; no visual
 acceptance or cinematic completion is claimed. Reversal is this increment's revert.
+
+## Film interval and remaining review wording
+
+Product chapter labels now describe passage planning and booking arrangements while retaining
+the public fragment IDs. The Platform sibling paragraph uses supported departure, booking and
+capacity wording instead of unverified payment integration copy. The operator lead clarifies
+independent tour operations through an editorial adapter; the immutable contract stays intact.
+
+Viewport captures at the company film's start, middle and end show visible media throughout the
+normal pinned interval, with sequential stills under reduced motion. Do not shorten the track
+based on a stitched full-page blank. Below the opening, FilmHero now delays video mounting until
+its track is within 300px of the viewport and uses lazy SSR stills. Its default opening mode stays
+eager. Existing responsive encodes, motion preferences, chapter anchors and playback hooks remain
+authoritative. Browser regression evidence must assert no MP4 request before approaching the film,
+then actual playback in view and both stills in reduced motion.
+
+Chose resource deferral over changing the correctly rendered track geometry. Because offscreen
+video requests compete with discovery without helping the visitor. Revisit-if viewport capture
+shows a blank first in-view frame or the film fails to start on a supported device.
+
+C6 first-frame targets and effects remain gated by the storyboard's mobile LCP requirement. The
+configured preview currently injects Netlify collaboration scripts and tutorial videos; measurements
+that exclude those requests are diagnostic only and do not establish unmodified preview acceptance.
+Full comparison and film evidence: WORK_LOGS/KEEL_ACQUISITION_20261111/cinematic/STATE.md.

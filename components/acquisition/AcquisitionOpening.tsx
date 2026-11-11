@@ -55,7 +55,7 @@ export default function AcquisitionOpening({ page }: { page: 'company' | Product
     <section className={styles.opening} id={page === 'platform' ? 'overview' : 'hero'}>
       <div className={styles.intro}>
         <h1>{page === 'company' && !roleChosen ? 'Find your next workspace' : selected.headline}</h1>
-        <div><p className={styles.lead}>{page === 'company' && !roleChosen ? 'Software for the people planning voyages, arranging port calls and running tours.' : selected.body}</p>
+        <div><p className={styles.lead}>{page === 'company' && !roleChosen ? 'Software for the people planning voyages, arranging port calls and running tours.' : role === 'operator' ? 'Plan bookings, capacity and guide preparation for your tour operation.' : selected.body}</p>
           <div className={styles.actions}>
             <a className={styles.cta} href="/#access" data-cta={page === 'company' ? 'demo-hero' : `demo-${page === 'platform' ? 'portlink' : 'embark'}-hero`}>Book a 20-minute demo</a>
             <a href={`/start/?product=${product}&audience=${audience[role]}`} data-cta={`trial-${page}-hero`}>Explore trial options</a>

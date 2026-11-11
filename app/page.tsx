@@ -2,6 +2,7 @@
 
 import Nav from '@/components/Nav'
 import FilmHero from '@/components/film/FilmHero'
+import AcquisitionOpening from '@/components/acquisition/AcquisitionOpening'
 import PlatformExplorer from '@/components/scenes/PlatformExplorer'
 import PainSection from '@/components/sections/PainSection'
 import EcosystemSection from '@/components/sections/EcosystemSection'
@@ -14,7 +15,7 @@ export default function Home() {
     <>
       <Nav />
       <main id="main" tabIndex={-1}>
-        <FilmHero />
+        <AcquisitionOpening page="company" />
         {/* The Seatrade draw block is deliberately absent from the front page — David's instruction
             of 17.09.2026. The campaign itself is unchanged and live: /seatrade/ still takes entries,
             the show QR codes still resolve, the email sequence still sends. Only the front page
@@ -28,6 +29,7 @@ export default function Home() {
             (four role previews of the same screens; the ecosystem diagram names the same four
             participants from the shared registry). Their files stay, unmounted, so a revert of
             this one file restores the old order. */}
+        <FilmHero mediaOnly />
         <PainSection />
         <PlatformExplorer />
         <EcosystemSection />

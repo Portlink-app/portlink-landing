@@ -7,8 +7,7 @@ Full brief: Buzz workspace PLANS/PORTLINK_ACQUISITION_EXECUTION_2026-11-11.md.
 
 The additive GET /start route translates the existing role IDs into Platform's existing /start
 segment parameter. It returns a non-cacheable redirect and never creates accounts, signs terms,
-sets entitlements, starts clocks or makes payment requests. Existing CTA mounts and demo fallback
-remain in place while Tiller prepares the shared contract and trial acceptance remains open.
+sets entitlements, starts clocks or makes payment requests. The primary demo fallback remains in place; the shared opening now offers audience-aware trial exploration while full trial acceptance remains open.
 
 | Input audience | Platform segment | Result with configured trial origin |
 | --- | --- | --- |
@@ -43,7 +42,7 @@ consent or conversion collectors; the 15.11.2026 conversion checkpoint remains w
 ## Scope and verification
 
 Owned files: lib/acquisition.ts, app/start/route.ts, scripts/check-acquisition.mjs, this document,
-next.config.ts, scripts/check-acquisition-http.mjs and package.json gate wiring. Existing generated design assets and consumer pages are untouched.
+next.config.ts, scripts/check-acquisition-http.mjs and package.json gate wiring. Generated design assets remain untouched. The composition increment also owns components/acquisition/*, the three page consumers, ProductHeader labels and FilmHero media-only composition.
 Reverse with this task commit's revert. Build and verify both run check:acquisition.
 The test calls the real GET handler, calibrates successful segment handoffs against assisted
 fallbacks, rejects duplicate keys and malformed configuration, and verifies that tenant, email,
@@ -54,7 +53,7 @@ Because product identity, signing, pricing and entitlement remain authoritative 
 Revisit-if independently accepted Embark signup or Wheelhouse commercial entry becomes available.
 
 Still unmapped: live payment/flag state, cross-product identity and provisioning, privileged access
-bypasses, accepted Tiller visual contract and final customer-journey release evidence. This
+bypasses, final cinematic acceptance and customer-journey release evidence. This
 increment is routing preparation, not a claim that the complete acquisition journey is delivered.
 
 The built server originally replaced the handler's no-referrer header with the global policy.
@@ -67,3 +66,16 @@ build exercises configured entry, and an unconfigured build exercises the closed
 Assisted responses use a relative Location: /#access. Next's production request URL can use an
 internal hostname behind a proxy; deriving an absolute fallback from it sent the local proof to
 localhost instead of the requested address. The HTTP guard now requires the relative fallback.
+
+## Shared opening composition
+
+Consumes Tiller acquisition-1, manifest SHA256 `01f8e4ce2208a6d7ea5aad545fe6dab5542728cf840684b8b25a39da22f2531d`.
+The pinned contract fields roles/platform/embark are copied without the illustrative signing state machine into components/acquisition/contract.json. This snapshot is authored sample content, not authenticated product captures. Its source is the Buzz acquisition-contract directory; update only against a new reviewed pin.
+
+One AcquisitionOpening serves company, Platform and Embark. Company roles map the contract's dmc key to the existing tour role; operator stays Embark-only. One choice drives headline, image, destination and lower workflow. Chapter buttons are deterministic, keyboard-operable, deep-linkable and replayable. No-JavaScript visitors receive the initial frame plus the later workflow text and ordinary product/demo links. Film motion uses useMotionAllowed and setManualMotion; reduced motion wins over manual enablement.
+
+Chose: existing D14 materials and one React composition over embedding specimen HTML or a new rendering engine. Because the same role and motion authorities govern all consumers. References: Apple AirPods Pro stage hierarchy, Linear product detail, Crypto.com product orientation, as documented in Tiller DIRECTION.md. Revisit-if: an accepted cinematic renderer is delivered.
+
+The previous product sample blocks that implied automatic cross-product synchronization are no longer mounted. Existing voyage footage remains below discovery via FilmHero mediaOnly; removing it also removed the motion guard's real positive control. No guard was weakened. Old public fragment aliases and conversion demo event names remain.
+
+Current limitation: this is a composed comparator, not accepted cinematic design. Full-page taste inspection retains legacy chapter findings (heading length, labels, shadows, outlines, type hierarchy and sticky overlap) plus the comparator's limited motion. These remain open for the shared design review, followed by a complete rendered audit. Authentic product capture, mobile performance, billing/access review and live customer journeys remain required. No production publication is authorised by these local proofs.

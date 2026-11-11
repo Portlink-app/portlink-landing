@@ -176,7 +176,7 @@ function StageStack({
   )
 }
 
-export default function FilmHero() {
+export default function FilmHero({ mediaOnly = false }: { mediaOnly?: boolean }) {
   const trackRef = useRef<HTMLDivElement>(null)
   const paneRef = useRef<HTMLDivElement>(null)
   const motionAllowed = useMotionAllowed()
@@ -186,8 +186,8 @@ export default function FilmHero() {
   const stage = useTrackStage(trackRef, paneRef, stages.length, motionAllowed && !short)
 
   return (
-    <section id="hero" className={styles.hero}>
-      <div className={styles.intro}>
+    <section id={mediaOnly ? 'product-film' : 'hero'} className={styles.hero}>
+      {!mediaOnly && <div className={styles.intro}>
         {/* Conversion Batch 1, 01.11.2026 (goal portlink-landing-conversion-2026-11-01). The H1 used to
             sell the team ("Maritime software. Built by people who know port calls.") and a visitor met
             the outcome only in the body copy; 63 % of October's visits left from this screen.
@@ -208,7 +208,8 @@ export default function FilmHero() {
             </div>
           </div>
         </div>
-      </div>
+      </div>}
+      {mediaOnly && <h2 className={styles.intro}>See the voyage take shape</h2>}
 
       <div
         ref={trackRef}

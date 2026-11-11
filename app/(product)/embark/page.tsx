@@ -1,18 +1,15 @@
 /* eslint-disable @next/next/no-img-element, @next/next/no-html-link-for-pages */
 import type { Metadata } from 'next'
 import Film from '@/components/clone/Film'
+import AcquisitionOpening from '@/components/acquisition/AcquisitionOpening'
 import { PRODUCT_PAGE_ROBOTS } from '@/components/product/config'
 import { EMBARK_D14_ASSETS } from '@/components/product/d14Assets'
-import {
-  EmbarkCruiseTradeBridge,
-  EmbarkQuayCheckInSample,
-} from '@/components/product/EmbarkQuayCheckInSample'
 import ProductHeader from '@/components/product/ProductHeader'
 
 export const metadata: Metadata = {
-  title: 'Embark by Portlink: Fill the Boat, Brief the Guide, and Check Guests In on the Quay',
+  title: 'Embark by Portlink: Keep Departures Ready',
   description:
-    'Embark runs daily departures, boat and guide capacity, online bookings with Vipps and Stripe, and Portlink cruise DMC allocations in one operational schedule.',
+    'Embark runs daily departures, boat and guide capacity, online bookings with Vipps and Stripe, in an independent tour operator workspace.',
   alternates: { canonical: '/embark/' },
   robots: PRODUCT_PAGE_ROBOTS,
 }
@@ -23,93 +20,7 @@ export default function EmbarkProductPage() {
       <ProductHeader product="embark" tone="light" />
 
       <main id="main">
-        {/* CHAPTER 1: Three-Layer Mirror Hero (0 ms Instant Text + Back Layer Photo + 140px Bottom Seam Overhang) */}
-        <section className="pp-chapter pp-chapter--embark-day pp-hero" id="hero">
-          <div className="pp-hero-back pp-hero-back--light" aria-hidden="true">
-            <div className="pp-hero-back-scrim pp-hero-back-scrim--light" />
-          </div>
-
-          <div className="pp-wrap pp-hero-back-grid">
-            <div className="pp-hero-front">
-              <div className="pp-chapter-tag">
-                <span>Embark by Portlink</span>
-                <span aria-hidden="true">·</span>
-                <span>Fjordland Adventures AS · Bergen &amp; Geiranger</span>
-              </div>
-              <h1>Fill the boat, brief the guide, and check guests in on the quay.</h1>
-              <p className="pp-hero-sub">
-                Embark runs daily departures, boat and guide capacity, online bookings, and cruise DMC allocations in one operational schedule.
-              </p>
-              <div className="pp-hero-actions">
-                <a href="/#access" className="pp-cta-btn" data-cta="demo-embark-hero">
-                  Book a 20-minute demo
-                </a>
-                <a href="#quay-checkin" className="pp-secondary-link pp-secondary-link--light">
-                  Try live quay check-in ↓
-                </a>
-              </div>
-            </div>
-
-            <div className="pp-hero-stage-wrap">
-              {/* Front Layer: Integrated 4-Pillar Operational Metrics Strip */}
-              <div className="pp-callout-strip pp-callout-strip--four">
-                <div className="pp-callout-pill">
-                  <span className="pp-callout-pill-kicker">Direct Web Checkout</span>
-                  <strong>Widget + Vipps &amp; Stripe</strong>
-                  <span>Embed /w/fjordland on your site with instant seat lock</span>
-                </div>
-                <div className="pp-callout-pill">
-                  <span className="pp-callout-pill-kicker">Resource Protection</span>
-                  <strong>Boat &amp; Guide Conflict Lock</strong>
-                  <span>RIB Havørn (12p) &amp; MS Fjordsyn (24p) never double-book</span>
-                </div>
-                <div className="pp-callout-pill">
-                  <span className="pp-callout-pill-kicker">Pier &amp; Gangway</span>
-                  <strong>Offline-Ready Quay Check-In</strong>
-                  <span>Tap guest groups or scan QR vouchers on any guide phone</span>
-                </div>
-                <div className="pp-callout-pill">
-                  <span className="pp-callout-pill-kicker">Cruise B2B Channel</span>
-                  <strong>Portlink DMC Trade Sync</strong>
-                  <span>Receive &amp; confirm cruise shorex allocations in one click</span>
-                </div>
-              </div>
-
-              {/* Middle Layer: 2x Retina D14 Daily Departures Stage overhanging bottom seam by 140px */}
-              <div className="pp-stage-frame">
-                <img
-                  src={EMBARK_D14_ASSETS.ch1Hero.desktop}
-                  alt={EMBARK_D14_ASSETS.ch1Hero.alt}
-                  width={EMBARK_D14_ASSETS.ch1Hero.width}
-                  height={EMBARK_D14_ASSETS.ch1Hero.height}
-                  decoding="async"
-                  className="pp-stage-img"
-                />
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* CHAPTER 2: The Interactive Free Sample (Live Quay Check-In & Capacity Swap) */}
-        <section className="pp-chapter pp-chapter--embark-alt pp-chapter--after-overhang" id="quay-checkin">
-          <div className="pp-wrap">
-            <div className="pp-chapter-intro">
-              <div>
-                <div className="pp-chapter-tag">
-                  <span>Chapter 02 · Interactive Free Sample</span>
-                  <span aria-hidden="true">·</span>
-                  <span>10.00 Icefjord &amp; Fjord RIB Safari</span>
-                </div>
-                <h2>Check in passengers on the pier and adjust boat capacity live.</h2>
-              </div>
-              <p className="pp-chapter-sub">
-                Tap a guest group to board them on RIB Havørn, swap in MS Fjordsyn for 12 extra seats, or accept an incoming cruise DMC request from MS Aster Brisa.
-              </p>
-            </div>
-
-            <EmbarkQuayCheckInSample />
-          </div>
-        </section>
+        <AcquisitionOpening page="embark" />
 
         {/* CHAPTER 3: Departures, Fleet & Guide Roster Stage */}
         <section className="pp-chapter pp-chapter--embark-day" id="dispatch">
@@ -207,24 +118,10 @@ export default function EmbarkProductPage() {
           </div>
         </section>
 
-        {/* CHAPTER 5: The Portlink Cruise-Trade Bridge */}
         <section className="pp-chapter pp-chapter--embark-day" id="cruise-bridge">
-          <div className="pp-wrap">
-            <div className="pp-chapter-intro">
-              <div>
-                <div className="pp-chapter-tag">
-                  <span>Chapter 05 · Portlink Cruise-Trade Bridge</span>
-                  <span aria-hidden="true">·</span>
-                  <span>api/trade/v1/requests</span>
-                </div>
-                <h2>Connected directly to cruise lines and DMCs in Portlink.</h2>
-              </div>
-              <p className="pp-chapter-sub">
-                Confirm a shore-excursion seat request in Embark and watch the ship&apos;s port-call programme update automatically with zero spreadsheets.
-              </p>
-            </div>
-
-            <EmbarkCruiseTradeBridge />
+          <div className="pp-wrap"><h2>Tour operations have their own workspace.</h2>
+            <p className="pp-chapter-sub">Embark works independently of Platform. For cruise-line itinerary planning and DMC shore requests, explore Platform.</p>
+            <a href="/portlink/" className="pp-secondary-link pp-secondary-link--light">Explore Platform →</a>
           </div>
         </section>
 

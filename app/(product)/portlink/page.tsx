@@ -1,16 +1,16 @@
 /* eslint-disable @next/next/no-img-element, @next/next/no-html-link-for-pages */
 import type { Metadata } from 'next'
 import Film from '@/components/clone/Film'
+import AcquisitionOpening from '@/components/acquisition/AcquisitionOpening'
 import { PRODUCT_PAGE_ROBOTS } from '@/components/product/config'
 import { PORTLINK_D14_ASSETS } from '@/components/product/d14Assets'
 import ProductHeader from '@/components/product/ProductHeader'
 import {
-  PortlinkLiveWorkspaceSample,
   PortlinkPdaFdaDiffSample,
 } from '@/components/product/PortlinkLiveWorkspaceSample'
 
 export const metadata: Metadata = {
-  title: 'Portlink: Run Every Port Call from One Shared Record',
+  title: 'Platform by Portlink: Plan the Whole Voyage',
   description:
     'Cruise lines, port agents, shorex DMCs, and vessels coordinate berth readiness, fairway voyage routing, gangway departure sign-off, and PDA-to-FDA settlement in one shared record.',
   alternates: { canonical: '/portlink/' },
@@ -23,88 +23,7 @@ export default function PortlinkProductPage() {
       <ProductHeader product="portlink" tone="dark" />
 
       <main id="main">
-        {/* CHAPTER 1: Three-Layer Mirror Hero (0 ms Instant Text + Back Layer Photo + 140px Bottom Seam Overhang) */}
-        <section className="pp-chapter pp-chapter--night pp-hero" id="overview">
-          <div className="pp-hero-back" aria-hidden="true">
-            <div className="pp-hero-back-scrim pp-hero-back-scrim--dark" />
-          </div>
-
-          <div className="pp-wrap pp-hero-back-grid">
-            <div className="pp-hero-front">
-              <div className="pp-chapter-tag">
-                <span>Portlink Maritime Operations</span>
-                <span aria-hidden="true">·</span>
-                <span>MS Aster Brisa · Bergen Skolten 3 · 06.08.2026</span>
-              </div>
-              <h1>Run every port call from one shared record.</h1>
-              <p className="pp-hero-sub">
-                From 48-hour berth readiness to gangway sign-off and final account settlement, without email chains or version drift.
-              </p>
-              <div className="pp-hero-actions">
-                <a href="/#access" className="pp-cta-btn" data-cta="demo-portlink-hero">
-                  Book a 20-minute demo
-                </a>
-                <a href="#live-record" className="pp-secondary-link">
-                  Try the live 4-seat record ↓
-                </a>
-              </div>
-            </div>
-
-            <div className="pp-hero-stage-wrap">
-              {/* Front Layer: Floating Role Callout Pills */}
-              <div className="pp-callout-strip">
-                <div className="pp-callout-pill">
-                  <span className="pp-callout-pill-kicker">Seat 1 · Cruise Line Ops</span>
-                  <strong>Nordkyst Cruise Line</strong>
-                  <span>All 7 tabs active: Overview, Readiness, Finance, Programme, Services, Tasks, Comms</span>
-                </div>
-                <div className="pp-callout-pill">
-                  <span className="pp-callout-pill-kicker">Seat 2 · Port Agent</span>
-                  <strong>Vestkyst Maritime Agency</strong>
-                  <span>Pilotage kl. 07.15, 2 tugs, berth services, and PDA/FDA settlement</span>
-                </div>
-                <div className="pp-callout-pill">
-                  <span className="pp-callout-pill-kicker">Seat 3 &amp; 4 · Shorex DMC &amp; Ship</span>
-                  <strong>Fjordhaven DMC + MS Aster Brisa</strong>
-                  <span>284 shorex guests synced via Embark; gangway sign-off on board</span>
-                </div>
-              </div>
-
-              {/* Middle Layer: 2x Retina D14 Port-Call Readiness Stage overhanging bottom seam by 140px */}
-              <div className="pp-stage-frame">
-                <img
-                  src={PORTLINK_D14_ASSETS.ch1Hero.desktop}
-                  alt={PORTLINK_D14_ASSETS.ch1Hero.alt}
-                  width={PORTLINK_D14_ASSETS.ch1Hero.width}
-                  height={PORTLINK_D14_ASSETS.ch1Hero.height}
-                  decoding="async"
-                  className="pp-stage-img"
-                />
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* CHAPTER 2: The Interactive Free Sample (4 Seats x 4 Call Timestamps) */}
-        <section className="pp-chapter pp-chapter--day pp-chapter--after-overhang" id="live-record">
-          <div className="pp-wrap">
-            <div className="pp-chapter-intro">
-              <div>
-                <div className="pp-chapter-tag">
-                  <span>Chapter 02 · Interactive Free Sample</span>
-                  <span aria-hidden="true">·</span>
-                  <span>Role-Scoped SECTION_VIS</span>
-                </div>
-                <h2>Four seats on the call. Each sees only its own job.</h2>
-              </div>
-              <p className="pp-chapter-sub">
-                Switch between Cruise Line Ops, Port Agent, Shorex DMC, and Ship Master to see how one database record enforces role privacy across every timestamp of the port call.
-              </p>
-            </div>
-
-            <PortlinkLiveWorkspaceSample />
-          </div>
-        </section>
+        <AcquisitionOpening page="platform" />
 
         {/* CHAPTER 3: Voyage & Nautical Chart Stage (RouteEditor + VoyageMap + Kystverket Fairways) */}
         <section className="pp-chapter pp-chapter--night" id="voyage-ais">
@@ -269,7 +188,7 @@ export default function PortlinkProductPage() {
                 </span>
                 <h3>Running shore excursions, RIB safaris, or local tours?</h3>
                 <p style={{ color: '#CBD5E1', fontSize: '15.5px' }}>
-                  Embark runs daily departures, boat and guide capacity, direct website bookings with Vipps and Stripe, and live Portlink cruise DMC allocations.
+                  Embark runs daily departures, boat and guide capacity, direct website bookings with Vipps and Stripe, for independent tour operations.
                 </p>
                 <div>
                   <a href="/embark/" className="pp-secondary-link" data-cta="crosslink-portlink-to-embark">

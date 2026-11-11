@@ -42,17 +42,17 @@ export default function ProductHeader({
 
         {product === 'portlink' ? (
           <nav className="pp-chapter-nav" aria-label="Portlink page chapters">
-            <a href="#live-record">Live Record</a>
-            <a href="#voyage-ais">Voyage &amp; AIS</a>
+            <a href="#live-record">Planning Example</a>
+            <a href="#voyage-ais">Voyage &amp; Chart</a>
             <a href="#gangway-signoff">Gangway Sign-Off</a>
             <a href="#pda-fda">PDA to FDA</a>
           </nav>
         ) : (
           <nav className="pp-chapter-nav" aria-label="Embark page chapters">
-            <a href="#quay-checkin">Quay Check-In</a>
+            <a href="#quay-checkin">Departure Example</a>
             <a href="#dispatch">Departures &amp; Roster</a>
             <a href="#paid-before">Paid Before Departure</a>
-            <a href="#cruise-bridge">Cruise-Trade Bridge</a>
+            <a href="#cruise-bridge">Platform</a>
           </nav>
         )}
 

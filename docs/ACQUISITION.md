@@ -275,3 +275,42 @@ verification, Starboard acceptance and Nautiqs release. No test of the adapter a
 Still unmapped: a reusable isolated product demo, Platform workspace-wide colour support,
 validated cross-origin transport/resume, Embark receiver ownership and safe existing-account
 application. No optional logo upload is offered before receiver validation/storage is agreed.
+
+## Current receiver reconciliation and presentation consumers
+
+The earlier June Embark discovery above is superseded by current main
+0a442fcb8ab15e9b2be252e7a1d0b992076011f5 and receiver draft PR323:
+https://github.com/Portlink-app/embark/pull/323. Keel owns implementation;
+Nautiqs releases after Surgeon review and Starboard acceptance. The existing
+invite-code creation RPC accepts name and seeds a public-site theme receiver.
+Validated private POST/cookie/metadata integration is implemented there; local
+fresh-browser confirmation and adversarial recovery are measured. Hosted continuity,
+CI and review remain open. No admin-shell colour promise or anonymous invite access.
+
+The two product overviews and six topic routes now consume ProductJourney.
+Each product layout supplies one ProductSession. Preferences use the existing
+validated seven-day adapter; sample progress is memory-only, keyed by audience/topic;
+view history contains only public topic IDs. ProductDemo loads on intent into a
+native modal with explicit keyboard wrapping, Escape, focus/scroll restoration,
+and one pushed history entry with topic replacements. Back/forward reopens/closes.
+Company AcquisitionOpening remains unchanged. ProductHeader chapter links are
+absolute overview anchors so topic pages do not create dead fragments.
+
+Audience evidence is bounded to existing examples: cruise itinerary review,
+agent account comparison, DMC draft quote response, independent operator capacity
+and booking review. Labels never make review a real external commitment. Unavailable
+send actions are disabled and explained. Images and their explicit controls open
+the same product session. Name and colour mark customer regions only; no requested
+colour is used for body text or semantic state. Make it yours collapses on phones,
+stays in flow, and loses stickiness on short screens. Optional uploads are absent.
+
+Chose the pinned finite topic/record composition (Apple's focused stage, Linear's
+legible evidence, the existing coastal scene direction) over duplicating a mock app
+per page. The design contract governs the generic taste inspector's image/motion
+floors: retain three useful topic illustrations, and leave motion expansion gated
+on the existing performance budget. Raw inspector failures are recorded, not waived.
+
+Current limits: the landing still uses truthful assisted trial routing; no cross-origin
+preference handoff is enabled. Progressive real onboarding preview, Platform colour
+receiver, final visual/motion acceptance and hosted performance remain unfinished.
+Browser matrix and raw inspector output: Buzz WORK_LOGS/KEEL_ACQUISITION_20261111/journey/.

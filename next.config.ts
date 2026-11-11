@@ -42,7 +42,9 @@ const nextConfig: NextConfig = {
     remotePatterns: [],
     deviceSizes: [400, 640],
     imageSizes: [],
-    qualities: [75],
+    // Encoder scales differ: native Next AVIF75 and Netlify AVIF50 retain the inspected detail.
+    // Next's default loader selects the sole allowed quality in both SSR and client markup.
+    qualities: process.env.NETLIFY === 'true' ? [50] : [75],
     formats: ['image/avif', 'image/webp'],
   },
   async headers() {

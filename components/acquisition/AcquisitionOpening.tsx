@@ -28,7 +28,7 @@ export default function AcquisitionOpening({ page }: { page: 'company' | Product
   const scenery = product === 'embark' ? 'operator' : 'coast'
   const { props: phoneScenery } = getImageProps({
     src: `/acquisition/${scenery}-phone.webp`, alt: '', width: 640, height: 960,
-    quality: 75, sizes: '(max-width: 767px) calc(100vw - 40px), 640px',
+    sizes: '(max-width: 767px) calc(100vw - 40px), 640px',
   })
   const changedCapacity = product === 'embark' && index > 0
 

@@ -209,7 +209,11 @@ Cinematic framing, authentic product evidence, performance and full trial/access
 ## Responsive phone scenery
 
 The shared picture keeps the original wide image for desktop. Next getImageProps supplies
-400px and native640px phone candidates at quality75; the browser chooses for viewport and DPR.
+400px and native640px phone candidates; the browser chooses for viewport and DPR.
+The quality allowlist is encoder-specific: native Next75, Netlify50. Measured Netlify75 AVIF
+exceeded the source bytes at640px; local Next50 visibly lost detail. The default Next loader
+chooses the sole allowed quality in SSR and hydration. Verify actual hosted bytes and frames
+when either encoder changes; matching quality numbers do not mean matching output.
 The image endpoint permits only the two local phone crops, with AVIF/WebP negotiation and no
 remote sources. Existing raw img consumers bypass it. These width limits belong to these assets;
 review native dimensions and all consumers before adding another optimized image.

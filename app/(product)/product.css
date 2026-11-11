@@ -6,7 +6,7 @@
   /* Typography */
   --pp-display: var(--pp-font-display), "Schibsted Grotesk", -apple-system, BlinkMacSystemFont, sans-serif;
   --pp-sans: var(--pp-font-text), "Manrope", -apple-system, BlinkMacSystemFont, sans-serif;
-  --pp-mono-font: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --pp-mono-font: var(--pp-sans);
 
   /* /portlink 60-30-10 Color Tokens */
   --pl-ground-day: #F6F5F1;
@@ -67,10 +67,10 @@
   background: var(--pl-ground-day);
   color: var(--pl-ink-primary);
   font-family: var(--pp-sans);
-  font-size: 17px;
+  font-size: 16px;
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
-  overflow-x: clip;
+
 }
 
 .pp--embark {
@@ -142,7 +142,6 @@
   position: sticky;
   top: 0;
   z-index: 40;
-  border-bottom: 1px solid var(--pl-edge-dark);
   background: #08131F;
   color: #F8FAFC;
 }
@@ -150,7 +149,6 @@
 .pp-header--light {
   background: #F4F3EE;
   color: #14181D;
-  border-bottom: 1px solid #D6D3C9;
 }
 
 .pp-header-inner {
@@ -215,7 +213,7 @@
   gap: 5px;
   padding: 7px 14px;
   border-radius: 9px;
-  font-size: 13.5px;
+  font-size: 14px;
   font-weight: 600;
   color: #CBD5E1;
   white-space: nowrap;
@@ -237,7 +235,6 @@
 .pp-header--light .pp-switcher-pill.is-active {
   background: #FFFFFF;
   color: #14181D;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
 }
 
 .pp-chapter-nav {
@@ -283,7 +280,7 @@
   background: #102033;
   color: #F8FAFC;
   font-family: var(--pp-sans);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
@@ -318,7 +315,7 @@
   background: var(--pp-cta-bg);
   color: #FFFFFF;
   font-family: var(--pp-sans);
-  font-size: 15.5px;
+  font-size: 16px;
   font-weight: 700;
   line-height: 1.1;
   border: 0;
@@ -354,7 +351,7 @@
   border: 1px solid #335474;
   background: #102033;
   color: #F8FAFC;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
 }
 
@@ -459,7 +456,7 @@
   padding: 6px 12px;
   border-radius: var(--pp-r-chip);
   font-family: var(--pp-mono-font);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   margin-bottom: 20px;
   background: #102033;
@@ -478,7 +475,7 @@
 .pp h1 {
   font-family: var(--pp-display);
   font-weight: 700;
-  font-size: clamp(36px, 4.35vw, 60px);
+  font-size: clamp(40px, 5.3vw, 76px);
   line-height: 1.04;
   letter-spacing: -0.03em;
   opacity: 1;
@@ -496,14 +493,14 @@
 .pp h3 {
   font-family: var(--pp-display);
   font-weight: 600;
-  font-size: clamp(20px, 2vw, 25px);
+  font-size: clamp(26px, 2vw, 28px);
   line-height: 1.2;
   letter-spacing: -0.02em;
 }
 
 .pp-hero-sub {
   margin-top: 20px;
-  font-size: clamp(18px, 1.45vw, 21px);
+  font-size: 18px;
   line-height: 1.5;
   max-width: 60ch;
   color: #F1F5F9;
@@ -555,7 +552,6 @@
   background: #102033;
   border: 1px solid #294C6E;
   color: #F8FAFC;
-  box-shadow: 0 12px 28px -12px rgba(8, 19, 31, 0.55);
 }
 
 .pp-chapter--day .pp-callout-pill,
@@ -564,13 +560,12 @@
   background: #FFFFFF;
   border-color: #CBD5E1;
   color: #0F172A;
-  box-shadow: 0 12px 28px -14px rgba(15, 23, 42, 0.12);
 }
 
 .pp-callout-pill-kicker {
   display: block;
   font-family: var(--pp-mono-font);
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
   color: #5EEAD4;
   margin-bottom: 4px;
@@ -584,13 +579,13 @@
 
 .pp-callout-pill strong {
   display: block;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 700;
 }
 
 .pp-callout-pill span {
   display: block;
-  font-size: 13px;
+  font-size: 14px;
   color: #CBD5E1;
   margin-top: 2px;
 }
@@ -605,9 +600,7 @@
 .pp-stage-frame {
   border-radius: var(--pp-r-stage);
   overflow: hidden;
-  border: 1px solid #294C6E;
   background: #0C1829;
-  box-shadow: 0 32px 80px -20px rgba(8, 19, 31, 0.48);
 }
 
 .pp-chapter--day .pp-stage-frame,
@@ -615,7 +608,6 @@
 .pp-chapter--embark-alt .pp-stage-frame {
   border-color: #CBD5E1;
   background: #FFFFFF;
-  box-shadow: 0 28px 64px -20px rgba(15, 23, 42, 0.16);
 }
 
 .pp-stage-img {
@@ -674,7 +666,7 @@
 }
 
 .pp-control-label {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   color: #334155;
 }
@@ -696,7 +688,7 @@
   background: transparent;
   color: #1E293B;
   font-family: var(--pp-sans);
-  font-size: 13.5px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   transition: background-color 140ms ease, color 140ms ease;
@@ -726,7 +718,7 @@
   background: #F0FDFA;
   color: #0F534E;
   font-family: var(--pp-sans);
-  font-size: 13.5px;
+  font-size: 14px;
   font-weight: 700;
   cursor: pointer;
 }
@@ -760,7 +752,7 @@
   align-items: center;
   gap: 12px;
   flex-wrap: wrap;
-  font-size: 14.5px;
+  font-size: 14px;
 }
 
 .pp-role-dot {
@@ -772,11 +764,11 @@
 
 .pp-role-person {
   color: #CBD5E1;
-  font-size: 13.5px;
+  font-size: 14px;
 }
 
 .pp-role-note {
-  font-size: 13.5px;
+  font-size: 14px;
   color: #E2E8F0;
 }
 
@@ -800,7 +792,6 @@
   color: #0F172A;
   border-radius: var(--pp-r-card);
   border: 1px solid #CBD5E1;
-  box-shadow: 0 20px 48px -22px rgba(15, 23, 42, 0.14);
   overflow: hidden;
   min-height: 520px;
   display: flex;
@@ -822,7 +813,7 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 8px;
-  font-size: 12.5px;
+  font-size: 14px;
   font-weight: 600;
   color: #475569;
   margin-bottom: 4px;
@@ -840,7 +831,7 @@
   background: #F1F5F9;
   border: 1px solid #CBD5E1;
   color: #0F172A;
-  font-size: 12.5px;
+  font-size: 14px;
   font-weight: 600;
 }
 
@@ -856,7 +847,7 @@
 .pp-ui-tab {
   padding: 7px 12px;
   border-radius: 8px;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   color: #334155;
 }
@@ -886,7 +877,7 @@
   display: flex;
   justify-content: space-between;
   gap: 10px;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   color: #1E293B;
   margin-bottom: 8px;
@@ -945,7 +936,7 @@
 
 .pp-ui-kpi-val {
   display: block;
-  font-size: 13.5px;
+  font-size: 14px;
   color: #0F172A;
   margin-top: 2px;
 }
@@ -987,19 +978,19 @@
 
 .pp-ui-row-sub {
   display: block;
-  font-size: 12.5px;
+  font-size: 14px;
   color: #475569;
   margin-top: 2px;
 }
 
 .pp-ui-row-owner {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   color: #334155;
 }
 
 .pp-ui-row-metric {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   color: #0F172A;
   text-align: right;
@@ -1011,7 +1002,7 @@
   align-items: center;
   padding: 5px 10px;
   border-radius: var(--pp-r-chip);
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
   white-space: nowrap;
 }
@@ -1047,7 +1038,7 @@
   background: #BE4412;
   color: #FFFFFF;
   font-family: var(--pp-sans);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   cursor: pointer;
   white-space: nowrap;
@@ -1071,7 +1062,7 @@
 }
 
 .pp-ui-footer-note {
-  font-size: 13px;
+  font-size: 14px;
   color: #334155;
   max-width: 50ch;
 }
@@ -1089,7 +1080,7 @@
   background: var(--pp-cta-bg);
   color: #FFFFFF;
   font-family: var(--pp-sans);
-  font-size: 13.5px;
+  font-size: 14px;
   font-weight: 700;
   cursor: pointer;
 }
@@ -1108,7 +1099,7 @@
   background: #FFFFFF;
   color: #0F172A;
   font-family: var(--pp-sans);
-  font-size: 13.5px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
 }
@@ -1128,14 +1119,14 @@
 
 .pp-stage-callout-tag {
   display: inline-block;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
   color: #0F766E;
   margin-bottom: 4px;
 }
 
 .pp-stage-callout-text {
-  font-size: 13.5px;
+  font-size: 14px;
   color: #334155;
 }
 
@@ -1151,7 +1142,6 @@
   border-radius: 36px;
   background: #0F172A;
   border: 2px solid #334155;
-  box-shadow: 0 28px 60px -18px rgba(8, 19, 31, 0.45);
 }
 
 .pp-phone-notch {
@@ -1188,7 +1178,7 @@
 }
 
 .pp-phone-title-block span {
-  font-size: 12.5px;
+  font-size: 14px;
   color: #475569;
 }
 
@@ -1211,7 +1201,7 @@
 }
 
 .pp-phone-count-sub {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   color: #334155;
 }
@@ -1245,7 +1235,7 @@
 
 .pp-phone-guest-info strong {
   display: block;
-  font-size: 13px;
+  font-size: 14px;
   color: #0F172A;
 }
 
@@ -1280,7 +1270,7 @@
   background: #14181D;
   color: #FFFFFF;
   font-family: var(--pp-sans);
-  font-size: 13.5px;
+  font-size: 14px;
   font-weight: 700;
   cursor: pointer;
 }
@@ -1316,7 +1306,6 @@
 
 .pp-diff-card.is-active {
   border: 2px solid #0F766E;
-  box-shadow: 0 16px 36px -18px rgba(15, 118, 110, 0.28);
 }
 
 .pp-diff-card-top {
@@ -1328,7 +1317,7 @@
 }
 
 .pp-diff-step {
-  font-size: 13.5px;
+  font-size: 14px;
   font-weight: 700;
   color: #334155;
 }
@@ -1348,7 +1337,7 @@
 }
 
 .pp-diff-sub {
-  font-size: 13.5px;
+  font-size: 14px;
   color: #475569;
   line-height: 1.45;
 }
@@ -1358,7 +1347,9 @@
 }
 
 .pp-table-scroll {
+  max-width: 100%;
   overflow-x: auto;
+  overscroll-behavior-x: contain;
 }
 
 .pp-ledger-table {
@@ -1372,7 +1363,7 @@
   padding: 12px 18px;
   background: #F8FAFC;
   border-bottom: 1px solid #CBD5E1;
-  font-size: 12.5px;
+  font-size: 14px;
   font-weight: 700;
   color: #334155;
 }
@@ -1388,7 +1379,7 @@
   background: #F8FAFC;
   border-top: 2px solid #CBD5E1;
   border-bottom: 0;
-  font-size: 14.5px;
+  font-size: 14px;
 }
 
 .pp-ledger-table .is-num {
@@ -1407,13 +1398,13 @@
 
 .pp-table-sub {
   display: block;
-  font-size: 12px;
+  font-size: 14px;
   color: #475569;
   margin-top: 2px;
 }
 
 .pp-table-proof {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   color: #1E293B;
 }
@@ -1467,7 +1458,7 @@
   position: absolute;
   inset: 0;
   z-index: 2;
-  background: linear-gradient(90deg, rgba(8, 19, 31, 0.94) 0%, rgba(8, 19, 31, 0.84) 52%, rgba(8, 19, 31, 0.34) 100%); /* signature-ok: Flexport neutral scrim on maritime gangway stage */
+  background: linear-gradient(90deg, rgba(8, 19, 31, 0.94) 0%, rgba(8, 19, 31, 0.84) 52%, rgba(8, 19, 31, 0.84) 100%); /* signature-ok: Flexport neutral scrim on maritime gangway stage */
 }
 
 .pp-gangway-stage-grid {
@@ -1489,7 +1480,6 @@
   background: #102033;
   border-color: #294C6E;
   color: #F8FAFC;
-  box-shadow: 0 12px 28px -12px rgba(8, 19, 31, 0.55);
 }
 
 .pp-chapter--day .pp-callout-pill--dark .pp-callout-pill-kicker {
@@ -1512,7 +1502,6 @@
   overflow: hidden;
   border: 2px solid #334155;
   background: #0F172A;
-  box-shadow: 0 28px 64px -18px rgba(8, 19, 31, 0.65);
 }
 
 .pp-close-grid {
@@ -1526,7 +1515,6 @@
   padding: 28px;
   border-radius: var(--pp-r-card);
   background: #102033;
-  border: 1px solid #294C6E;
   color: #F8FAFC;
   display: flex;
   flex-direction: column;
@@ -1542,7 +1530,6 @@
   padding-block: 56px 40px;
   background: #08131F;
   color: #CBD5E1;
-  border-top: 1px solid #1E3A56;
 }
 
 .pp--embark .pp-footer {
@@ -1562,7 +1549,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 24px;
-  font-size: 14.5px;
+  font-size: 14px;
   font-weight: 600;
   color: #F8FAFC;
 }
@@ -1573,7 +1560,7 @@
 }
 
 .pp-footer-copy {
-  font-size: 13.5px;
+  font-size: 14px;
   color: #CBD5E1;
 }
 
@@ -1666,4 +1653,33 @@ html[data-motion="off"] .pp *::before,
 html[data-motion="off"] .pp *::after {
   animation: none !important;
   transition: none !important;
+}
+
+/* Acquisition review C2-C5: readable examples, actual table scrolling and shared D14 type. */
+.pp :is(button, a) { font-family: inherit; }
+.pp :is(.pp-motion-toggle,.pp-switcher-pill,.pp-cta-btn,.pp-seg-btn) { min-height: 48px; }
+.pp :is(section[id],span[id]) { scroll-margin-top: 100px; }
+.pp-example { min-width: 0; padding: 32px; border-radius: var(--pp-r-stage); background: #fff; color: #0c1829; }
+.pp-example p { margin-block: 16px; font-size: 16px; }
+.pp .pp-note { font-size: 14px; }
+.pp-route-stops { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 24px; margin: 32px 0; padding-left: 24px; }
+.pp-route-stops strong,.pp-route-stops span { display: block; }
+.pp-route-stops span { margin-top: 12px; }
+.pp-record { font-size: 16px; }
+.pp-record>div { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding-block: 16px; }
+.pp-record dd { text-align: right; font-weight: 600; }
+.pp-gangway-stack { color: #f8fafc; font-size: 16px; }
+.pp-scroll-help { padding: 16px 24px; color: #334155; font-size: 14px; }
+.pp-diff-table-card { min-width: 0; }
+.pp-ledger-table { min-width: 1040px; }
+.pp-diff-card { box-shadow: none; }
+@media(max-width:900px) { .pp-route-stops { grid-template-columns: 1fr 1fr; } }
+@media(max-width:767px) {
+ .pp h1 { font-size: 40px; }
+ .pp h2 { font-size: 30px; }
+ .pp h3 { font-size: 26px; }
+ .pp-hero-sub,.pp-chapter-sub { font-size: 17px; }
+ .pp-example { padding: 22px; }
+ .pp-route-stops { grid-template-columns: 1fr; gap: 28px; }
+ .pp :is(section[id],span[id]) { scroll-margin-top: 180px; }
 }

@@ -1,0 +1,83 @@
+.journey { background: #f3f5f5; color: #132e42; font-family: var(--acq-body), sans-serif; }
+.journey h1, .journey h2, .journey h3, .dialog h2, .dialog h3 { font-family: var(--acq-display), sans-serif; letter-spacing: -.035em; line-height: 1.08; }
+.journey h1 { font-size: clamp(2.6rem, 5.5vw, 5.5rem); max-width: 14ch; margin: 0; }
+.journey h2 { font-size: clamp(2rem, 3.4vw, 3.5rem); margin: 0 0 1rem; }
+.journey h3, .dialog h3 { font-size: 1.6rem; margin: .75rem 0; }
+.journey p, .dialog p { font-size: 1rem; line-height: 1.6; max-width: 62ch; }
+.journey a { text-underline-offset: .25em; }
+.intro { padding: clamp(3rem, 7vw, 7rem) 4vw 4rem; display: grid; grid-template-columns: 1.2fr 1fr; gap: 4vw; align-items: end; }
+.intro a, .close a { display: block; width: fit-content; margin: 1.25rem 0; }
+.layout { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 4vw; padding: 0 4vw; align-items: start; }
+.preferences { position: sticky; top: 6rem; border-top: 2px solid #132e42; padding: 1rem 0; }
+.preferences summary { font-weight: 700; cursor: pointer; min-height: 48px; padding: .75rem 0; }
+.preferences label { display: grid; gap: .5rem; margin: 1rem 0; font-size: 1rem; }
+.preferences input, .preferences select { width: 100%; min-width: 0; height: 48px; padding: .5rem; border: 1px solid #687a85; background: white; border-radius: 4px; font-size: 16px; color: #132e42; }
+.preferences p { font-size: 1rem; }
+.preview {  margin-top: 1.5rem; }
+/* taste-skill-ignore: a boundary keeps a white requested colour swatch visible. */
+.swatch { display: inline-block; width: 24px; height: 24px; vertical-align: middle; margin-right: .5rem; border: 1px solid #687a85; }
+.features { min-width: 0; }
+.feature { padding: 2rem 0 5rem;  scroll-margin-top: 6rem; }
+.feature > div:first-child { display: grid; grid-template-columns: 1.2fr 1fr; gap: 0 2rem; align-items: start; margin-bottom: 2rem; }
+.feature > div:first-child a { grid-column: 2; padding: 1rem 0; }
+.visual { position: relative; background: #102c40; min-height: 440px; overflow: hidden; }
+.visualImage img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.visualRecord { position: relative; margin: 3rem; padding: 1.5rem; max-width: 420px; background: #fff; border-left: 8px solid #173b57; }
+.journey button, .dialog button { min-height: 48px; padding: .7rem 1rem; border: 1px solid #173b57; border-radius: 4px; background: white; color: #132e42; font: inherit; cursor: pointer; }
+.journey button:focus-visible, .journey a:focus-visible, .journey input:focus-visible, .journey select:focus-visible, .dialog button:focus-visible { outline: 3px solid #116b8d; outline-offset: 4px; }
+/* taste-skill-ignore: Tiller personalisation-v1 requires a recognisable disabled control boundary. */
+.dialog button:disabled { border-style: dashed; color: #65747d; cursor: not-allowed; background: #eef1f2; }
+.topicNav { display: flex; flex-wrap: wrap; gap: 1.5rem; padding: 2rem 0; }
+.close { padding: 3rem 0;  }
+.footer { padding: 3rem 4vw;  display: flex; flex-wrap: wrap; align-items: center; gap: 2rem; }
+.dialog { max-width: none; max-height: none; width: 100vw; height: 100dvh; inset: 0; margin: 0; padding: clamp(1rem, 3vw, 3rem); border: 0; background: #f3f5f5; color: #132e42; font-family: var(--acq-body), sans-serif; overflow-y: auto; }
+.dialog::backdrop { background: #102c40; }
+.demoHeader { display: flex; justify-content: space-between; align-items: start; gap: 1rem; }
+.demoHeader h2 { font-size: clamp(1.75rem, 3vw, 3rem); margin: .5rem 0; }
+.demoNav { display: flex; flex-wrap: wrap; gap: .5rem; margin: 1.5rem 0 2rem; }
+.demoNav button[aria-pressed=true], .dialog .primary { background: #173b57; color: #fff; }
+.demoBody { display: grid; grid-template-columns: minmax(0, 2fr) minmax(220px, 1fr); gap: 3rem; }
+.record { background: #fff; padding: clamp(1.5rem, 3vw, 3rem); border-top: 8px solid #173b57; }
+.record dl { margin: 2rem 0; }
+/* taste-skill-ignore: row separators belong to the sample definition table. */
+.record dl div { display: flex; justify-content: space-between; gap: 1.5rem; padding: 1rem 0; border-bottom: 1px solid #bcc8ce; }
+.record dd { margin: 0; text-align: right; font-weight: 700; }
+.demoBody aside button { display: block; margin: 1rem 0; }
+@media (max-width: 900px), (max-height: 700px) { .preferences { position: static; } }
+@media (max-width: 767px) {
+  .intro, .layout, .feature > div:first-child, .demoBody { grid-template-columns: 1fr; }
+  .intro { gap: 1.5rem; padding: 2rem 20px; }
+  .layout { padding: 0 20px; gap: 2rem; }
+
+  .feature { padding-bottom: 3rem; }
+  .feature > div:first-child a { grid-column: 1; }
+  .visual { min-height: 440px; display: flex; align-items: end; }
+  .visualRecord { margin: 7rem 1rem 1rem; padding: 1.25rem; width: calc(100% - 2rem); }
+  .demoHeader { flex-wrap: wrap; }
+  .demoHeader > button { order: -1; margin-left: auto; }
+  .record dl div { flex-direction: column; gap: .5rem; }
+  .record dd { text-align: left; }
+}
+@media (prefers-reduced-motion: reduce) { .journey *, .dialog * { scroll-behavior: auto; animation: none; transition: none; } }
+
+.journey .visualImage { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; padding: 0; border-radius: 0; background: transparent; }
+.demoHeader { position: sticky; top: 0; z-index: 2; background: #f3f5f5; padding: .5rem 0; }
+@media (max-width: 767px) {
+  .intro { gap: .5rem; padding: 1.5rem 20px 1rem; }
+  .journey h1 { max-width: none; font-size: 2.6rem; }
+  .intro p { margin: .5rem 0; }
+  .intro a { margin: 1rem 0; }
+  .layout { gap: 0; }
+  .feature { padding-top: 1.5rem; }
+}
+
+.journey :global(.pp-header) { position: relative; top: auto; font-family: var(--acq-body), sans-serif; }
+@media (max-width: 767px) { .footer { padding-inline: 20px; } }
+
+.preferences .preferenceTitle { font: 700 1rem var(--acq-body), sans-serif; letter-spacing: normal; padding: .75rem 0; margin: 0; }
+.preferences .mobileToggle { display: none; }
+@media (max-width: 767px) {
+  .preferences .preferenceTitle { display: none; }
+  .preferences .mobileToggle { display: block; border: 0; padding-inline: 0; font-weight: 700; background: transparent; }
+  .preferenceFields[data-expanded=false] { display: none; }
+}

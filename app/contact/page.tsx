@@ -1,3 +1,4 @@
+import MotionProvider from '@/components/MotionProvider'
 import { ogDefaults, twitterDefaults } from '@/lib/metadata'
 import PageNav from '@/components/PageNav'
 import ContactForm from '@/components/contact/ContactForm'
@@ -106,7 +107,7 @@ export default function ContactPage() {
                     "Request pilot access" to `#access`, and the H1 above says so. The question is
                     still asked, and the pilot option sits directly under it for anyone who wants
                     the other door. */}
-                <ContactForm intent="build" />
+                <MotionProvider><ContactForm intent="build" /></MotionProvider>
               </div>
 
               <ol className="contact-promises" style={{ listStyle: 'none', margin: 0, padding: 0, display: 'grid', gap: 18 }}>

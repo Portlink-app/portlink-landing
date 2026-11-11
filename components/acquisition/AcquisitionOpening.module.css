@@ -1,0 +1,53 @@
+/* Tiller acquisition-1: Apple stage hierarchy, Linear evidence density, existing D14 materials. */
+.root{--ground:#08131f;--ink:#f8fafc;--surface:#f6f5f1;--surface-ink:#0c1829;--action:#0f766e;--gutter:clamp(20px,3.34vw,48px);background:var(--ground);color:var(--ink);font-family:var(--acq-body),sans-serif;font-size:16px;line-height:1.5}
+.embark{--ground:#f4f3ee;--ink:#14181d;--surface:#fff;--surface-ink:#14181d;--action:#be4412}
+.opening{padding:40px var(--gutter) 48px;max-width:1600px;margin:auto}
+.intro{display:grid;grid-template-columns:1.3fr 1fr;gap:48px;align-items:end;margin-bottom:32px}
+.root.root h1,.root.root h2,.root.root h3{font-family:var(--acq-display),sans-serif;letter-spacing:-.035em;font-weight:600;text-wrap:balance;margin:0;line-height:1.05}
+.root.root h1{font-size:clamp(40px,5.3vw,76px);max-width:14ch}
+.root.root h2{font-size:clamp(30px,3.5vw,50px)}
+.root.root h3{font-size:clamp(26px,2vw,28px)}
+.root p{color:inherit;margin:16px 0;max-width:62ch}
+.lead{font-size:18px}.root a{color:inherit;text-underline-offset:5px}
+.actions,.roles,.steps,.controls{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.actions{margin-top:24px}.roles{margin-bottom:24px}
+.root button,.cta{min-height:48px;padding:12px 20px;border:0;border-radius:12px;font:inherit;cursor:pointer;transition:transform .2s ease}
+.root button{background:var(--surface);color:var(--surface-ink)}
+.root button:active,.cta:active{transform:translateY(1px)}
+.root button:disabled{opacity:.5;cursor:default}
+.root button:focus-visible,.root a:focus-visible{outline:3px solid currentColor;outline-offset:4px}
+.root button[aria-pressed=true],.root button[aria-current=step],.root .cta{background:var(--action);color:#fff}
+.root .cta{display:inline-flex;align-items:center;text-decoration:none;font-weight:700}
+.stage{position:relative;min-height:760px;overflow:hidden;border-radius:16px;background:#152c39;padding:36px}
+.scenery{position:absolute;inset:0}.landscape{display:block;width:100%;height:100%;object-fit:cover;object-position:center}
+.panel{position:relative;width:min(510px,50%);padding:28px;background:var(--surface);color:var(--surface-ink);border-radius:8px;margin-top:100px}
+.panel p:first-child{margin-top:0}.panel a{font-weight:600}.root.root .panel h2{font-size:30px;line-height:1.12;max-width:20ch}
+.root .record{font-size:14px;margin-bottom:8px}.root .owner{font-size:14px;font-weight:700;margin:8px 0 16px}
+.itinerary{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:16px 0;border-block:1px solid #c8d0ce;margin-top:20px}.itinerary span{font-size:14px}.itinerary b{display:block;font-size:20px;font-weight:600}
+.panel dl{margin:12px 0}.panel dl>div{display:flex;justify-content:space-between;gap:20px;padding:7px 0}.panel dt{font-size:14px}.panel dd{margin:0;text-align:right;font-size:14px;font-weight:600}
+.root .sceneExplanation{font-size:14px;margin:12px 0}.sceneSteps{display:flex;flex-wrap:wrap;gap:6px;margin:20px 0}.root .sceneSteps button{padding:10px 12px;font-size:14px;border-radius:4px;background:#dce3e0}.root .sceneSteps button[aria-pressed=true]{background:var(--action);color:#fff}
+.actors span{position:absolute;background:#f6f5f1;color:#0c1829;border-radius:4px;padding:8px 12px;font-size:14px;font-weight:600;border:2px solid transparent}.actors span[data-selected=true]{border-color:#0f766e}.ship{left:12%;top:11%}.agent{left:66%;top:25%}.dmc{right:5%;top:31%}.operator{left:61%;top:25%}.guide{right:8%;top:16%}
+.root .sceneNote{position:relative;margin:20px 0 0;background:#152c39;color:#fff;padding:8px 12px;font-size:12px;max-width:510px;border-radius:4px}
+.root .capacity p{font-size:14px;margin:14px 0}.places{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}.places span{display:grid;place-items:center;background:#224b40;color:#fff;font-size:13px;min-height:28px;border:2px solid #224b40;border-radius:3px}.places span[data-unresolved=true]{background:#fff;color:#853409;border:2px dashed #853409}
+.caption{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:12px}.caption button{background:transparent;color:inherit}
+.products{display:grid;grid-template-columns:1fr 1fr 1fr;gap:40px;padding-top:48px}.root.root .products h2{font-size:28px}
+.chapter{background:var(--surface);color:var(--surface-ink);padding:72px var(--gutter)}
+.chapterHead,.proof{display:grid;grid-template-columns:1fr 1.2fr;gap:56px;max-width:1504px;margin:auto;align-items:center}
+.chapterHead{margin-bottom:32px}.steps{max-width:1504px;margin:0 auto 24px}.steps button,.controls button{background:#e2e8f0;color:#0c1829}
+.proof{min-height:360px}.controls{margin-top:28px}
+.sample{background:#fff;color:#0c1829;padding:32px;border-radius:16px}
+.sample strong{display:block;font-size:28px;line-height:1.15;min-height:65px}
+.sample dl{margin:20px 0}.sample dl div{display:flex;justify-content:space-between;gap:22px;padding:12px 0}.sample dd{margin:0;text-align:right;font-weight:600}
+.root[data-motion=on] .sample{animation:focus-in .5s ease-out}@keyframes focus-in{from{transform:translateY(10px)}to{transform:translateY(0)}}
+@media(max-width:767px){.opening{padding-top:28px}.intro{display:block}.lead{font-size:17px!important;margin-top:24px!important}.stage{min-height:0;padding:260px 0 0;overflow:hidden;background:#152c39}.scenery{height:600px;bottom:auto}.landscape{height:100%;object-position:center top}.panel{width:100%;margin-top:0;padding:22px;border-radius:8px}.root.root .panel h2{font-size:26px}.actors span{font-size:12px;padding:5px 7px}.ship{left:5%;top:50px}.agent{left:40%;top:125px}.dmc{right:3%;top:165px}.operator{left:5%;top:70px}.guide{right:5%;top:130px}.root .sceneNote{margin:0;border-radius:0;padding:14px 22px}.panel dl>div{gap:12px}.products{display:block;padding-top:24px}.products article{padding-block:16px}.chapter{padding:48px var(--gutter)}.chapterHead,.proof{display:block}.chapterHead p{margin-top:24px}.sample{margin-top:28px;padding:22px}.sample strong{min-height:0}.sample dl div{gap:16px}.caption{font-size:14px}.roles{gap:8px}.roles button{padding:12px}.root.root h1{max-width:15ch}}
+@media(prefers-reduced-motion:reduce){.root *{animation:none!important;transition:none!important}}
+
+/* Workflow anchors clear the two-row phone header without changing selected state. */
+.steps button,.chapter>span{scroll-margin-top:180px}
+@media(min-width:768px){.steps button,.chapter>span{scroll-margin-top:100px}}
+@media(max-width:900px){.intro{grid-template-columns:1fr;gap:8px;align-items:start}}
+
+@media(min-width:768px) and (max-width:1050px){.stage{padding:24px}.panel{width:60%}.agent{left:70%}.dmc{right:3%;top:34%}.operator{left:68%}}
+
+/* Keep the assigned vessel above the planner foreground, not behind the record. */
+@media(min-width:768px){.stage[data-scene=platform] .panel{margin-top:280px}.stage[data-scene=platform] .scenery{height:900px;bottom:auto}.stage[data-scene=platform]{background:#152c39}.operator{left:auto;right:8%;top:35%}.guide{left:64%;right:auto;top:17%}}

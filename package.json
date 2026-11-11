@@ -4,13 +4,13 @@
   "private": true,
   "scripts": {
     "dev": "sh scripts/dev.sh",
-    "prebuild": "node scripts/check-ds-version.mjs && node scripts/lint-dashes.mjs && node scripts/check-clip-modes.mjs --if-available && npm run check:leaderboard && npm run check:access && npm run check:eligibility && npm run check:anchors && npm run check:mail-routes && npm run check:viz-type && npm run check:contact-intent && npm run check:font-hosts && npm run check:provenance && npm run check:client-ip",
+    "prebuild": "node scripts/check-ds-version.mjs && node scripts/lint-dashes.mjs && node scripts/check-clip-modes.mjs --if-available && npm run check:leaderboard && npm run check:access && npm run check:eligibility && npm run check:anchors && npm run check:mail-routes && npm run check:viz-type && npm run check:contact-intent && npm run check:font-hosts && npm run check:provenance && npm run check:client-ip && npm run check:acquisition",
     "check:clips": "node scripts/check-clip-modes.mjs",
-    "verify": "npm run lint:dashes && npm run lint:dashes-selftest && npm run check:clips && npm run check:leaderboard && npm run check:access && npm run check:eligibility && npm run check:anchors && npm run check:mail-routes && npm run check:viz-type && npm run check:contact-intent && npm run check:scene-layouts && npm run check:film-motion && npm run check:font-hosts && npm run check:provenance && npm run check:client-ip && npm run lint",
+    "verify": "npm run lint:dashes && npm run lint:dashes-selftest && npm run check:clips && npm run check:leaderboard && npm run check:access && npm run check:eligibility && npm run check:anchors && npm run check:mail-routes && npm run check:viz-type && npm run check:contact-intent && npm run check:scene-layouts && npm run check:film-motion && npm run check:font-hosts && npm run check:provenance && npm run check:client-ip && npm run lint && npm run check:acquisition",
     "lint:dashes": "node scripts/lint-dashes.mjs",
     "lint:dashes-selftest": "node scripts/lint-dashes.selftest.mjs",
     "build": "next build",
-    "postbuild": "node scripts/check-scene-layouts.mjs --built && node scripts/check-film-motion.mjs --built && node scripts/check-anchors.mjs --built && node scripts/check-consent-gate.mjs --built && node scripts/check-font-hosts.mjs --built",
+    "postbuild": "node scripts/check-scene-layouts.mjs --built && node scripts/check-film-motion.mjs --built && node scripts/check-anchors.mjs --built && node scripts/check-consent-gate.mjs --built && node scripts/check-font-hosts.mjs --built && npm run check:acquisition:http",
     "start": "next start",
     "lint": "eslint",
     "ds:check": "node scripts/check-ds-version.mjs --strict",
@@ -28,7 +28,9 @@
     "check:font-hosts": "node scripts/check-font-hosts.mjs",
     "check:provenance": "node scripts/check-provenance.mjs",
     "check:font-hosts:live": "node scripts/check-font-hosts.mjs --live",
-    "fonts:sync": "node scripts/sync-fonts.mjs"
+    "fonts:sync": "node scripts/sync-fonts.mjs",
+    "check:acquisition": "tsx scripts/check-acquisition.mjs && tsx scripts/check-acquisition-preferences.mjs",
+    "check:acquisition:http": "node scripts/check-acquisition-http.mjs"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",

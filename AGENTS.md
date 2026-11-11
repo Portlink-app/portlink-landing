@@ -8,7 +8,7 @@ Verified 19.09.2026 against GitHub and the Netlify site API. This routing supers
 
 | Service | This repo uses | Verify with |
 |---|---|---|
-| GitHub | account `portlinkadmin`, org repository `Portlink-app/portlink-landing`, origin `https://github.com/Portlink-app/portlink-landing.git`, default `main` | authenticated `/user` and repository API, `git remote -v` |
+| GitHub | read account `portlinkadmin`; scoped named-keyring write account `Bakke-Co`, org repository `Portlink-app/portlink-landing`, origin `https://github.com/Portlink-app/portlink-landing.git`, default `main` | authenticated `/user` and repository API, `git remote -v` |
 | Netlify | account `admin-irpjrvy`, site `portlin-landing-2`, id `34ab2932-19da-44e5-b761-0bc83acc0055`, domain `https://portlink.app`, builds `main` | site API id, account_slug, custom_domain and build_settings |
 | Resend | Portlink account, contact and Seatrade mail, runtime `RESEND_API_KEY` | existing mail guards; do not send verification mail |
 | Netlify Blobs | `seatrade-leads`, on the site above | existing Seatrade entry documentation |
@@ -48,3 +48,11 @@ Inspect live status with `/Applications/Tailscale.app/Contents/MacOS/Tailscale s
 Preserve unrelated routes. This endpoint is private Serve, not public Funnel. Browser loading on
 this Mac was verified on 19.09.2026; a remote-device browser test was not performed.
 To remove just this endpoint: `/Applications/Tailscale.app/Contents/MacOS/Tailscale serve --https=4320 off`.
+
+## Acquisition execution route, 11.11.2026
+
+The current registered write route is the invocation-scoped gh keyring login
+`Bakke-Co`; reads retain `portlinkadmin`. No global auth switch. Keel may publish
+only its task branch. Nautiqs owns release after Starboard exact-head acceptance,
+including applicable performance, visual and receiver review gates. Historic
+publishing prose above does not expand Keel’s saved lane authority.

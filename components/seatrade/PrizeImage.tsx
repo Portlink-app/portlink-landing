@@ -19,8 +19,8 @@ import { PRIZE_NAME } from '@/lib/seatrade/config'
  * it so it reads as co-branding with the Portlink mark. Naming the prize in text is unrelated and
  * unchanged; that is what PRIZE_NAME is for.
  *
- * WIDTH AND HEIGHT ARE ALWAYS SET. `images: { unoptimized: true }` in next.config means there is no
- * image optimizer computing an intrinsic ratio for us, so the attributes are what stop the text
+ * WIDTH AND HEIGHT ARE ALWAYS SET. These plain img elements serve the original file, so the
+ * width and height attributes reserve its intrinsic ratio and stop the text
  * below from jumping when the file lands.
  */
 

@@ -35,7 +35,12 @@ const nextConfig: NextConfig = {
   trailingSlash: true,
   images: { unoptimized: true },
   async headers() {
-    return [{ source: '/:path*', headers: securityHeaders }]
+    return [
+      { source: '/:path*', headers: securityHeaders },
+      // Next's configured headers override route-handler headers in the built server.
+      // Keep acquisition query data out of both external and same-origin referrers.
+      { source: '/start/:path*', headers: [{ key: 'Referrer-Policy', value: 'no-referrer' }] },
+    ]
   },
 }
 

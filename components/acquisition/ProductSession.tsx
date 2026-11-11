@@ -1,14 +1,15 @@
 'use client'
 /* eslint-disable react-hooks/set-state-in-effect -- Restore anonymous browser-only state after SSR. */
 import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from 'react'
-import dynamic from 'next/dynamic'
+import DemoShell from './DemoShell'
 import { defaultPreferences, readPreferences, resetPreferences, savePreferences, validatePreferences, type AcquisitionPreferences, type AcquisitionProduct } from '@/lib/acquisition-preferences'
 import { topics } from './journey-content'
-const ProductDemo = dynamic(() => import('./ProductDemo'), { ssr: false })
+let handoff: { product: AcquisitionProduct; companyName: string; brandColor: string; stored: boolean } | null = null
 type Session = {
   product: AcquisitionProduct; preferences: AcquisitionPreferences; storageAvailable: boolean
   update: (value: AcquisitionPreferences) => boolean; resetPreferences: () => void
   progress: Record<string, boolean>; review: (topic: string) => void; resetDemo: () => void
+  transfer: (target: AcquisitionProduct) => void
   open: (topic: string, trigger?: HTMLElement) => void
 }
 const Context = createContext<Session | null>(null)
@@ -24,6 +25,9 @@ export default function ProductSession({ product, children }: { product: Acquisi
   useEffect(() => {
     const value = readPreferences(product, () => localStorage)
     if (value) setPreferences({ ...value, audience: product === 'embark' ? 'operator' : value.audience === 'operator' ? 'cruise' : value.audience })
+    if (handoff?.product === product) {
+      setPreferences({ ...(value ?? defaultPreferences(product)), companyName: handoff.companyName, brandColor: handoff.brandColor }); setStorageAvailable(handoff.stored); handoff = null
+    }
     function readView() {
       const hash = location.hash.slice(1)
       const id = hash.startsWith('demo-') ? hash.slice(5) : ''
@@ -52,8 +56,9 @@ export default function ProductSession({ product, children }: { product: Acquisi
   }
   return <Context.Provider value={{ product, preferences, storageAvailable, update,
     resetPreferences: () => { setPreferences(defaultPreferences(product)); setStorageAvailable(resetPreferences(product, () => localStorage)) },
+    transfer: target => { if (target === product) return; const current = validatePreferences(preferences); if (!current) return; const other = readPreferences(target, () => localStorage) ?? defaultPreferences(target); const stored = savePreferences(target, { ...other, companyName: current.companyName, brandColor: current.brandColor }, () => localStorage); handoff = { product: target, companyName: current.companyName, brandColor: current.brandColor, stored } },
     progress: Object.fromEntries(topics[product].map(t => [t.id, !!progress[`${preferences.audience}:${t.id}`]])), review: topic => setProgress(old => ({ ...old, [`${preferences.audience}:${topic}`]: true })), resetDemo: () => setProgress({}), open }}>
     {children}
-    {scene && <ProductDemo topic={scene} onClose={close} onRestore={() => { window.scrollTo(0, scroll.current); trigger.current?.focus({ preventScroll: true }) }} />}
+    {scene && <DemoShell topic={scene} onClose={close} onRestore={() => { window.scrollTo(0, scroll.current); (trigger.current?.isConnected ? trigger.current : document.querySelector<HTMLElement>('[data-demo-focus-fallback]'))?.focus({ preventScroll: true }) }} />}
   </Context.Provider>
 }

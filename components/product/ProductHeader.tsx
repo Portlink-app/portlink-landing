@@ -1,6 +1,7 @@
 'use client'
 /* eslint-disable @next/next/no-html-link-for-pages */
 
+import Link from 'next/link'
 import { setManualMotion, useMotionAllowed } from '@/components/film/useFilm'
 
 type ProductSlug = 'portlink' | 'embark'
@@ -8,9 +9,11 @@ type ProductSlug = 'portlink' | 'embark'
 export default function ProductHeader({
   product,
   tone = 'dark',
+  onSwitch,
 }: {
   product: ProductSlug
   tone?: 'dark' | 'light'
+  onSwitch?: (product: ProductSlug) => void
 }) {
   const motionAllowed = useMotionAllowed()
 
@@ -23,20 +26,20 @@ export default function ProductHeader({
             <span>Portlink</span>
           </a>
           <div className="pp-switcher" role="navigation" aria-label="Switch product">
-            <a
+            <Link onClick={() => onSwitch?.('portlink')}
               href="/portlink/"
               className={`pp-switcher-pill ${product === 'portlink' ? 'is-active' : ''}`}
               aria-current={product === 'portlink' ? 'page' : undefined}
             >
               Portlink
-            </a>
-            <a
+            </Link>
+            <Link onClick={() => onSwitch?.('embark')}
               href="/embark/"
               className={`pp-switcher-pill ${product === 'embark' ? 'is-active' : ''}`}
               aria-current={product === 'embark' ? 'page' : undefined}
             >
               Embark
-            </a>
+            </Link>
           </div>
         </div>
 

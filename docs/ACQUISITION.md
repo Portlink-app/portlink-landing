@@ -314,3 +314,27 @@ Current limits: the landing still uses truthful assisted trial routing; no cross
 preference handoff is enabled. Progressive real onboarding preview, Platform colour
 receiver, final visual/motion acceptance and hosted performance remain unfinished.
 Browser matrix and raw inspector output: Buzz WORK_LOGS/KEEL_ACQUISITION_20261111/journey/.
+
+
+## Composition repair checkpoint, 11.11.2026
+
+Tiller R1-R6 source repairs share the existing consumers. The audience/topic map now
+separates planning, service-record review, quote preparation and account comparison;
+unsupported role/topic pairs explain their boundary. A synchronous DemoShell owns
+close, loading/failure fallback, topic name and connected-invoker recovery. Failed
+module imports remain cached by the runtime, so the failed state offers the readable
+topic fallback, not a retry button that cannot recover.
+
+Product consent uses the unchanged shared choices/gating in an in-flow product slot.
+The editable hex field, named swatches and associated errors share a requested/effective
+customer-brand adapter. Brand fills use contrast-selected text; product/status colours
+remain fixed. Deliberate product links transfer validated name/colour only, including a
+memory-only handoff when storage fails. Audience and demo operations remain isolated.
+Later topic sections show all distinct task rows rather than repeating the same scenery.
+These are labelled illustrative records, not authenticated product screenshots.
+
+Full verify/build and browser checks are recorded under Buzz
+WORK_LOGS/KEEL_ACQUISITION_20261111/composition-repair/. Final hosted performance,
+recognisable source-backed product fragments/cinematic composition, complete theme and
+zoom/device coverage, private landing-to-signup bridge and receiver runtime acceptance
+remain open. This checkpoint does not close all R1-R6 or request the consolidated re-review.

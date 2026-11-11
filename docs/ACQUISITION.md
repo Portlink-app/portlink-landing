@@ -154,3 +154,25 @@ targets can be prepared for review; they do not establish an implemented cinemat
 configured preview currently injects Netlify collaboration scripts and tutorial videos; measurements
 that exclude those requests are diagnostic only and do not establish unmodified preview acceptance.
 Full comparison and film evidence: WORK_LOGS/KEEL_ACQUISITION_20261111/cinematic/STATE.md.
+
+## Composed static scene states
+
+AcquisitionOpening now renders the scene record and lower workflow from the same immutable
+contract state, selected through the existing role, chapter and fragment lifecycle. Company
+foreground belongs to the itinerary planner. Port agent and DMC are separate labelled supporting
+organisations. The future itinerary context remains visible through request and acceptance;
+acceptance is its own visitor-selected chapter after a valid returned quote. Embark starts with
+independent operator preparation and keeps ten seats, twelve bookings and two unresolved guests
+visible during review. No automatic reassignment, integration or live booking is implied.
+
+Scene chapter buttons are ordinary HTML controls. They share state with the existing workflow
+controls and do not add an autoplay timeline, camera engine or WebGL dependency. Both motion
+preferences use viewport-specific static scenery and the same readable HTML. Missing images
+leave the solid-backed record usable. No-JS retains the first record and subsequent chapter text.
+Only the lower, existing workflow status is a live region, avoiding duplicate announcements.
+
+Chose authored static scenery with HTML records over shipping generated paper text or introducing
+a second renderer. Because first-frame review is authorised while effects remain gated by mobile
+performance. Four compressed files under public/acquisition are illustrative campaign assets, each
+below the 250 KB poster budget. Their README records provenance. Frame review, performance,
+authentic product evidence and full signed trial/access acceptance remain open.

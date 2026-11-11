@@ -24,6 +24,8 @@ export default function AcquisitionOpening({ page }: { page: 'company' | Product
   const motion = useMotionAllowed()
   const selected = contract.roles[role]
   const prefix = `discovery-${product}-`
+  const scenery = product === 'embark' ? 'operator' : 'coast'
+  const changedCapacity = product === 'embark' && index > 0
 
   useEffect(() => {
     function readHash() {
@@ -65,14 +67,38 @@ export default function AcquisitionOpening({ page }: { page: 'company' | Product
       {page === 'company' && <div className={styles.roles} role="group" aria-label="Choose your work">
         {roleKeys.map(key => <button key={key} onClick={() => selectRole(key)} aria-pressed={role === key}>{label(key)}</button>)}
       </div>}
-      <div className={styles.stage}>
-        <img className={styles.landscape} src={product === 'embark' ? '/product/sea-kayak-800.webp' : '/product/fjord-cruise-1600.webp'} srcSet={product === 'embark' ? '/product/sea-kayak-800.webp 800w, /product/sea-kayak-1600.webp 1600w' : '/product/fjord-cruise-800.webp 800w, /product/fjord-cruise-1600.webp 1600w'} sizes="(max-width: 767px) calc(100vw - 40px), 94vw" alt={product === 'embark' ? 'Kayaking on coastal water' : 'A cruise vessel in a Norwegian fjord'} width={1600} height={1000} fetchPriority="high" />
-        <div className={styles.panel}>
-          <p>{product === 'embark' ? 'Sample departure · Coastal kayaking' : 'Sample voyage · Summer 2028'}</p>
-          <strong>{product === 'embark' ? '12 guests. One prepared team.' : 'The itinerary comes first.'}</strong>
-          <p>{product === 'embark' ? 'Bookings and capacity stay visible before the first guest arrives.' : 'One proposed Bergen call becomes a shore request, then an explicit commitment.'}</p>
-          <a href={page === 'company' ? (product === 'embark' ? '/embark/' : '/portlink/') : `#${prefix}${state.id}`}>{page === 'company' ? (product === 'embark' ? 'Explore Embark' : 'Explore Platform') : (product === 'embark' ? 'Review a changed departure' : 'Follow a planned call')} →</a>
+      <div className={styles.stage} data-scene={product} data-chapter={state.id}>
+        <picture className={styles.scenery}>
+          <source media="(max-width: 767px)" srcSet={`/acquisition/${scenery}-phone.webp`} />
+          <img className={styles.landscape} src={`/acquisition/${scenery}-wide.webp`} alt="" width={1536} height={1024} fetchPriority="high" />
+        </picture>
+        <div className={styles.actors} aria-label={product === 'embark' ? 'Independent operation' : 'Separate supporting organisations'}>
+          {product === 'platform' ? <>
+            <span className={styles.ship}>Assigned vessel</span>
+            <span className={styles.agent} data-selected={role === 'agent'}>Port agent</span>
+            <span className={styles.dmc} data-selected={role === 'dmc'}>DMC</span>
+          </> : <><span className={styles.operator}>Tour operator</span><span className={styles.guide}>Guide</span></>}
         </div>
+        <div className={styles.panel} data-scene-record>
+          <p className={styles.record}>{state.record}</p>
+          <p className={styles.owner}>Owner: {state.owner}</p>
+          <h2>{state.status}</h2>
+          {product === 'platform' && <div className={styles.itinerary} aria-label="Future itinerary context">
+            <span>Summer <b>2028</b></span><span>Northern coast<b>Bergen call</b></span>
+          </div>}
+          {product === 'embark' && <div className={styles.capacity}>
+            <p>{changedCapacity ? '10 seats · 12 booked guests' : '12 seats · 12 booked guests'}</p>
+            <div className={styles.places} aria-hidden="true">{Array.from({ length: 12 }, (_, seat) => <span key={seat} data-unresolved={changedCapacity && seat >= 10}>{seat + 1}</span>)}</div>
+            <p>{changedCapacity ? '2 unresolved guests. No automatic reassignment.' : 'Guide assigned. Capacity remains the operator’s responsibility.'}</p>
+          </div>}
+          <dl>{state.rows.map(([name, value]) => <div key={name}><dt>{name}</dt><dd>{value}</dd></div>)}</dl>
+          <p className={styles.sceneExplanation}>{state.body}</p>
+          <div className={styles.sceneSteps} role="group" aria-label="Scene chapters">
+            {states.map((item, i) => <button key={item.id} aria-label={`Show ${item.label.toLowerCase()} scene`} aria-pressed={index === i} onClick={() => selectStep(i)}>{item.label}</button>)}
+          </div>
+          <a href={page === 'company' ? (product === 'embark' ? '/embark/' : '/portlink/') : '#discovery-workflow'}>{page === 'company' ? (product === 'embark' ? 'Explore Embark' : 'Explore Platform') : 'Read the workflow example'} →</a>
+        </div>
+        <p className={styles.sceneNote}>Illustrative Greenland setting. {product === 'platform' ? 'Bergen workflow example.' : 'Independent operator example.'} No live booking.</p>
       </div>
       <div className={styles.caption}><span>{product === 'embark' ? 'Embark · Independent tour operations' : 'Platform · Voyage and port-call planning'}</span>{page === 'company' && <button aria-pressed={motion} onClick={() => setManualMotion(!motion)}>Motion: {motion ? 'On' : 'Off'}</button>}</div>
       {page === 'company' && <div className={styles.products}>

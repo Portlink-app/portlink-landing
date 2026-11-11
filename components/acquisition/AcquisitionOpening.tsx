@@ -73,10 +73,10 @@ export default function AcquisitionOpening({ page }: { page: 'company' | Product
           <p>{product === 'embark' ? 'Sample departure · Coastal kayaking' : 'Sample voyage · Summer 2028'}</p>
           <strong>{product === 'embark' ? '12 guests. One prepared team.' : 'The itinerary comes first.'}</strong>
           <p>{product === 'embark' ? 'Bookings and capacity stay visible before the first guest arrives.' : 'One proposed Bergen call becomes a shore request, then an explicit commitment.'}</p>
-          <a href={product === 'embark' ? '/embark/' : '/portlink/'}>{product === 'embark' ? 'Explore Embark' : 'Explore Platform'} →</a>
+          <a href={page === 'company' ? (product === 'embark' ? '/embark/' : '/portlink/') : `#${prefix}${state.id}`}>{page === 'company' ? (product === 'embark' ? 'Explore Embark' : 'Explore Platform') : (product === 'embark' ? 'Review a changed departure' : 'Follow a planned call')} →</a>
         </div>
       </div>
-      <div className={styles.caption}><span>{product === 'embark' ? 'Embark · Independent tour operations' : 'Platform · Voyage and port-call planning'}</span><button aria-pressed={motion} onClick={() => setManualMotion(!motion)}>Motion: {motion ? 'On' : 'Off'}</button></div>
+      <div className={styles.caption}><span>{product === 'embark' ? 'Embark · Independent tour operations' : 'Platform · Voyage and port-call planning'}</span>{page === 'company' && <button aria-pressed={motion} onClick={() => setManualMotion(!motion)}>Motion: {motion ? 'On' : 'Off'}</button>}</div>
       {page === 'company' && <div className={styles.products}>
         <article><h2><a href="/portlink/">Platform</a></h2><p>Voyages, port calls and the people preparing them.</p></article>
         <article><h2><a href="/embark/">Embark</a></h2><p>Departures, bookings and delivery for independent tour operators.</p></article>
@@ -91,7 +91,7 @@ export default function AcquisitionOpening({ page }: { page: 'company' | Product
         {states.map((item, i) => <button key={item.id} id={prefix + item.id} aria-current={i === index ? 'step' : undefined} aria-controls="discovery-proof" onClick={() => selectStep(i)}>{item.label}</button>)}
       </nav>
       <div className={styles.proof} id="discovery-proof">
-        <div><p>{state.owner}</p><h3>{state.title}</h3><p>{state.body}</p>
+        <div><p>Owner: {state.owner}</p><h3>{state.title}</h3><p>{state.body}</p>
           <div className={styles.controls}><button disabled={index === 0} onClick={() => selectStep(index - 1)}>Previous</button><button onClick={() => selectStep(index === states.length - 1 ? 0 : index + 1)}>{index === states.length - 1 ? 'Replay' : 'Next chapter'}</button></div>
         </div>
         <div className={styles.sample} key={`${product}-${state.id}`} data-ui>

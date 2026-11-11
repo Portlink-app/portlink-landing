@@ -79,3 +79,29 @@ Chose: existing D14 materials and one React composition over embedding specimen 
 The previous product sample blocks that implied automatic cross-product synchronization are no longer mounted. Existing voyage footage remains below discovery via FilmHero mediaOnly; removing it also removed the motion guard's real positive control. No guard was weakened. Old public fragment aliases and conversion demo event names remain.
 
 Current limitation: this is a composed comparator, not accepted cinematic design. Full-page taste inspection retains legacy chapter findings (heading length, labels, shadows, outlines, type hierarchy and sticky overlap) plus the comparator's limited motion. These remain open for the shared design review, followed by a complete rendered audit. Authentic product capture, mobile performance, billing/access review and live customer journeys remain required. No production publication is authorised by these local proofs.
+
+## Consolidated review correction, 11.11.2026
+
+C1-C5 source: `WORK_LOGS/TILLER_ACQUISITION_REVIEW_20261111/REVIEW.md`.
+The old product-page studio images and clips contained claims inside their pixels as well as the
+surrounding copy. They are unmounted from both product pages. Their source assets remain archived
+in the existing asset registry; they must not be remounted as authenticated evidence. Replacement
+records are explicitly illustrative HTML, readable at phone width. They make no fairway-depth,
+daylight-check, automatic recalculation, automatic FDA transfer, payout or cross-product sync claim.
+The actual authenticated chart/capture gate remains open; the route detail is not a navigation chart.
+
+The financial example retains a semantic table in an explicitly labelled, focusable horizontal
+scroll region, with keyboard instructions. All columns remain available. Product example links
+preserve the selected chapter hash and clear the sticky header. Product pages use the header's
+single motion preference control; company keeps its caption control. Tablet intros stack by 900px.
+Shared product typography follows Schibsted/Manrope and the reviewed responsive scale. Decorative
+chapter labels, callout stacks and static shadows are removed; real table and control boundaries
+remain. The neutral maritime photo scrim and D14 cream are intentional direction exceptions.
+
+Reversal: revert this correction commit. Forms, consent policy, assisted entry, role mapping and
+conversion event names retain their existing behaviour. Tiller's immutable manifest is unchanged.
+
+This is still the fallback comparator. C6 expedition framing, authentic product captures,
+performance acceptance, complete signed trial/access verification and authorised publication remain
+open. Full-page company audit also exposes older lower-page typography and composition findings;
+those findings are recorded with the consolidated evidence, not dismissed by a clean source lint.

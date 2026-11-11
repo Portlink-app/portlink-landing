@@ -575,7 +575,7 @@ export function PortlinkPdaFdaDiffSample() {
             <span className="pp-chip pp-chip--ok">Ready to Settle</span>
           </div>
           <div className="pp-diff-amount">401 250,00 kr</div>
-          <p className="pp-diff-sub">Every line item reconciles to the signed departure report before the ship reaches sea.</p>
+          <p className="pp-diff-sub">This example subtracts unused tug overtime from the approved estimate.</p>
         </button>
       </div>
 
@@ -583,17 +583,18 @@ export function PortlinkPdaFdaDiffSample() {
       <div className="pp-ui-card pp-diff-table-card" data-ui>
         <div className="pp-ui-hd">
           <div>
-            <span className="pp-ui-meta pp-mono">Disbursement Ledger · Call BGO-2026-0806 · MS Aster Brisa</span>
+            <span className="pp-ui-meta pp-mono">Illustrative ledger · Call BGO-2026-0806 · MS Aster Brisa</span>
             <h3 className="pp-ui-title">
-              {diffMode === 'pda' && 'Approved Proforma Baseline (412 380,00 kr)'}
-              {diffMode === 'gangway' && 'Gangway Departure Report Variance (-11 130,00 kr)'}
-              {diffMode === 'fda' && 'Final Disbursement Account Settlement (401 250,00 kr)'}
+              {diffMode === 'pda' && 'Approved estimate'}
+              {diffMode === 'gangway' && 'Departure adjustment'}
+              {diffMode === 'fda' && 'Final account'}
             </h3>
           </div>
-          <span className="pp-chip pp-chip--ok">Variance auto-flagged: 1 line</span>
+          <span className="pp-chip pp-chip--ok">Example variance: 1 line</span>
         </div>
 
-        <div className="pp-table-scroll">
+        <p className="pp-scroll-help" id="ledger-scroll-help">Scroll horizontally to review every column. Keyboard: focus the table region, then use the arrow keys.</p>
+        <div className="pp-table-scroll" role="region" aria-label="Illustrative disbursement ledger" aria-describedby="ledger-scroll-help" tabIndex={0}>
           <table className="pp-ledger-table">
             <thead>
               <tr>

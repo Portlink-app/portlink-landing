@@ -6,9 +6,9 @@
 .root.root h1,.root.root h2,.root.root h3{font-family:var(--acq-display),sans-serif;letter-spacing:-.035em;font-weight:600;text-wrap:balance;margin:0;line-height:1.05}
 .root.root h1{font-size:clamp(40px,5.3vw,76px);max-width:14ch}
 .root.root h2{font-size:clamp(30px,3.5vw,50px)}
-.root.root h3{font-size:clamp(26px,2.5vw,36px)}
+.root.root h3{font-size:clamp(26px,2vw,28px)}
 .root p{color:inherit;margin:16px 0;max-width:62ch}
-.lead{font-size:19px}.root a{color:inherit;text-underline-offset:5px}
+.lead{font-size:18px}.root a{color:inherit;text-underline-offset:5px}
 .actions,.roles,.steps,.controls{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .actions{margin-top:24px}.roles{margin-bottom:24px}
 .root button,.cta{min-height:48px;padding:12px 20px;border:0;border-radius:12px;font:inherit;cursor:pointer;transition:transform .2s ease}
@@ -34,3 +34,8 @@
 .root[data-motion=on] .sample{animation:focus-in .5s ease-out}@keyframes focus-in{from{transform:translateY(10px)}to{transform:translateY(0)}}
 @media(max-width:767px){.opening{padding-top:28px}.intro{display:block}.lead{font-size:17px!important;margin-top:24px!important}.stage{height:auto;overflow:visible;background:transparent}.landscape{height:220px;border-radius:16px}.panel{position:relative;left:auto;bottom:auto;width:100%;margin-top:12px;padding:22px}.panel strong{font-size:26px}.products{display:block;padding-top:24px}.products article{padding-block:16px}.chapter{padding:48px var(--gutter)}.chapterHead,.proof{display:block}.chapterHead p{margin-top:24px}.sample{margin-top:28px;padding:22px}.sample strong{min-height:0}.sample dl div{gap:16px}.caption{font-size:14px}.roles{gap:8px}.roles button{padding:12px}.root.root h1{max-width:15ch}}
 @media(prefers-reduced-motion:reduce){.root *{animation:none!important;transition:none!important}}
+
+/* Workflow anchors clear the two-row phone header without changing selected state. */
+.steps button,.chapter>span{scroll-margin-top:180px}
+@media(min-width:768px){.steps button,.chapter>span{scroll-margin-top:100px}}
+@media(max-width:900px){.intro{grid-template-columns:1fr;gap:8px;align-items:start}}

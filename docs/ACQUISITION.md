@@ -149,7 +149,8 @@ Chose resource deferral over changing the correctly rendered track geometry. Bec
 video requests compete with discovery without helping the visitor. Revisit-if viewport capture
 shows a blank first in-view frame or the film fails to start on a supported device.
 
-C6 first-frame targets and effects remain gated by the storyboard's mobile LCP requirement. The
+C6 effect expansion remains gated by the storyboard's mobile LCP requirement. Static framing
+targets can be prepared for review; they do not establish an implemented cinematic scene. The
 configured preview currently injects Netlify collaboration scripts and tutorial videos; measurements
 that exclude those requests are diagnostic only and do not establish unmodified preview acceptance.
 Full comparison and film evidence: WORK_LOGS/KEEL_ACQUISITION_20261111/cinematic/STATE.md.

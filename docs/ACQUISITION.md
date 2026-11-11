@@ -223,3 +223,55 @@ local and hosted previews must exercise the same markup and high-density fidelit
 Revisit-if endpoint negotiation, image fidelity or repeatable page performance regresses.
 Controlled response-rewrite probes supported this candidate, but are not release acceptance.
 Evidence: WORK_LOGS/KEEL_ACQUISITION_20261111/scenery-control/STATE.md in the Buzz workspace.
+
+
+## Personalisation receiver map and preference boundary (11.11.2026)
+
+Execution-ID: portlink-acquisition-onboarding-2026-11-11. This is source evidence,
+not signup continuity or a released UI. The approved shared specification is Tiller's
+personalisation-v1/CONTRACT.md, SHA256
+`a66777c4d5880dae414d221f87f06e664652a54ddd9ca176043fa17bf917d766`.
+
+Chose: an explicit, versioned projection of company display name, requested six-digit
+colour and audience. Over: forwarding arbitrary query/form objects, or serialising the
+demo session. Because: anonymous presentation values must never carry workspace IDs,
+permissions, bookings, prices, trial clocks or payments. Revisit-if the confirmed receiver
+requires a narrower projection; do not widen it implicitly.
+
+`lib/acquisition-preferences.ts` is the shared validation/storage boundary, currently
+prepared but not connected to a UI or receiver. Names are trimmed, NFC-normalised and
+limited to 100 UTF-16 code units; markup, controls and bidi overrides are rejected.
+Colour is optional, otherwise exactly six hex digits. Unknown fields are dropped.
+Preferences expire seven days after saving; malformed, future, expired and cross-product
+envelopes return no preferences. Storage access and quota errors are nonthrowing.
+A caller must retain its in-memory state and tell the visitor if persistence fails.
+Reset removes only the selected product's preferences. Demo operations have no storage
+or transport path in this module. Product switching will explicitly project common
+editable fields; it must never infer shared tenancy. Local storage is not cross-origin
+signup continuity.
+
+Measured source boundaries:
+
+| Product/source | Supported receiver in inspected source | Gap and consequence |
+| --- | --- | --- |
+| Landing `b18603903235423073353f4d062a944d83843c16` | `lib/acquisition.ts` selects a configured HTTPS entry and forwards only segment; `app/start/route.ts` is a private no-store redirect | No branding transport. Keep assisted entry until receiver acceptance. |
+| Platform `bc21d7d4a117b950fa3192b0a2e97f41a26f949d` (`origin/main`, source only) | `src/modules/onboarding/actions.ts` accepts name/type/country/currency, authenticates, creates a workspace through `create_workspace_with_admin`, then claims pending billing and redirects | No colour input in this creation path. Calling it can create a real workspace and invoke billing/welcome-mail effects. Do not exercise it as a demo. Existing-workspace review, replay and interrupted verification need a separately reviewed receiver. |
+| Platform same source | `src/modules/billing/start-actions.ts` and `pending.ts` carry company name with paid-plan state; public offer/voyage share helpers support brand fields scoped to their shares | Paid-plan state is not an anonymous preference store. Share brand colours do not establish a workspace-wide theme receiver. |
+| Embark `1553fbce1af4c31b814edfc739780e3090eaf688` (source only) | `web/src/app/api/admin/workspace-settings/route.ts` calls `saveWorkspaceGeneral`, scoped to authenticated workspace; `web/src/app/api/admin/theme-settings/route.ts` calls `saveThemeSettings` | Authenticated mutation endpoints are not anonymous onboarding receivers. Nautiqs owns confirming the receiver owner/claim through Starboard. |
+| Embark same source | `web/src/lib/admin-data-settings.ts` updates `workspaces.name`; theme upsert writes `tenant_theme.colors`; `web/src/lib/theme/derive.ts` maps primary/accent into public-site tokens | A primary-only update can replace other colour entries. Existing workspace changes require explicit target review and preservation of existing settings. Public-site branding does not promise an admin-shell theme. |
+
+Before/after consumers: the existing company, Platform and Embark openings still own their
+local role/chapter state. No consumer changed in this preparation. The existing handoff,
+forms, analytics and production tenant writes remain unmodified. The new adapter runs through
+`check:acquisition`, included by full verify and build. Reversal is reverting the adapter,
+its test and the package-script extension.
+
+Remaining integration, in order: source-backed audience task map; one product session with
+separate preferences/demo/view/receiver domains; presentation/topic consumers and lazy viewport
+demo; shared preview; browser history/focus/reset/storage/contrast checks; exact-head performance
+and Tiller review. Then receiver integration with Surgeon review, actual resumed workspace
+verification, Starboard acceptance and Nautiqs release. No test of the adapter alone closes these.
+
+Still unmapped: a reusable isolated product demo, Platform workspace-wide colour support,
+validated cross-origin transport/resume, Embark receiver ownership and safe existing-account
+application. No optional logo upload is offered before receiver validation/storage is agreed.

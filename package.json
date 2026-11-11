@@ -29,7 +29,7 @@
     "check:provenance": "node scripts/check-provenance.mjs",
     "check:font-hosts:live": "node scripts/check-font-hosts.mjs --live",
     "fonts:sync": "node scripts/sync-fonts.mjs",
-    "check:acquisition": "tsx scripts/check-acquisition.mjs",
+    "check:acquisition": "tsx scripts/check-acquisition.mjs && tsx scripts/check-acquisition-preferences.mjs",
     "check:acquisition:http": "node scripts/check-acquisition-http.mjs"
   },
   "dependencies": {

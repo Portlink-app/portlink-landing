@@ -182,3 +182,25 @@ The browser icon generator now keeps 16/32/48px ICO frames and the separate exis
 favicon from 285478 to 15086 bytes. Retained frames are pixel-identical, and all three PNG hashes
 are unchanged. A 32 KiB generator guard prevents recurrence. This is a measured byte reduction,
 not an inferred mobile LCP pass; CSS, fonts and preview tooling remain separate candidates.
+
+## Viewport discovery and initial script scope
+
+Scene controls now precede the scenery and full record in DOM order. An adjacent plain-text
+example status follows the same chapter state. At 390 × 844, the controls begin at 563px on
+company and 509px on both product routes, rather than below 1173px. Type, record fields, actors
+and the existing single live region remain intact. Ordinary viewport captures, including reduced
+motion, are in WORK_LOGS/KEEL_ACQUISITION_20261111/viewport/.
+
+MotionProvider now wraps the two ContactForm mounts instead of every route. Seatrade Scorecard
+retains its own MotionConfig. A future remount of legacy Framer components must supply the
+reduced-motion provider locally. Company/contact forward and back navigation, focus and both
+motion preferences are exercised without submitting the access form.
+
+Chose the bounded provider scope over a larger server/client explorer rewrite. The measured
+product script savings are only 846 and 842 bytes; controlled local LCP changes by 40 and 20ms.
+This does not establish a performance improvement or satisfy the mobile gate. The next bounded
+investigation is the seven scene imports in PlatformExplorer's client graph; preserve its
+selection/hash behaviour and server-rendered fallback before moving any code.
+
+Starboard owns acceptance. Release follows acceptance through the authorised execution lane.
+Cinematic framing, authentic product evidence, performance and full trial/access gates remain open.

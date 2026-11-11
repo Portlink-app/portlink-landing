@@ -67,6 +67,10 @@ export default function AcquisitionOpening({ page }: { page: 'company' | Product
       {page === 'company' && <div className={styles.roles} role="group" aria-label="Choose your work">
         {roleKeys.map(key => <button key={key} onClick={() => selectRole(key)} aria-pressed={role === key}>{label(key)}</button>)}
       </div>}
+      <p data-scene-summary>Example: {state.status}</p>
+      <div className={styles.sceneSteps} role="group" aria-label="Scene chapters">
+        {states.map((item, i) => <button key={item.id} aria-label={`Show ${item.label.toLowerCase()} scene`} aria-pressed={index === i} onClick={() => selectStep(i)}>{item.label}</button>)}
+      </div>
       <div className={styles.stage} data-scene={product} data-chapter={state.id}>
         <picture className={styles.scenery}>
           <source media="(max-width: 767px)" srcSet={`/acquisition/${scenery}-phone.webp`} />
@@ -93,9 +97,6 @@ export default function AcquisitionOpening({ page }: { page: 'company' | Product
           </div>}
           <dl>{state.rows.map(([name, value]) => <div key={name}><dt>{name}</dt><dd>{value}</dd></div>)}</dl>
           <p className={styles.sceneExplanation}>{state.body}</p>
-          <div className={styles.sceneSteps} role="group" aria-label="Scene chapters">
-            {states.map((item, i) => <button key={item.id} aria-label={`Show ${item.label.toLowerCase()} scene`} aria-pressed={index === i} onClick={() => selectStep(i)}>{item.label}</button>)}
-          </div>
           <a href={page === 'company' ? (product === 'embark' ? '/embark/' : '/portlink/') : '#discovery-workflow'}>{page === 'company' ? (product === 'embark' ? 'Explore Embark' : 'Explore Platform') : 'Read the workflow example'} →</a>
         </div>
         <p className={styles.sceneNote}>Illustrative Greenland setting. {product === 'platform' ? 'Bergen workflow example.' : 'Independent operator example.'} No live booking.</p>

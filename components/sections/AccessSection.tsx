@@ -1,5 +1,7 @@
 'use client'
 
+import MotionProvider from '@/components/MotionProvider'
+
 /**
  * The one primary action on the homepage: "Book a 20-minute demo". Every demo link on the page
  * (header, hero) lands here, on one mount of the shared contact form.
@@ -58,7 +60,7 @@ export default function AccessSection() {
         </div>
 
         <div className={`reveal ${styles.form}`}>
-          <ContactForm intent="pilot" lockIntent />
+          <MotionProvider><ContactForm intent="pilot" lockIntent /></MotionProvider>
         </div>
 
         <div className={`reveal ${styles.aside}`}>

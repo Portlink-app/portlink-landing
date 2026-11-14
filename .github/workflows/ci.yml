@@ -1,0 +1,26 @@
+# Minimal CI for portlink-landing (14.11.2026). Runs the repo's own `npm run verify` on the shared
+# Portlink studio runners, so either founder's server serves it (Linux only: the Windows runners carry
+# `portlink-studio` too). Not a required check yet: make it one once it has run green on both servers.
+name: CI
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  verify:
+    runs-on: [self-hosted, Linux, portlink-studio]
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npm run verify

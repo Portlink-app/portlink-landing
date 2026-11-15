@@ -1,6 +1,6 @@
 # portlink-landing
 
-The public Portlink marketing site — Next.js 16, live at **https://portlink.app**.
+The public Portlink marketing site: Next.js 16, live at **https://portlink.app**.
 It vendors the Portlink design system into `app/_ds/` at a pinned version; see
 `../portlink-design-system/CONSUMERS.md`.
 
@@ -15,43 +15,51 @@ design system is copied in rather than fetched at runtime. Funnel entry doc:
 
 | Service | This repo uses | Verify with |
 |---|---|---|
-| GitHub | **`Portlink-app/portlink-landing`** (the **org**), public, default branch `main`. The local `origin` still says `https://github.com/portlinkadmin/portlink-landing.git` — the repo was **transferred to the org** and GitHub redirects the old path, which is why both work and why the Netlify site reports the org URL. Push as the person working: **David = `GitDABA`**, Kris = `Nautiqs` (since 28.09.2026; `portlinkadmin` is now a read-only org member for automatic services and cannot push) | `gh repo view portlinkadmin/portlink-landing` → resolves to `Portlink-app/portlink-landing` |
-| GitHub — second remote | `v2` → `https://github.com/portlinkadmin/portlink-landing-v2.git`, public, last pushed 20.03.2026. **Not the live site.** Never `git push v2` expecting a deploy | `git remote -v` · `gh repo view portlinkadmin/portlink-landing-v2` |
-| Netlify | account **Portlink** (`admin-irpjrvy`) · site **`portlin-landing-2`** — note the typo, "portlin", not "portlink" — (`34ab2932-19da-44e5-b761-0bc83acc0055`) · **https://portlink.app** · builds `main` from the org repo | `GET /api/v1/sites` with the **Portlink** token |
+| GitHub | `Portlink-app/portlink-landing`, default branch `main`, ruleset `27278269` (`main-pr-only`, 14.11.2026: squash-only PRs, no direct pushes). Authenticate via GitHub App `portlink-app-factory` (`5762523`, installation `182031120`) for repo/PR work and `portlink-app-verdict` (`5762513`, installation `182031016`) for `portlink/verdict` commit statuses. | `git remote -v`; `~/Projects/bakke/agent-system/bin/github-app token <ref>` |
+| GitHub (second remote) | `v2` -> `https://github.com/portlinkadmin/portlink-landing-v2.git`, public, last pushed 20.03.2026. **Not the live site.** Never `git push v2` expecting a deploy | `git remote -v` |
+| CI | `.github/workflows/ci.yml` (`verify` job running `npm ci --no-audit --no-fund` and `npm run verify` on `ubuntu-latest`) | `gh pr checks <pr> -R Portlink-app/portlink-landing` |
+| Netlify | account **Portlink** (`admin-irpjrvy`) · site **`portlin-landing-2`** (note the typo: "portlin", not "portlink"; `34ab2932-19da-44e5-b761-0bc83acc0055`) · **https://portlink.app** · builds `main` from the org repo | `GET /api/v1/sites` with the **Portlink** token |
 | Resend | account **Portlink**, domain `portlink.app` verified (eu-west-1), sender `pilot@portlink.app`, audiences *General* + *Seatrade Med 2026* (`462446b9-df54-4ce1-ace1-8cf07e3b4d7b`) | `GET https://api.resend.com/domains` with the key below |
 | Netlify Blobs | store `seatrade-leads` on the site above, site-wide (shared by drafts and production) | `node scripts/seatrade-delete-lead.mjs --list` |
-| Supabase / Stripe / SMS / CI | **none** | `ls .github/workflows` → absent |
+| Supabase / Stripe / SMS | **none** | none configured |
 
-**Deploy trigger, stated plainly:** Netlify auto-deploys `main` from the **org** repo to
-**portlink.app**, the company's public front door. Pushing `main` is publishing. There is no CI and
-no build gate in front of it. A push to the `v2` remote deploys nothing.
+**Deploy trigger, stated plainly:** Netlify auto-deploys `main` from `Portlink-app/portlink-landing`
+to **portlink.app**, the company's public front door. Merging into `main` is publishing. A push to
+the `v2` remote deploys nothing.
 
-**Who may publish, settled 17.09.2026.** This line used to read as a flat reservation to David, and
-on 17.09 it cost him five hours: he asked for the draw block to come off the front page, the work was
-done and proven within six minutes, and it then sat in PR #11 while two agents in turn refused to
-merge it and put a decision row on his board instead. He had already decided. **A change David asked
-for is published by whoever carries it out, all the way to the live domain, with no intermediate ask.**
+**Who may publish, settled 17.09.2026 and updated 14.11.2026.** **A change David asked for is
+published by whoever carries it out, all the way to the live domain, with no intermediate ask.**
 What stays his is the publish nobody requested: an agent-initiated edit to the public site.
 
-**And publishing here is a push, not a merge.** Measured 17.09.2026 against the org repo:
-`rules/branches/main` returns `[]`, `rulesets` returns `[]`, and `branches/main` reports
-`protected: false`. A pull request is this repo's review convention, never a platform requirement,
-and no step in the table below is a merge. So an agent whose standing instruction forbids merging
-is not blocked from publishing: land a change David asked for with
-`ALLOW_MAIN=1 git push origin main` once it is proven. Keep the pull-request form for a change
-nobody asked for, because that one is David's and the pull request is the thing he approves.
+**Publishing uses squash-merged pull requests (ruleset `27278269`, 14.11.2026).** Direct pushes to
+`main` (`git push origin main`) are blocked by the `main-pr-only` ruleset. To ship a change David
+asked for:
+1. Push a branch and open a pull request as `portlink-app-factory[bot]`.
+2. Wait for `.github/workflows/ci.yml` (`verify`) to pass on the PR head SHA.
+3. Have an independent Portlink verifier inspect the PR (`orgs/portlink/VERIFIER_ROLE.md`) and post
+   a commit-bound `portlink/verdict` PASS status via `portlink-app-verdict[bot]`
+   (`/Users/nyx/.buzz/OPS/scripts/portlink_verdict.py`). Builder lanes never mint or post their own
+   verdict.
+4. Squash-merge the PR into `main` (the production gate verifies both green checks and the
+   commit-bound `portlink/verdict` status before admitting `gh pr merge`), then confirm the Netlify
+   deploy record (`commit_ref`, `state`, `published_at`).
 
-**Credentials — references only, never values.** Vault `cypqkqoeuibf4f6aud47v3qooa` (*Portlink*):
+For an agent-initiated change nobody asked for, open the PR and leave merge approval to David.
+
+**Credentials (references only, never values).** Vault `cypqkqoeuibf4f6aud47v3qooa` (*Portlink*):
 
 | Need | `op://` reference |
 |---|---|
-| GitHub PAT (Portlink) | `op://cypqkqoeuibf4f6aud47v3qooa/owl6advkmjvx2bjpzi3y6duyha/credential` |
+| GitHub App `portlink-app-factory` (App `5762523`, installation `182031120`, repo/PR/actions) | `op://cypqkqoeuibf4f6aud47v3qooa/p4zg7e67zuku7xe23rukd7u4ku/password` |
+| GitHub App `portlink-app-verdict` (App `5762513`, installation `182031016`, verifier `statuses:write`) | `op://cypqkqoeuibf4f6aud47v3qooa/owgdcoruwvb5hgoulfqod3l2um/password` |
 | Netlify API token (Portlink) | `op://cypqkqoeuibf4f6aud47v3qooa/a7h7xyjwjlfmzsc4oaf6gmuoym/credential` |
 | Resend API key (Portlink) | `op://cypqkqoeuibf4f6aud47v3qooa/lhylbglnfx7vy7yenlxn2tfehm/credential` |
 
-`op://Portlink/…` also works (single-word vault name), unlike `op://Bakke & Co/…`, which `op`
-rejects. Read with `op read '<ref>' --no-newline` and pipe straight into the consuming command;
-never echo, log or paste a value.
+Mint short-lived GitHub App installation tokens with
+`~/Projects/bakke/agent-system/bin/github-app token <ref>`. Read API tokens with
+`~/.claude/bin/secret get '<ref>'` piped straight into the consuming command; never echo, log or
+paste a value. The former `portlinkadmin` PAT (`owl6advkmjvx2bjpzi3y6duyha`) is retired for agent
+operations.
 
 **Runtime environment (Netlify site env, all contexts):** `RESEND_API_KEY` (same value as the
 1Password item above) and `ADMIN_EMAIL` (where pilot requests, Seatrade lead notifications and CSV
@@ -59,29 +67,23 @@ exports land; `post@davidbakke.no` as of 14.09.2026). Nothing else. Netlify Blob
 on Netlify; locally run `netlify dev` (the checkout is linked to the site) or export
 `NETLIFY_SITE_ID` + `NETLIFY_AUTH_TOKEN`.
 
-**Local secrets:** `npm run dev` runs `scripts/dev.sh`, which starts `next dev` under
-`op run --env-file=.env.op`, so `RESEND_API_KEY` comes from 1Password and `.env.local` holds only
-`ADMIN_EMAIL`. Never write a key back into `.env.local`. Without `op` (or with `PL_DEV_NO_OP=1`) it is
-plain `next dev`, and mail routes then run without a key.
+**Hard separation:** GitHub org `Portlink-app` (`portlink-app-factory[bot]` /
+`portlink-app-verdict[bot]`) and the **Portlink** Netlify account. The **Bakke & Co** side of this
+machine (GitHub `GitDABA`, the Bakke & Co Netlify account, vault `7tr6yo3acnhdlbltgkzexw7rce`) is a
+different company and is out of bounds. Default `gh` auth on this machine is `Bakke-Co` / `GitDABA`;
+always pass a process-scoped `GH_TOKEN` minted from `portlink-app-factory` when operating on
+`Portlink-app` repos. No Supabase project belongs to this repo.
 
-**Hard separation:** GitHub `portlinkadmin` / the `Portlink-app` org, and the **Portlink** Netlify
-account. The **Bakke & Co** side of this machine — GitHub `GitDABA`, the Bakke & Co Netlify
-account, vault `7tr6yo3acnhdlbltgkzexw7rce` — is a different company and is out of bounds. `gh`'s
-active account defaults to `GitDABA`; check it every time, because a wrong-account push here lands
-in the wrong company's history. No Supabase project belongs to this repo.
-
-**Worth tidying, David's call:** the local `origin` points at the pre-transfer path. It works
-through GitHub's redirect, but it makes every tool report a different owner than the one that owns
-the repo. Repointing it (`git remote set-url origin https://github.com/Portlink-app/portlink-landing.git`)
-is local and reversible — left undone here deliberately, since changing a remote is not a
-documentation change.
+**Remote routing verified 15.11.2026:** `origin` uses
+`https://github.com/Portlink-app/portlink-landing.git`. Recheck process-scoped GitHub App identity
+before external work.
 
 **Irreversible steps and who owns them:**
 
 | Step | Owner | Note |
 |---|---|---|
-| `git push origin main`, carrying out a change **David asked for** | **you land it** | his ruling, 17.09.2026: *"whenever i ask for somthing i expecot yoiu to tkae the instrcurtucon and land it all the way, without quaestion"*. Publishing is the last step of his instruction, not a separate permission. Do not stop at a pull request and do not file a decision row |
-| `git push origin main`, carrying a change **nobody asked for** | **David approves** | it publishes portlink.app, the company's public front door, with no CI in between. An agent-initiated edit to the public site is still his |
-| `git push v2 …` | **avoid** | that remote is a stale parallel repo and deploys nothing — pushing there splits history |
+| Squash-merging a PR to `main`, carrying out a change **David asked for** | **you land it** | his ruling, 17.09.2026: *"whenever i ask for somthing i expecot yoiu to tkae the instrcurtucon and land it all the way, without quaestion"*. Pass `verify`, obtain an independent `portlink/verdict` PASS status, squash-merge, and verify the Netlify deploy record without filing a decision row |
+| Squash-merging a PR to `main`, carrying a change **nobody asked for** | **David approves** | it publishes portlink.app, the company's public front door. An agent-initiated edit to the public site stays his |
+| `git push v2 ...` | **avoid** | that remote is a stale parallel repo and deploys nothing; pushing there splits history |
 | Changing the custom domain or DNS for portlink.app | **David only** | it takes the company's public site offline |
 | Bumping the vendored DS version in `app/_ds/` | **David approves** | it is a visual change to the public site; keep `CONSUMERS.md` in step |

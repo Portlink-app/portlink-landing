@@ -1,5 +1,5 @@
 'use client'
-/* eslint-disable @next/next/no-html-link-for-pages */
+/* eslint-disable @next/next/no-html-link-for-pages, @next/next/no-img-element */
 
 import Link from 'next/link'
 import { setManualMotion, useMotionAllowed } from '@/components/film/useFilm'
@@ -38,6 +38,14 @@ export default function ProductHeader({
               className={`pp-switcher-pill ${product === 'embark' ? 'is-active' : ''}`}
               aria-current={product === 'embark' ? 'page' : undefined}
             >
+              <img
+                src="/brand/embark-symbol.svg"
+                alt=""
+                width={16}
+                height={16}
+                aria-hidden="true"
+                style={{ display: 'inline-block', verticalAlign: '-3px', marginRight: 6 }}
+              />
               Embark
             </Link>
           </div>

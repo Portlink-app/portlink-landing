@@ -4,7 +4,13 @@ Use the supported CUA browser only. Reuse the local task's browser binding and i
 
 Capture screenshots at key compositions through CUA and keep measured DOM results in this review's evidence. Wait for the actual visible state through observations; a screenshot during smooth scrolling or an entrance transition is not a settled composition. Each UI action must be followed by a fresh accessibility observation.
 
-Development: npm run dev -- --hostname 127.0.0.1 --port 4319. Optimized preview: npm run start -- --hostname 127.0.0.1 --port 4320. Check current processes and Tailscale Serve first. Do not rebuild .next underneath a running optimized server.
+Development: npm run dev -- --hostname 127.0.0.1 --port 4319. Shared optimized preview: node scripts/preview-service.mjs start. Check current processes and Tailscale Serve first. Stop with node scripts/preview-service.mjs stop before rebuilding .next, then start after a successful build. Do not use a transient tool-owned process for a shared link.
+
+Before sharing, run node scripts/preview-service.mjs status and node scripts/preview-service.mjs check https://nyxs-mac-studio.tail79b0ec.ts.net:4320/. The check must load the homepage, contact page and every application asset referenced by both. Follow with a CUA screenshot and interaction. A healthy HTTP response alone does not prove rendering. Reversal: stop, then remove only ~/Library/LaunchAgents/app.portlink.landing-preview-4320.plist. Leave Serve and other services unchanged. The host must remain awake, signed in and connected to Tailscale.
+
+Availability trap reproduced on 22.09.2026: the tool-owned Next process disappeared after the earlier turn. No listener remained on loopback:4320, while Serve correctly returned 502. A user LaunchAgent now owns this preview and restarts Next after exit. The old app.portlink.landing-preview service points to a different worktree on 4611. Never infer ownership from a similar label.
+
+Cached browser error-page trap: a failed tab can internally hold a data: error document. Browser policy blocks attaching to that document. Use a fresh HTTPS tab to verify the repaired server; do not retry reading the blocked error document or disable any browser protection.
 
 Required repo verification: npm run verify and npm run build. Form fixtures verify the mail boundary; browser tests exercise validation and movement between steps only. Dummy test details must never be submitted to /api/access. Existing #access links are externally circulated and mandatory.
 

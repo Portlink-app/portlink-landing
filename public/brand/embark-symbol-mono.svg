@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Embark"><title>Embark</title>
+  <rect width="64" height="64" rx="12" fill="currentColor"/>
+  <path d="M25 15h24v8H33v5h-8z M25 36h8v5h16v8H25z" fill="#fff"/>
+  <path d="M0 28h45v8H0z" fill="#fff" opacity=".72"/>
+</svg>

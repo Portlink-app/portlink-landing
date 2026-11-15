@@ -91,9 +91,20 @@ export default function TeamProofSection() {
           ))}
         </ul>
 
-        <div style={{ textAlign: 'center', marginTop: 'clamp(28px, 4vw, 40px)' }}>
+        <div id="mission" style={{ maxWidth: '680px', margin: 'clamp(28px, 4vw, 40px) auto 0', textAlign: 'center' }}>
+          <p
+            className="reveal"
+            style={{
+              margin: '0 auto 18px',
+              fontSize: '15px',
+              lineHeight: 1.6,
+              color: 'var(--ds-text-2, var(--ds-text-3))',
+            }}
+          >
+            <strong style={{ color: 'var(--ds-text-1)' }}>Our mission &amp; ethos:</strong> give every organisation in a port call and shore operation one shared, accountable record, where software prepares the facts and operators own every commitment.
+          </p>
           <Link
-            href="/team"
+            href="/team/#mission"
             className="reveal"
             style={{
               display: 'inline-flex',
@@ -107,7 +118,7 @@ export default function TeamProofSection() {
               paddingBottom: '2px',
             }}
           >
-            Read more about the team
+            Read more about the team and our ethos
           </Link>
         </div>
       </div>

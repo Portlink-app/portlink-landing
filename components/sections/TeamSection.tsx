@@ -62,6 +62,21 @@ function Person({ member }: { member: Member }) {
   )
 }
 
+const ethosPillars = [
+  {
+    title: 'One shared record, clear boundaries',
+    body: 'Cruise lines, port agents, DMCs and independent tour operators work from the same live call and departure dates without exposing private commercial terms across company lines.',
+  },
+  {
+    title: 'Explicit human decisions',
+    body: 'A berth change, a capacity shortfall or a final disbursement variance stays visible until a person reviews and accepts it. Software prepares the facts; operators own the commitment.',
+  },
+  {
+    title: 'Built from the quay up',
+    body: 'Designed by maritime and operations builders for real port conditions: readable in daylight, dependable on a harbour connection, and clear about what is confirmed versus pending.',
+  },
+]
+
 export default function TeamSection({ heading = true }: { heading?: boolean }) {
   const sectionRef = useReveal()
 
@@ -152,6 +167,80 @@ export default function TeamSection({ heading = true }: { heading?: boolean }) {
           {advisors.map((m) => (
             <Person key={m.name} member={m} />
           ))}
+        </div>
+
+        <div
+          id="mission"
+          style={{
+            marginTop: '88px',
+            paddingTop: '64px',
+            borderTop: '1px solid var(--border)',
+          }}
+        >
+          <div style={{ maxWidth: '680px', margin: '0 auto 40px', textAlign: 'center' }}>
+            <span
+              className="reveal"
+              style={{
+                display: 'inline-block',
+                fontSize: '12px',
+                textTransform: 'uppercase',
+                letterSpacing: '0.1em',
+                color: 'var(--text-muted)',
+                fontWeight: 500,
+              }}
+            >
+              Mission &amp; ethos
+            </span>
+            <h2
+              className="reveal"
+              style={{
+                marginTop: '14px',
+                fontSize: 'clamp(22px, 3vw, 32px)',
+                lineHeight: 1.2,
+              }}
+            >
+              One accountable record from itinerary planning to the quay
+            </h2>
+            <p
+              className="reveal"
+              style={{
+                marginTop: '14px',
+                color: 'var(--text-muted)',
+                fontSize: '16px',
+                lineHeight: 1.65,
+              }}
+            >
+              Our mission is to connect every participant in a port call and shore operation around a shared source of operational truth, replacing scattered email threads and spreadsheets with clear ownership at every step.
+            </p>
+          </div>
+
+          <div
+            className="reveal"
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+              gap: '24px',
+            }}
+          >
+            {ethosPillars.map((pillar) => (
+              <article
+                key={pillar.title}
+                style={{
+                  padding: '24px',
+                  borderRadius: '12px',
+                  border: '1px solid var(--border)',
+                  background: 'var(--color-surface-sunken, var(--bg))',
+                }}
+              >
+                <h3 style={{ fontSize: '16px', fontWeight: 600, marginBottom: '10px', lineHeight: 1.35 }}>
+                  {pillar.title}
+                </h3>
+                <p style={{ fontSize: '14px', lineHeight: 1.6, color: 'var(--text-muted)', margin: 0 }}>
+                  {pillar.body}
+                </p>
+              </article>
+            ))}
+          </div>
         </div>
       </div>
     </section>

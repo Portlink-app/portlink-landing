@@ -1,4 +1,5 @@
 'use client'
+import ProductFragment from './ProductFragment'
 import { customerBrand } from '@/lib/customer-brand'
 import { useProductSession } from './ProductSession'
 import { audienceLabels, demoRecord, topics } from './journey-content'
@@ -12,7 +13,7 @@ export default function ProductDemo({ topic }: { topic: string }) {
     <div className={styles.demoBody}>
       <section className={styles.record} data-ui aria-label="Sample workspace" >
         <p className={styles.customerBrand} style={{ background: brand.effective, color: brand.foreground }}>{session.preferences.companyName || 'Your company'} · Sample workspace</p><h3>{record.title}</h3><p>Owner: {record.owner}</p>
-        <dl>{record.rows.map(([name, value]) => <div key={name}><dt>{name}</dt><dd>{value}</dd></div>)}</dl>
+        <ProductFragment product={session.product} audience={session.preferences.audience} topic={topic} record={record} reviewed={!!session.progress[topic]} />
         {record.unavailable && <p id="topic-unavailable">{record.unavailable}</p>}<button disabled={!!record.unavailable} aria-describedby={record.unavailable ? 'topic-unavailable' : undefined} className={styles.primary} onClick={() => session.review(topic)}>{record.action}</button>
         {session.progress[topic] && <p role="status">{record.result}</p>}
       </section>

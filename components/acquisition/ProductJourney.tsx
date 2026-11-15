@@ -5,6 +5,7 @@ import { getImageProps } from 'next/image'
 import { customerBrand } from '@/lib/customer-brand'
 import { useState } from 'react'
 import ProductHeader from '@/components/product/ProductHeader'
+import ProductFragment from './ProductFragment'
 import { useProductSession } from './ProductSession'
 import { audienceLabels, demoRecord, productSlug, topics, type JourneyTopic } from './journey-content'
 import type { AcquisitionAudience } from '@/lib/acquisition-preferences'
@@ -44,7 +45,7 @@ function Feature({ topic, detail = false, priority = false }: { topic: JourneyTo
     <div className={styles.featureHeading}><h2>{topic.title}</h2><p>{record.unavailable ?? (detail ? topic.detail : topic.outcome)}</p><Link href={`/${productSlug(s.product)}/${topic.id}/`}>Read about {topic.id} →</Link></div>
     <div className={styles.visual}>
       <button className={styles.visualImage} aria-label={`Open ${topic.id} example`} onClick={event => s.open(topic.id, event.currentTarget)}><picture>{phone && <source media="(max-width: 767px)" srcSet={phone.srcSet} sizes={phone.sizes} />}<img src={topic.image} alt={s.product === 'embark' ? 'Coastal setting for the operator example' : 'Coastal setting for the port-call example'} width={1536} height={1024} loading={priority ? 'eager' : 'lazy'} fetchPriority={priority ? 'high' : undefined} /></picture></button>
-      <div className={styles.visualRecord}><p className={styles.customerBrand} style={{ background: brand.effective, color: brand.foreground }}>{s.preferences.companyName || 'Your company'} · Illustrative record</p><h3>{record.title}</h3><dl>{record.rows.map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl>{record.unavailable && <p>{record.unavailable}</p>}<button onClick={event => s.open(topic.id, event.currentTarget)}>Explore {topic.id} demo</button></div>
+      <div className={styles.visualRecord}><p className={styles.customerBrand} style={{ background: brand.effective, color: brand.foreground }}>{s.preferences.companyName || 'Your company'} · Illustrative record</p><h3>{record.title}</h3><ProductFragment product={s.product} audience={s.preferences.audience} topic={topic.id} record={record} reviewed={!!s.progress[topic.id]} />{record.unavailable && <p>{record.unavailable}</p>}<button onClick={event => s.open(topic.id, event.currentTarget)}>Explore {topic.id} demo</button></div>
     </div>
   </section>
 }
@@ -53,7 +54,7 @@ export default function ProductJourney({ topicId }: { topicId?: string }) {
   return <div className={`pp pp--${slug} ${styles.journey}`}>
     <ProductHeader product={slug} tone="light" onSwitch={target => s.transfer(target === 'embark' ? 'embark' : 'platform')} />
     <main id="main">
-      <span id="hero" /><header className={styles.intro} id="overview"><div><h1 tabIndex={-1} data-demo-focus-fallback>{topic ? topic.title : s.product === 'embark' ? 'Keep departures ready' : 'Plan the whole voyage'}</h1></div><div><p>{topic ? topic.outcome : s.product === 'embark' ? 'Embark brings bookings, capacity and guide preparation into one view for independent tour operators.' : 'Platform helps cruise lines, port agents and DMCs plan the itinerary and prepare each call.'}</p><a href="/#access" data-cta={`demo-${slug}-hero`}>Book a 20-minute demo</a><a href={`/start/?product=${s.product}&audience=${s.preferences.audience}`} data-cta={`trial-${s.product}-hero`}>Explore trial options</a>{topic && <Link href={`/${slug}/`}>Back to {s.product === 'embark' ? 'Embark' : 'Platform'} overview</Link>}</div></header>
+      <span id="hero" /><header className={styles.intro} id="overview"><div>{s.product === 'embark' && !topic && <img src="/brand/embark-lockup.svg" alt="Embark by Portlink" width={168} height={39} style={{ display: 'block', marginBottom: 14 }} />}<h1 tabIndex={-1} data-demo-focus-fallback>{topic ? topic.title : s.product === 'embark' ? 'Keep departures ready' : 'Plan the whole voyage'}</h1></div><div><p>{topic ? topic.outcome : s.product === 'embark' ? 'Embark brings bookings, capacity and guide preparation into one view for independent tour operators.' : 'Platform helps cruise lines, port agents and DMCs plan the itinerary and prepare each call.'}</p><a href="/#access" data-cta={`demo-${slug}-hero`}>Book a 20-minute demo</a><a href={`/start/?product=${s.product}&audience=${s.preferences.audience}`} data-cta={`trial-${s.product}-hero`}>Explore trial options</a>{topic && <Link href={`/${slug}/`}>Back to {s.product === 'embark' ? 'Embark' : 'Platform'} overview</Link>}</div></header>
       <div id="product-consent" className={styles.consentSlot} />
       <div className={styles.layout}><Personalisation /><div className={styles.features}><span id="discovery-workflow" />
         {s.product === 'platform' && <span id="live-record" />}

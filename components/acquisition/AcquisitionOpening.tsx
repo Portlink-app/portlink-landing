@@ -109,7 +109,7 @@ export default function AcquisitionOpening({ page }: { page: 'company' | Product
       <div className={styles.caption}><span>{product === 'embark' ? 'Embark · Independent tour operations' : 'Platform · Voyage and port-call planning'}</span>{page === 'company' && <button aria-pressed={motion} onClick={() => setManualMotion(!motion)}>Motion: {motion ? 'On' : 'Off'}</button>}</div>
       {page === 'company' && <div className={styles.products}>
         <article><h2><a href="/portlink/">Platform</a></h2><p>Voyages, port calls and the people preparing them.</p></article>
-        <article><h2><a href="/embark/">Embark</a></h2><p>Departures, bookings and delivery for independent tour operators.</p></article>
+        <article><h2><a href="/embark/"><img src="/brand/embark-symbol.svg" alt="" width={20} height={20} aria-hidden="true" style={{ display: 'inline-block', verticalAlign: '-3px', marginRight: 8 }} />Embark</a></h2><p>Departures, bookings and delivery for independent tour operators.</p></article>
         <article><h2>Wheelhouse</h2><p>Work management included in Platform. <a href="/#access">Discuss a standalone workspace</a>.</p></article>
       </div>}
     </section>

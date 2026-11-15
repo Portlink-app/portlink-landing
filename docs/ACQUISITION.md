@@ -338,3 +338,39 @@ WORK_LOGS/KEEL_ACQUISITION_20261111/composition-repair/. Final hosted performanc
 recognisable source-backed product fragments/cinematic composition, complete theme and
 zoom/device coverage, private landing-to-signup bridge and receiver runtime acceptance
 remain open. This checkpoint does not close all R1-R6 or request the consolidated re-review.
+
+
+## Focused product evidence continuation, 12.11.2026
+
+ProductFragment now supplies the same focused presentation to overview/topic pages and
+the lazy demo. The itinerary rail keeps draft, marine, shorex, commercial and publication
+separate from external commitment. Embark shows booked guests against departure seats,
+retains guide assignment and unresolved guests, and uses occupied-seat ticks rather than
+a success-coloured capacity meter. Accounts show the arithmetic of the existing sample.
+All records remain explicitly illustrative, with unchanged shared session actions.
+
+Source provenance read during this increment:
+- Platform local head 2fd760bf905f3238baa457d77babcdff09087872:
+  `src/modules/voyages/components/itinerary-timeline.tsx` (port/berth/state leg) and
+  `src/modules/voyages/itinerary.helpers.ts` (five separate review stages).
+- Embark receiver head c373935f09237f36635204a61ce84e8a7b133404:
+  `web/src/components/admin/departures/DeparturesTable.tsx` (tour/time, booked guests,
+  capacity, status and guide columns), `admin/ui/mini-bar.tsx` (occupied ticks and
+  explicit accessible value), `admin/bookings/BookingsTable.tsx` (separate booking,
+  capacity and payment states). An earlier local Embark main is stale; it was
+  rejected as provenance after comparison with this current receiver worktree.
+
+These are focused adaptations, not authenticated screenshots or proof of product
+operations. Current coordination and booking records remain the accepted capability
+map; cinematic motion and full source-fidelity acceptance remain Tiller gates.
+
+Measured font culprit: the root Skip to content link, outside the product font scope,
+requested the homepage's Jakarta and Inter faces. Its product-route-only system face
+removes both requests; browser readback downloads only Schibsted and Manrope. The
+keyboard entry itself remains the first focusable link. No generated font/DS edits.
+
+Evidence: Buzz `WORK_LOGS/KEEL_ACQUISITION_20261111/composition-repair/recovery/` and
+`RECOVERY.md`. Full verification/build and existing browser regression matrix pass on
+the repaired source; final commit receipt belongs in that evidence. Hosted exact-head
+performance, real-device keyboard/safe-area, browser zoom and the remaining cinematic
+acceptance are still open. Do not interpret this increment as release acceptance.

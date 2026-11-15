@@ -16,7 +16,8 @@
  * about us yet is asking at the moment trust is lowest. The card appears after a first real sign
  * of interest: a scroll past most of the first screen, a second page, or ENGAGE_MS on the page.
  */
-import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
+import { useEffect, useState, useSyncExternalStore } from 'react'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { allChoices, choose, closeRequested, isExcludedPath, isOpenRequested, loadAllowed, subscribe } from '@/lib/consent'
@@ -24,6 +25,8 @@ import ConsentPreferences from './ConsentPreferences'
 import { useConsent } from './useConsent'
 import styles from './Consent.module.css'
 
+const subscribeSlot = (changed: () => void) => { const observer = new MutationObserver(changed); observer.observe(document.body, { childList: true, subtree: true }); return () => observer.disconnect() }
+const readSlot = () => document.getElementById('product-consent')
 const ENGAGE_MS = 12000
 const ENGAGE_SCROLL = 0.6
 
@@ -36,6 +39,7 @@ export default function ConsentManager() {
   const [reopened, setReopened] = useState(false)
   // The path the visit started on. Reaching any other page is engagement in itself.
   const [firstPath] = useState(pathname)
+  const target = useSyncExternalStore(subscribeSlot, readSlot, () => null)
   const excluded = isExcludedPath(pathname)
 
   // Reopening from the footer goes straight to the switches: that is what the visitor came for.
@@ -63,8 +67,8 @@ export default function ConsentManager() {
   const visible = !excluded && !gpc && (reopened || (state === 'unset' && (engaged || secondPage)))
   if (!visible) return null
 
-  return (
-    <section className={styles.banner} role="region" aria-labelledby="consent-title">
+  const banner = (
+    <section className={`${styles.banner} ${target ? styles.inline : ''}`} role="region" aria-labelledby="consent-title">
       {layer === 'first' ? (
         <>
           <p id="consent-title" className={styles.lead}>
@@ -94,4 +98,5 @@ export default function ConsentManager() {
       )}
     </section>
   )
+  return target ? createPortal(banner, target) : banner
 }

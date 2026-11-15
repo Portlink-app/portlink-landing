@@ -33,9 +33,27 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   trailingSlash: true,
-  images: { unoptimized: true },
+  images: {
+    // Only the acquisition phone crops use optimisation. Keep candidates within their native width.
+    localPatterns: [
+      { pathname: '/acquisition/coast-phone.webp', search: '' },
+      { pathname: '/acquisition/operator-phone.webp', search: '' },
+    ],
+    remotePatterns: [],
+    deviceSizes: [400, 640],
+    imageSizes: [],
+    // Encoder scales differ: native Next AVIF75 and Netlify AVIF50 retain the inspected detail.
+    // Next's default loader selects the sole allowed quality in both SSR and client markup.
+    qualities: process.env.NETLIFY === 'true' ? [50] : [75],
+    formats: ['image/avif', 'image/webp'],
+  },
   async headers() {
-    return [{ source: '/:path*', headers: securityHeaders }]
+    return [
+      { source: '/:path*', headers: securityHeaders },
+      // Next's configured headers override route-handler headers in the built server.
+      // Keep acquisition query data out of both external and same-origin referrers.
+      { source: '/start/:path*', headers: [{ key: 'Referrer-Policy', value: 'no-referrer' }] },
+    ]
   },
 }
 

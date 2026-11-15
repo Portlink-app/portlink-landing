@@ -1,6 +1,7 @@
 'use client'
-/* eslint-disable @next/next/no-html-link-for-pages */
+/* eslint-disable @next/next/no-html-link-for-pages, @next/next/no-img-element */
 
+import Link from 'next/link'
 import { setManualMotion, useMotionAllowed } from '@/components/film/useFilm'
 
 type ProductSlug = 'portlink' | 'embark'
@@ -8,9 +9,11 @@ type ProductSlug = 'portlink' | 'embark'
 export default function ProductHeader({
   product,
   tone = 'dark',
+  onSwitch,
 }: {
   product: ProductSlug
   tone?: 'dark' | 'light'
+  onSwitch?: (product: ProductSlug) => void
 }) {
   const motionAllowed = useMotionAllowed()
 
@@ -23,36 +26,44 @@ export default function ProductHeader({
             <span>Portlink</span>
           </a>
           <div className="pp-switcher" role="navigation" aria-label="Switch product">
-            <a
+            <Link onClick={() => onSwitch?.('portlink')}
               href="/portlink/"
               className={`pp-switcher-pill ${product === 'portlink' ? 'is-active' : ''}`}
               aria-current={product === 'portlink' ? 'page' : undefined}
             >
               Portlink
-            </a>
-            <a
+            </Link>
+            <Link onClick={() => onSwitch?.('embark')}
               href="/embark/"
               className={`pp-switcher-pill ${product === 'embark' ? 'is-active' : ''}`}
               aria-current={product === 'embark' ? 'page' : undefined}
             >
+              <img
+                src="/brand/embark-symbol.svg"
+                alt=""
+                width={16}
+                height={16}
+                aria-hidden="true"
+                style={{ display: 'inline-block', verticalAlign: '-3px', marginRight: 6 }}
+              />
               Embark
-            </a>
+            </Link>
           </div>
         </div>
 
         {product === 'portlink' ? (
           <nav className="pp-chapter-nav" aria-label="Portlink page chapters">
-            <a href="#live-record">Live Record</a>
-            <a href="#voyage-ais">Voyage &amp; AIS</a>
-            <a href="#gangway-signoff">Gangway Sign-Off</a>
-            <a href="#pda-fda">PDA to FDA</a>
+            <a href="/portlink/#live-record">Planning Example</a>
+            <a href="/portlink/#voyage-ais">Passage planning</a>
+            <a href="/portlink/#gangway-signoff">Gangway Sign-Off</a>
+            <a href="/portlink/#pda-fda">PDA to FDA</a>
           </nav>
         ) : (
           <nav className="pp-chapter-nav" aria-label="Embark page chapters">
-            <a href="#quay-checkin">Quay Check-In</a>
-            <a href="#dispatch">Departures &amp; Roster</a>
-            <a href="#paid-before">Paid Before Departure</a>
-            <a href="#cruise-bridge">Cruise-Trade Bridge</a>
+            <a href="/embark/#quay-checkin">Departure Example</a>
+            <a href="/embark/#dispatch">Departures &amp; Roster</a>
+            <a href="/embark/#paid-before">Booking arrangement</a>
+            <a href="/embark/#cruise-bridge">Platform</a>
           </nav>
         )}
 

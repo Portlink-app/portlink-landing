@@ -1,0 +1,222 @@
+{
+  "version": "acquisition-1",
+  "roles": {
+    "cruise": {
+      "label": "Cruise line",
+      "product": "platform",
+      "headline": "Plan the whole voyage",
+      "body": "Shape the itinerary, then keep each call’s requests and confirmations in view."
+    },
+    "agent": {
+      "label": "Port agent",
+      "product": "platform",
+      "headline": "Keep the call in view",
+      "body": "Bring service requests, decisions and readiness together around each port call."
+    },
+    "dmc": {
+      "label": "DMC / shorex",
+      "product": "platform",
+      "headline": "Keep shore plans together",
+      "body": "Follow shore requests through quotes and bookings, with the call as their context."
+    },
+    "operator": {
+      "label": "Tour operator",
+      "product": "embark",
+      "headline": "Keep departures ready",
+      "body": "Bring bookings, capacity and guide preparation into view."
+    }
+  },
+  "platform": [
+    {
+      "id": "plan",
+      "label": "Plan",
+      "owner": "Itinerary planner",
+      "title": "A voyage starts years ahead",
+      "body": "Aster Brisa is assigned to a proposed summer voyage. The itinerary is still a draft.",
+      "status": "Draft itinerary",
+      "record": "Sample voyage · Summer 2028",
+      "rows": [
+        [
+          "Voyage",
+          "Northern coast"
+        ],
+        [
+          "Assigned vessel",
+          "Aster Brisa"
+        ],
+        [
+          "Proposed call",
+          "Bergen"
+        ],
+        [
+          "External commitment",
+          "Not requested"
+        ]
+      ]
+    },
+    {
+      "id": "review",
+      "label": "Review",
+      "owner": "Cruise line team",
+      "title": "Review before publication",
+      "body": "Marine operations, shorex and commercial review are distinct from confirming a port call.",
+      "status": "Marine operations review",
+      "record": "Northern coast · Bergen",
+      "rows": [
+        [
+          "Marine operations",
+          "In review"
+        ],
+        [
+          "Shorex review",
+          "Waiting"
+        ],
+        [
+          "Commercial review",
+          "Waiting"
+        ],
+        [
+          "External commitment",
+          "Not requested"
+        ]
+      ]
+    },
+    {
+      "id": "request",
+      "label": "Request",
+      "owner": "Shorex planner",
+      "title": "Request a shore quote",
+      "body": "A shore request belongs to this call and names the DMC. A pending request is not a confirmed booking.",
+      "status": "Quote requested",
+      "record": "Northern coast · Bergen",
+      "rows": [
+        [
+          "Request",
+          "Coastal excursion"
+        ],
+        [
+          "Guests",
+          "12"
+        ],
+        [
+          "Responsible party",
+          "DMC"
+        ],
+        [
+          "Quote",
+          "Pending"
+        ]
+      ]
+    },
+    {
+      "id": "commit",
+      "label": "Confirm",
+      "owner": "Cruise line shorex",
+      "title": "Accept the returned quote",
+      "body": "After the DMC returns a valid quote, the cruise line can accept it into a booking. This example stops at that commitment.",
+      "status": "Quote accepted into booking",
+      "record": "Northern coast · Bergen",
+      "rows": [
+        [
+          "Request",
+          "Coastal excursion"
+        ],
+        [
+          "Guests",
+          "12"
+        ],
+        [
+          "Responsible party",
+          "Cruise line"
+        ],
+        [
+          "Booking",
+          "Created in this example"
+        ]
+      ]
+    }
+  ],
+  "embark": [
+    {
+      "id": "departure",
+      "label": "Departure",
+      "owner": "Tour operator",
+      "title": "Prepare the departure",
+      "body": "An independent kayaking operator prepares a departure for direct guests. Platform is not required.",
+      "status": "Departure planned",
+      "record": "Sample departure · Coastal kayaking",
+      "rows": [
+        [
+          "Departure",
+          "10.00"
+        ],
+        [
+          "Bookings",
+          "12 guests"
+        ],
+        [
+          "Capacity",
+          "12 seats"
+        ],
+        [
+          "Guide",
+          "Assigned"
+        ]
+      ]
+    },
+    {
+      "id": "change",
+      "label": "Change",
+      "owner": "Tour operator",
+      "title": "A smaller capacity changes the picture",
+      "body": "The example now has ten available seats for twelve booked guests. The shortfall stays visible.",
+      "status": "2 guests need a decision",
+      "record": "Coastal kayaking · 10.00",
+      "rows": [
+        [
+          "Bookings",
+          "12 guests"
+        ],
+        [
+          "Available capacity",
+          "10 seats"
+        ],
+        [
+          "Shortfall",
+          "2 guests"
+        ],
+        [
+          "Reassignment",
+          "Not made"
+        ]
+      ]
+    },
+    {
+      "id": "resolve",
+      "label": "Review",
+      "owner": "Departure coordinator",
+      "title": "Review the available options",
+      "body": "The responsible person reviews capacity and guest arrangements. The example does not choose for them.",
+      "status": "Action required",
+      "record": "Coastal kayaking · 10.00",
+      "rows": [
+        [
+          "Capacity review",
+          "Open"
+        ],
+        [
+          "Guest arrangements",
+          "Pending"
+        ],
+        [
+          "Guide briefing",
+          "Needs review"
+        ],
+        [
+          "Automatic reallocation",
+          "None"
+        ]
+      ]
+    }
+  ]
+}

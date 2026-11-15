@@ -8,7 +8,6 @@ import {
   twitterDefaults,
 } from '@/lib/metadata'
 import './globals.css'
-import MotionProvider from '@/components/MotionProvider'
 import ConsentManager from '@/components/consent/ConsentManager'
 import VisitorTracker from '@/components/intel/VisitorTracker'
 
@@ -72,7 +71,7 @@ export default function RootLayout({
         <a className="skip-link" href="#main">
           Skip to content
         </a>
-        <MotionProvider>{children}</MotionProvider>
+        {children}
         {/* The consent banner, and the only thing allowed to load an optional tag, after a yes.
             lib/consent.ts says why no such tag is ever in server HTML. */}
         <ConsentManager />

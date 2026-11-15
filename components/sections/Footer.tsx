@@ -10,7 +10,7 @@ const navLinks = {
     { label: 'Book a 20-minute demo', href: '/#access' },
   ],
   Company: [
-    { label: 'Team', href: '/team/' },
+    { label: 'Team & ethos', href: '/team/#mission' },
     { label: 'LinkedIn', href: 'https://www.linkedin.com/company/portlink-app/' },
     { label: 'Contact', href: '/contact/' },
     { label: 'Privacy', href: '/privacy/' },

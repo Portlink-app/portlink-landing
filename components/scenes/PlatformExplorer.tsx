@@ -55,7 +55,6 @@ export default function PlatformExplorer() {
       <noscript><style>{'#dashboard [data-platform-panel] { display: block; } #dashboard [role="tablist"], #dashboard [data-platform-next] { display: none; }'}</style></noscript>
       <div className={styles.inner}>
         <div className={styles.labelRow}>
-          <span className="section-eyebrow">Inside the platform</span>
           <span className={styles.instruction}>Choose a surface. Previews use illustrative data.</span>
         </div>
         <div className={styles.tabs} role="tablist" aria-label="Platform surfaces">
@@ -81,7 +80,7 @@ export default function PlatformExplorer() {
               {/* Legacy section fragments remain real targets even before JavaScript is available. */}
               {chapter.id !== 'dashboard' && <span id={chapter.id} className={styles.anchor} />}
               <div className={styles.copy}>
-                <div><span className={styles.chapter}>0{index + 1} / 0{chapters.length}</span><h3>{chapter.title}</h3></div>
+                <div><h3>{chapter.title}</h3></div>
                 <p>{chapter.body}</p>
               </div>
               <div className={styles.stage}><Scene /></div>

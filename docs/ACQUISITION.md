@@ -374,3 +374,15 @@ Evidence: Buzz `WORK_LOGS/KEEL_ACQUISITION_20261111/composition-repair/recovery/
 the repaired source; final commit receipt belongs in that evidence. Hosted exact-head
 performance, real-device keyboard/safe-area, browser zoom and the remaining cinematic
 acceptance are still open. Do not interpret this increment as release acceptance.
+
+## Stage 1 D14 Restoration and Integrated Personalisation, 16.11.2026
+
+Following David's visual audit of `e86a850d` (`16.11.2026 kl. 01.56`), Stage 1 restores the full
+6-chapter 2x Retina D14 `/portlink/` and `/embark/` product pages and `/` `<FilmHero />` from
+`c4d64b3b9f755ba37d62f29fb7ff0300140457c4`, integrating the acquisition capabilities directly
+into the D14 chapters rather than replacing them with wireframe `<ProductJourney />` text tables:
+
+- **Chose:** Restoring all 6 D14 chapters on `/portlink/` (`#overview` 3-layer fjord hero with 140px overhang, `#live-record` `<PortlinkLiveWorkspaceSample />`, `#voyage-ais` Kystverket `Hovedled` 60fps voyage/chart `<Film />` `portlink-voyage-ais-d14.mp4`, `#gangway-signoff` upright 2x Retina mobile Gangway Sign-Off, `#pda-fda` `<PortlinkPdaFdaDiffSample />`, `#demo` season deployment stage) and `/embark/` (`#hero` 3-layer hero with `embark-lockup.svg` and 140px overhang, `#quay-checkin` `<EmbarkQuayCheckInSample />`, `#dispatch` 60fps `<Film />` `embark-dispatch-d14.mp4`, `#paid-before` 2x Retina widget/invoicing stage, `#cruise-bridge` `<EmbarkCruiseTradeBridge />`, `#demo` operator overview stage), restoring `<FilmHero />` on `/` without `<AcquisitionOpening />`, and mounting a compact D14-styled `<ProductPersonalisationBar />` ("Make it yours") + `<ProductTopicBar />` inside the D14 chapters.
+- **Over:** Replacing the 6-chapter D14 pages with `<ProductJourney />` + `<ProductFragment />`'s 4-row HTML text tables and prepending `<AcquisitionOpening page="company" />` above `<FilmHero mediaOnly />`.
+- **Because:** The wireframe replacement deleted all 2x Retina D14 UI stages, Kystverket `Hovedled` 60fps voyage video, upright mobile gangway sign-off, and interactive D14 samples (`-303` lines on `/portlink/`, `-293` lines on `/embark/`). Integrating `<ProductPersonalisationBar />` directly into Chapter 2 live-themes `<PortlinkLiveWorkspaceSample />`, `<PortlinkPdaFdaDiffSample />`, `<EmbarkQuayCheckInSample />`, `<EmbarkCruiseTradeBridge />`, and `<ProductDemo />` while keeping all 6 topic routes (`/portlink/planning/`, `/coordination/`, `/accounts/` and `/embark/departures/`, `/capacity/`, `/bookings/`) backed by the real D14 stages.
+- **Revisit-if:** Stage 2 (`Tiller (Design)` + `Keel`) delivers the Apple / Crypto.com / Lemo-Opuscar spatial expedition workflow stage and role-driven hero audited at `1440x900` and `390x844`.

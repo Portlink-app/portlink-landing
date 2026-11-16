@@ -10,7 +10,7 @@ export default function DemoShell({ topic, onClose, onRestore }: { topic: string
   useEffect(() => { restore.current = onRestore }, [onRestore])
   useEffect(() => { let live = true; import('./ProductDemo').then(m => { if (live) setBody(() => m.default) }).catch(() => { if (live) setFailed(true) }); return () => { live = false } }, [])
   useEffect(() => { const dialog = ref.current, previous = document.body.style.overflow; dialog?.showModal(); document.body.style.overflow = 'hidden'; return () => { dialog?.close(); document.body.style.overflow = previous; restore.current() } }, [])
-  return <dialog ref={ref} className={styles.dialog} aria-labelledby="product-demo-title" onCancel={e => { e.preventDefault(); onClose() }} onKeyDown={event => {
+  return <dialog ref={ref} className={`pp pp--${s.product === 'embark' ? 'embark' : 'portlink'} ${styles.dialog}`} aria-labelledby="product-demo-title" onCancel={e => { e.preventDefault(); onClose() }} onKeyDown={event => {
     if (event.key !== 'Tab') return
     const controls = Array.from(event.currentTarget.querySelectorAll<HTMLElement>('button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), [tabindex="0"]')).filter(el => el.getClientRects().length)
     const first = controls[0], last = controls[controls.length - 1]

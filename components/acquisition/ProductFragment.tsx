@@ -1,35 +1,217 @@
+'use client'
+/* eslint-disable @next/next/no-img-element */
+
+import Film from '@/components/clone/Film'
+import { EMBARK_D14_ASSETS, PORTLINK_D14_ASSETS } from '@/components/product/d14Assets'
+import {
+  EmbarkCruiseTradeBridge,
+  EmbarkQuayCheckInSample,
+} from '@/components/product/EmbarkQuayCheckInSample'
+import {
+  PortlinkLiveWorkspaceSample,
+  PortlinkPdaFdaDiffSample,
+} from '@/components/product/PortlinkLiveWorkspaceSample'
 import type { AcquisitionAudience, AcquisitionProduct } from '@/lib/acquisition-preferences'
 import type { DemoRecord } from './journey-content'
-import styles from './ProductJourney.module.css'
 
-/** Focused, synthetic product fragments. Source provenance: docs/ACQUISITION.md.
- * These preserve the real products' separate review, capacity and payment states.
- * They are presentation only; the shared session owns every sample operation. */
-export default function ProductFragment({ product, audience, topic, record, reviewed }: {
-  product: AcquisitionProduct; audience: AcquisitionAudience; topic: string; record: DemoRecord; reviewed: boolean
+/**
+ * D14 Stage & Interactive Sample Fragment for the 6 topic routes and expandable <ProductDemo /> modal.
+ * Replaces wireframe 4-row HTML text tables with the real 2x Retina D14 stages and interactive samples.
+ */
+export default function ProductFragment({
+  product,
+  audience,
+  topic,
+  record,
+  reviewed,
+}: {
+  product: AcquisitionProduct
+  audience: AcquisitionAudience
+  topic: string
+  record: DemoRecord
+  reviewed: boolean
 }) {
-  if (record.unavailable) return <dl>{record.rows.map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl>
-  if (product === 'platform' && topic === 'planning') return <div className={styles.productFragment} data-ui>
-    <p className={styles.fragmentContext}>Itinerary · Aster Brisa · Summer 2028</p>
-    <ol className={styles.reviewRail} aria-label="Itinerary review stages">{['Draft', 'Marine operations', 'Shorex', 'Commercial', 'Published'].map((stage, index) => <li key={stage} aria-current={index === (reviewed ? 1 : 0) ? 'step' : undefined}>{stage}<span>{index === (reviewed ? 1 : 0) ? 'Current stage' : index < (reviewed ? 1 : 0) ? 'Reviewed' : 'Not started'}</span></li>)}</ol>
-    <div className={styles.callLeg}><span className={styles.portMarker} aria-hidden="true" /><div><strong>Bergen</strong><p>Proposed call · Berth to be arranged</p></div><span className={styles.fragmentStatus}>Not confirmed</span></div>
-    <p>External commitment: not requested</p>
-  </div>
-  if (product === 'embark' && topic !== 'bookings') {
-    const capacity = topic === 'capacity' ? 10 : 12
-    return <div className={styles.productFragment} data-ui>
-      <div className={styles.departureHeader}><div><span>Departure</span><h4>Coastal kayaking</h4><p>10.00 · Guide assigned</p></div><span className={styles.fragmentStatus}>{topic === 'capacity' ? 'Capacity needs review' : reviewed ? 'Plan reviewed' : 'Ready for review'}</span></div>
-      <div className={styles.capacityMeter}><strong>12 <span>/ {capacity} seats</span></strong><div className={styles.seatTicks} role="img" aria-label={`12 booked guests against ${capacity} seats; ${12 - capacity} unresolved`}>{Array.from({ length: capacity }, (_, i) => <span key={i} aria-hidden="true" />)}</div><p>{capacity === 10 ? '2 guests need a decision' : 'All booked guests fit the departure'}</p></div>
-      <div className={styles.fragmentRows}><div><strong>Guest bookings</strong><span>12 guests retained</span></div><div><strong>Guide preparation</strong><span>Assignment unchanged</span></div></div>
+  return (
+    <div className="pp-fragment-stage" data-ui data-reviewed={reviewed ? 'true' : 'false'}>
+      {record.unavailable && (
+        <div className="pp-role-banner" style={{ marginBottom: '20px' }} role="status">
+          <div className="pp-role-banner-main">
+            <span className="pp-role-dot" aria-hidden="true" />
+            <strong>{record.title}</strong>
+            <span className="pp-role-person">Role-scoped SECTION_VIS ({audience})</span>
+          </div>
+          <p className="pp-role-note">{record.unavailable}</p>
+        </div>
+      )}
+
+      {product === 'platform' && topic === 'planning' && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
+          <div className="pp-callout-strip">
+            <div className="pp-callout-pill">
+              <span className="pp-callout-pill-kicker">Kystverket Hovedled Fairways</span>
+              <strong className="pp-mono">257,0 NM · 4 Ports</strong>
+              <span>Bergen (NOBGO) to Florø, Stadlandet, Ålesund, and Molde with 0 land crossings</span>
+            </div>
+            <div className="pp-callout-pill">
+              <span className="pp-callout-pill-kicker">Follow-Water Autorouting</span>
+              <strong className="pp-mono">120 Fairway Waypoints</strong>
+              <span>Snaps passage legs to official coastal lanes with 42,0 m minimum fairway depth</span>
+            </div>
+            <div className="pp-callout-pill">
+              <span className="pp-callout-pill-kicker">Voyage Position Scrubber</span>
+              <strong className="pp-mono">SHIP AT Timeline · SOG / COG</strong>
+              <span>Scrub any timestamp along the polyline to inspect live coordinates and next-port ETA</span>
+            </div>
+          </div>
+
+          <div className="pp-stage-frame">
+            <Film
+              src={PORTLINK_D14_ASSETS.ch3VoyageAis.filmBase}
+              poster={PORTLINK_D14_ASSETS.ch3VoyageAis.desktop}
+              alt={PORTLINK_D14_ASSETS.ch3VoyageAis.alt}
+              width={PORTLINK_D14_ASSETS.ch3VoyageAis.width}
+              height={PORTLINK_D14_ASSETS.ch3VoyageAis.height}
+              className="pp-stage-img"
+            />
+          </div>
+
+          <PortlinkLiveWorkspaceSample />
+        </div>
+      )}
+
+      {product === 'platform' && topic === 'coordination' && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
+          <div className="pp-gangway-stage">
+            <img
+              src="/product/fjord-cruise-1600.webp"
+              alt="Cruise vessel alongside a Norwegian fjord quay"
+              width={1600}
+              height={1067}
+              loading="lazy"
+              className="pp-gangway-back-img"
+            />
+            <div className="pp-gangway-back-scrim" aria-hidden="true" />
+
+            <div className="pp-gangway-stage-grid">
+              <div className="pp-gangway-stack">
+                <div className="pp-callout-pill pp-callout-pill--dark">
+                  <span className="pp-callout-pill-kicker">Pilotage &amp; Towage</span>
+                  <strong className="pp-mono">07.15 to 08.00 · 2 Tugs</strong>
+                  <span>Zero tug overtime used alongside; logged directly on the departure report before lines come in.</span>
+                </div>
+                <div className="pp-callout-pill pp-callout-pill--dark">
+                  <span className="pp-callout-pill-kicker">Quay Services Verified</span>
+                  <strong className="pp-mono">180 t Water · 6 m³ Waste</strong>
+                  <span>Mooring 6 lines fast kl. 07.52; gangway cleared kl. 08.05; hydrant meter #3 and MARPOL receipt attached.</span>
+                </div>
+                <div className="pp-callout-pill pp-callout-pill--dark">
+                  <span className="pp-callout-pill-kicker">Cryptographic Sign-Off</span>
+                  <strong className="pp-mono">17.28 Agent · 17.31 Master</strong>
+                  <span>Dual on-board signatures lock operational quantities and feed the Final Disbursement Account automatically.</span>
+                </div>
+              </div>
+
+              <div className="pp-gangway-phone-wrap">
+                <div className="pp-upright-mobile-frame">
+                  <img
+                    src={PORTLINK_D14_ASSETS.ch4GangwaySignoff.mobile}
+                    alt="Upright 2x Retina mobile capture of Portlink on-board gangway departure report with Port Agent and Ship Master signatures"
+                    width={PORTLINK_D14_ASSETS.ch4GangwaySignoff.mobileWidth}
+                    height={PORTLINK_D14_ASSETS.ch4GangwaySignoff.mobileHeight}
+                    loading="lazy"
+                    className="pp-stage-img"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <PortlinkLiveWorkspaceSample />
+        </div>
+      )}
+
+      {product === 'platform' && topic === 'accounts' && <PortlinkPdaFdaDiffSample />}
+
+      {product === 'embark' && topic === 'departures' && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
+          <div className="pp-callout-strip">
+            <div className="pp-callout-pill">
+              <span className="pp-callout-pill-kicker">Vessel Quota Lock</span>
+              <strong className="pp-mono">RIB Havørn (12p) · MS Fjordsyn (24p)</strong>
+              <span>Shared hull inventory prevents overlapping departure overbooking</span>
+            </div>
+            <div className="pp-callout-pill">
+              <span className="pp-callout-pill-kicker">Guide Qualifications</span>
+              <strong className="pp-mono">STCW + NO / EN / DE</strong>
+              <span>Filter roster by high-speed craft certificate and guest language</span>
+            </div>
+            <div className="pp-callout-pill">
+              <span className="pp-callout-pill-kicker">Exception Alerts</span>
+              <strong className="pp-mono">Action Required Flag</strong>
+              <span>Departures missing a skipper or guide highlight 24 hours ahead</span>
+            </div>
+          </div>
+
+          <div className="pp-stage-frame">
+            <Film
+              src={EMBARK_D14_ASSETS.ch3DispatchRoster.filmBase}
+              poster={EMBARK_D14_ASSETS.ch3DispatchRoster.desktop}
+              alt={EMBARK_D14_ASSETS.ch3DispatchRoster.alt}
+              width={EMBARK_D14_ASSETS.ch3DispatchRoster.width}
+              height={EMBARK_D14_ASSETS.ch3DispatchRoster.height}
+              className="pp-stage-img"
+            />
+          </div>
+
+          <div className="pp-stage-frame">
+            <img
+              src={EMBARK_D14_ASSETS.ch1Hero.desktop}
+              alt={EMBARK_D14_ASSETS.ch1Hero.alt}
+              width={EMBARK_D14_ASSETS.ch1Hero.width}
+              height={EMBARK_D14_ASSETS.ch1Hero.height}
+              loading="lazy"
+              className="pp-stage-img"
+            />
+          </div>
+        </div>
+      )}
+
+      {product === 'embark' && topic === 'capacity' && <EmbarkQuayCheckInSample />}
+
+      {product === 'embark' && topic === 'bookings' && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
+          <div className="pp-callout-strip">
+            <div className="pp-callout-pill">
+              <span className="pp-callout-pill-kicker">Embeddable Web Widget</span>
+              <strong className="pp-mono">/w/fjordland · Live Seats</strong>
+              <span>Real-time seat availability on your own domain with zero OTA commission</span>
+            </div>
+            <div className="pp-callout-pill">
+              <span className="pp-callout-pill-kicker">Instant Nordic &amp; Global Pay</span>
+              <strong className="pp-mono">Vipps · Stripe · Apple Pay</strong>
+              <span>Payment confirmation attaches directly to the passenger manifest row</span>
+            </div>
+            <div className="pp-callout-pill">
+              <span className="pp-callout-pill-kicker">Group &amp; DMC Invoicing</span>
+              <strong className="pp-mono">Invoice #2048 · Settled 14d Prior</strong>
+              <span>Automated payment links and reminders for private charters and cruise groups</span>
+            </div>
+          </div>
+
+          <div className="pp-stage-frame">
+            <img
+              src={EMBARK_D14_ASSETS.ch4WidgetInvoicing.desktop}
+              alt={EMBARK_D14_ASSETS.ch4WidgetInvoicing.alt}
+              width={EMBARK_D14_ASSETS.ch4WidgetInvoicing.width}
+              height={EMBARK_D14_ASSETS.ch4WidgetInvoicing.height}
+              loading="lazy"
+              className="pp-stage-img"
+            />
+          </div>
+
+          <EmbarkCruiseTradeBridge />
+        </div>
+      )}
     </div>
-  }
-  if (product === 'platform' && topic === 'accounts') return <div className={styles.productFragment} data-ui>
-    <div className={styles.fragmentRows}><div><strong>Approved proforma</strong><span>412 380,00 kr</span></div><div><strong>Unused tug overtime</strong><span>−11 130,00 kr</span></div><div className={styles.accountTotal}><strong>Final account</strong><span>401 250,00 kr</span></div></div>
-    <p className={styles.fragmentStatus}>{reviewed ? 'Difference reviewed' : 'Awaiting quantity review'}</p><p>Account acceptance and payment remain separate decisions.</p>
-  </div>
-  return <div className={styles.productFragment} data-ui>
-    <p className={styles.fragmentContext}>{product === 'embark' ? 'Bookings · Group request' : audience === 'tour' ? 'Shore programme · Quote response' : 'Port call · Service record'}</p>
-    <div className={styles.fragmentRows}>{record.rows.map(([label,value]) => <div key={label}><strong>{label}</strong><span>{value}</span></div>)}</div>
-    <p className={styles.fragmentStatus}>{reviewed ? 'Sample review complete' : 'Awaiting review'}</p>
-  </div>
+  )
 }

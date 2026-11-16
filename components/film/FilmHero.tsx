@@ -32,7 +32,7 @@
  * is the chart.
  */
 
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { ArrowDown, Pause, Play } from 'lucide-react'
 import { useMotionAllowed, useInViewPlayback, useNarrow, useShortViewport, useTrackStage } from './useFilm'
 import styles from './FilmHero.module.css'
@@ -144,14 +144,12 @@ function StageStack({
   narrow,
   paused,
   short,
-  eager,
 }: {
   stage: number
   motionAllowed: boolean
   narrow: boolean
   paused: boolean
   short: boolean
-  eager: boolean
 }) {
   return (
     <div className="film-stack">
@@ -164,7 +162,7 @@ function StageStack({
               playing={!short && i === stage && !paused}
               motionAllowed={motionAllowed}
               narrow={narrow}
-              eager={eager}
+              eager
               controls={short}
             />
           </div>
@@ -178,31 +176,18 @@ function StageStack({
   )
 }
 
-export default function FilmHero({ mediaOnly = false }: { mediaOnly?: boolean }) {
+export default function FilmHero() {
   const trackRef = useRef<HTMLDivElement>(null)
   const paneRef = useRef<HTMLDivElement>(null)
   const motionAllowed = useMotionAllowed()
   const narrow = useNarrow()
   const short = useShortViewport()
   const [paused, setPaused] = useState(false)
-  const [nearFilm, setNearFilm] = useState(!mediaOnly)
-
-  useEffect(() => {
-    if (!mediaOnly || nearFilm || !trackRef.current) return
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        setNearFilm(true)
-        observer.disconnect()
-      }
-    }, { rootMargin: '300px' })
-    observer.observe(trackRef.current)
-    return () => observer.disconnect()
-  }, [mediaOnly, nearFilm])
   const stage = useTrackStage(trackRef, paneRef, stages.length, motionAllowed && !short)
 
   return (
-    <section id={mediaOnly ? 'product-film' : 'hero'} className={styles.hero}>
-      {!mediaOnly && <div className={styles.intro}>
+    <section id="hero" className={styles.hero}>
+      <div className={styles.intro}>
         {/* Conversion Batch 1, 01.11.2026 (goal portlink-landing-conversion-2026-11-01). The H1 used to
             sell the team ("Maritime software. Built by people who know port calls.") and a visitor met
             the outcome only in the body copy; 63 % of October's visits left from this screen.
@@ -223,8 +208,7 @@ export default function FilmHero({ mediaOnly = false }: { mediaOnly?: boolean })
             </div>
           </div>
         </div>
-      </div>}
-      {mediaOnly && <h2 className={styles.intro}>See the voyage take shape</h2>}
+      </div>
 
       <div
         ref={trackRef}
@@ -243,8 +227,8 @@ export default function FilmHero({ mediaOnly = false }: { mediaOnly?: boolean })
         ))}
 
         <div ref={paneRef} className={`film-pane ${styles.pane}`}>
-          <div className={styles.sceneLabel}>Voyage planning in Platform</div>
-          <StageStack stage={stage} motionAllowed={motionAllowed && nearFilm} narrow={narrow} paused={paused} short={short} eager={!mediaOnly} />
+          <div className={styles.sceneLabel}><span>Portlink in motion</span><span>0{stage + 1} / 0{stages.length}</span></div>
+          <StageStack stage={stage} motionAllowed={motionAllowed} narrow={narrow} paused={paused} short={short} />
 
           {/* Real links, not decoration: a keyboard or switch user reaches stage
               two without scrolling to it, and the browser does the scrolling. */}

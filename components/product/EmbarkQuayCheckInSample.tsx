@@ -6,6 +6,8 @@
  *   2. <EmbarkCruiseTradeBridge /> (Chapter 5: Two-Sided Portlink DMC Request ⇄ Embark Operator Confirmation)
  */
 import { useState } from 'react'
+import { useOptionalProductSession } from '@/components/acquisition/ProductSession'
+import { customerBrand } from '@/lib/customer-brand'
 
 type BoatId = 'havorn' | 'fjordsyn'
 type GuideId = 'marte' | 'erik'
@@ -114,6 +116,7 @@ const DMC_BLOCK_ROW: GuestRow = {
 }
 
 export function EmbarkQuayCheckInSample() {
+  const session = useOptionalProductSession()
   const [boatId, setBoatId] = useState<BoatId>('havorn')
   const [guideId, setGuideId] = useState<GuideId>('marte')
   const [dmcAccepted, setDmcAccepted] = useState<boolean>(false)
@@ -124,6 +127,9 @@ export function EmbarkQuayCheckInSample() {
     booking88: false,
     dmc210: true,
   })
+
+  const brand = customerBrand(session?.preferences.brandColor || '#be4412')
+  const operatorName = session?.preferences.companyName || 'Fjordland Adventures AS'
 
   const activeRows = dmcAccepted ? [...BASE_GUESTS, DMC_BLOCK_ROW] : BASE_GUESTS
   const boat = BOATS[boatId]
@@ -236,13 +242,24 @@ export function EmbarkQuayCheckInSample() {
 
       {/* Main split stage: Left Dispatch & Manifest Console, Right Guide's On-Tour Phone */}
       <div className="pp-embark-sample-grid">
-        <div className="pp-ui-card" data-ui>
+        <div
+          className="pp-ui-card"
+          data-ui
+          style={{ borderTop: `4px solid ${brand.effective}` }}
+        >
           <div className="pp-ui-hd">
             <div>
               <div className="pp-ui-meta">
                 <span className="pp-mono">06.08.2026 kl. 10.00</span>
                 <span className="pp-sep" aria-hidden="true">·</span>
                 <span>{boat.berth}</span>
+                <span className="pp-sep" aria-hidden="true">·</span>
+                <span
+                  className="pp-brand-badge"
+                  style={{ backgroundColor: brand.effective, color: brand.foreground }}
+                >
+                  {operatorName}
+                </span>
               </div>
               <h3 className="pp-ui-title">10.00 Icefjord &amp; Fjord RIB Safari</h3>
             </div>
@@ -343,7 +360,7 @@ export function EmbarkQuayCheckInSample() {
               <div className="pp-phone-title-block">
                 <strong>10.00 RIB Safari</strong>
                 <span>
-                  {boat.name} · {guide.langs}
+                  {operatorName} · {boat.name} · {guide.langs}
                 </span>
               </div>
               <div className="pp-phone-counter" aria-live="polite">
@@ -395,7 +412,10 @@ export function EmbarkQuayCheckInSample() {
 }
 
 export function EmbarkCruiseTradeBridge() {
+  const session = useOptionalProductSession()
   const [confirmed, setConfirmed] = useState<boolean>(true)
+  const brand = customerBrand(session?.preferences.brandColor || '#be4412')
+  const operatorName = session?.preferences.companyName || 'Fjordland Adventures AS'
 
   return (
     <div className="pp-bridge-shell" data-testid="embark-cruise-trade-bridge">
@@ -465,11 +485,24 @@ export function EmbarkCruiseTradeBridge() {
         </div>
 
         {/* Right Card: Tour Operator in Embark */}
-        <div className="pp-ui-card pp-bridge-card" data-ui>
+        <div
+          className="pp-ui-card pp-bridge-card"
+          data-ui
+          style={{ borderTop: `4px solid ${brand.effective}` }}
+        >
           <div className="pp-ui-hd">
             <div>
-              <span className="pp-ui-meta pp-mono">Side B · Local Tour Operator in Embark</span>
-              <h3 className="pp-ui-title">Fjordland Adventures AS · Trade Inbox</h3>
+              <div className="pp-ui-meta pp-mono">
+                <span>Side B · Local Tour Operator in Embark</span>
+                <span className="pp-sep" aria-hidden="true">·</span>
+                <span
+                  className="pp-brand-badge"
+                  style={{ backgroundColor: brand.effective, color: brand.foreground }}
+                >
+                  {operatorName}
+                </span>
+              </div>
+              <h3 className="pp-ui-title">{operatorName} · Trade Inbox</h3>
             </div>
             <span className="pp-chip pp-chip--info">Visible in Bergen · Flåm · Ålesund</span>
           </div>

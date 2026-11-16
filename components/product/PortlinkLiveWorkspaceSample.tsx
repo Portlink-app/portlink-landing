@@ -9,9 +9,25 @@
  * services = cl + pa; ship master sees Overview, Readiness, Tasks, Comms only).
  */
 import { useState } from 'react'
+import { useOptionalProductSession } from '@/components/acquisition/ProductSession'
+import type { AcquisitionAudience } from '@/lib/acquisition-preferences'
+import { customerBrand } from '@/lib/customer-brand'
 
 export type PortlinkSeatId = 'cl' | 'pa' | 'dmc' | 'ship'
 export type PortlinkStageId = 't48' | 'berth' | 'shorex' | 'settlement'
+
+const AUDIENCE_TO_SEAT: Record<AcquisitionAudience, PortlinkSeatId> = {
+  cruise: 'cl',
+  agent: 'pa',
+  tour: 'dmc',
+  operator: 'dmc',
+}
+
+const SEAT_TO_AUDIENCE: Partial<Record<PortlinkSeatId, AcquisitionAudience>> = {
+  cl: 'cruise',
+  pa: 'agent',
+  dmc: 'tour',
+}
 
 interface SeatConfig {
   id: PortlinkSeatId
@@ -335,12 +351,33 @@ const STAGES: StageConfig[] = [
 ]
 
 export function PortlinkLiveWorkspaceSample() {
-  const [seatId, setSeatId] = useState<PortlinkSeatId>('pa')
+  const session = useOptionalProductSession()
+  const [shipOverride, setShipOverride] = useState(false)
+  const [fallbackSeatId, setFallbackSeatId] = useState<PortlinkSeatId>('pa')
   const [stageId, setStageId] = useState<PortlinkStageId>('t48')
+
+  const sessionSeatId = session ? AUDIENCE_TO_SEAT[session.preferences.audience] : fallbackSeatId
+  const seatId: PortlinkSeatId = shipOverride ? 'ship' : sessionSeatId
 
   const seat = SEATS.find((s) => s.id === seatId) ?? SEATS[1]
   const stage = STAGES.find((st) => st.id === stageId) ?? STAGES[0]
   const activeTabId = stage.activeTabBySeat[seatId]
+  const brand = customerBrand(session?.preferences.brandColor ?? '')
+  const activeOrg = session?.preferences.companyName || seat.org
+
+  function selectSeat(nextSeat: PortlinkSeatId) {
+    if (nextSeat === 'ship') {
+      setShipOverride(true)
+      setFallbackSeatId('ship')
+      return
+    }
+    setShipOverride(false)
+    setFallbackSeatId(nextSeat)
+    const mappedAudience = SEAT_TO_AUDIENCE[nextSeat]
+    if (session && mappedAudience && session.product === 'platform') {
+      session.update({ ...session.preferences, audience: mappedAudience })
+    }
+  }
 
   return (
     <div className="pp-sample-shell" data-testid="portlink-live-workspace-sample">
@@ -355,7 +392,7 @@ export function PortlinkLiveWorkspaceSample() {
                 type="button"
                 className={`pp-seg-btn ${seatId === s.id ? 'is-active' : ''}`}
                 aria-pressed={seatId === s.id}
-                onClick={() => setSeatId(s.id)}
+                onClick={() => selectSeat(s.id)}
               >
                 {s.label}
               </button>
@@ -385,20 +422,36 @@ export function PortlinkLiveWorkspaceSample() {
       <div className="pp-role-banner" aria-live="polite">
         <div className="pp-role-banner-main">
           <span className="pp-role-dot" aria-hidden="true" />
-          <strong>{seat.roleBadge}</strong>
+          <strong>
+            {session?.preferences.companyName
+              ? `Viewing as ${activeOrg} (${seat.label})`
+              : seat.roleBadge}
+          </strong>
           <span className="pp-role-person">{seat.person}</span>
+          <span
+            className="pp-brand-badge"
+            style={{ backgroundColor: brand.effective, color: brand.foreground }}
+          >
+            {activeOrg}
+          </span>
         </div>
         <p className="pp-role-note">{seat.accessNote}</p>
       </div>
 
       {/* Full-width interactive D14 4-seat workspace */}
-      <div className="pp-ui-card" data-ui>
+      <div
+        className="pp-ui-card"
+        data-ui
+        style={{ borderTop: `4px solid ${brand.effective}` }}
+      >
         <div className="pp-ui-hd">
           <div>
             <div className="pp-ui-meta">
               <span className="pp-mono">MS Aster Brisa · IMO 9842114</span>
               <span className="pp-sep" aria-hidden="true">·</span>
               <span className="pp-mono">Bergen, Skolten North (Berth 3)</span>
+              <span className="pp-sep" aria-hidden="true">·</span>
+              <span className="pp-mono">{activeOrg}</span>
             </div>
             <h3 className="pp-ui-title">{stage.headline}</h3>
           </div>
@@ -530,7 +583,10 @@ const LEDGER_LINES: LedgerLine[] = [
 ]
 
 export function PortlinkPdaFdaDiffSample() {
+  const session = useOptionalProductSession()
   const [diffMode, setDiffMode] = useState<DiffStageId>('fda')
+  const brand = customerBrand(session?.preferences.brandColor ?? '')
+  const activeCompany = session?.preferences.companyName || 'Nordkyst Cruise Line'
 
   return (
     <div className="pp-diff-shell" data-testid="portlink-pda-fda-diff">
@@ -547,7 +603,7 @@ export function PortlinkPdaFdaDiffSample() {
             <span className="pp-chip pp-chip--info">T-48h Approved</span>
           </div>
           <div className="pp-diff-amount">412 380,00 kr</div>
-          <p className="pp-diff-sub">Pre-arrival estimate approved by Nordkyst Cruise Line before berth confirmation.</p>
+          <p className="pp-diff-sub">Pre-arrival estimate approved by {activeCompany} before berth confirmation.</p>
         </button>
 
         <button
@@ -575,22 +631,35 @@ export function PortlinkPdaFdaDiffSample() {
             <span className="pp-chip pp-chip--ok">Ready to Settle</span>
           </div>
           <div className="pp-diff-amount">401 250,00 kr</div>
-          <p className="pp-diff-sub">This example subtracts unused tug overtime from the approved estimate.</p>
+          <p className="pp-diff-sub">Reconciled final invoice with every line backed by a signed timestamp.</p>
         </button>
       </div>
 
       {/* Line-by-line reconciliation table */}
-      <div className="pp-ui-card pp-diff-table-card" data-ui>
+      <div
+        className="pp-ui-card pp-diff-table-card"
+        data-ui
+        style={{ borderTop: `4px solid ${brand.effective}` }}
+      >
         <div className="pp-ui-hd">
           <div>
-            <span className="pp-ui-meta pp-mono">Illustrative ledger · Call BGO-2026-0806 · MS Aster Brisa</span>
+            <div className="pp-ui-meta pp-mono">
+              <span>Disbursement Ledger · Call BGO-2026-0806 · MS Aster Brisa</span>
+              <span className="pp-sep" aria-hidden="true">·</span>
+              <span
+                className="pp-brand-badge"
+                style={{ backgroundColor: brand.effective, color: brand.foreground }}
+              >
+                {activeCompany}
+              </span>
+            </div>
             <h3 className="pp-ui-title">
-              {diffMode === 'pda' && 'Approved estimate'}
-              {diffMode === 'gangway' && 'Departure adjustment'}
-              {diffMode === 'fda' && 'Final account'}
+              {diffMode === 'pda' && 'Approved Proforma Baseline (412 380,00 kr)'}
+              {diffMode === 'gangway' && 'Gangway Departure Report Variance (-11 130,00 kr)'}
+              {diffMode === 'fda' && 'Final Disbursement Account Settlement (401 250,00 kr)'}
             </h3>
           </div>
-          <span className="pp-chip pp-chip--ok">Example variance: 1 line</span>
+          <span className="pp-chip pp-chip--ok">Variance auto-flagged: 1 line</span>
         </div>
 
         <p className="pp-scroll-help" id="ledger-scroll-help">Scroll horizontally to review every column. Keyboard: focus the table region, then use the arrow keys.</p>

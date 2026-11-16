@@ -34,10 +34,10 @@ for (const hex of ['#ffffff', '#000000', '#00ff00', '#ff0000', '#0000ff', '#965a
   assert.ok(customerBrand(hex).contrast >= 4.5)
 }
 
-// Verify Stage 1 D14 restoration + personalisation bar + topic deep-links
+// Verify Stage 2 Spatial Expedition Hero on / + Stage 1 D14 restoration + personalisation bar + topic deep-links
 const homePage = read('app/page.tsx')
-assert.ok(homePage.includes('<FilmHero />'), 'app/page.tsx must mount <FilmHero />')
-assert.ok(!homePage.includes('<AcquisitionOpening'), 'app/page.tsx must not mount <AcquisitionOpening />')
+assert.ok(homePage.includes('<AcquisitionOpening page="company" />'), 'app/page.tsx must mount <AcquisitionOpening page="company" />')
+assert.ok(homePage.includes('<FilmHero mediaOnly />'), 'app/page.tsx must mount <FilmHero mediaOnly />')
 
 const portlinkPage = read('app/(product)/portlink/page.tsx')
 for (const token of [

@@ -1,53 +1,1093 @@
-/* Tiller acquisition-1: Apple stage hierarchy, Linear evidence density, existing D14 materials. */
-.root{--ground:#08131f;--ink:#f8fafc;--surface:#f6f5f1;--surface-ink:#0c1829;--action:#0f766e;--gutter:clamp(20px,3.34vw,48px);background:var(--ground);color:var(--ink);font-family:var(--acq-body),sans-serif;font-size:16px;line-height:1.5}
-.embark{--ground:#f4f3ee;--ink:#14181d;--surface:#fff;--surface-ink:#14181d;--action:#be4412}
-.opening{padding:40px var(--gutter) 48px;max-width:1600px;margin:auto}
-.intro{display:grid;grid-template-columns:1.3fr 1fr;gap:48px;align-items:end;margin-bottom:32px}
-.root.root h1,.root.root h2,.root.root h3{font-family:var(--acq-display),sans-serif;letter-spacing:-.035em;font-weight:600;text-wrap:balance;margin:0;line-height:1.05}
-.root.root h1{font-size:clamp(40px,5.3vw,76px);max-width:14ch}
-.root.root h2{font-size:clamp(30px,3.5vw,50px)}
-.root.root h3{font-size:clamp(26px,2vw,28px)}
-.root p{color:inherit;margin:16px 0;max-width:62ch}
-.lead{font-size:18px}.root a{color:inherit;text-underline-offset:5px}
-.actions,.roles,.steps,.controls{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.actions{margin-top:24px}.roles{margin-bottom:24px}
-.root button,.cta{min-height:48px;padding:12px 20px;border:0;border-radius:12px;font:inherit;cursor:pointer;transition:transform .2s ease}
-.root button{background:var(--surface);color:var(--surface-ink)}
-.root button:active,.cta:active{transform:translateY(1px)}
-.root button:disabled{opacity:.5;cursor:default}
-.root button:focus-visible,.root a:focus-visible{outline:3px solid currentColor;outline-offset:4px}
-.root button[aria-pressed=true],.root button[aria-current=step],.root .cta{background:var(--action);color:#fff}
-.root .cta{display:inline-flex;align-items:center;text-decoration:none;font-weight:700}
-.stage{position:relative;min-height:760px;overflow:hidden;border-radius:16px;background:#152c39;padding:36px}
-.scenery{position:absolute;inset:0}.landscape{display:block;width:100%;height:100%;object-fit:cover;object-position:center}
-.panel{position:relative;width:min(510px,50%);padding:28px;background:var(--surface);color:var(--surface-ink);border-radius:8px;margin-top:100px}
-.panel p:first-child{margin-top:0}.panel a{font-weight:600}.root.root .panel h2{font-size:30px;line-height:1.12;max-width:20ch}
-.root .record{font-size:14px;margin-bottom:8px}.root .owner{font-size:14px;font-weight:700;margin:8px 0 16px}
-.itinerary{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:16px 0;border-block:1px solid #c8d0ce;margin-top:20px}.itinerary span{font-size:14px}.itinerary b{display:block;font-size:20px;font-weight:600}
-.panel dl{margin:12px 0}.panel dl>div{display:flex;justify-content:space-between;gap:20px;padding:7px 0}.panel dt{font-size:14px}.panel dd{margin:0;text-align:right;font-size:14px;font-weight:600}
-.root .sceneExplanation{font-size:14px;margin:12px 0}.sceneSteps{display:flex;flex-wrap:wrap;gap:6px;margin:20px 0}.root .sceneSteps button{padding:10px 12px;font-size:14px;border-radius:4px;background:#dce3e0}.root .sceneSteps button[aria-pressed=true]{background:var(--action);color:#fff}
-.actors span{position:absolute;background:#f6f5f1;color:#0c1829;border-radius:4px;padding:8px 12px;font-size:14px;font-weight:600;border:2px solid transparent}.actors span[data-selected=true]{border-color:#0f766e}.ship{left:12%;top:11%}.agent{left:66%;top:25%}.dmc{right:5%;top:31%}.operator{left:61%;top:25%}.guide{right:8%;top:16%}
-.root .sceneNote{position:relative;margin:20px 0 0;background:#152c39;color:#fff;padding:8px 12px;font-size:12px;max-width:510px;border-radius:4px}
-.root .capacity p{font-size:14px;margin:14px 0}.places{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}.places span{display:grid;place-items:center;background:#224b40;color:#fff;font-size:13px;min-height:28px;border:2px solid #224b40;border-radius:3px}.places span[data-unresolved=true]{background:#fff;color:#853409;border:2px dashed #853409}
-.caption{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:12px}.caption button{background:transparent;color:inherit}
-.products{display:grid;grid-template-columns:1fr 1fr 1fr;gap:40px;padding-top:48px}.root.root .products h2{font-size:28px}
-.chapter{background:var(--surface);color:var(--surface-ink);padding:72px var(--gutter)}
-.chapterHead,.proof{display:grid;grid-template-columns:1fr 1.2fr;gap:56px;max-width:1504px;margin:auto;align-items:center}
-.chapterHead{margin-bottom:32px}.steps{max-width:1504px;margin:0 auto 24px}.steps button,.controls button{background:#e2e8f0;color:#0c1829}
-.proof{min-height:360px}.controls{margin-top:28px}
-.sample{background:#fff;color:#0c1829;padding:32px;border-radius:16px}
-.sample strong{display:block;font-size:28px;line-height:1.15;min-height:65px}
-.sample dl{margin:20px 0}.sample dl div{display:flex;justify-content:space-between;gap:22px;padding:12px 0}.sample dd{margin:0;text-align:right;font-weight:600}
-.root[data-motion=on] .sample{animation:focus-in .5s ease-out}@keyframes focus-in{from{transform:translateY(10px)}to{transform:translateY(0)}}
-@media(max-width:767px){.opening{padding-top:28px}.intro{display:block}.lead{font-size:17px!important;margin-top:24px!important}.stage{min-height:0;padding:260px 0 0;overflow:hidden;background:#152c39}.scenery{height:600px;bottom:auto}.landscape{height:100%;object-position:center top}.panel{width:100%;margin-top:0;padding:22px;border-radius:8px}.root.root .panel h2{font-size:26px}.actors span{font-size:12px;padding:5px 7px}.ship{left:5%;top:50px}.agent{left:40%;top:125px}.dmc{right:3%;top:165px}.operator{left:5%;top:70px}.guide{right:5%;top:130px}.root .sceneNote{margin:0;border-radius:0;padding:14px 22px}.panel dl>div{gap:12px}.products{display:block;padding-top:24px}.products article{padding-block:16px}.chapter{padding:48px var(--gutter)}.chapterHead,.proof{display:block}.chapterHead p{margin-top:24px}.sample{margin-top:28px;padding:22px}.sample strong{min-height:0}.sample dl div{gap:16px}.caption{font-size:14px}.roles{gap:8px}.roles button{padding:12px}.root.root h1{max-width:15ch}}
-@media(prefers-reduced-motion:reduce){.root *{animation:none!important;transition:none!important}}
+/* Tiller Stage 2: Apple staged hierarchy, Crypto.com portfolio doors, Lemo-Opuscar isometric cutaway + real 2x Retina D14 UI stages. */
+.root {
+  --ground: #08131f;
+  --ink: #f8fafc;
+  --ink-muted: #cbd5e1;
+  --surface: #f6f5f1;
+  --surface-ink: #0c1829;
+  --tile-dark: #0e2033;
+  --tile-edge: #244362;
+  --action: #0f766e;
+  --action-bright: #14b8a6;
+  --gutter: clamp(20px, 3.34vw, 48px);
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--acq-body), -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.embark {
+  --action: #be4412;
+  --action-bright: #ea580c;
+}
+
+.opening {
+  padding: 20px var(--gutter) 44px;
+  max-width: 1560px;
+  margin: 0 auto;
+}
+
+.intro {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  gap: 36px;
+  align-items: end;
+  margin-bottom: 18px;
+}
+
+.kickerTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 11px;
+  border-radius: 6px;
+  background: #10243a;
+  color: #5eead4;
+  font-size: 13px;
+  font-weight: 600;
+  margin: 0 0 12px;
+}
+
+.embark .kickerTag {
+  color: #fdba74;
+  background: #2b1812;
+}
+
+.root.root h1,
+.root.root h2,
+.root.root h3 {
+  font-family: var(--acq-display), -apple-system, BlinkMacSystemFont, sans-serif;
+  letter-spacing: -0.032em;
+  font-weight: 700;
+  text-wrap: balance;
+  margin: 0;
+  line-height: 1.05;
+}
+
+.root.root h1 {
+  font-size: clamp(34px, 3.55vw, 52px);
+  max-width: 18ch;
+}
+
+.root.root h2 {
+  font-size: clamp(28px, 3vw, 42px);
+}
+
+.root.root h3 {
+  font-size: clamp(22px, 1.9vw, 28px);
+}
+
+.root p {
+  color: inherit;
+  margin: 12px 0;
+  max-width: 62ch;
+}
+
+.introAside {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.lead {
+  font-size: 17px;
+  color: var(--ink-muted);
+  margin: 0;
+  line-height: 1.45;
+}
+
+.root a {
+  color: inherit;
+  text-underline-offset: 5px;
+}
+
+.actions,
+.roles,
+.steps,
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.actions {
+  margin-top: 16px;
+}
+
+.root button,
+.cta,
+.secondaryCta {
+  min-height: 44px;
+  padding: 9px 16px;
+  border: 0;
+  border-radius: 10px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.18s ease, background-color 0.18s ease;
+}
+
+.root button {
+  background: #132b45;
+  color: #f8fafc;
+}
+
+.root button:hover {
+  background: #1a3a5c;
+}
+
+.root button:active,
+.cta:active,
+.secondaryCta:active {
+  transform: translateY(1px);
+}
+
+.root button:disabled {
+  opacity: 0.48;
+  cursor: default;
+}
+
+.root button:focus-visible,
+.root a:focus-visible {
+  outline: 3px solid currentColor;
+  outline-offset: 3px;
+}
+
+.root button[aria-pressed='true'],
+.root button[aria-current='step'],
+.root .cta {
+  background: var(--action);
+  color: #ffffff;
+}
+
+.root .cta,
+.root .secondaryCta {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.root .secondaryCta {
+  background: #16324f;
+  color: #f8fafc;
+}
+
+.root .secondaryCta:hover {
+  background: #1d4064;
+}
+
+/* Interactive Control Deck above the Stage */
+.controlDeck {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 18px;
+  margin-bottom: 14px;
+  border-radius: 12px;
+  background: #0d1f33;
+}
+
+.roleBlock,
+.stepBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.controlHeading {
+  font-size: 12px;
+  font-weight: 600;
+  color: #cbd5e1;
+  margin: 0 !important;
+}
+
+.sceneSteps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.root .sceneSteps button {
+  min-height: 44px;
+  padding: 8px 13px;
+  font-size: 14px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.stepNum {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* Main Two-Column Spatial Expedition + D14 UI Stage */
+.stage {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  gap: 18px;
+  align-items: stretch;
+  border-radius: 16px;
+  background: #0c1d30;
+  padding: 16px;
+}
+
+.spatialViewport {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 12px;
+  background: #071320;
+  overflow: hidden;
+}
+
+.spatialHudTop {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  background: #0a1929;
+}
+
+.spatialCoords {
+  font-size: 12px;
+  font-weight: 600;
+  color: #cbd5e1;
+}
+
+.spatialStepBadge {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: #0f3d39;
+  color: #5eead4;
+}
+
+.spatialStepBadge[data-tone='amber'] {
+  background: #3b2506;
+  color: #fcd34d;
+}
+
+.spatialStepBadge[data-tone='copper'] {
+  background: #3b180c;
+  color: #fdba74;
+}
+
+.isometricFrame {
+  position: relative;
+  min-height: 410px;
+  overflow: hidden;
+  background: #071320;
+}
+
+.isometricVisualWrap {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.terrainGroup,
+.quayGroup {
+  transform-origin: center;
+}
+
+.bathymetryCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.isometricSvg {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: auto;
+  min-height: 390px;
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.root[data-motion='on'] .isometricFrame[data-focus='plan'] .isometricSvg {
+  transform: scale(1.02) translate3d(1%, 0.5%, 0);
+}
+
+.root[data-motion='on'] .isometricFrame[data-focus='review'] .isometricSvg {
+  transform: scale(1.03) translate3d(0%, 0%, 0);
+}
+
+.root[data-motion='on'] .isometricFrame[data-focus='request'] .isometricSvg {
+  transform: scale(1.04) translate3d(-1.5%, -0.5%, 0);
+}
+
+.root[data-motion='on'] .isometricFrame[data-focus='commit'] .isometricSvg {
+  transform: scale(1.02) translate3d(0%, 0%, 0);
+}
+
+/* Interactive Actor Pins overlaid on the Isometric Cutaway */
+.actors {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.root .actorPin {
+  pointer-events: auto;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  min-height: 50px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: #0b1c2e;
+  color: #f8fafc;
+  outline: 2px solid #2b4f73;
+  text-align: left;
+}
+
+.root .actorPin[data-selected='true'] {
+  background: #0d2b36;
+  outline-color: #2dd4bf;
+}
+
+.embark .actorPin[data-selected='true'] {
+  background: #2b160e;
+  outline-color: #fb923c;
+}
+
+.actorRole {
+  font-size: 12px;
+  font-weight: 600;
+  color: #cbd5e1;
+  line-height: 1.2;
+}
+
+.actorPin strong {
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.25;
+}
+
+.actorBadge {
+  display: inline-block;
+  margin-top: 2px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  background: #133946;
+  color: #5eead4;
+}
+
+.actorPin[data-tone='pending'] .actorBadge {
+  background: #3d2607;
+  color: #fcd34d;
+}
+
+.actorPin[data-tone='muted'] .actorBadge {
+  background: #16293d;
+  color: #cbd5e1;
+}
+
+.plannerPin {
+  left: 3%;
+  top: 4%;
+}
+
+.ship {
+  left: 4%;
+  bottom: 10%;
+}
+
+.agent {
+  left: 45%;
+  top: 6%;
+}
+
+.dmc {
+  right: 3%;
+  bottom: 12%;
+}
+
+.operator {
+  left: 6%;
+  top: 12%;
+}
+
+.guide {
+  right: 4%;
+  bottom: 12%;
+}
+
+.telemetryGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  background: #06101b;
+  padding-top: 2px;
+}
+
+.telemetryCell {
+  background: #091726;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.telemetryKicker {
+  font-size: 12px;
+  font-weight: 600;
+  color: #cbd5e1;
+}
+
+.telemetryVal {
+  font-size: 14px;
+  font-weight: 700;
+  color: #f8fafc;
+  font-variant-numeric: tabular-nums;
+}
+
+.telemetryNote {
+  font-size: 12px;
+  font-weight: 600;
+  color: #5eead4;
+}
+
+.embark .telemetryNote {
+  color: #fdba74;
+}
+
+.spatialFooterBar {
+  padding: 9px 14px;
+  background: #0a1929;
+}
+
+.root .sceneNote {
+  margin: 0;
+  color: #cbd5e1;
+  font-size: 12px;
+  max-width: none;
+}
+
+/* Right Column: Coupled 2x Retina D14 UI Close-Up & Live Record Inspector */
+.panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--surface-ink);
+  overflow: hidden;
+}
+
+.d14PreviewFrame {
+  background: #0a1828;
+}
+
+.d14PreviewHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 9px 14px;
+  background: #08131f;
+  color: #f8fafc;
+}
+
+.d14SurfaceName {
+  font-size: 12px;
+  font-weight: 700;
+  color: #e2e8f0;
+}
+
+.d14SurfaceBadge {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: #0f3d39;
+  color: #5eead4;
+}
+
+.d14SurfaceBadge[data-tone='amber'] {
+  background: #3b2506;
+  color: #fcd34d;
+}
+
+.d14SurfaceBadge[data-tone='copper'] {
+  background: #3b180c;
+  color: #fdba74;
+}
+
+.d14ImageViewport {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16 / 9.4;
+  background: #0c1928;
+}
+
+.d14CloseUpImg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.panelBody {
+  padding: 18px 20px;
+}
+
+.panelMetaRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.root .record {
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+  margin: 0;
+}
+
+.root .owner {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+}
+
+.root.root .panel h2 {
+  font-size: 24px;
+  line-height: 1.15;
+  color: #0c1829;
+}
+
+.itinerary {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #ebe9e1;
+  margin-top: 10px;
+}
+
+.itinerary span {
+  font-size: 13px;
+  color: #334155;
+}
+
+.itinerary b {
+  display: block;
+  font-size: 16px;
+  font-weight: 700;
+  color: #0c1829;
+  margin-top: 2px;
+}
+
+.panel dl {
+  margin: 10px 0;
+  display: grid;
+  gap: 4px;
+}
+
+.panel dl > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: #ffffff;
+}
+
+.panel dt {
+  font-size: 14px;
+  color: #334155;
+}
+
+.panel dd {
+  margin: 0;
+  text-align: right;
+  font-size: 14px;
+  font-weight: 700;
+  color: #0c1829;
+}
+
+.root .sceneExplanation {
+  font-size: 14px;
+  color: #1e293b;
+  margin: 10px 0;
+}
+
+.panelActions {
+  margin-top: 10px;
+}
+
+.panelPrimaryLink {
+  display: inline-flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: #0c1829 !important;
+  text-decoration: underline;
+}
+
+.root .capacity p {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 8px 0;
+}
+
+.places {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 6px;
+}
+
+.places span {
+  display: grid;
+  place-items: center;
+  background: #134e4a;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  min-height: 26px;
+  border-radius: 4px;
+}
+
+.places span[data-unresolved='true'] {
+  background: #fffbeb;
+  color: #9a3412;
+  outline: 2px dashed #c2410c;
+  outline-offset: -2px;
+}
+
+.caption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: 12px;
+  color: #cbd5e1;
+  font-size: 14px;
+}
+
+.motionBtn {
+  background: #132b45 !important;
+  color: #f8fafc !important;
+  min-height: 40px !important;
+  padding: 7px 13px !important;
+  font-size: 13px !important;
+}
+
+/* 3-Door Product Portfolio Bar immediately below the Stage */
+.products {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  padding-top: 24px;
+}
+
+.productDoor {
+  padding: 22px;
+  border-radius: 12px;
+  background: #0d1f33;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.productDoor[data-active='true'] {
+  background: #112a44;
+  outline: 2px solid #2dd4bf;
+  outline-offset: -2px;
+}
+
+.embark .productDoor[data-active='true'] {
+  outline-color: #fb923c;
+}
+
+.doorMeta {
+  font-size: 12px;
+  font-weight: 700;
+  color: #5eead4;
+  margin-bottom: 6px;
+}
+
+.root.root .products h2 {
+  font-size: 24px;
+  color: #f8fafc;
+}
+
+.products p {
+  font-size: 15px;
+  color: #cbd5e1;
+  margin: 8px 0 14px;
+}
+
+.doorLink {
+  font-size: 14px;
+  font-weight: 700;
+  color: #f8fafc !important;
+}
+
+/* Interactive Lifecycle Walkthrough Section (#discovery-workflow) */
+.chapter {
+  background: var(--surface);
+  color: var(--surface-ink);
+  padding: 60px var(--gutter);
+}
+
+.chapterHead,
+.proof {
+  display: grid;
+  grid-template-columns: 1fr 1.25fr;
+  gap: 48px;
+  max-width: 1504px;
+  margin: 0 auto;
+  align-items: start;
+}
+
+.chapterHead {
+  margin-bottom: 24px;
+  align-items: end;
+}
+
+.chapterTag {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 700;
+  color: #0f766e;
+  margin-bottom: 8px;
+}
+
+.embark .chapterTag {
+  color: #9a3412;
+}
+
+.steps {
+  max-width: 1504px;
+  margin: 0 auto 24px;
+}
+
+.steps button,
+.controls button {
+  background: #e2e8f0;
+  color: #0c1829;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.steps button:hover,
+.controls button:hover {
+  background: #cbd5e1;
+}
+
+.proof {
+  min-height: 360px;
+}
+
+.proofCopy {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 26px;
+}
+
+.proofOwner {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0f766e;
+  margin-top: 0 !important;
+}
+
+.embark .proofOwner {
+  color: #9a3412;
+}
+
+.signoffRailWrap {
+  margin: 18px 0;
+  padding: 14px 16px;
+  border-radius: 8px;
+  background: #f1f0eb;
+}
+
+.railLabel {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: #334155;
+  margin-bottom: 10px;
+}
+
+.signoffRail {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.signoffRail li {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 10px;
+  border-radius: 6px;
+  background: #e2e8f0;
+  color: #334155;
+}
+
+.signoffRail li[data-state='current'] {
+  background: #0f766e;
+  color: #ffffff;
+}
+
+.signoffRail li[data-state='done'] {
+  background: #ccfbf1;
+  color: #115e59;
+}
+
+.controls {
+  margin-top: 22px;
+}
+
+.sample {
+  background: #ffffff;
+  color: #0c1829;
+  padding: 22px;
+  border-radius: 14px;
+}
+
+.sampleTopBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.sampleRecordLabel {
+  font-size: 14px;
+  font-weight: 600;
+  color: #334155;
+  margin: 0 !important;
+}
+
+.sampleStatus {
+  display: block;
+  font-size: 22px;
+  line-height: 1.2;
+  color: #0c1829;
+}
+
+.sampleD14Frame {
+  border-radius: 10px;
+  overflow: hidden;
+  background: #08131f;
+  margin-bottom: 14px;
+  aspect-ratio: 16 / 10;
+}
+
+.sampleD14Img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+}
+
+.sample dl {
+  margin: 12px 0;
+  display: grid;
+  gap: 4px;
+}
+
+.sample dl div {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 7px 10px;
+  border-radius: 6px;
+  background: #f6f5f1;
+}
+
+.sample dt {
+  font-size: 14px;
+  color: #334155;
+}
+
+.sample dd {
+  margin: 0;
+  text-align: right;
+  font-size: 14px;
+  font-weight: 700;
+  color: #0c1829;
+}
+
+.sampleFootnote {
+  font-size: 13px;
+  color: #334155;
+  margin: 10px 0 0 !important;
+}
+
+.root[data-motion='on'] .sample {
+  animation: focus-in 0.45s ease-out;
+}
+
+@keyframes focus-in {
+  from {
+    transform: translateY(8px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
 
 /* Workflow anchors clear the two-row phone header without changing selected state. */
-.steps button,.chapter>span{scroll-margin-top:180px}
-@media(min-width:768px){.steps button,.chapter>span{scroll-margin-top:100px}}
-@media(max-width:900px){.intro{grid-template-columns:1fr;gap:8px;align-items:start}}
+.steps button,
+.chapter > span {
+  scroll-margin-top: 180px;
+}
 
-@media(min-width:768px) and (max-width:1050px){.stage{padding:24px}.panel{width:60%}.agent{left:70%}.dmc{right:3%;top:34%}.operator{left:68%}}
+@media (min-width: 768px) {
+  .steps button,
+  .chapter > span {
+    scroll-margin-top: 100px;
+  }
+}
 
-/* Keep the assigned vessel above the planner foreground, not behind the record. */
-@media(min-width:768px){.stage[data-scene=platform] .panel{margin-top:280px}.stage[data-scene=platform] .scenery{height:900px;bottom:auto}.stage[data-scene=platform]{background:#152c39}.operator{left:auto;right:8%;top:35%}.guide{left:64%;right:auto;top:17%}}
+@media (max-width: 1120px) {
+  .stage {
+    grid-template-columns: 1fr;
+  }
+  .intro {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    align-items: start;
+  }
+}
+
+@media (max-width: 767px) {
+  .opening {
+    padding-top: 20px;
+  }
+  .intro {
+    display: block;
+  }
+  .lead {
+    font-size: 16px !important;
+    margin-top: 14px !important;
+  }
+  .controlDeck {
+    padding: 12px;
+  }
+  .stage {
+    padding: 12px;
+    gap: 16px;
+  }
+  .isometricFrame {
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .isometricSvg {
+    min-height: 220px;
+  }
+  /* On phone viewports, place actor buttons in a clean 2-column grid below the isometric map so nothing overlaps */
+  .actors {
+    position: relative;
+    inset: auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    padding: 10px;
+    background: #091726;
+  }
+  .root .actorPin {
+    position: static;
+    width: 100%;
+    min-height: 50px;
+    padding: 8px 10px;
+  }
+  .telemetryGrid {
+    grid-template-columns: 1fr;
+  }
+  .panelBody {
+    padding: 16px;
+  }
+  .root.root .panel h2 {
+    font-size: 22px;
+  }
+  .products {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    padding-top: 20px;
+  }
+  .chapter {
+    padding: 40px var(--gutter);
+  }
+  .chapterHead,
+  .proof {
+    display: block;
+  }
+  .chapterHead p {
+    margin-top: 14px;
+  }
+  .sample {
+    margin-top: 18px;
+    padding: 18px;
+  }
+  .caption {
+    font-size: 13px;
+    flex-wrap: wrap;
+  }
+  .roles {
+    gap: 8px;
+  }
+  .roles button {
+    padding: 9px 12px;
+  }
+  .root.root h1 {
+    font-size: 25px;
+    max-width: 24ch;
+  }
+}
+
+@media (max-width: 420px) {
+  .actors {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

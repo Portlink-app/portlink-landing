@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import styles from './Footer.module.css'
 import Link from 'next/link'
 import CookieSettingsButton from '@/components/consent/CookieSettingsButton'
@@ -5,6 +6,8 @@ import CookieSettingsButton from '@/components/consent/CookieSettingsButton'
 const navLinks = {
   Product: [
     { label: 'Platform', href: '/#dashboard' },
+    { label: 'Portlink (Port Calls)', href: '/portlink/' },
+    { label: 'Embark (Shorex & Tours)', href: '/embark/', icon: '/brand/embark-symbol.svg' },
     { label: 'How it connects', href: '/#ecosystem' },
     { label: 'Pilot program', href: '/#pilot' },
     { label: 'Book a 20-minute demo', href: '/#access' },
@@ -29,7 +32,25 @@ export default function Footer() {
           <nav key={category} aria-label={`${category} links`}>
             <h2>{category}</h2>
             <ul>{links.map((link) => (
-              <li key={link.href}><a href={link.href} {...(link.href === '/#access' ? { 'data-cta': 'demo-footer' } : {})} {...(link.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>{link.label}</a></li>
+              <li key={link.href}>
+                <a
+                  href={link.href}
+                  {...(link.href === '/#access' ? { 'data-cta': 'demo-footer' } : {})}
+                  {...(link.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                >
+                  {'icon' in link && link.icon ? (
+                    <img
+                      src={link.icon}
+                      alt=""
+                      width={15}
+                      height={15}
+                      aria-hidden="true"
+                      style={{ display: 'inline-block', verticalAlign: '-2px', marginRight: 6 }}
+                    />
+                  ) : null}
+                  {link.label}
+                </a>
+              </li>
             ))}</ul>
           </nav>
         ))}

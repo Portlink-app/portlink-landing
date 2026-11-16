@@ -13,6 +13,7 @@ type Session = {
   open: (topic: string, trigger?: HTMLElement) => void
 }
 const Context = createContext<Session | null>(null)
+export const useOptionalProductSession = () => useContext(Context)
 export const useProductSession = () => { const value = useContext(Context); if (!value) throw new Error('Product session missing'); return value }
 export default function ProductSession({ product, children }: { product: AcquisitionProduct; children: ReactNode }) {
   const [preferences, setPreferences] = useState(defaultPreferences(product))

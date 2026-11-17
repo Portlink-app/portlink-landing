@@ -83,7 +83,7 @@ export default function PlatformExplorer() {
                 <div><h3>{chapter.title}</h3></div>
                 <p>{chapter.body}</p>
               </div>
-              <div className={styles.stage}><Scene /></div>
+              <div className={styles.stage} data-ui={active === index ? true : undefined}><Scene /></div>
             </div>
           )
         })}

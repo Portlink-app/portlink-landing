@@ -3,7 +3,7 @@
   --ground: #08131f;
   --ink: #f8fafc;
   --ink-muted: #cbd5e1;
-  --surface: #f6f5f1;
+  --surface: #f3f4f6;
   --surface-ink: #0c1829;
   --tile-dark: #0e2033;
   --tile-edge: #244362;
@@ -13,27 +13,27 @@
   background: var(--ground);
   color: var(--ink);
   font-family: var(--acq-body), -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: 16px;
-  line-height: 1.5;
+  font-size: 18px;
+  line-height: 1.55;
 }
 
 .embark {
-  --action: #be4412;
-  --action-bright: #ea580c;
+  --action: #b43e10;
+  --action-bright: #c2410c;
 }
 
 .opening {
-  padding: 20px var(--gutter) 44px;
+  padding: 24px var(--gutter) 48px;
   max-width: 1560px;
   margin: 0 auto;
 }
 
 .intro {
   display: grid;
-  grid-template-columns: 1.25fr 1fr;
-  gap: 36px;
+  grid-template-columns: 1.5fr 0.85fr;
+  gap: 32px;
   align-items: end;
-  margin-bottom: 18px;
+  margin-bottom: 22px;
 }
 
 .kickerTag {
@@ -44,7 +44,7 @@
   border-radius: 6px;
   background: #10243a;
   color: #5eead4;
-  font-size: 13px;
+  font-size: 13.5px;
   font-weight: 600;
   margin: 0 0 12px;
 }
@@ -58,16 +58,16 @@
 .root.root h2,
 .root.root h3 {
   font-family: var(--acq-display), -apple-system, BlinkMacSystemFont, sans-serif;
-  letter-spacing: -0.032em;
+  letter-spacing: -0.035em;
   font-weight: 700;
-  text-wrap: balance;
   margin: 0;
-  line-height: 1.05;
+  line-height: 0.96;
 }
 
 .root.root h1 {
-  font-size: clamp(34px, 3.55vw, 52px);
-  max-width: 18ch;
+  font-size: clamp(72px, 5.1vw, 74px);
+  line-height: 0.94;
+  max-width: 22ch;
 }
 
 .root.root h2 {
@@ -75,7 +75,7 @@
 }
 
 .root.root h3 {
-  font-size: clamp(22px, 1.9vw, 28px);
+  font-size: clamp(20px, 1.9vw, 24px);
 }
 
 .root p {
@@ -91,10 +91,10 @@
 }
 
 .lead {
-  font-size: 17px;
+  font-size: 18px;
   color: var(--ink-muted);
   margin: 0;
-  line-height: 1.45;
+  line-height: 1.55;
 }
 
 .root a {
@@ -201,7 +201,7 @@
 }
 
 .controlHeading {
-  font-size: 12px;
+  font-size: 13.5px;
   font-weight: 600;
   color: #cbd5e1;
   margin: 0 !important;
@@ -217,14 +217,14 @@
   min-height: 44px;
   padding: 8px 13px;
   font-size: 14px;
-  border-radius: 8px;
+  border-radius: 6px;
   display: inline-flex;
   align-items: center;
   gap: 7px;
 }
 
 .stepNum {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
 }
 
@@ -259,13 +259,13 @@
 }
 
 .spatialCoords {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   color: #cbd5e1;
 }
 
 .spatialStepBadge {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
   padding: 4px 10px;
   border-radius: 6px;
@@ -370,14 +370,14 @@
 }
 
 .actorRole {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   color: #cbd5e1;
   line-height: 1.2;
 }
 
 .actorPin strong {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   color: #ffffff;
   line-height: 1.25;
@@ -388,7 +388,7 @@
   margin-top: 2px;
   padding: 2px 7px;
   border-radius: 4px;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
   background: #133946;
   color: #5eead4;
@@ -451,20 +451,20 @@
 }
 
 .telemetryKicker {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   color: #cbd5e1;
 }
 
 .telemetryVal {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 700;
   color: #f8fafc;
   font-variant-numeric: tabular-nums;
 }
 
 .telemetryNote {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   color: #5eead4;
 }
@@ -481,7 +481,7 @@
 .root .sceneNote {
   margin: 0;
   color: #cbd5e1;
-  font-size: 12px;
+  font-size: 13.5px;
   max-width: none;
 }
 
@@ -512,13 +512,13 @@
 }
 
 .d14SurfaceName {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
   color: #e2e8f0;
 }
 
 .d14SurfaceBadge {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   padding: 3px 8px;
   border-radius: 4px;
@@ -737,10 +737,10 @@
 }
 
 .doorMeta {
-  font-size: 12px;
+  font-size: 13.5px;
   font-weight: 700;
   color: #5eead4;
-  margin-bottom: 6px;
+  margin-top: 6px;
 }
 
 .root.root .products h2 {
@@ -749,13 +749,29 @@
 }
 
 .products p {
-  font-size: 15px;
+  font-size: 16px;
   color: #cbd5e1;
   margin: 8px 0 14px;
 }
 
+.doorThumbWrap {
+  margin-bottom: 14px;
+  border-radius: 8px;
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+  background: #08131f;
+}
+
+.doorThumb {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+}
+
 .doorLink {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 700;
   color: #f8fafc !important;
 }
@@ -765,12 +781,12 @@
   margin: 8px 0;
   padding: 8px 12px;
   border-radius: 8px;
-  background: #ebe9e1;
+  background: #e5e7eb;
 }
 
 .railLabel {
   display: block;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
   color: #1e293b;
   margin-bottom: 6px;
@@ -786,7 +802,7 @@
 }
 
 .signoffRail li {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   padding: 4px 8px;
   border-radius: 6px;
@@ -837,6 +853,10 @@
 }
 
 @media (max-width: 1120px) {
+  .root.root h1 {
+    font-size: clamp(44px, 5.6vw, 58px);
+    max-width: 18ch;
+  }
   .stage {
     grid-template-columns: 1fr;
   }
@@ -918,7 +938,7 @@
     padding: 18px;
   }
   .caption {
-    font-size: 13px;
+    font-size: 14px;
     flex-wrap: wrap;
   }
   .roles {
@@ -928,8 +948,9 @@
     padding: 9px 12px;
   }
   .root.root h1 {
-    font-size: 25px;
-    max-width: 24ch;
+    font-size: clamp(30px, 7.6vw, 35px);
+    line-height: 0.96;
+    max-width: 18ch;
   }
 }
 

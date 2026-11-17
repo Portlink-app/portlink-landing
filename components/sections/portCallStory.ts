@@ -24,35 +24,35 @@ type StoryStep = {
 
 export const portCallSteps: readonly StoryStep[] = [
   {
-    label: 'Confirm', handoff: 'Cruise line → Port agent', title: 'A request becomes a working relationship.',
+    label: 'Confirm', handoff: 'Cruise line → Port agent', title: 'A request becomes a shared call.',
     body: 'The cruise line sends a port booking request. When the agent accepts, Portlink creates the shared call or connects the agent to the call already planned.',
     detail: 'The acceptance stays attached to the arrival it belongs to.',
     record: 'Agent confirmed', fields: [['Booking request', 'Accepted'], ['Port agent', 'Connected']],
     active: ['cruise', 'agent'], states: { cruise: 'Request accepted', agent: 'Call assigned', tour: 'Shore planning', vessel: 'Voyage ahead' },
   },
   {
-    label: 'Plan ashore', handoff: 'Cruise line → DMC', title: 'The shore programme starts with the same call.',
+    label: 'Plan ashore', handoff: 'Cruise line → DMC', title: 'Shore plans start on the call.',
     body: 'A shore request carries the arrival and expected passenger count to the DMC. Acceptance opens a tour intake for the DMC to quote.',
     detail: 'Accepting the brief starts the work. It does not confirm the excursion.',
     record: 'Shore intake open', fields: [['Shore request', 'Accepted'], ['Tour intake', 'Quote requested']],
     active: ['cruise', 'tour'], states: { cruise: 'Brief sent', agent: 'Call assigned', tour: 'Preparing quote', vessel: 'Voyage ahead' },
   },
   {
-    label: 'Prepare', handoff: 'Port agent → Cruise line', title: 'Know what is ready. See what needs a decision.',
+    label: 'Prepare', handoff: 'Port agent → Cruise line', title: 'See what is ready to approve.',
     body: 'The agent prepares the pro forma disbursement account, the estimate for the call. The cruise line can approve it or return it with a reason.',
     detail: 'Costs are linked to the call, with visibility set for the relevant roles.',
     record: 'Estimate in review', fields: [['Agent estimate', 'Submitted'], ['Line approval', 'Pending']],
     active: ['agent', 'cruise'], states: { cruise: 'Reviewing estimate', agent: 'Estimate submitted', tour: 'Shore programme', vessel: 'Preparing onboard' },
   },
   {
-    label: 'Hand over', handoff: 'Shoreside ↔ Vessel', title: 'The work comes onboard with its context.',
+    label: 'Hand over', handoff: 'Shoreside ↔ Vessel', title: 'Work comes onboard in context.',
     body: 'Moving the call into handover notifies the cruise line and port agent. The vessel team works from the shared call, with its arrangements and history attached.',
     detail: 'The handover is an explicit step in the call, with a record of the transition.',
     record: 'Handover started', fields: [['Call stage', 'Handover'], ['Working record', 'Carried forward']],
     active: ['cruise', 'agent', 'vessel'], states: { cruise: 'Handover started', agent: 'Local contact', tour: 'Shore programme', vessel: 'Taking handover' },
   },
   {
-    label: 'Handle change', handoff: 'Operational change → Vessel', title: 'A new berth needs a recorded decision.',
+    label: 'Handle change', handoff: 'Operational change → Vessel', title: 'A new berth gets a clear sign-off.',
     body: 'Once the voyage is active, a berth change is a material amendment. The proposal keeps the old value, the requested change and its reason together while it awaits acknowledgement.',
     detail: 'Small same-day time changes can apply automatically. Material changes follow the approval path.',
     record: 'Amendment proposed', fields: [['Change', 'New berth'], ['Acknowledgement', 'Pending']],

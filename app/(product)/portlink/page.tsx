@@ -14,7 +14,7 @@ import {
 } from '@/components/product/ProductPersonalisationBar'
 
 export const metadata: Metadata = {
-  title: 'Portlink: Run Every Port Call from One Shared Record',
+  title: 'Portlink: Every Port Call on One Record',
   description:
     'Cruise lines, port agents, shorex DMCs, and vessels coordinate berth readiness, fairway voyage routing, gangway departure sign-off, and PDA-to-FDA settlement in one shared record.',
   alternates: { canonical: '/portlink/' },
@@ -27,24 +27,15 @@ export default function PortlinkProductPage() {
       <ProductHeader product="portlink" tone="dark" />
 
       <main id="main">
-        {/* CHAPTER 1: Three-Layer Mirror Hero (0 ms Instant Text + Back Layer Photo + 140px Bottom Seam Overhang) */}
+        {/* CHAPTER 1: Editorial-Report Asymmetric Masthead + Seam-Breaking 2x Retina D14 Stage */}
         <section className="pp-chapter pp-chapter--night pp-hero" id="overview">
-          <div className="pp-hero-back" aria-hidden="true">
-            <div className="pp-hero-back-scrim pp-hero-back-scrim--dark" />
-          </div>
-
           <div className="pp-wrap pp-hero-back-grid">
             <div className="pp-hero-front">
-              <div className="pp-chapter-tag">
-                <span>Portlink Maritime Operations</span>
-                <span aria-hidden="true">·</span>
-                <span>MS Aster Brisa · Bergen Skolten 3 · 06.08.2026</span>
-              </div>
               <h1 tabIndex={-1} data-demo-focus-fallback>
-                Run every port call from one shared record.
+                Every port call on one record.
               </h1>
               <p className="pp-hero-sub">
-                From 48-hour berth readiness to gangway sign-off and final account settlement, without email chains or version drift.
+                For MS Aster Brisa at Bergen Skolten 3 (06.08.2026), cruise line ops, port agent, shorex DMC, and bridge crew coordinate 48-hour berth readiness, gangway sign-off, and final account settlement without email chains or version drift.
               </p>
               <div className="pp-hero-actions">
                 <a href="/#access" className="pp-cta-btn" data-cta="demo-portlink-hero">
@@ -64,27 +55,7 @@ export default function PortlinkProductPage() {
             </div>
 
             <div className="pp-hero-stage-wrap">
-              {/* Front Layer: Floating Role Callout Pills */}
-              <div className="pp-callout-strip">
-                <div className="pp-callout-pill">
-                  <span className="pp-callout-pill-kicker">Seat 1 · Cruise Line Ops</span>
-                  <strong>Nordkyst Cruise Line</strong>
-                  <span>All 7 tabs active: Overview, Readiness, Finance, Programme, Services, Tasks, Comms</span>
-                </div>
-                <div className="pp-callout-pill">
-                  <span className="pp-callout-pill-kicker">Seat 2 · Port Agent</span>
-                  <strong>Vestkyst Maritime Agency</strong>
-                  <span>Pilotage kl. 07.15, 2 tugs, berth services, and PDA/FDA settlement</span>
-                </div>
-                <div className="pp-callout-pill">
-                  <span className="pp-callout-pill-kicker">Seat 3 &amp; 4 · Shorex DMC &amp; Ship</span>
-                  <strong>Fjordhaven DMC + MS Aster Brisa</strong>
-                  <span>284 shorex guests synced via Embark; gangway sign-off on board</span>
-                </div>
-              </div>
-
-              {/* Middle Layer: 2x Retina D14 Port-Call Readiness Stage overhanging bottom seam by 140px */}
-              <div className="pp-stage-frame">
+              <div className="pp-stage-frame" data-gsap-step>
                 <img
                   src={PORTLINK_D14_ASSETS.ch1Hero.desktop}
                   alt={PORTLINK_D14_ASSETS.ch1Hero.alt}
@@ -98,65 +69,58 @@ export default function PortlinkProductPage() {
           </div>
         </section>
 
-        {/* CHAPTER 2: The Interactive Free Sample (4 Seats x 4 Call Timestamps) + Make it yours Bar */}
+        {/* CHAPTER 2: Showcase — Output Index & Live 4-Seat Sheet + Make It Yours Toolbar */}
         <section className="pp-chapter pp-chapter--day pp-chapter--after-overhang" id="live-record">
           <div className="pp-wrap">
-            <ProductPersonalisationBar defaultTopic="planning" />
-
             <div className="pp-chapter-intro">
               <div>
-                <div className="pp-chapter-tag">
-                  <span>Chapter 02 · Interactive Free Sample</span>
-                  <span aria-hidden="true">·</span>
-                  <span>Role-Scoped SECTION_VIS</span>
-                </div>
-                <h2>Four seats on the call. Each sees only its own job.</h2>
+                <h2>Four seats. Role-scoped views.</h2>
               </div>
               <p className="pp-chapter-sub">
                 Switch between Cruise Line Ops, Port Agent, Shorex DMC, and Ship Master to see how one database record enforces role privacy across every timestamp of the port call.
               </p>
             </div>
 
+            <ProductPersonalisationBar defaultTopic="planning" />
+
             <PortlinkLiveWorkspaceSample />
           </div>
         </section>
 
-        {/* CHAPTER 3: Voyage & Nautical Chart Stage (RouteEditor + VoyageMap + Kystverket Fairways) */}
+        {/* CHAPTER 3: How-It-Works — Lines That Step Across + Full-Width Fairway Film */}
         <section className="pp-chapter pp-chapter--night" id="voyage-ais">
           <div className="pp-wrap">
             <div className="pp-chapter-intro">
               <div>
-                <div className="pp-chapter-tag">
-                  <span>Chapter 03 · Voyage &amp; Nautical Chart</span>
-                  <span aria-hidden="true">·</span>
-                  <span>Bergen → Florø → Ålesund → Molde</span>
-                </div>
-                <h2>Route along Norwegian fairways and scrub every passage window.</h2>
+                <h2>Route along official fairways.</h2>
               </div>
               <p className="pp-chapter-sub">
-                Snap multi-port legs to Kystverket Hovedled fairways on a survey-grade Norwegian nautical chart, verify daylight arrival windows, and scrub vessel position across the entire voyage. When a berth window shifts, downstream port calls recalculate immediately.
+                Snap multi-port legs from Bergen to Floro, Stadlandet, Alesund, and Molde onto Kystverket Hovedled fairways on a survey-grade Norwegian nautical chart. When a berth window shifts, downstream port calls recalculate immediately.
               </p>
             </div>
 
-            <div className="pp-callout-strip">
-              <div className="pp-callout-pill">
-                <span className="pp-callout-pill-kicker">Kystverket Hovedled Fairways</span>
-                <strong className="pp-mono">257,0 NM · 4 Ports</strong>
-                <span>Bergen (NOBGO) to Florø, Stadlandet, Ålesund, and Molde with 0 land crossings</span>
+            <div className="pp-staircase">
+              <div className="pp-staircase-item pp-staircase-item--1" data-gsap-step>
+                <strong className="pp-staircase-lead">First, snap 257,0 NM across four ports to Kystverket Hovedled fairways.</strong>
+                <p className="pp-staircase-body">
+                  Every passage leg between Bergen (NOBGO), Floro, Stadlandet, Alesund, and Molde routes through charted coastal lanes with zero land crossings.
+                </p>
               </div>
-              <div className="pp-callout-pill">
-                <span className="pp-callout-pill-kicker">Follow-Water Autorouting</span>
-                <strong className="pp-mono">120 Fairway Waypoints</strong>
-                <span>Snaps passage legs to official coastal lanes with 42,0 m minimum fairway depth and daylight arrival checks</span>
+              <div className="pp-staircase-item pp-staircase-item--2" data-gsap-step>
+                <strong className="pp-staircase-lead">Then verify 120 fairway waypoints against 42,0 m minimum depth.</strong>
+                <p className="pp-staircase-body">
+                  Follow-water autorouting checks under-keel clearance and daylight arrival windows before marine operations locks the itinerary.
+                </p>
               </div>
-              <div className="pp-callout-pill">
-                <span className="pp-callout-pill-kicker">Voyage Position Scrubber</span>
-                <strong className="pp-mono">SHIP AT Timeline · SOG / COG</strong>
-                <span>Scrub any timestamp along the polyline to inspect live coordinates, sailed distance, and next-port ETA</span>
+              <div className="pp-staircase-item pp-staircase-item--3" data-gsap-step>
+                <strong className="pp-staircase-lead">Finally, scrub live vessel position, SOG/COG, and next-port ETA.</strong>
+                <p className="pp-staircase-body">
+                  Drag any timestamp along the voyage polyline to inspect real-time coordinates, sailed distance, and pilot boarding readiness.
+                </p>
               </div>
             </div>
 
-            <div className="pp-stage-frame">
+            <div className="pp-stage-frame" data-gsap-step>
               <Film
                 src={PORTLINK_D14_ASSETS.ch3VoyageAis.filmBase}
                 poster={PORTLINK_D14_ASSETS.ch3VoyageAis.desktop}
@@ -175,50 +139,51 @@ export default function PortlinkProductPage() {
           </div>
         </section>
 
-        {/* CHAPTER 4: Gangway Departure Sign-Off (kl. 17.30 on the Quay) */}
+        {/* CHAPTER 4: Quayside Verification & Gangway Departure Sign-Off */}
         <section className="pp-chapter pp-chapter--day" id="gangway-signoff">
           <div className="pp-wrap">
             <div className="pp-chapter-intro">
               <div>
-                <div className="pp-chapter-tag">
-                  <span>Chapter 04 · Quayside Verification</span>
-                  <span aria-hidden="true">·</span>
-                  <span>kl. 17.30 All Aboard</span>
-                </div>
-                <h2>Signed on one phone at the gangway before cast-off.</h2>
+                <h2>Signed at the gangway at 17.30.</h2>
               </div>
               <p className="pp-chapter-sub">
-                The port agent and the ship master verify water, waste, tugs, and pilotage alongside, then sign on the same screen at kl. 17.30 so no disputed quantities appear weeks later.
+                The port agent and the ship master verify water, waste, tugs, and pilotage alongside on the quay, then sign on the same screen at kl. 17.30 so no disputed quantities appear weeks later.
               </p>
             </div>
 
-            <div className="pp-gangway-stage">
-              <img
-                src="/product/fjord-cruise-1600.webp"
-                alt="Cruise vessel alongside a Norwegian fjord quay"
-                width={1600}
-                height={1067}
-                loading="lazy"
-                className="pp-gangway-back-img"
-              />
-              <div className="pp-gangway-back-scrim" aria-hidden="true" />
-
+            <div className="pp-gangway-stage" data-gsap-step>
               <div className="pp-gangway-stage-grid">
-                <div className="pp-gangway-stack">
-                  <div className="pp-callout-pill pp-callout-pill--dark">
-                    <span className="pp-callout-pill-kicker">Pilotage &amp; Towage</span>
-                    <strong className="pp-mono">07.15 to 08.00 · 2 Tugs</strong>
-                    <span>Zero tug overtime used alongside; logged directly on the departure report before lines come in.</span>
+                <div className="pp-gangway-editorial">
+                  <div className="pp-gangway-photo-frame">
+                    <img
+                      src="/product/fjord-cruise-1600.webp"
+                      alt="Cruise vessel alongside a Norwegian fjord quay"
+                      width={1600}
+                      height={1067}
+                      loading="lazy"
+                      className="pp-gangway-photo"
+                    />
                   </div>
-                  <div className="pp-callout-pill pp-callout-pill--dark">
-                    <span className="pp-callout-pill-kicker">Quay Services Verified</span>
-                    <strong className="pp-mono">180 t Water · 6 m³ Waste</strong>
-                    <span>Mooring 6 lines fast kl. 07.52; gangway cleared kl. 08.05; hydrant meter #3 and MARPOL receipt attached.</span>
-                  </div>
-                  <div className="pp-callout-pill pp-callout-pill--dark">
-                    <span className="pp-callout-pill-kicker">Cryptographic Sign-Off</span>
-                    <strong className="pp-mono">17.28 Agent · 17.31 Master</strong>
-                    <span>Dual on-board signatures lock operational quantities and feed the Final Disbursement Account automatically.</span>
+
+                  <div className="pp-gangway-clauses">
+                    <div className="pp-gangway-clause">
+                      <strong>Pilotage and towage logged (kl. 07.15 to 08.00, 2 ASD tugs).</strong>
+                      <p>
+                        Zero tug overtime used alongside at Skolten Berth 3; recorded directly on the departure report before lines come in.
+                      </p>
+                    </div>
+                    <div className="pp-gangway-clause">
+                      <strong>Quayside services metered (180 t fresh water, 6 m³ MARPOL waste).</strong>
+                      <p>
+                        Six mooring lines fast kl. 07.52 and gangway cleared kl. 08.05, with hydrant meter #3 and waste receipt attached.
+                      </p>
+                    </div>
+                    <div className="pp-gangway-clause">
+                      <strong>Dual cryptographic sign-off (kl. 17.28 Agent, kl. 17.31 Master).</strong>
+                      <p>
+                        On-board signatures lock operational quantities and feed the Final Disbursement Account automatically.
+                      </p>
+                    </div>
                   </div>
                 </div>
 
@@ -245,17 +210,12 @@ export default function PortlinkProductPage() {
           </div>
         </section>
 
-        {/* CHAPTER 5: PDA-to-FDA Final Account Reconciliation (kl. 21.00 Settlement) */}
+        {/* CHAPTER 5: PDA-to-FDA Final Account Reconciliation */}
         <section className="pp-chapter pp-chapter--day" id="pda-fda" style={{ paddingTop: 0 }}>
           <div className="pp-wrap">
             <div className="pp-chapter-intro">
               <div>
-                <div className="pp-chapter-tag">
-                  <span>Chapter 05 · Disbursement Settlement</span>
-                  <span aria-hidden="true">·</span>
-                  <span>kl. 21.00 Under Way</span>
-                </div>
-                <h2>Every final invoice line links to a signed timestamp.</h2>
+                <h2>Every invoice line is signed.</h2>
               </div>
               <p className="pp-chapter-sub">
                 Compare Approved Proforma (412 380,00 kr), Signed Gangway Consumption (-11 130,00 kr unused tug overtime), and Final Account (401 250,00 kr) side by side.
@@ -272,19 +232,14 @@ export default function PortlinkProductPage() {
           </div>
         </section>
 
-        {/* CHAPTER 6: High-Contrast Conversion Close */}
+        {/* CHAPTER 6: Inverted Conversion Close */}
         <section className="pp-chapter pp-chapter--night" id="demo">
           <div className="pp-wrap">
             <div className="pp-close-grid">
               <div>
-                <div className="pp-chapter-tag">
-                  <span>Chapter 06 · Live Season Onboarding</span>
-                  <span aria-hidden="true">·</span>
-                  <span>20-Minute Walkthrough</span>
-                </div>
-                <h2>Bring your next port call or season schedule.</h2>
+                <h2>Load your next season live.</h2>
                 <p className="pp-hero-sub">
-                  In 20 minutes we load your ports and walk through the live 4-seat record with your team.
+                  In 20 minutes we load your port calls and walk through the live four-seat record with your operations team.
                 </p>
                 <div className="pp-hero-actions">
                   <a href="/#access" className="pp-cta-btn" data-cta="demo-portlink-close">
@@ -296,31 +251,28 @@ export default function PortlinkProductPage() {
                 </div>
               </div>
 
-              <div className="pp-sibling-card">
-                <span className="pp-mono" style={{ fontSize: '12.5px', color: '#5EEAD4', fontWeight: 600 }}>
-                  <img
-                    src="/brand/embark-symbol-on-dark.svg"
-                    alt=""
-                    width={16}
-                    height={16}
-                    aria-hidden="true"
-                    style={{ display: 'inline-block', verticalAlign: '-3px', marginRight: 6 }}
-                  />
-                  Sibling Product · Embark by Portlink
-                </span>
-                <h3>Running shore excursions, RIB safaris, or local tours?</h3>
-                <p style={{ color: '#CBD5E1', fontSize: '15.5px' }}>
-                  Embark runs daily departures, boat and guide capacity, direct website bookings with Vipps and Stripe, and live Portlink cruise DMC allocations.
+              <div className="pp-sibling-card" data-gsap-step>
+                <h3>Running local tours or shorex?</h3>
+                <p className="pp-sibling-body">
+                  Embark by Portlink runs daily departures, boat and guide capacity, direct website bookings with Vipps and Stripe, and live Portlink cruise DMC allocations.
                 </p>
                 <div>
                   <a href="/embark/" className="pp-secondary-link" data-cta="crosslink-portlink-to-embark">
+                    <img
+                      src="/brand/embark-symbol-on-dark.svg"
+                      alt=""
+                      width={16}
+                      height={16}
+                      aria-hidden="true"
+                      style={{ display: 'inline-block', verticalAlign: '-3px', marginRight: 8 }}
+                    />
                     Explore Embark for Tour Operators →
                   </a>
                 </div>
               </div>
             </div>
 
-            <div className="pp-stage-frame" style={{ marginTop: '48px' }}>
+            <div className="pp-stage-frame" style={{ marginTop: '48px' }} data-gsap-step>
               <img
                 src={PORTLINK_D14_ASSETS.ch6Deployment.desktop}
                 alt={PORTLINK_D14_ASSETS.ch6Deployment.alt}
@@ -337,18 +289,38 @@ export default function PortlinkProductPage() {
       </main>
 
       <footer className="pp-footer">
-        <div className="pp-wrap pp-footer-inner">
-          <div className="pp-footer-links">
-            <a href="/">Portlink Home</a>
-            <a href="/portlink/">Portlink (Port Calls)</a>
-            <a href="/embark/">Embark (Shorex &amp; Tours)</a>
-            <a href="/team/#mission">Team &amp; Ethos</a>
-            <a href="/privacy/">Privacy</a>
-            <a href="/contact/">Contact</a>
+        <div className="pp-wrap">
+          <div className="pp-footer-inner">
+            <div className="pp-footer-links">
+              <a href="/">Portlink Home</a>
+              <a href="/portlink/">Portlink (Port Calls)</a>
+              <a href="/embark/">Embark (Shorex &amp; Tours)</a>
+              <a href="/team/#mission">Team &amp; Ethos</a>
+              <a href="/privacy/">Privacy</a>
+              <a href="/contact/">Contact</a>
+            </div>
+            <p className="pp-footer-copy">
+              Portlink AS · Oslo, Norway · Maritime port-call and shore-excursion operations.
+            </p>
           </div>
-          <p className="pp-footer-copy">
-            Portlink AS · Oslo, Norway · Maritime port-call and shore-excursion operations.
-          </p>
+          <svg
+            viewBox="0 0 1200 170"
+            className="pp-footer-wordmark"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <text
+              x="0"
+              y="142"
+              fill="currentColor"
+              fontFamily="var(--pp-display)"
+              fontWeight="700"
+              fontSize="168"
+              letterSpacing="-6"
+            >
+              PORTLINK
+            </text>
+          </svg>
         </div>
       </footer>
     </div>

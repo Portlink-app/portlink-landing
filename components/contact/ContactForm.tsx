@@ -572,7 +572,7 @@ export default function ContactForm({ intent, lockIntent = false }: ContactFormP
                       onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--brand-bright)')}
                       onMouseLeave={(e) => (e.currentTarget.style.background = 'var(--brand)')}
                     >
-                      Continue <ChevronRight size={15} />
+                      Next step <ChevronRight size={15} />
                     </button>
                   </div>
                 </motion.form>

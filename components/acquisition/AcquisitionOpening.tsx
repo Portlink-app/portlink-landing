@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { display, body } from './fonts'
 import { portCallRoles, type PortCallRole } from '@/components/sections/portCallStory'
 import { setManualMotion, useMotionAllowed } from '@/components/film/useFilm'
+import { EMBARK_D14_ASSETS, PORTLINK_D14_ASSETS } from '@/components/product/d14Assets'
 import contract from './contract.json'
 import ExpeditionStage, {
   type ExpeditionProduct,
@@ -75,16 +76,9 @@ export default function AcquisitionOpening({ page }: { page: 'company' | Product
       <section className={styles.opening} id={page === 'platform' ? 'overview' : 'hero'}>
         <div className={styles.intro}>
           <div>
-            <p className={styles.kickerTag}>
-              <span>
-                {product === 'embark'
-                  ? 'Embark by Portlink · Operator Dispatch & Departures'
-                  : 'Portlink Maritime Workspace · Planner to Final Account'}
-              </span>
-            </p>
             <h1>
               {page === 'company' && !roleChosen
-                ? 'From the first itinerary to the final port call.'
+                ? 'One voyage. Every seat in sync.'
                 : selected.headline}
             </h1>
           </div>
@@ -125,7 +119,7 @@ export default function AcquisitionOpening({ page }: { page: 'company' | Product
           {page === 'embark' && <span id="quay-checkin" />}
           {page === 'company' && (
             <div className={styles.roleBlock}>
-              <span className={styles.controlHeading}>1. Choose your role</span>
+              <span className={styles.controlHeading}>Choose your role</span>
               <div className={styles.roles} role="group" aria-label="Choose your work">
                 {roleKeys.map((key) => (
                   <button
@@ -143,7 +137,7 @@ export default function AcquisitionOpening({ page }: { page: 'company' | Product
 
           <div className={styles.stepBlock}>
             <p className={styles.controlHeading} data-scene-summary>
-              {page === 'company' ? '2. Trace the handoff:' : 'Trace the handoff:'} Example:{' '}
+              {page === 'company' ? 'Trace the handoff:' : 'Trace the handoff:'} Example:{' '}
               {state.status}
             </p>
             <div className={styles.sceneSteps} role="group" aria-label="Scene chapters">
@@ -157,7 +151,6 @@ export default function AcquisitionOpening({ page }: { page: 'company' | Product
                   aria-controls="discovery-proof"
                   onClick={() => selectStep(i)}
                 >
-                  <span className={styles.stepNum}>0{i + 1}</span>
                   <span>{item.label}</span>
                 </button>
               ))}
@@ -198,50 +191,86 @@ export default function AcquisitionOpening({ page }: { page: 'company' | Product
         {page === 'company' && (
           <div className={styles.products} aria-label="Portlink product family">
             <article className={styles.productDoor} data-active={product === 'platform'}>
-              <div className={styles.doorMeta}>Maritime Workspace · 90-day trial</div>
-              <h2>
-                <a href="/portlink/">Platform</a>
-              </h2>
-              <p>
-                Voyages, port calls, berth readiness, shorex requests and PDA-to-FDA settlement for
-                cruise lines, port agents and DMCs.
-              </p>
+              <div>
+                <h2>
+                  <a href="/portlink/">Platform</a>
+                </h2>
+                <div className={styles.doorMeta}>Maritime Workspace · 90-day trial</div>
+                <p>
+                  Voyages, port calls, berth readiness, shorex requests and PDA-to-FDA settlement for
+                  cruise lines, port agents and DMCs.
+                </p>
+              </div>
+              <div className={styles.doorThumbWrap}>
+                <img
+                  src={PORTLINK_D14_ASSETS.ch1Hero.desktop}
+                  alt="Portlink Platform port-call readiness workspace"
+                  width={1440}
+                  height={900}
+                  loading="lazy"
+                  className={styles.doorThumb}
+                />
+              </div>
               <a href="/portlink/" className={styles.doorLink}>
                 Explore 6 D14 Platform chapters →
               </a>
             </article>
 
             <article className={styles.productDoor} data-active={product === 'embark'}>
-              <div className={styles.doorMeta}>Connected Product · Independent workspace</div>
-              <h2>
-                <a href="/embark/">
-                  <img
-                    src="/brand/embark-symbol-on-dark.svg"
-                    alt=""
-                    width={22}
-                    height={22}
-                    aria-hidden="true"
-                    style={{ display: 'inline-block', verticalAlign: '-4px', marginRight: 8 }}
-                  />
-                  Embark
-                </a>
-              </h2>
-              <p>
-                Daily departures, boat and guide capacity, Vipps/Stripe web checkout and quayside
-                check-in for tour operators. Platform is not required.
-              </p>
+              <div>
+                <h2>
+                  <a href="/embark/">
+                    <img
+                      src="/brand/embark-symbol-on-dark.svg"
+                      alt=""
+                      width={22}
+                      height={22}
+                      aria-hidden="true"
+                      style={{ display: 'inline-block', verticalAlign: '-4px', marginRight: 8 }}
+                    />
+                    Embark
+                  </a>
+                </h2>
+                <div className={styles.doorMeta}>Connected Product · Independent workspace</div>
+                <p>
+                  Daily departures, boat and guide capacity, Vipps/Stripe web checkout and quayside
+                  check-in for tour operators. Platform is not required.
+                </p>
+              </div>
+              <div className={styles.doorThumbWrap}>
+                <img
+                  src={EMBARK_D14_ASSETS.ch3DispatchRoster.desktop}
+                  alt="Embark daily departures and guide roster workspace"
+                  width={1440}
+                  height={900}
+                  loading="lazy"
+                  className={styles.doorThumb}
+                />
+              </div>
               <a href="/embark/" className={styles.doorLink}>
                 Explore 6 D14 Embark chapters →
               </a>
             </article>
 
             <article className={styles.productDoor}>
-              <div className={styles.doorMeta}>Included Module &amp; Company Workspace</div>
-              <h2>Wheelhouse</h2>
-              <p>
-                Contextual work management included in Platform for maritime teams, or available for
-                company operations workspaces.
-              </p>
+              <div>
+                <h2>Wheelhouse</h2>
+                <div className={styles.doorMeta}>Included Module &amp; Company Workspace</div>
+                <p>
+                  Contextual work management included in Platform for maritime teams, or available for
+                  company operations workspaces.
+                </p>
+              </div>
+              <div className={styles.doorThumbWrap}>
+                <img
+                  src={PORTLINK_D14_ASSETS.ch6Deployment.desktop}
+                  alt="Wheelhouse operational tasks and itinerary review board"
+                  width={1440}
+                  height={900}
+                  loading="lazy"
+                  className={styles.doorThumb}
+                />
+              </div>
               <a href="/#access" className={styles.doorLink}>
                 Discuss a standalone workspace →
               </a>

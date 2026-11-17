@@ -4,12 +4,13 @@
  * root homepage and its vendored design system untouched. Entry doc: docs/PRODUCT-PAGES.md.
  */
 import { display, body } from '@/components/acquisition/fonts'
+import SmoothScrollProvider from '@/components/motion/SmoothScrollProvider'
 import './product.css'
 
 export default function ProductLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className={`${display.variable} ${body.variable}`} style={{ display: 'contents', '--pp-font-display': 'var(--acq-display)', '--pp-font-text': 'var(--acq-body)' } as React.CSSProperties}>
-      {children}
+      <SmoothScrollProvider>{children}</SmoothScrollProvider>
     </div>
   )
 }

@@ -137,7 +137,7 @@ export function getStageVisualConfig(
         dmc: { badge: 'Waiting for sign-off', tone: 'muted' },
       },
       telemetryStrip: [
-        ['Sign-Off Stage', '02 Marine Operations', 'In review'],
+        ['Sign-Off Stage', 'Marine Operations', 'In review'],
         ['Downstream Gates', 'Shorex & Commercial', 'Waiting in sequence'],
         ['Port Commitment', 'Skolten Berth 3', 'Not requested yet'],
       ],
@@ -392,7 +392,7 @@ export default function ExpeditionStage({
               : 'EXPEDITION FAIRWAY CUTAWAY · 69°13′N 051°06′W → BERGEN SKOLTEN 3'}
           </span>
           <span className={styles.spatialStepBadge} data-tone={stageConfig.signalTone}>
-            Step 0{index + 1} / 0{statesCount} · {state.status}
+            {state.status}
           </span>
         </div>
 
@@ -642,10 +642,10 @@ export default function ExpeditionStage({
               />
 
               {/* Cutaway geological depth labels positioned in clear water/strata */}
-              <text x="275" y="348" fill="#cbd5e1" fontSize="12" fontFamily="monospace">
+              <text x="275" y="348" fill="#cbd5e1" fontSize="13" fontFamily="sans-serif">
                 FAIRWAY 42,0 m · 0 LAND HITS
               </text>
-              <text x="275" y="366" fill="#cbd5e1" fontSize="12" fontFamily="monospace">
+              <text x="275" y="366" fill="#cbd5e1" fontSize="13" fontFamily="sans-serif">
                 SKOLTEN / DISKO BASIN CUTAWAY
               </text>
             </svg>
@@ -673,7 +673,7 @@ export default function ExpeditionStage({
                     onSelectStep(0)
                   }}
                 >
-                  <span className={styles.actorRole}>01 · Itinerary planner</span>
+                  <span className={styles.actorRole}>Itinerary planner</span>
                   <strong>Nordkyst Cruise Line</strong>
                   <span className={styles.actorBadge}>
                     {stageConfig.actorStates.planner?.badge}
@@ -690,7 +690,7 @@ export default function ExpeditionStage({
                     onSelectStep(1)
                   }}
                 >
-                  <span className={styles.actorRole}>02 · Assigned vessel</span>
+                  <span className={styles.actorRole}>Assigned vessel</span>
                   <strong>MS Aster Brisa</strong>
                   <span className={styles.actorBadge}>
                     {stageConfig.actorStates.ship?.badge}
@@ -707,7 +707,7 @@ export default function ExpeditionStage({
                     onSelectStep(2)
                   }}
                 >
-                  <span className={styles.actorRole}>03 · Port agent</span>
+                  <span className={styles.actorRole}>Port agent</span>
                   <strong>Vestkyst Agency · Berth 3</strong>
                   <span className={styles.actorBadge}>
                     {stageConfig.actorStates.agent?.badge}
@@ -724,7 +724,7 @@ export default function ExpeditionStage({
                     onSelectStep(2)
                   }}
                 >
-                  <span className={styles.actorRole}>04 · Shorex DMC</span>
+                  <span className={styles.actorRole}>Shorex DMC</span>
                   <strong>Fjordhaven DMC · Quay</strong>
                   <span className={styles.actorBadge}>
                     {stageConfig.actorStates.dmc?.badge}
@@ -740,7 +740,7 @@ export default function ExpeditionStage({
                   data-tone={stageConfig.actorStates.operator?.tone ?? 'active'}
                   onClick={() => onSelectStep(0)}
                 >
-                  <span className={styles.actorRole}>01 · Tour operator</span>
+                  <span className={styles.actorRole}>Tour operator</span>
                   <strong>Fjordland Adventures · RIB Havørn</strong>
                   <span className={styles.actorBadge}>
                     {stageConfig.actorStates.operator?.badge}
@@ -754,7 +754,7 @@ export default function ExpeditionStage({
                   data-tone={stageConfig.actorStates.guide?.tone ?? 'pending'}
                   onClick={() => onSelectStep(1)}
                 >
-                  <span className={styles.actorRole}>02 · Certified guide</span>
+                  <span className={styles.actorRole}>Certified guide</span>
                   <strong>Pier B2 · Quay Check-In</strong>
                   <span className={styles.actorBadge}>
                     {stageConfig.actorStates.guide?.badge}
@@ -812,11 +812,11 @@ export default function ExpeditionStage({
         </div>
 
         <div className={styles.panelBody}>
+          <h2>{state.status}</h2>
           <div className={styles.panelMetaRow}>
             <p className={styles.record}>{state.record}</p>
             <p className={styles.owner}>Owner: {state.owner}</p>
           </div>
-          <h2>{state.status}</h2>
 
           {product === 'platform' && (
             <div className={styles.itinerary} aria-label="Future itinerary context">

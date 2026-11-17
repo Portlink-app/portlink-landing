@@ -138,5 +138,5 @@
 }
 
 /* Product composition reserves normal flow for every consent choice. */
-.banner.inline { position: relative; inset: auto; width: 100%; max-height: none; margin: 1rem 0 2rem; box-shadow: none; animation: none; font-family: var(--acq-body), sans-serif; }
+.banner.inline { position: relative; inset: auto; width: 100%; max-height: none; margin: 1rem 0 2rem; border: 0; background: var(--surface); box-shadow: none; animation: none; font-family: var(--acq-body), sans-serif; }
 .banner.inline .actions { max-width: 400px; }

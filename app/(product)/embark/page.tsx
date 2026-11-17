@@ -14,7 +14,7 @@ import {
 } from '@/components/product/ProductPersonalisationBar'
 
 export const metadata: Metadata = {
-  title: 'Embark by Portlink: Fill the Boat, Brief the Guide, and Check Guests In on the Quay',
+  title: 'Embark by Portlink: Fill the Boat, Check In on Pier',
   description:
     'Embark runs daily departures, boat and guide capacity, online bookings with Vipps and Stripe, and Portlink cruise DMC allocations in one operational schedule.',
   alternates: { canonical: '/embark/' },
@@ -27,12 +27,9 @@ export default function EmbarkProductPage() {
       <ProductHeader product="embark" tone="light" />
 
       <main id="main">
-        {/* CHAPTER 1: Three-Layer Mirror Hero (0 ms Instant Text + Back Layer Photo + 140px Bottom Seam Overhang) */}
+        {/* CHAPTER 1: Editorial-Report Asymmetric Masthead + Seam-Breaking 2x Retina D14 Stage */}
         <section className="pp-chapter pp-chapter--embark-day pp-hero" id="hero">
           <span id="overview" aria-hidden="true" />
-          <div className="pp-hero-back pp-hero-back--light" aria-hidden="true">
-            <div className="pp-hero-back-scrim pp-hero-back-scrim--light" />
-          </div>
 
           <div className="pp-wrap pp-hero-back-grid">
             <div className="pp-hero-front">
@@ -41,18 +38,13 @@ export default function EmbarkProductPage() {
                 alt="Embark by Portlink"
                 width={168}
                 height={39}
-                style={{ display: 'block', marginBottom: '16px' }}
+                style={{ display: 'block', marginBottom: '20px' }}
               />
-              <div className="pp-chapter-tag">
-                <span>Embark by Portlink</span>
-                <span aria-hidden="true">·</span>
-                <span>Fjordland Adventures AS · Bergen &amp; Geiranger</span>
-              </div>
               <h1 tabIndex={-1} data-demo-focus-fallback>
-                Fill the boat, brief the guide, and check guests in on the quay.
+                Fill the boat. Check in on pier.
               </h1>
               <p className="pp-hero-sub">
-                Embark runs daily departures, boat and guide capacity, online bookings, and cruise DMC allocations in one operational schedule.
+                For Fjordland Adventures AS in Bergen and Geiranger, Embark runs daily departures, RIB and cruiser capacity locks, direct Vipps and Stripe web bookings, and Portlink cruise DMC allocations in one operational schedule.
               </p>
               <div className="pp-hero-actions">
                 <a href="/#access" className="pp-cta-btn" data-cta="demo-embark-hero">
@@ -72,32 +64,7 @@ export default function EmbarkProductPage() {
             </div>
 
             <div className="pp-hero-stage-wrap">
-              {/* Front Layer: Integrated 4-Pillar Operational Metrics Strip */}
-              <div className="pp-callout-strip pp-callout-strip--four">
-                <div className="pp-callout-pill">
-                  <span className="pp-callout-pill-kicker">Direct Web Checkout</span>
-                  <strong>Widget + Vipps &amp; Stripe</strong>
-                  <span>Embed /w/fjordland on your site with instant seat lock</span>
-                </div>
-                <div className="pp-callout-pill">
-                  <span className="pp-callout-pill-kicker">Resource Protection</span>
-                  <strong>Boat &amp; Guide Conflict Lock</strong>
-                  <span>RIB Havørn (12p) &amp; MS Fjordsyn (24p) never double-book</span>
-                </div>
-                <div className="pp-callout-pill">
-                  <span className="pp-callout-pill-kicker">Pier &amp; Gangway</span>
-                  <strong>Offline-Ready Quay Check-In</strong>
-                  <span>Tap guest groups or scan QR vouchers on any guide phone</span>
-                </div>
-                <div className="pp-callout-pill">
-                  <span className="pp-callout-pill-kicker">Cruise B2B Channel</span>
-                  <strong>Portlink DMC Trade Sync</strong>
-                  <span>Receive &amp; confirm cruise shorex allocations in one click</span>
-                </div>
-              </div>
-
-              {/* Middle Layer: 2x Retina D14 Daily Departures Stage overhanging bottom seam by 140px */}
-              <div className="pp-stage-frame">
+              <div className="pp-stage-frame" data-gsap-step>
                 <img
                   src={EMBARK_D14_ASSETS.ch1Hero.desktop}
                   alt={EMBARK_D14_ASSETS.ch1Hero.alt}
@@ -111,24 +78,19 @@ export default function EmbarkProductPage() {
           </div>
         </section>
 
-        {/* CHAPTER 2: The Interactive Free Sample (Live Quay Check-In & Capacity Swap) + Make it yours Bar */}
+        {/* CHAPTER 2: Showcase — Live Quay Check-In & Capacity Swap + Make It Yours Toolbar */}
         <section className="pp-chapter pp-chapter--embark-alt pp-chapter--after-overhang" id="quay-checkin">
           <div className="pp-wrap">
-            <ProductPersonalisationBar defaultTopic="capacity" />
-
             <div className="pp-chapter-intro">
               <div>
-                <div className="pp-chapter-tag">
-                  <span>Chapter 02 · Interactive Free Sample</span>
-                  <span aria-hidden="true">·</span>
-                  <span>10.00 Icefjord &amp; Fjord RIB Safari</span>
-                </div>
-                <h2>Check in passengers on the pier and adjust boat capacity live.</h2>
+                <h2>Board guests and swap boats live.</h2>
               </div>
               <p className="pp-chapter-sub">
-                Tap a guest group to board them on RIB Havørn, swap in MS Fjordsyn for 12 extra seats, or accept an incoming cruise DMC request from MS Aster Brisa.
+                Tap a guest group to board them on RIB Havorn at Zachariasbryggen, swap in MS Fjordsyn for 12 extra seats, or accept an incoming cruise DMC request from MS Aster Brisa.
               </p>
             </div>
+
+            <ProductPersonalisationBar defaultTopic="capacity" />
 
             <EmbarkQuayCheckInSample />
 
@@ -140,42 +102,40 @@ export default function EmbarkProductPage() {
           </div>
         </section>
 
-        {/* CHAPTER 3: Departures, Fleet & Guide Roster Stage */}
+        {/* CHAPTER 3: How-It-Works — Lines That Step Across + Full-Width Dispatch Film */}
         <section className="pp-chapter pp-chapter--embark-day" id="dispatch">
           <div className="pp-wrap">
             <div className="pp-chapter-intro">
               <div>
-                <div className="pp-chapter-tag">
-                  <span>Chapter 03 · Dispatch &amp; Guide Roster</span>
-                  <span aria-hidden="true">·</span>
-                  <span>NO / EN / DE Language Matching</span>
-                </div>
-                <h2>Know which boat is going and which guide holds the keys.</h2>
+                <h2>Every boat and guide assigned.</h2>
               </div>
               <p className="pp-chapter-sub">
                 Assign boats, high-speed craft skippers, and language-matched guides with automatic conflict locking across every departure. Unassigned departures surface an immediate action alert before the morning briefing.
               </p>
             </div>
 
-            <div className="pp-callout-strip">
-              <div className="pp-callout-pill">
-                <span className="pp-callout-pill-kicker">Vessel Quota Lock</span>
-                <strong className="pp-mono">RIB Havørn (12p) · MS Fjordsyn (24p)</strong>
-                <span>Shared hull inventory prevents overlapping departure overbooking</span>
+            <div className="pp-staircase">
+              <div className="pp-staircase-item pp-staircase-item--1" data-gsap-step>
+                <strong className="pp-staircase-lead">First, lock shared hull capacity across RIB Havorn (12p) and MS Fjordsyn (24p).</strong>
+                <p className="pp-staircase-body">
+                  Shared vessel inventory prevents overlapping departures from overbooking the same boat or pontoon berth.
+                </p>
               </div>
-              <div className="pp-callout-pill">
-                <span className="pp-callout-pill-kicker">Guide Qualifications</span>
-                <strong className="pp-mono">STCW + NO / EN / DE</strong>
-                <span>Filter roster by high-speed craft certificate and guest language</span>
+              <div className="pp-staircase-item pp-staircase-item--2" data-gsap-step>
+                <strong className="pp-staircase-lead">Then match STCW skippers and NO, EN, and DE guides to each departure.</strong>
+                <p className="pp-staircase-body">
+                  Filter the roster by high-speed craft certificate, crowd management qualification, and booked guest language.
+                </p>
               </div>
-              <div className="pp-callout-pill">
-                <span className="pp-callout-pill-kicker">Exception Alerts</span>
-                <strong className="pp-mono">Action Required Flag</strong>
-                <span>Departures missing a skipper or guide highlight 24 hours ahead</span>
+              <div className="pp-staircase-item pp-staircase-item--3" data-gsap-step>
+                <strong className="pp-staircase-lead">Finally, clear unassigned departure alerts 24 hours before cast-off.</strong>
+                <p className="pp-staircase-body">
+                  Any departure missing a skipper, guide, or sufficient seat quota stays flagged until an operator resolves it.
+                </p>
               </div>
             </div>
 
-            <div className="pp-stage-frame">
+            <div className="pp-stage-frame" data-gsap-step>
               <Film
                 src={EMBARK_D14_ASSETS.ch3DispatchRoster.filmBase}
                 poster={EMBARK_D14_ASSETS.ch3DispatchRoster.desktop}
@@ -194,50 +154,50 @@ export default function EmbarkProductPage() {
           </div>
         </section>
 
-        {/* CHAPTER 4: Paid Before Departure (Direct Web Widget, Vipps & Automated Invoicing) */}
+        {/* CHAPTER 4: Split Editorial Settlement Ledger + 2x Retina Web Widget & Invoicing Stage */}
         <section className="pp-chapter pp-chapter--embark-alt" id="paid-before">
           <div className="pp-wrap">
             <div className="pp-chapter-intro">
               <div>
-                <div className="pp-chapter-tag">
-                  <span>Chapter 04 · Direct Booking &amp; Settlement</span>
-                  <span aria-hidden="true">·</span>
-                  <span>/w/fjordland + Automated Invoices</span>
-                </div>
-                <h2>Paid before departure by Vipps, card, or group invoice.</h2>
+                <h2>Paid before departure via Vipps.</h2>
               </div>
               <p className="pp-chapter-sub">
                 Guests book in 30 seconds on your website widget while cruise DMCs and charter groups settle via automated invoice links with due-date tracking.
               </p>
             </div>
 
-            <div className="pp-callout-strip">
-              <div className="pp-callout-pill">
-                <span className="pp-callout-pill-kicker">Embeddable Web Widget</span>
-                <strong className="pp-mono">/w/fjordland · Live Seats</strong>
-                <span>Real-time seat availability on your own domain with zero OTA commission</span>
+            <div className="pp-split-ledger">
+              <div className="pp-split-clauses" data-gsap-step>
+                <div className="pp-split-clause">
+                  <strong>Embeddable web widget (/w/fjordland) with live seat lock.</strong>
+                  <p>
+                    Publish real-time seat availability directly on your own domain with zero OTA commission and instant manifest creation.
+                  </p>
+                </div>
+                <div className="pp-split-clause">
+                  <strong>Instant Nordic and international checkout (Vipps, Stripe, Apple Pay).</strong>
+                  <p>
+                    Every payment confirmation attaches directly to the passenger manifest row before the guest reaches Zachariasbryggen.
+                  </p>
+                </div>
+                <div className="pp-split-clause">
+                  <strong>Automated group and DMC invoicing (Invoice #2048 settled 14d prior).</strong>
+                  <p>
+                    Send hosted payment links and scheduled due-date reminders for private charters and cruise shorex allocations.
+                  </p>
+                </div>
               </div>
-              <div className="pp-callout-pill">
-                <span className="pp-callout-pill-kicker">Instant Nordic &amp; Global Pay</span>
-                <strong className="pp-mono">Vipps · Stripe · Apple Pay</strong>
-                <span>Payment confirmation attaches directly to the passenger manifest row</span>
-              </div>
-              <div className="pp-callout-pill">
-                <span className="pp-callout-pill-kicker">Group &amp; DMC Invoicing</span>
-                <strong className="pp-mono">Invoice #2048 · Settled 14d Prior</strong>
-                <span>Automated payment links and reminders for private charters and cruise groups</span>
-              </div>
-            </div>
 
-            <div className="pp-stage-frame">
-              <img
-                src={EMBARK_D14_ASSETS.ch4WidgetInvoicing.desktop}
-                alt={EMBARK_D14_ASSETS.ch4WidgetInvoicing.alt}
-                width={EMBARK_D14_ASSETS.ch4WidgetInvoicing.width}
-                height={EMBARK_D14_ASSETS.ch4WidgetInvoicing.height}
-                loading="lazy"
-                className="pp-stage-img"
-              />
+              <div className="pp-stage-frame" data-gsap-step>
+                <img
+                  src={EMBARK_D14_ASSETS.ch4WidgetInvoicing.desktop}
+                  alt={EMBARK_D14_ASSETS.ch4WidgetInvoicing.alt}
+                  width={EMBARK_D14_ASSETS.ch4WidgetInvoicing.width}
+                  height={EMBARK_D14_ASSETS.ch4WidgetInvoicing.height}
+                  loading="lazy"
+                  className="pp-stage-img"
+                />
+              </div>
             </div>
 
             <ProductTopicBar
@@ -253,15 +213,10 @@ export default function EmbarkProductPage() {
           <div className="pp-wrap">
             <div className="pp-chapter-intro">
               <div>
-                <div className="pp-chapter-tag">
-                  <span>Chapter 05 · Portlink Cruise-Trade Bridge</span>
-                  <span aria-hidden="true">·</span>
-                  <span>api/trade/v1/requests</span>
-                </div>
-                <h2>Connected directly to cruise lines and DMCs in Portlink.</h2>
+                <h2>Synced with cruise lines live.</h2>
               </div>
               <p className="pp-chapter-sub">
-                Confirm a shore-excursion seat request in Embark and watch the ship&apos;s port-call programme update automatically with zero spreadsheets.
+                Confirm a shore-excursion seat request in Embark and watch the ship&apos;s port-call programme in Portlink update automatically with zero spreadsheets.
               </p>
             </div>
 
@@ -269,7 +224,7 @@ export default function EmbarkProductPage() {
           </div>
         </section>
 
-        {/* CHAPTER 6: Conversion Close & Clean Nordic Footer */}
+        {/* CHAPTER 6: Inverted Conversion Close */}
         <section className="pp-chapter pp-chapter--embark-night" id="demo">
           <div className="pp-wrap">
             <div className="pp-close-grid">
@@ -279,14 +234,9 @@ export default function EmbarkProductPage() {
                   alt="Embark by Portlink"
                   width={154}
                   height={36}
-                  style={{ display: 'block', marginBottom: '16px' }}
+                  style={{ display: 'block', marginBottom: '20px' }}
                 />
-                <div className="pp-chapter-tag">
-                  <span>Chapter 06 · Ready for Next Season</span>
-                  <span aria-hidden="true">·</span>
-                  <span>20-Minute Live Setup</span>
-                </div>
-                <h2>Bring one of next season&apos;s tours.</h2>
+                <h2>Bring one tour for next season.</h2>
                 <p className="pp-hero-sub">
                   In 20 minutes we load your departures, boats, and booking widget live so your guides can test quay check-in on their own phones.
                 </p>
@@ -300,13 +250,10 @@ export default function EmbarkProductPage() {
                 </div>
               </div>
 
-              <div className="pp-sibling-card">
-                <span className="pp-mono" style={{ fontSize: '12.5px', color: '#5EEAD4', fontWeight: 600 }}>
-                  Sibling Product · Portlink Maritime
-                </span>
-                <h3>Managing cruise port calls, berth readiness, or agency disbursements?</h3>
-                <p style={{ color: '#CBD5E1', fontSize: '15.5px' }}>
-                  Portlink connects cruise lines, port agents, shorex DMCs, and vessels on one shared port-call record from T-48h readiness to FDA settlement.
+              <div className="pp-sibling-card" data-gsap-step>
+                <h3>Managing cruise port calls?</h3>
+                <p className="pp-sibling-body">
+                  Portlink Maritime connects cruise lines, port agents, shorex DMCs, and vessels on one shared port-call record from T-48h readiness to FDA settlement.
                 </p>
                 <div>
                   <a href="/portlink/" className="pp-secondary-link" data-cta="crosslink-embark-to-portlink">
@@ -316,7 +263,7 @@ export default function EmbarkProductPage() {
               </div>
             </div>
 
-            <div className="pp-stage-frame" style={{ marginTop: '48px' }}>
+            <div className="pp-stage-frame" style={{ marginTop: '48px' }} data-gsap-step>
               <img
                 src={EMBARK_D14_ASSETS.ch6OperatorOverview.desktop}
                 alt={EMBARK_D14_ASSETS.ch6OperatorOverview.alt}
@@ -333,18 +280,38 @@ export default function EmbarkProductPage() {
       </main>
 
       <footer className="pp-footer">
-        <div className="pp-wrap pp-footer-inner">
-          <div className="pp-footer-links">
-            <a href="/">Portlink Home</a>
-            <a href="/embark/">Embark (Shorex &amp; Tours)</a>
-            <a href="/portlink/">Portlink (Port Calls)</a>
-            <a href="/team/#mission">Team &amp; Ethos</a>
-            <a href="/privacy/">Privacy</a>
-            <a href="/contact/">Contact</a>
+        <div className="pp-wrap">
+          <div className="pp-footer-inner">
+            <div className="pp-footer-links">
+              <a href="/">Portlink Home</a>
+              <a href="/embark/">Embark (Shorex &amp; Tours)</a>
+              <a href="/portlink/">Portlink (Port Calls)</a>
+              <a href="/team/#mission">Team &amp; Ethos</a>
+              <a href="/privacy/">Privacy</a>
+              <a href="/contact/">Contact</a>
+            </div>
+            <p className="pp-footer-copy">
+              Portlink AS · Oslo, Norway · Embark tour operator dispatch, booking, and cruise-trade platform.
+            </p>
           </div>
-          <p className="pp-footer-copy">
-            Portlink AS · Oslo, Norway · Embark tour operator dispatch, booking, and cruise-trade platform.
-          </p>
+          <svg
+            viewBox="0 0 1200 170"
+            className="pp-footer-wordmark"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <text
+              x="0"
+              y="142"
+              fill="currentColor"
+              fontFamily="var(--pp-display)"
+              fontWeight="700"
+              fontSize="188"
+              letterSpacing="-6"
+            >
+              EMBARK
+            </text>
+          </svg>
         </div>
       </footer>
     </div>

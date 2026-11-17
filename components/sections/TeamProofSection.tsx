@@ -1,20 +1,5 @@
 'use client'
 
-/**
- * The proof strip: who is actually building this, one line each, just before the page asks.
- *
- * It is the replacement for the press-logo row a funded consumer app would put here (Flighty's is
- * the reference). We have no press logos and inventing social proof is worse than having none, so
- * the proof on offer is the only kind that is true: the people, and what they did before this. It
- * sits directly above the access form because that is where a reader decides whether to hand over
- * an email address, and "who are these people" is the question they are asking at that moment.
- *
- * ⛔ IT PRINTS NO FIGURE THAT IS NOT ALREADY ON /team. Both numbers here, sixteen years and a
- * decade, come from the people's own CVs through `team-members.ts`, which is the single source the
- * full team page also renders. A strip with its own copy of the facts is a strip that will
- * eventually disagree with the page it links to.
- */
-
 import Link from 'next/link'
 import { useReveal } from '@/hooks/useReveal'
 import { everyone } from './team-members'
@@ -27,36 +12,22 @@ export default function TeamProofSection() {
     <section
       ref={sectionRef}
       id="team-proof"
-      /* The scenes' rhythm, character for character. `section-pad` is gone with it: that class is a
-         `!important` override at 768 px and below, so it and a clamp cannot both be in charge. */
       style={{ background: 'var(--ds-canvas)', padding: 'clamp(56px, 8vw, 96px) clamp(16px, 4vw, 24px)' }}
     >
       <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: 'clamp(28px, 4vw, 44px)' }}>
-          <span
-            className="reveal"
-            style={{
-              display: 'inline-block',
-              fontSize: '12px',
-              textTransform: 'uppercase',
-              letterSpacing: '0.1em',
-              color: 'var(--ds-text-3)',
-              fontWeight: 600,
-            }}
-          >
-            Who is building it
-          </span>
+        <div style={{ marginBottom: 'clamp(28px, 4vw, 44px)' }}>
           <h2
             className="reveal"
             style={{
-              marginTop: '14px',
-              fontSize: 'clamp(1.5rem, 3.2vw, 2.125rem)',
-              lineHeight: 1.15,
-              letterSpacing: '-0.02em',
+              marginTop: 0,
+              fontSize: 'clamp(26px, 3.4vw, 42px)',
+              lineHeight: 1.04,
+              letterSpacing: '-0.03em',
+              fontWeight: 700,
               color: 'var(--ds-text-1)',
             }}
           >
-            Built by people who know the work.
+            Built by people who run calls.
           </h2>
         </div>
 
@@ -72,33 +43,35 @@ export default function TeamProofSection() {
                 decoding="async"
                 className={styles.photo}
               />
-              <div className={styles.bio}><div style={{ fontSize: '15px', fontWeight: 600, color: 'var(--ds-text-1)' }}>{m.name}</div>
-              <div style={{ fontSize: '12.5px', fontWeight: 600, color: 'var(--ds-accent-strong)', marginTop: '3px' }}>
-                {m.role}
+              <div className={styles.bio}>
+                <div style={{ fontSize: '16px', fontWeight: 700, color: 'var(--ds-text-1)' }}>{m.name}</div>
+                <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--ds-accent-strong)', marginTop: '3px' }}>
+                  {m.role}
+                </div>
+                <p
+                  style={{
+                    margin: '9px auto 0',
+                    maxWidth: '240px',
+                    fontSize: '14.5px',
+                    lineHeight: 1.55,
+                    color: 'var(--ds-text-2)',
+                  }}
+                >
+                  {m.short}
+                </p>
               </div>
-              <p
-                style={{
-                  margin: '9px auto 0',
-                  maxWidth: '230px',
-                  fontSize: '13px',
-                  lineHeight: 1.55,
-                  color: 'var(--ds-text-3)',
-                }}
-              >
-                {m.short}
-              </p></div>
             </li>
           ))}
         </ul>
 
-        <div id="mission" style={{ maxWidth: '680px', margin: 'clamp(28px, 4vw, 40px) auto 0', textAlign: 'center' }}>
+        <div id="mission" style={{ maxWidth: '720px', margin: 'clamp(28px, 4vw, 40px) 0 0' }}>
           <p
             className="reveal"
             style={{
-              margin: '0 auto 18px',
-              fontSize: '15px',
+              margin: '0 0 16px',
+              fontSize: '18px',
               lineHeight: 1.6,
-              color: 'var(--ds-text-2, var(--ds-text-3))',
+              color: 'var(--ds-text-2)',
             }}
           >
             <strong style={{ color: 'var(--ds-text-1)' }}>Our mission &amp; ethos:</strong> give every organisation in a port call and shore operation one shared, accountable record, where software prepares the facts and operators own every commitment.
@@ -110,12 +83,11 @@ export default function TeamProofSection() {
               display: 'inline-flex',
               alignItems: 'center',
               minHeight: 44,
-              fontSize: '15px',
+              fontSize: '16px',
               fontWeight: 600,
               color: 'var(--ds-primary)',
-              textDecoration: 'none',
-              borderBottom: '1px solid var(--ds-border-2)',
-              paddingBottom: '2px',
+              textDecoration: 'underline',
+              textUnderlineOffset: '4px',
             }}
           >
             Read more about the team and our ethos

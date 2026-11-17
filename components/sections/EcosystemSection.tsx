@@ -20,23 +20,22 @@ export default function EcosystemSection() {
       <div className={styles.inner}>
         <div className={styles.heading}>
           <div>
-            <span className={styles.eyebrow}>The connected port call</span>
-            <h2 id="ecosystem-title">Four sides.<br />One shared record.</h2>
+            <h2 id="ecosystem-title">Four sides. One shared record.</h2>
           </div>
           <p>Follow a call from the first agreement to the final account. The people change. The context stays with the call.</p>
         </div>
         <nav aria-label="Follow a port call" className={styles.steps}>
           {portCallSteps.map((item, index) => (
             <button type="button" key={item.label} aria-current={step === index ? 'step' : undefined} aria-controls="port-call-story" onClick={() => setStep(index)}>
-              <span className={styles.stepNumber}>{String(index + 1).padStart(2, '0')}</span><span>{item.label}</span>
+              <span>{item.label}</span>
             </button>
           ))}
         </nav>
         <div id="port-call-story" className={styles.top}>
           <div className={styles.copy}>
             <div className={styles.narrative} aria-live="polite" aria-atomic="true">
-              <span className={styles.handoff}>{current.handoff}</span>
               <h3>{current.title}</h3>
+              <span className={styles.handoff}>{current.handoff}</span>
               <p>{current.body}</p>
               <p className={styles.detail}>{current.detail}</p>
             </div>
@@ -46,13 +45,12 @@ export default function EcosystemSection() {
                 {last ? 'Follow it again' : 'Next handoff'}
                 {last ? <RotateCcw size={16} aria-hidden="true" /> : <ArrowRight size={16} aria-hidden="true" />}
               </button>
-              <span className={styles.counter}>{String(step + 1).padStart(2, '0')} / {String(portCallSteps.length).padStart(2, '0')}</span>
+              <span className={styles.counter}>Stage {step + 1} of {portCallSteps.length}</span>
             </div>
             <span className={styles.note}>An illustrative port call. Select a step to follow the handoff.</span>
           </div>
           <div>
-            <div className={styles.diagram} aria-label={`Connected teams: ${current.active.map(id => portCallRoles.find(role => role.id === id)!.title).join(', ')}`}>
-              <div className={styles.grid} aria-hidden="true" />
+            <div className={styles.diagram} data-ui aria-label={`Connected teams: ${current.active.map(id => portCallRoles.find(role => role.id === id)!.title).join(', ')}`}>
               <svg viewBox="0 0 600 500" preserveAspectRatio="none" className={styles.lines} aria-hidden="true">
                 {paths.map(d => <path key={d} d={d} className={styles.basePath} />)}
                 {paths.map((d, index) => current.active.includes(portCallRoles[index].id) && <path key={`${step}-${index}`} d={d} pathLength="1" className={styles.signal} />)}

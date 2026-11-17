@@ -316,7 +316,7 @@ export function EmbarkQuayCheckInSample() {
                     aria-pressed={isChecked}
                     onClick={() => toggleRow(row.id)}
                   >
-                    {isChecked ? 'Aboard ✓' : `Check in (+${row.pax})`}
+                    {isChecked ? 'Aboard' : `Check in (+${row.pax})`}
                   </button>
                 </div>
               )
@@ -387,7 +387,7 @@ export function EmbarkQuayCheckInSample() {
                         </small>
                       </span>
                       <span className="pp-phone-tick" aria-hidden="true">
-                        {isChecked ? '✓' : '+'}
+                        {isChecked ? 'OK' : '+'}
                       </span>
                     </button>
                   )
@@ -535,7 +535,7 @@ export function EmbarkCruiseTradeBridge() {
               className="pp-action-primary"
               onClick={() => setConfirmed((v) => !v)}
             >
-              {confirmed ? 'Confirmed & Synced ✓ (Click to reset)' : 'Confirm allocation & pricing'}
+              {confirmed ? 'Confirmed & Synced (Click to reset)' : 'Confirm allocation & pricing'}
             </button>
           </div>
         </div>

@@ -96,7 +96,6 @@ export default function Story() {
     <section id="bevis" className={styles.story} aria-labelledby="bevis-title" ref={reveal}>
       <div className={styles.storyInner}>
         <div className={styles.storyHeading}>
-          <span className={styles.eyebrow}>Vår side av kaia, som den er i dag</span>
           <h2 id="bevis-title">Ikke en skisse. Ekte skjermbilder fra plattformen.</h2>
         </div>
 
@@ -130,7 +129,6 @@ export default function Story() {
 
         <div className={styles.portSide}>
           <div className={styles.portSideHeading}>
-            <span className={styles.eyebrow}>Deres side av kaia</span>
             <h3>Dette bygger vi ikke.</h3>
             <p>Grieg Connect gjør dette allerede, i mer enn 85 nordiske havner. Vi vil koble oss på det, ikke konkurrere med det.</p>
           </div>

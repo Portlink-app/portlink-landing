@@ -20,7 +20,6 @@ export default function EcosystemSection() {
       <div className={styles.inner}>
         <div className={styles.heading}>
           <div>
-            <span className={styles.eyebrow}>The connected port call</span>
             <h2 id="ecosystem-title">Four sides.<br />One shared record.</h2>
           </div>
           <p>Follow a call from the first agreement to the final account. The people change. The context stays with the call.</p>

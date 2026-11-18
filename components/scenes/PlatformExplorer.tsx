@@ -55,7 +55,7 @@ export default function PlatformExplorer() {
       <noscript><style>{'#dashboard [data-platform-panel] { display: block; } #dashboard [role="tablist"], #dashboard [data-platform-next] { display: none; }'}</style></noscript>
       <div className={styles.inner}>
         <div className={styles.labelRow}>
-          <span className="section-eyebrow">Inside the platform</span>
+          <h2 className={styles.title}>Inside the platform</h2>
           <span className={styles.instruction}>Choose a surface. Previews use illustrative data.</span>
         </div>
         <div className={styles.tabs} role="tablist" aria-label="Platform surfaces">

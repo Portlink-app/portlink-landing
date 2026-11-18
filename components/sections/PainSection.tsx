@@ -12,7 +12,6 @@ export default function PainSection() {
     <section id="pain" className={styles.section}>
       <div className={styles.layout}>
         <div className={styles.intro}>
-          <span className="section-eyebrow">The work between port calls</span>
           <h2>Too much depends on finding the right file.</h2>
           <p>Port calls cross teams, time zones and systems. The handover is where the gaps show.</p>
           <span className={styles.note}>Open a question to see how the work connects.</span>

@@ -2,7 +2,7 @@ import { ArrowDown, ArrowUpRight } from 'lucide-react'
 import styles from './havn.module.css'
 
 /**
- * The opening, in the homepage's own composition (components/film/FilmHero.tsx): an eyebrow row
+ * The opening, in the homepage's own composition (components/film/FilmHero.tsx): a co-brand line
  * on a hairline, the statement left and the argument right, a mono lead line. Same grid, same
  * scale, so this page reads as a page of portlink.app and not a form someone attached to it.
  *
@@ -14,8 +14,7 @@ export default function HavnHero() {
   return (
     <section className={styles.hero} aria-labelledby="havn-title">
       <div className={styles.heroIntro}>
-        <div className={styles.heroEyebrow}>
-          <span className="section-eyebrow">Til dere som bruker Grieg Connect hver dag</span>
+        <div className={styles.heroStrip}>
           <span>Portlink × Grieg Connect</span>
         </div>
         <div className={styles.heroGrid}>

@@ -101,9 +101,6 @@ export default function TwoDoorsSection() {
     >
       <div style={{ maxWidth: 1100, margin: '0 auto' }}>
         <div style={{ maxWidth: 680, marginBottom: 'clamp(24px, 4vw, 40px)' }}>
-          <span className="reveal section-eyebrow" style={{ display: 'inline-block' }}>
-            Working with us
-          </span>
           <h2
             className="reveal"
             style={{

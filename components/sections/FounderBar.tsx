@@ -44,13 +44,6 @@ export default function FounderBar() {
       }}
     >
       <div style={{ maxWidth: 780, margin: '0 auto' }}>
-        <span
-          className="reveal section-eyebrow"
-          style={{ display: 'inline-block', marginBottom: 14 }}
-        >
-          Who builds it
-        </span>
-
         <ul
           className="reveal"
           style={{ listStyle: 'none', margin: 0, padding: 0, display: 'grid', gap: 10 }}

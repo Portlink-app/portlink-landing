@@ -12,7 +12,6 @@ export default function Hilsen() {
     <section className={styles.hilsen} aria-labelledby="hilsen-title">
       <div className={styles.hilsenInner}>
         <div className={styles.hilsenCopy}>
-          <span className={styles.eyebrow}>Fra oss to</span>
           <h2 id="hilsen-title">Takk for at dere tar dere tid.</h2>
           <p>
             Denne siden er oppfølgingen etter Seatrade. Svarene går rett til oss to og er med på å

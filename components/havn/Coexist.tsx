@@ -50,7 +50,6 @@ export default function Coexist() {
       <div className={styles.coexistInner}>
         <div className={styles.coexistHeading}>
           <div>
-            <span className={styles.eyebrowInverted}>Slik ser vi det for oss</span>
             <h2 id="sammen-title">To systemer.<br />Ett anløp.</h2>
           </div>
           <p>

@@ -457,7 +457,6 @@ export default function BentoSection() {
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
           style={{ textAlign: 'center', marginBottom: '28px' }}
         >
-          <span className="section-eyebrow">Built for your role</span>
           <h2 style={{
             fontSize: 'clamp(1.75rem, 3.6vw, 2.75rem)',
             fontWeight: 700,

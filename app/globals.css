@@ -228,51 +228,6 @@ body {
 main:focus,
 main:focus-visible { outline: none; }
 
-/* The section eyebrow, in one place.
-   It was the same five declarations inline in SceneSection, EcosystemSection and BentoSection, and
-   every new section added 17.09.2026 wanted a sixth copy. One class means a colour decision about
-   it is made once rather than in six files, which is exactly the decision the dark theme forced. */
-.section-eyebrow {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--ds-primary);
-}
-
-/*
- * In dark, --ds-primary is #5686c2, and MEASURED ON A RENDERED DARK PAGE 17.09.2026 that is
- * 4,51:1 against --ds-surface-2 (#0f1d30) and 5,18:1 against --ds-canvas (#050d18). The first
- * number clears the 4,5:1 floor for normal text by one hundredth, at 11 px, weight 600, uppercase,
- * with 0,12em tracking - which is the hardest text on the page to read and the one carrying the
- * least redundancy, because an eyebrow is a single short label with no sentence around it to
- * recover meaning from.
- *
- * --ds-accent (#8bb0dc) measures 7,52:1 and 8,67:1 on the same two backgrounds. Both values are
- * from the token set; no new colour is introduced, and nothing inside the scenes is touched.
- *
- * Light is unchanged and deliberately so: there --ds-primary is #1e3a5f on near-white, which is
- * not marginal at any size.
- *
- * ⛔ MEASURE, DO NOT CALCULATE FROM THE TOKEN FILE. These numbers came out of getComputedStyle on
- * the served page walking up to the first non-transparent ancestor background, because that is the
- * pair of colours a reader's eye actually receives. A token read off disk cannot see an inherited
- * opacity, a cascade override or a background set on a wrapper.
- */
-[data-theme="dark"] .section-eyebrow {
-  color: var(--ds-accent);
-}
-
-/* The same rule for the system-preference path, mirroring `:root:not([data-theme])` in
-   app/_ds/portlink-tokens.dist.css. Every page here sets data-theme explicitly today, so this
-   matches nothing; it exists so the eyebrow follows its background rather than the attribute if
-   one ever does not. */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme]) .section-eyebrow {
-    color: var(--ds-accent);
-  }
-}
-
 /* Focus ring — global accessibility */
 a:focus-visible,
 button:focus-visible,

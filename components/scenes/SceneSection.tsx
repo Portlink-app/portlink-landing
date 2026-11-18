@@ -13,14 +13,12 @@ import { motion } from 'framer-motion'
 
 export default function SceneSection({
   id,
-  eyebrow,
   headline,
   body,
   children,
   tone = 'canvas',
 }: {
   id: string
-  eyebrow: string
   headline: string
   body: string
   children: React.ReactNode
@@ -42,7 +40,6 @@ export default function SceneSection({
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
           style={{ maxWidth: 680, marginBottom: 'clamp(24px, 4vw, 40px)' }}
         >
-          <span className="section-eyebrow">{eyebrow}</span>
           <h2
             style={{
               fontSize: 'clamp(1.5rem, 3.2vw, 2.25rem)',

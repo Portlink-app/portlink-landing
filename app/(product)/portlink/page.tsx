@@ -67,18 +67,18 @@ export default function PortlinkProductPage() {
               {/* Front Layer: Floating Role Callout Pills */}
               <div className="pp-callout-strip">
                 <div className="pp-callout-pill">
-                  <span className="pp-callout-pill-kicker">Seat 1 · Cruise Line Ops</span>
                   <strong>Nordkyst Cruise Line</strong>
+                  <span className="pp-callout-pill-meta">Seat 1 · Cruise Line Ops</span>
                   <span>All 7 tabs active: Overview, Readiness, Finance, Programme, Services, Tasks, Comms</span>
                 </div>
                 <div className="pp-callout-pill">
-                  <span className="pp-callout-pill-kicker">Seat 2 · Port Agent</span>
                   <strong>Vestkyst Maritime Agency</strong>
+                  <span className="pp-callout-pill-meta">Seat 2 · Port Agent</span>
                   <span>Pilotage kl. 07.15, 2 tugs, berth services, and PDA/FDA settlement</span>
                 </div>
                 <div className="pp-callout-pill">
-                  <span className="pp-callout-pill-kicker">Seat 3 &amp; 4 · Shorex DMC &amp; Ship</span>
                   <strong>Fjordhaven DMC + MS Aster Brisa</strong>
+                  <span className="pp-callout-pill-meta">Seat 3 &amp; 4 · Shorex DMC &amp; Ship</span>
                   <span>284 shorex guests synced via Embark; gangway sign-off on board</span>
                 </div>
               </div>
@@ -140,18 +140,18 @@ export default function PortlinkProductPage() {
 
             <div className="pp-callout-strip">
               <div className="pp-callout-pill">
-                <span className="pp-callout-pill-kicker">Kystverket Hovedled Fairways</span>
                 <strong className="pp-mono">257,0 NM · 4 Ports</strong>
+                <span className="pp-callout-pill-meta">Kystverket Hovedled Fairways</span>
                 <span>Bergen (NOBGO) to Florø, Stadlandet, Ålesund, and Molde with 0 land crossings</span>
               </div>
               <div className="pp-callout-pill">
-                <span className="pp-callout-pill-kicker">Follow-Water Autorouting</span>
                 <strong className="pp-mono">120 Fairway Waypoints</strong>
+                <span className="pp-callout-pill-meta">Follow-Water Autorouting</span>
                 <span>Snaps passage legs to official coastal lanes with 42,0 m minimum fairway depth and daylight arrival checks</span>
               </div>
               <div className="pp-callout-pill">
-                <span className="pp-callout-pill-kicker">Voyage Position Scrubber</span>
                 <strong className="pp-mono">SHIP AT Timeline · SOG / COG</strong>
+                <span className="pp-callout-pill-meta">Voyage Position Scrubber</span>
                 <span>Scrub any timestamp along the polyline to inspect live coordinates, sailed distance, and next-port ETA</span>
               </div>
             </div>
@@ -206,18 +206,18 @@ export default function PortlinkProductPage() {
               <div className="pp-gangway-stage-grid">
                 <div className="pp-gangway-stack">
                   <div className="pp-callout-pill pp-callout-pill--dark">
-                    <span className="pp-callout-pill-kicker">Pilotage &amp; Towage</span>
                     <strong className="pp-mono">07.15 to 08.00 · 2 Tugs</strong>
+                    <span className="pp-callout-pill-meta">Pilotage &amp; Towage</span>
                     <span>Zero tug overtime used alongside; logged directly on the departure report before lines come in.</span>
                   </div>
                   <div className="pp-callout-pill pp-callout-pill--dark">
-                    <span className="pp-callout-pill-kicker">Quay Services Verified</span>
                     <strong className="pp-mono">180 t Water · 6 m³ Waste</strong>
+                    <span className="pp-callout-pill-meta">Quay Services Verified</span>
                     <span>Mooring 6 lines fast kl. 07.52; gangway cleared kl. 08.05; hydrant meter #3 and MARPOL receipt attached.</span>
                   </div>
                   <div className="pp-callout-pill pp-callout-pill--dark">
-                    <span className="pp-callout-pill-kicker">Cryptographic Sign-Off</span>
                     <strong className="pp-mono">17.28 Agent · 17.31 Master</strong>
+                    <span className="pp-callout-pill-meta">Cryptographic Sign-Off</span>
                     <span>Dual on-board signatures lock operational quantities and feed the Final Disbursement Account automatically.</span>
                   </div>
                 </div>

@@ -2,7 +2,7 @@
 
 18.11.2026. Authored by Fable 5.2 on David's brief (event 22707ce6, with additions dc0eae0c, 80aec9d7, 28423d13). Keel builds, Tiller owns the shared design pieces, Starboard accepts. This is a new page beside portlink.app. It edits nothing on the existing landing page.
 
-## 1. Verdict
+## Positioning & Idea (1. Verdict)
 
 **One Harbour.** One cruise call into one Greenland harbour, followed by scroll from the planner's desk to the guide's phone, where every room the camera enters ends on the real screen that person works in.
 
@@ -63,7 +63,7 @@ One place, lit by low summer sun. The page labels it as an illustrated West Gree
 - **Two threads, honestly.** The Portlink thread ends at the DMC. Embark has its own thread (hut, jetty, boat). The camera walks between them along the quay. No data link between the two products is drawn or claimed (Q6).
 - **Lit windows.** A role active on the call has a lit window. At the final pull-back all windows are lit, with copy stating that each role sees only its part.
 
-## 4. Scroll script
+## Storyboard & Motion Spine (4. Scroll script; Lenis and GSAP wiring in section 7)
 
 Ranges are in screens (1,0 = one viewport height). Total 23,2 screens on desktop, about 16 on phone. One sticky stage of 100svh sits inside a tall track. Nothing is pinned by spacer.
 
@@ -309,7 +309,7 @@ Ordinary long-GOP video is ruled out, because the dives play reversed.
 - Higgsfield is David's named tool. The technical requirement is any model with first and last frame conditioning at 1080p.
 - No spend is at risk before gate G1. The scrub engine is proven first on an existing landing clip.
 
-## 6. Visual system
+## Visual System (6)
 
 **Palette** (existing tokens, plus one accent):
 
@@ -481,7 +481,7 @@ CLS is 0. `saveData` or a slow connection gets the stills path.
 
 ## 11. WP1 measurements (Keel, 18.11.2026)
 
-Measured with Playwright Chromium 1.60 at 1440x900 and 390x844, screenshots at 0, 25, 50, 75 and 100 % scroll. Raw data and screenshots: `design-review/harbour-2026-11/teardown/<site>/teardown.json`.
+Measured on https://www.apple.com/airpods-pro/ and https://seasats.com with Playwright Chromium 1.60 at 1440x900 and 390x844, screenshots at 0, 25, 50, 75 and 100 % scroll. Raw data and screenshots: `design-review/harbour-2026-11/teardown/<site>/teardown.json`.
 
 | Measure | apple.com/airpods-pro (desktop, phone) | seasats.com (desktop, phone) |
 |---|---|---|

@@ -1,0 +1,717 @@
+{
+  "url": "https://seasats.com",
+  "measuredAt": "2026-11-18T15:41:45.744Z",
+  "viewports": {
+    "desktop": {
+      "height": 34147,
+      "screens": 37.9,
+      "probe": {
+        "h1": {
+          "tag": "H1",
+          "text": "Ocean Autonomy That Works",
+          "fontFamily": "seasonMix, \"seasonMix Fallback\", serif",
+          "fontSize": "124px",
+          "lineHeight": "111.6px",
+          "letterSpacing": "-1.24px",
+          "fontWeight": "400",
+          "color": "rgb(255, 255, 255)",
+          "textTransform": "none"
+        },
+        "h2": {
+          "tag": "H2",
+          "text": "Mission after mission",
+          "fontFamily": "seasonMix, \"seasonMix Fallback\", serif",
+          "fontSize": "80px",
+          "lineHeight": "80px",
+          "letterSpacing": "-0.8px",
+          "fontWeight": "400",
+          "color": "rgb(255, 253, 253)",
+          "textTransform": "none"
+        },
+        "p": {
+          "tag": "P",
+          "text": "Ghost fleet",
+          "fontFamily": "supplyMono, \"supplyMono Fallback\", monospace",
+          "fontSize": "14px",
+          "lineHeight": "12.6px",
+          "letterSpacing": "normal",
+          "fontWeight": "400",
+          "color": "rgb(35, 35, 35)",
+          "textTransform": "uppercase"
+        },
+        "mono": [
+          "supplyMono, \"supplyMono Fallback\", monospace",
+          "supplyMono, \"supplyMono Fallback\", monospace",
+          "supplyMono, \"supplyMono Fallback\", monospace"
+        ],
+        "canvases": [
+          {
+            "w": 1440,
+            "h": 900,
+            "cls": "AnimateFrames_canvas___E4_0"
+          },
+          {
+            "w": 2880,
+            "h": 1307,
+            "cls": ""
+          },
+          {
+            "w": 1440,
+            "h": 900,
+            "cls": "AnimateFrames_canvas___E4_0"
+          },
+          {
+            "w": 1440,
+            "h": 810,
+            "cls": "AnimateFrames_canvas___E4_0"
+          },
+          {
+            "w": 1440,
+            "h": 810,
+            "cls": "AnimateFrames_canvas___E4_0"
+          }
+        ],
+        "videos": [
+          {
+            "src": "https://seasats.sfo3.cdn.digitaloceanspaces.com/seasats_styleframe_Header_IDLE_v001-1.mp4",
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "https://seasats.sfo3.cdn.digitaloceanspaces.com/seasats_styleframe_Header_IDLE_v001_mobile.mp4",
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "https://seasats.sfo3.cdn.digitaloceanspaces.com/React_With_Speed.mp4",
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "https://seasats.sfo3.cdn.digitaloceanspaces.com/cruisin_lf-1.mp4",
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          }
+        ],
+        "lenis": true,
+        "gsap": false,
+        "scrollTrigger": false,
+        "three": false,
+        "webgl": true,
+        "bgTop": [
+          "rgba(0, 0, 0, 0.1)",
+          "rgb(35, 35, 35)",
+          "rgb(217, 217, 217)",
+          "rgba(255, 253, 253, 0.5)",
+          "rgb(207, 207, 207)",
+          "rgb(255, 253, 253)"
+        ],
+        "sticky": [
+          {
+            "tag": "DIV",
+            "cls": "browser-ui-overlay browser-ui-overlay--top",
+            "pos": "sticky",
+            "h": 0
+          },
+          {
+            "tag": "DIV",
+            "cls": "ThemeBackground_background__xCT8k",
+            "pos": "fixed",
+            "h": 900
+          },
+          {
+            "tag": "HEADER",
+            "cls": "Header_container__U6gzw",
+            "pos": "fixed",
+            "h": 72
+          },
+          {
+            "tag": "DIV",
+            "cls": "Nav_overlay__cNEMq",
+            "pos": "fixed",
+            "h": 900
+          },
+          {
+            "tag": "DIV",
+            "cls": "Nav_proximity__I_xAN",
+            "pos": "fixed",
+            "h": 900
+          },
+          {
+            "tag": "DIV",
+            "cls": "Nav_thumbnails__BTG40 NavThumbnails_container__NFwa1 navThum",
+            "pos": "fixed",
+            "h": 880
+          },
+          {
+            "tag": "DIV",
+            "cls": "NavProgress_progress__UrBA2",
+            "pos": "fixed",
+            "h": 880
+          },
+          {
+            "tag": "DIV",
+            "cls": "Nav_content__HKsDe nav",
+            "pos": "fixed",
+            "h": 900
+          },
+          {
+            "tag": "DIV",
+            "cls": "Media_media__LG2WM HeroMedia_media__38U7f HeroMedia_mediaDes",
+            "pos": "sticky",
+            "h": 900
+          },
+          {
+            "tag": "DIV",
+            "cls": "Media_media__LG2WM HeroMedia_media__38U7f HeroMedia_mediaMob",
+            "pos": "sticky",
+            "h": 0
+          },
+          {
+            "tag": "DIV",
+            "cls": "HeroMedia_contentScroller__5N4Q9",
+            "pos": "sticky",
+            "h": 700
+          },
+          {
+            "tag": "DIV",
+            "cls": "FlythroughPoints_content__Jbw02",
+            "pos": "sticky",
+            "h": 900
+          },
+          {
+            "tag": "UL",
+            "cls": "FlythroughPoints_list__B70qW",
+            "pos": "sticky",
+            "h": 202
+          },
+          {
+            "tag": "P",
+            "cls": "FlythroughPoints_outro__QYfug",
+            "pos": "sticky",
+            "h": 243
+          },
+          {
+            "tag": "DIV",
+            "cls": "AnimateFrames_container__q_SCe FlythroughPoints_framesContai",
+            "pos": "sticky",
+            "h": 900
+          }
+        ]
+      },
+      "requests": 1137,
+      "transferBytes": 41732952,
+      "imageSequenceRequests": 1029,
+      "imageSequenceSample": [
+        "https://seasats.sfo3.cdn.digitaloceanspaces.com/seasats_styleframe_Header_IDLE_v001_1%20copy%20(1)-1920x1200.webp?2025-11-06T10:14:52.866Z",
+        "https://seasats.sfo3.cdn.digitaloceanspaces.com/Quickfish_Nav-300x211.png?2026-10-05T07:55:39.421Z",
+        "https://seasats.sfo3.cdn.digitaloceanspaces.com/Screenshot%202026-04-10%20at%206.08.08%E2%80%AFPM-300x176.png?2026-04-11T01:08:19.461Z"
+      ],
+      "videoRequests": [
+        "https://seasats.sfo3.cdn.digitaloceanspaces.com/seasats_styleframe_Header_IDLE_v001-1.mp4",
+        "https://seasats.sfo3.cdn.digitaloceanspaces.com/seasats_styleframe_Header_IDLE_v001_mobile.mp4",
+        "https://seasats.sfo3.cdn.digitaloceanspaces.com/React_With_Speed.mp4",
+        "https://seasats.sfo3.cdn.digitaloceanspaces.com/cruisin_lf-1.mp4"
+      ],
+      "shots": [
+        "/Users/nyx/Projects/_workspaces/portlink-landing/keel-umbrella-harbour-20261118/design-review/harbour-2026-11/teardown/seasats/desktop-0.png",
+        "/Users/nyx/Projects/_workspaces/portlink-landing/keel-umbrella-harbour-20261118/design-review/harbour-2026-11/teardown/seasats/desktop-25.png",
+        "/Users/nyx/Projects/_workspaces/portlink-landing/keel-umbrella-harbour-20261118/design-review/harbour-2026-11/teardown/seasats/desktop-50.png",
+        "/Users/nyx/Projects/_workspaces/portlink-landing/keel-umbrella-harbour-20261118/design-review/harbour-2026-11/teardown/seasats/desktop-75.png",
+        "/Users/nyx/Projects/_workspaces/portlink-landing/keel-umbrella-harbour-20261118/design-review/harbour-2026-11/teardown/seasats/desktop-100.png"
+      ]
+    },
+    "phone": {
+      "height": 28045,
+      "screens": 33.2,
+      "probe": {
+        "h1": {
+          "tag": "H1",
+          "text": "Ocean Autonomy That Works",
+          "fontFamily": "seasonMix, \"seasonMix Fallback\", serif",
+          "fontSize": "63.5115px",
+          "lineHeight": "63.5115px",
+          "letterSpacing": "-0.635114px",
+          "fontWeight": "400",
+          "color": "rgb(255, 255, 255)",
+          "textTransform": "none"
+        },
+        "h2": {
+          "tag": "H2",
+          "text": "Mission after mission",
+          "fontFamily": "seasonMix, \"seasonMix Fallback\", serif",
+          "fontSize": "35.7252px",
+          "lineHeight": "35.7252px",
+          "letterSpacing": "normal",
+          "fontWeight": "400",
+          "color": "rgb(255, 253, 253)",
+          "textTransform": "none"
+        },
+        "p": {
+          "tag": "P",
+          "text": "Ghost fleet",
+          "fontFamily": "supplyMono, \"supplyMono Fallback\", monospace",
+          "fontSize": "13.8931px",
+          "lineHeight": "12.5038px",
+          "letterSpacing": "normal",
+          "fontWeight": "400",
+          "color": "rgb(35, 35, 35)",
+          "textTransform": "uppercase"
+        },
+        "mono": [
+          "supplyMono, \"supplyMono Fallback\", monospace",
+          "supplyMono, \"supplyMono Fallback\", monospace",
+          "supplyMono, \"supplyMono Fallback\", monospace"
+        ],
+        "canvases": [
+          {
+            "w": 390,
+            "h": 844,
+            "cls": "AnimateFrames_canvas___E4_0"
+          },
+          {
+            "w": 780,
+            "h": 1189,
+            "cls": ""
+          },
+          {
+            "w": 358,
+            "h": 201,
+            "cls": "AnimateFrames_canvas___E4_0"
+          },
+          {
+            "w": 358,
+            "h": 201,
+            "cls": "AnimateFrames_canvas___E4_0"
+          },
+          {
+            "w": 0,
+            "h": 0,
+            "cls": "AnimateFrames_canvas___E4_0"
+          }
+        ],
+        "videos": [
+          {
+            "src": "https://seasats.sfo3.cdn.digitaloceanspaces.com/seasats_styleframe_Header_IDLE_v001-1.mp4",
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "https://seasats.sfo3.cdn.digitaloceanspaces.com/seasats_styleframe_Header_IDLE_v001_mobile.mp4",
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "https://seasats.sfo3.cdn.digitaloceanspaces.com/deploys-with-speed.mp4",
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "https://seasats.sfo3.cdn.digitaloceanspaces.com/detects-and-fathoms.mp4",
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "https://seasats.sfo3.cdn.digitaloceanspaces.com/React_With_Speed.mp4",
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "https://seasats.sfo3.cdn.digitaloceanspaces.com/beach_launch.mp4",
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "https://seasats.sfo3.cdn.digitaloceanspaces.com/cruisin_lf-1.mp4",
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          }
+        ],
+        "lenis": true,
+        "gsap": false,
+        "scrollTrigger": false,
+        "three": false,
+        "webgl": true,
+        "bgTop": [
+          "rgba(0, 0, 0, 0.1)",
+          "rgb(255, 253, 253)",
+          "rgb(207, 207, 207)",
+          "rgb(217, 217, 217)",
+          "rgba(255, 253, 253, 0.5)",
+          "rgb(43, 57, 34)"
+        ],
+        "sticky": [
+          {
+            "tag": "DIV",
+            "cls": "browser-ui-overlay browser-ui-overlay--top",
+            "pos": "sticky",
+            "h": 0
+          },
+          {
+            "tag": "DIV",
+            "cls": "ThemeBackground_background__xCT8k",
+            "pos": "fixed",
+            "h": 844
+          },
+          {
+            "tag": "HEADER",
+            "cls": "Header_container__U6gzw",
+            "pos": "fixed",
+            "h": 60
+          },
+          {
+            "tag": "DIV",
+            "cls": "Nav_overlay__cNEMq",
+            "pos": "fixed",
+            "h": 844
+          },
+          {
+            "tag": "DIV",
+            "cls": "Nav_proximity__I_xAN",
+            "pos": "fixed",
+            "h": 0
+          },
+          {
+            "tag": "DIV",
+            "cls": "Nav_thumbnails__BTG40 NavThumbnails_container__NFwa1 navThum",
+            "pos": "fixed",
+            "h": 0
+          },
+          {
+            "tag": "DIV",
+            "cls": "NavProgress_progress__UrBA2",
+            "pos": "fixed",
+            "h": 0
+          },
+          {
+            "tag": "DIV",
+            "cls": "Nav_content__HKsDe nav",
+            "pos": "fixed",
+            "h": 844
+          },
+          {
+            "tag": "DIV",
+            "cls": "Media_media__LG2WM HeroMedia_media__38U7f HeroMedia_mediaDes",
+            "pos": "sticky",
+            "h": 0
+          },
+          {
+            "tag": "DIV",
+            "cls": "Media_media__LG2WM HeroMedia_media__38U7f HeroMedia_mediaMob",
+            "pos": "sticky",
+            "h": 844
+          },
+          {
+            "tag": "DIV",
+            "cls": "HeroMedia_contentScroller__5N4Q9",
+            "pos": "sticky",
+            "h": 646
+          },
+          {
+            "tag": "DIV",
+            "cls": "FlythroughPoints_content__Jbw02",
+            "pos": "sticky",
+            "h": 844
+          },
+          {
+            "tag": "UL",
+            "cls": "FlythroughPoints_list__B70qW",
+            "pos": "sticky",
+            "h": 143
+          },
+          {
+            "tag": "P",
+            "cls": "FlythroughPoints_outro__QYfug",
+            "pos": "sticky",
+            "h": 184
+          },
+          {
+            "tag": "DIV",
+            "cls": "AnimateFrames_container__q_SCe FlythroughPoints_framesContai",
+            "pos": "sticky",
+            "h": 844
+          }
+        ]
+      },
+      "requests": 825,
+      "transferBytes": 28423664,
+      "imageSequenceRequests": 720,
+      "imageSequenceSample": [
+        "https://seasats.sfo3.cdn.digitaloceanspaces.com/seasats_styleframe_Header_IDLE_v001_1%20copy%20(1)-900x563.webp?2025-11-06T10:14:52.866Z",
+        "https://seasats.sfo3.cdn.digitaloceanspaces.com/image%201955.png?2025-11-13T13:24:54.501Z",
+        "https://www.seasats.com/frames/intro-25-mobile/frame_0001.avif"
+      ],
+      "videoRequests": [
+        "https://seasats.sfo3.cdn.digitaloceanspaces.com/seasats_styleframe_Header_IDLE_v001-1.mp4",
+        "https://seasats.sfo3.cdn.digitaloceanspaces.com/seasats_styleframe_Header_IDLE_v001_mobile.mp4",
+        "https://seasats.sfo3.cdn.digitaloceanspaces.com/React_With_Speed.mp4",
+        "https://seasats.sfo3.cdn.digitaloceanspaces.com/deploys-with-speed.mp4",
+        "https://seasats.sfo3.cdn.digitaloceanspaces.com/detects-and-fathoms.mp4"
+      ],
+      "shots": [
+        "/Users/nyx/Projects/_workspaces/portlink-landing/keel-umbrella-harbour-20261118/design-review/harbour-2026-11/teardown/seasats/phone-0.png",
+        "/Users/nyx/Projects/_workspaces/portlink-landing/keel-umbrella-harbour-20261118/design-review/harbour-2026-11/teardown/seasats/phone-25.png",
+        "/Users/nyx/Projects/_workspaces/portlink-landing/keel-umbrella-harbour-20261118/design-review/harbour-2026-11/teardown/seasats/phone-50.png",
+        "/Users/nyx/Projects/_workspaces/portlink-landing/keel-umbrella-harbour-20261118/design-review/harbour-2026-11/teardown/seasats/phone-75.png",
+        "/Users/nyx/Projects/_workspaces/portlink-landing/keel-umbrella-harbour-20261118/design-review/harbour-2026-11/teardown/seasats/phone-100.png"
+      ]
+    }
+  }
+}

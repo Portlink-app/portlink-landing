@@ -1,0 +1,531 @@
+{
+  "url": "https://www.apple.com/airpods-pro/",
+  "measuredAt": "2026-11-18T15:41:45.744Z",
+  "viewports": {
+    "desktop": {
+      "height": 29006,
+      "screens": 32.2,
+      "probe": {
+        "h1": {
+          "tag": "H1",
+          "text": "AirPods Pro 3",
+          "fontFamily": "\"SF Pro Display\", \"SF Pro Icons\", \"Helvetica Neue\", Helvetica, Arial, sans-serif",
+          "fontSize": "28px",
+          "lineHeight": "32px",
+          "letterSpacing": "0.196px",
+          "fontWeight": "600",
+          "color": "rgb(29, 29, 31)",
+          "textTransform": "none"
+        },
+        "h2": {
+          "tag": "H2",
+          "text": "Shop",
+          "fontFamily": "\"SF Pro Text\", \"SF Pro Icons\", \"Helvetica Neue\", Helvetica, Arial, sans-serif",
+          "fontSize": "12px",
+          "lineHeight": "16.0005px",
+          "letterSpacing": "-0.12px",
+          "fontWeight": "400",
+          "color": "rgb(110, 110, 115)",
+          "textTransform": "none"
+        },
+        "p": {
+          "tag": "P",
+          "text": "Up to 2x more than AirPods Pro 2.1",
+          "fontFamily": "\"SF Pro Text\", \"SF Pro Icons\", \"Helvetica Neue\", Helvetica, Arial, sans-serif",
+          "fontSize": "17px",
+          "lineHeight": "21.0012px",
+          "letterSpacing": "-0.374px",
+          "fontWeight": "600",
+          "color": "rgb(29, 29, 31)",
+          "textTransform": "none"
+        },
+        "mono": [],
+        "canvases": [],
+        "videos": [
+          {
+            "src": "https://www.apple.com/105/media/us/airpods-pro/2025/7acffb13-4adb-40b1-9393-8f1c99bc6c90/anim/hero/large.mp4",
+            "autoplay": false,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": false,
+            "loop": false,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": false,
+            "loop": false,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": false,
+            "loop": false,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": false,
+            "loop": false,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": false,
+            "loop": false,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": false,
+            "loop": false,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": false,
+            "loop": false,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": false,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "blob:https://www.apple.com/e89b2d15-0388-413c-bec6-fb4d36ed6b9f",
+            "autoplay": false,
+            "loop": false,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": false,
+            "loop": false,
+            "muted": true
+          },
+          {
+            "src": "https://www.apple.com/105/media/us/airpods-pro/2025/7acffb13-4adb-40b1-9393-8f1c99bc6c90/anim/hearing-health-halo/large.",
+            "autoplay": false,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": false,
+            "loop": false,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": false,
+            "loop": false,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": false,
+            "loop": false,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": false,
+            "loop": false,
+            "muted": false
+          }
+        ],
+        "lenis": false,
+        "gsap": false,
+        "scrollTrigger": false,
+        "three": false,
+        "webgl": false,
+        "bgTop": [
+          "rgb(255, 255, 255)",
+          "rgb(245, 245, 247)",
+          "rgba(232, 232, 237, 0.4)",
+          "rgb(250, 250, 252)",
+          "rgb(0, 0, 0)",
+          "rgba(255, 255, 255, 0.67)"
+        ],
+        "sticky": [
+          {
+            "tag": "DIV",
+            "cls": "globalnav-curtain",
+            "pos": "fixed",
+            "h": 900
+          },
+          {
+            "tag": "NAV",
+            "cls": "js no-touch css-sticky ac-ln-allow-transitions ac-ln-stickin",
+            "pos": "sticky",
+            "h": 52
+          },
+          {
+            "tag": "LABEL",
+            "cls": "",
+            "pos": "fixed",
+            "h": 0
+          },
+          {
+            "tag": "DIV",
+            "cls": "all-access-pass inactive aap-media-card-gallery ",
+            "pos": "sticky",
+            "h": 56
+          },
+          {
+            "tag": "DIV",
+            "cls": "sticky-element",
+            "pos": "sticky",
+            "h": 900
+          },
+          {
+            "tag": "DIV",
+            "cls": "all-access-pass inactive  ",
+            "pos": "sticky",
+            "h": 56
+          },
+          {
+            "tag": "DIV",
+            "cls": "modal modal-full-bleed modal-close-button-static ac-modal-vi",
+            "pos": "fixed",
+            "h": 0
+          },
+          {
+            "tag": "DIV",
+            "cls": "ric-modal ric-modal-scrim ric-modal-scrim-blur  ric-modal-pa",
+            "pos": "fixed",
+            "h": 0
+          },
+          {
+            "tag": "DIV",
+            "cls": "ric-modal-close-button-wrapper",
+            "pos": "sticky",
+            "h": 0
+          },
+          {
+            "tag": "DIV",
+            "cls": "ric-modal ric-modal-scrim ric-modal-scrim-blur  ric-modal-pa",
+            "pos": "fixed",
+            "h": 0
+          },
+          {
+            "tag": "DIV",
+            "cls": "ric-modal-close-button-wrapper",
+            "pos": "sticky",
+            "h": 0
+          },
+          {
+            "tag": "DIV",
+            "cls": "ric-modal ric-modal-scrim ric-modal-scrim-blur  ric-modal-pa",
+            "pos": "fixed",
+            "h": 0
+          },
+          {
+            "tag": "DIV",
+            "cls": "ric-modal-close-button-wrapper",
+            "pos": "sticky",
+            "h": 0
+          },
+          {
+            "tag": "DIV",
+            "cls": "ric-modal ric-modal-scrim ric-modal-scrim-blur  ric-modal-pa",
+            "pos": "fixed",
+            "h": 0
+          },
+          {
+            "tag": "DIV",
+            "cls": "ric-modal-close-button-wrapper",
+            "pos": "sticky",
+            "h": 0
+          }
+        ]
+      },
+      "requests": 73,
+      "transferBytes": 18761316,
+      "imageSequenceRequests": 1,
+      "imageSequenceSample": [
+        "https://www.apple.com/ac/ac-video-posterframe/4.0/images/ac_video_poster_960x540.jpg"
+      ],
+      "videoRequests": [
+        "https://www.apple.com/105/media/us/airpods-pro/2025/7acffb13-4adb-40b1-9393-8f1c99bc6c90/anim/hero/large.mp4",
+        "https://www.apple.com/105/media/us/airpods-pro/2025/ab88f834-9c62-4bab-8cf8-f5e866987d6e/anim/design/large.webm",
+        "https://www.apple.com/105/media/us/airpods-pro/2025/7acffb13-4adb-40b1-9393-8f1c99bc6c90/anim/hearing-health-halo/large.webm"
+      ],
+      "shots": [
+        "/Users/nyx/Projects/_workspaces/portlink-landing/keel-umbrella-harbour-20261118/design-review/harbour-2026-11/teardown/apple-airpods-pro/desktop-0.png",
+        "/Users/nyx/Projects/_workspaces/portlink-landing/keel-umbrella-harbour-20261118/design-review/harbour-2026-11/teardown/apple-airpods-pro/desktop-25.png",
+        "/Users/nyx/Projects/_workspaces/portlink-landing/keel-umbrella-harbour-20261118/design-review/harbour-2026-11/teardown/apple-airpods-pro/desktop-50.png",
+        "/Users/nyx/Projects/_workspaces/portlink-landing/keel-umbrella-harbour-20261118/design-review/harbour-2026-11/teardown/apple-airpods-pro/desktop-75.png",
+        "/Users/nyx/Projects/_workspaces/portlink-landing/keel-umbrella-harbour-20261118/design-review/harbour-2026-11/teardown/apple-airpods-pro/desktop-100.png"
+      ]
+    },
+    "phone": {
+      "height": 26053,
+      "screens": 30.9,
+      "probe": {
+        "h1": {
+          "tag": "H1",
+          "text": "AirPods Pro 3",
+          "fontFamily": "\"SF Pro Display\", \"SF Pro Icons\", \"Helvetica Neue\", Helvetica, Arial, sans-serif",
+          "fontSize": "21px",
+          "lineHeight": "25px",
+          "letterSpacing": "0.231px",
+          "fontWeight": "600",
+          "color": "rgb(29, 29, 31)",
+          "textTransform": "none"
+        },
+        "h2": {
+          "tag": "H2",
+          "text": "Shop",
+          "fontFamily": "\"SF Pro Text\", \"SF Pro Icons\", \"Helvetica Neue\", Helvetica, Arial, sans-serif",
+          "fontSize": "17px",
+          "lineHeight": "21.0012px",
+          "letterSpacing": "-0.374px",
+          "fontWeight": "400",
+          "color": "rgb(110, 110, 115)",
+          "textTransform": "none"
+        },
+        "p": {
+          "tag": "P",
+          "text": "Up to 2x more than AirPods Pro 2.1",
+          "fontFamily": "\"SF Pro Text\", \"SF Pro Icons\", \"Helvetica Neue\", Helvetica, Arial, sans-serif",
+          "fontSize": "12px",
+          "lineHeight": "16.0005px",
+          "letterSpacing": "-0.12px",
+          "fontWeight": "600",
+          "color": "rgb(29, 29, 31)",
+          "textTransform": "none"
+        },
+        "mono": [],
+        "canvases": [],
+        "videos": [
+          {
+            "src": "https://www.apple.com/105/media/us/airpods-pro/2025/7acffb13-4adb-40b1-9393-8f1c99bc6c90/anim/hero/small.mp4",
+            "autoplay": false,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": false,
+            "loop": false,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": false,
+            "loop": false,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": false,
+            "loop": false,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": false,
+            "loop": false,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": false,
+            "loop": false,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": false,
+            "loop": false,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": false,
+            "loop": false,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": false,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "blob:https://www.apple.com/430d05e5-aea7-4ee9-a312-4c71b70d289e",
+            "autoplay": false,
+            "loop": false,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": false,
+            "loop": false,
+            "muted": true
+          },
+          {
+            "src": "https://www.apple.com/105/media/us/airpods-pro/2025/7acffb13-4adb-40b1-9393-8f1c99bc6c90/anim/hearing-health-halo/small.",
+            "autoplay": false,
+            "loop": true,
+            "muted": true
+          },
+          {
+            "src": "https://www.apple.com/105/media/us/airpods-pro/2025/ab88f834-9c62-4bab-8cf8-f5e866987d6e/anim/battery/small.mp4",
+            "autoplay": false,
+            "loop": false,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": false,
+            "loop": false,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": false,
+            "loop": false,
+            "muted": true
+          },
+          {
+            "src": "",
+            "autoplay": false,
+            "loop": false,
+            "muted": false
+          }
+        ],
+        "lenis": false,
+        "gsap": false,
+        "scrollTrigger": false,
+        "three": false,
+        "webgl": false,
+        "bgTop": [
+          "rgb(255, 255, 255)",
+          "rgb(245, 245, 247)",
+          "rgb(250, 250, 252)",
+          "rgba(232, 232, 237, 0.4)",
+          "rgba(255, 255, 255, 0.57)",
+          "rgb(0, 0, 0)"
+        ],
+        "sticky": [
+          {
+            "tag": "DIV",
+            "cls": "globalnav-curtain",
+            "pos": "fixed",
+            "h": 844
+          },
+          {
+            "tag": "NAV",
+            "cls": "js touch css-sticky ac-ln-allow-transitions ac-ln-sticking",
+            "pos": "sticky",
+            "h": 48
+          },
+          {
+            "tag": "LABEL",
+            "cls": "",
+            "pos": "fixed",
+            "h": 0
+          },
+          {
+            "tag": "DIV",
+            "cls": "all-access-pass inactive aap-media-card-gallery ",
+            "pos": "sticky",
+            "h": 56
+          },
+          {
+            "tag": "DIV",
+            "cls": "controls",
+            "pos": "sticky",
+            "h": 264
+          },
+          {
+            "tag": "BUTTON",
+            "cls": "close-button",
+            "pos": "sticky",
+            "h": 0
+          },
+          {
+            "tag": "DIV",
+            "cls": "sticky-element",
+            "pos": "sticky",
+            "h": 844
+          },
+          {
+            "tag": "DIV",
+            "cls": "all-access-pass inactive  ",
+            "pos": "sticky",
+            "h": 56
+          },
+          {
+            "tag": "DIV",
+            "cls": "ac-video-player idle-state ac-films-handheld-player small",
+            "pos": "fixed",
+            "h": 1
+          },
+          {
+            "tag": "DIV",
+            "cls": "ric-modal ric-modal-scrim ric-modal-scrim-blur  ric-modal-pa",
+            "pos": "fixed",
+            "h": 0
+          },
+          {
+            "tag": "DIV",
+            "cls": "ric-modal-close-button-wrapper",
+            "pos": "sticky",
+            "h": 0
+          },
+          {
+            "tag": "DIV",
+            "cls": "ric-modal ric-modal-scrim ric-modal-scrim-blur  ric-modal-pa",
+            "pos": "fixed",
+            "h": 0
+          },
+          {
+            "tag": "DIV",
+            "cls": "ric-modal-close-button-wrapper",
+            "pos": "sticky",
+            "h": 0
+          },
+          {
+            "tag": "DIV",
+            "cls": "ric-modal ric-modal-scrim ric-modal-scrim-blur  ric-modal-pa",
+            "pos": "fixed",
+            "h": 0
+          },
+          {
+            "tag": "DIV",
+            "cls": "ric-modal-close-button-wrapper",
+            "pos": "sticky",
+            "h": 0
+          }
+        ]
+      },
+      "requests": 87,
+      "transferBytes": 12249392,
+      "imageSequenceRequests": 1,
+      "imageSequenceSample": [
+        "https://www.apple.com/ac/ac-video-posterframe/4.0/images/ac_video_poster_960x540.jpg"
+      ],
+      "videoRequests": [
+        "https://www.apple.com/105/media/us/airpods-pro/2025/7acffb13-4adb-40b1-9393-8f1c99bc6c90/anim/hero/small.mp4",
+        "https://www.apple.com/105/media/us/airpods-pro/2025/ab88f834-9c62-4bab-8cf8-f5e866987d6e/anim/design/small.webm",
+        "https://www.apple.com/105/media/us/airpods-pro/2025/7acffb13-4adb-40b1-9393-8f1c99bc6c90/anim/hearing-health-halo/small.webm",
+        "https://www.apple.com/105/media/us/airpods-pro/2025/ab88f834-9c62-4bab-8cf8-f5e866987d6e/anim/battery/small.mp4"
+      ],
+      "shots": [
+        "/Users/nyx/Projects/_workspaces/portlink-landing/keel-umbrella-harbour-20261118/design-review/harbour-2026-11/teardown/apple-airpods-pro/phone-0.png",
+        "/Users/nyx/Projects/_workspaces/portlink-landing/keel-umbrella-harbour-20261118/design-review/harbour-2026-11/teardown/apple-airpods-pro/phone-25.png",
+        "/Users/nyx/Projects/_workspaces/portlink-landing/keel-umbrella-harbour-20261118/design-review/harbour-2026-11/teardown/apple-airpods-pro/phone-50.png",
+        "/Users/nyx/Projects/_workspaces/portlink-landing/keel-umbrella-harbour-20261118/design-review/harbour-2026-11/teardown/apple-airpods-pro/phone-75.png",
+        "/Users/nyx/Projects/_workspaces/portlink-landing/keel-umbrella-harbour-20261118/design-review/harbour-2026-11/teardown/apple-airpods-pro/phone-100.png"
+      ]
+    }
+  }
+}

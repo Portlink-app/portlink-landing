@@ -1,0 +1,228 @@
+/* Harbour-scoped tokens, DS-shaped names so they can be promoted later (WP4). Not in app/_ds. */
+.root {
+  --harbour-navy: #0a2342;
+  --harbour-navy-up: #12305a;
+  --harbour-sun: #f5b53d;
+  --harbour-mist: #f2f5f9;
+}
+
+/* ---- Stills page: the server markup and the reduced-motion page ---- */
+.still {
+  background: var(--ds-canvas);
+  color: var(--ds-text-1);
+  padding: clamp(56px, 9vw, 120px) clamp(16px, 4vw, 48px);
+  border-top: 1px solid var(--ds-border-1);
+}
+.stillInner {
+  max-width: 960px;
+  margin: 0 auto;
+}
+.h1 {
+  font-size: clamp(2.5rem, 8.4vw, 9.375rem);
+  line-height: 0.92;
+  letter-spacing: -0.035em;
+  font-weight: 700;
+  margin: 0;
+  max-width: 14ch;
+}
+.h2 {
+  font-size: clamp(2.5rem, 4.6vw, 4.5rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  font-weight: 700;
+  margin: 0;
+  max-width: 16ch;
+}
+.line {
+  font-size: 1.125rem;
+  line-height: 1.5;
+  max-width: 56ch;
+  margin: 24px 0 0;
+  color: var(--ds-text-2);
+}
+.role {
+  font-family: var(--ds-font-mono);
+  font-size: 13px;
+  line-height: 1.3;
+  color: var(--ds-text-3);
+  margin: 0 0 16px;
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 32px;
+}
+.btn {
+  display: inline-block;
+  padding: 14px 22px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 1rem;
+  text-decoration: none;
+  background: var(--ds-primary);
+  color: #fff;
+}
+.btnGhost {
+  composes: btn;
+  background: transparent;
+  color: var(--ds-primary);
+  box-shadow: inset 0 0 0 2px var(--ds-primary);
+}
+.products {
+  display: grid;
+  gap: 32px;
+  margin-top: 40px;
+}
+.productName {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+}
+.sessionGrid {
+  display: grid;
+  gap: 40px;
+  grid-template-columns: 1fr;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+@media (min-width: 900px) {
+  .sessionGrid {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+}
+
+/* ---- Stage: motion enhancement ---- */
+.track {
+  position: relative;
+  background: var(--harbour-navy);
+}
+.stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+  background: var(--harbour-navy);
+  color: var(--harbour-mist);
+}
+.copy {
+  position: absolute;
+  left: clamp(24px, 5vw, 80px);
+  right: clamp(24px, 5vw, 80px);
+  top: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  opacity: 0;
+  pointer-events: none;
+}
+.copy .h1,
+.copy .h2 {
+  color: var(--harbour-mist);
+}
+.copy .line,
+.copy .role {
+  color: var(--harbour-mist);
+}
+.copy .line {
+  opacity: 0.86;
+}
+.copy a {
+  pointer-events: auto;
+}
+.btnSun {
+  composes: btn;
+  background: var(--harbour-sun);
+  color: var(--harbour-navy);
+}
+.btnSunGhost {
+  composes: btn;
+  background: transparent;
+  color: var(--harbour-mist);
+  box-shadow: inset 0 0 0 2px var(--harbour-mist);
+}
+.scrim {
+  position: absolute;
+  inset: 0;
+  background: var(--harbour-navy);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+/* Thread map: bottom left, solid, no blur. */
+.map {
+  position: absolute;
+  left: clamp(16px, 2vw, 32px);
+  bottom: clamp(16px, 2vw, 32px);
+  width: 232px;
+  min-height: 132px;
+  box-sizing: border-box;
+  padding: 12px;
+  background: var(--harbour-navy-up);
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 3;
+}
+.mapNode {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: 0;
+  padding: 2px 0;
+  color: var(--harbour-mist);
+  font: inherit;
+  font-size: 13px;
+  line-height: 1.3;
+  cursor: pointer;
+  text-align: left;
+  opacity: 0.7;
+}
+.mapNode::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1.5px var(--harbour-mist);
+  flex: none;
+}
+.mapNodeOn {
+  opacity: 1;
+  font-weight: 700;
+}
+.mapNodeOn::before {
+  background: var(--harbour-sun);
+  box-shadow: none;
+}
+.mapList {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 8px;
+}
+
+/* Telemetry strip: bottom right, mono. */
+.telemetry {
+  position: absolute;
+  right: clamp(16px, 2vw, 32px);
+  bottom: clamp(16px, 2vw, 32px);
+  font-family: var(--ds-font-mono);
+  font-size: 13px;
+  line-height: 1.3;
+  color: var(--harbour-sun);
+  z-index: 3;
+}
+
+.bakeoffNote {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-family: var(--ds-font-mono);
+  font-size: 13px;
+  color: var(--harbour-mist);
+  z-index: 3;
+}

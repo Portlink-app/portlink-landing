@@ -36,8 +36,10 @@ import { fileURLToPath } from 'node:url'
 const ROOT = join(fileURLToPath(new URL('.', import.meta.url)), '..')
 const GUARDED = ['app/page.tsx', 'components/sections', 'components/scenes', 'components/film', 'app/_ds']
 const BUILT_PAGE = '.next/server/app/harbour.html'
-// A reference is any harbour media path or any .webp file name the markup carries.
-const MEDIA_REF = /\/media\/harbour-2026-11\/[^"'\s)<>?#]*|[^"'\s()<>=,]*\.webp\b/gi
+// A reference is any harbour media path or any .webp file name the markup carries. A backslash
+// ends a reference: the RSC payload inlined in the HTML escapes its quotes (`...webp\"`), so
+// without it every capture in the payload reads as `P01-desktop.webp\` and fails the allowlist.
+const MEDIA_REF = /\/media\/harbour-2026-11\/[^"'\\\s)<>?#]*|[^"'\\\s()<>=,]*\.webp\b/gi
 // The only harbour media the server markup may name: a product capture still.
 const CAPTURE = /^\/media\/harbour-2026-11\/captures\/P\d{2}-(desktop|phone)\.webp$/
 const STRICT = process.env.HARBOUR_ISOLATION_STRICT === '1'
@@ -127,6 +129,8 @@ function selftestPass() {
     ['sequence frame outside harbour media', '<img src="/video/seq/014.webp">', 1],
     ['capture lookalike with a suffix', '"/media/harbour-2026-11/captures/P06-desktop-2.webp"', 1],
     ['no harbour media at all', '<main>One Harbour</main>', 0],
+    ['capture still in the escaped RSC payload', 'self.__next_f.push([1,"{\\"src\\":\\"/media/harbour-2026-11/captures/P06-desktop.webp\\"}"])', 0],
+    ['bakeoff frame in the escaped RSC payload', 'self.__next_f.push([1,"{\\"src\\":\\"/media/harbour-2026-11/bakeoff/hero-A-webp/001.webp\\"}"])', 1],
   ]
   let bad = 0
   for (const [name, html, want] of cases) {

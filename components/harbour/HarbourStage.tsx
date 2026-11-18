@@ -11,6 +11,7 @@ import { CAPTURES_READY, SHOTS, STAGED_SHOTS, TRACK_SCREENS, shotAt } from './sc
 import type { Shot } from './script'
 import type { PlayerMode } from './SequencePlayer'
 import styles from './harbour.module.css'
+import CaptureFigure from './CaptureFigure'
 
 gsap.registerPlugin(useGSAP, ScrollTrigger)
 
@@ -150,6 +151,9 @@ export default function HarbourStage({ children }: { children: ReactNode }) {
         ) : null}
         {bakeoff ? <p className={styles.bakeoffNote}>bakeoff: {bakeoff}</p> : null}
         <div className={styles.scrim} aria-hidden="true" />
+        {CAPTURES_READY && active.captures[0] ? (
+          <CaptureFigure key={active.captures[0]} id={active.captures[0]} className={styles.stageCapture} />
+        ) : null}
 
         {STAGED_SHOTS.filter((s) => s.heading).map((s) => (
           <div

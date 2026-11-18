@@ -245,3 +245,47 @@
   color: var(--ds-stage-text);
   z-index: 3;
 }
+
+/* ---- Real captures (CaptureFigure). Frameless, hairline edge, no shadow. ---- */
+.capture {
+  margin: 32px 0 0;
+}
+.capture img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--ds-capture-radius);
+  border: var(--ds-hairline) solid var(--ds-border-1);
+}
+.captureNote {
+  margin-top: 8px;
+  font-family: var(--ds-telemetry-font);
+  font-size: var(--ds-telemetry-size);
+  line-height: var(--ds-telemetry-leading);
+  color: var(--ds-text-3);
+}
+.stageCapture {
+  position: absolute;
+  right: clamp(24px, 4vw, 64px);
+  top: 50%;
+  width: min(var(--ds-capture-hold-min), 60vw);
+  margin: 0;
+  transform: translateY(-50%);
+  z-index: 2;
+}
+.stageCapture img {
+  border-color: var(--ds-stage-border);
+}
+.stageCapture .captureNote {
+  color: var(--ds-telemetry-color);
+}
+@media (max-width: 899px) {
+  .stageCapture {
+    left: 16px;
+    right: 16px;
+    top: auto;
+    bottom: calc(var(--ds-threadmap-h) + 2 * var(--ds-threadmap-inset));
+    width: auto;
+    transform: none;
+  }
+}

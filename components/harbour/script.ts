@@ -6,8 +6,11 @@
  * track. Copy is exactly the lines DIRECTION.md section 4 gives; a stop with `heading: null`
  * carries none. Nothing here is a claim beyond those lines.
  *
- * Capture ids (P1..P12) are the planned real captures. None exist yet (WP3), so `CAPTURES_READY`
- * is false and no component may draw a capture, mock UI or placeholder image for them.
+ * Capture ids are real product captures from the local demo seed (platform PR #3230, MS Disko Star
+ * (demo) at Ilulissat; Embark from its own local demo data). Claim register: docs/HARBOUR-CLAIMS.md.
+ * P2 (typical conditions) and P10 (Embark field mode) have no real capture, so they and stop S9
+ * are removed, never mocked. P7, P11 and stop S10 are cut: those screens show real ships from the
+ * shared demo fleet, and no real name appears on this page. Copy lines claim only what a capture shows.
  */
 
 export type Product = 'Portlink platform' | 'Embark' | 'Portlink and Embark' | 'Mist' | 'all'
@@ -37,21 +40,41 @@ export type Shot = {
   staged: boolean
 }
 
-export const CAPTURES_READY = false
+export const CAPTURES_READY = true
+
+export type Capture = { desktop: string | null; phone: string | null; alt: string }
+
+const C = (id: string, desktop: boolean, phone: boolean, alt: string): Capture => ({
+  desktop: desktop ? `/media/harbour-2026-11/captures/${id}-desktop.webp` : null,
+  phone: phone ? `/media/harbour-2026-11/captures/${id}-phone.webp` : null,
+  alt,
+})
+
+/** Every real capture on the page. Demo data from a local seed, labelled as such on the page. */
+export const CAPTURES: Record<string, Capture> = {
+  P1: C('P01', true, true, 'Voyage builder: the demo route on a planning chart with four passages'),
+  P3: C('P03', true, false, 'Route editor with RTZ, GPX and CSV export and the waypoint table'),
+  P4: C('P04', true, false, 'Voyage map, satellite layer, the whole route, 3,118 NM over four passages'),
+  P5: C('P05', true, true, 'Voyage costs: day by day fuel and the port cost waiting on the agent estimate'),
+  P6: C('P06', true, true, 'Agent workspace: the call with the agent appointed and the PDA sent'),
+  P8: C('P08', true, true, 'DMC bookings: the tour intake marked quote requested'),
+  P9: C('P09', true, true, 'Embark: departures with a guide column'),
+  P12: C('P12', true, true, 'Call money tab: PDA sent, departure report complete, FDA in draft'),
+}
 
 export const SHOTS: readonly Shot[] = [
   {
     id: 'S0', start: 0, end: 1, role: 'Itinerary planner', product: 'Portlink platform',
     clip: null, captures: ['P1'],
     heading: 'One port call. Every desk.',
-    line: "Follow one cruise call from the planner's screen to the guide's phone, on the real screens each role works in.",
+    line: "Follow one cruise call from the planner's screen to the tour operator's desk, on the real screens each role works in.",
     telemetry: null, label: 'Plan', node: true, staged: true,
   },
   {
     id: 'S1', start: 1, end: 2.6, role: 'Itinerary planner', product: 'Portlink platform',
-    clip: null, captures: ['P1', 'P2', 'P3'],
+    clip: null, captures: ['P1', 'P3'],
     heading: 'The plan the bridge can load.',
-    line: 'Draw the route on charts made for planning, check typical conditions for your dates, export RTZ for the ECDIS.',
+    line: 'Draw the route on charts made for planning and export it as RTZ for the ECDIS.',
     telemetry: 'Route: RTZ export', label: 'Plan', node: false, staged: true,
   },
   {
@@ -64,7 +87,7 @@ export const SHOTS: readonly Shot[] = [
     clip: null, captures: ['P4', 'P5'],
     heading: 'The cost is already moving.',
     line: "Fuel is on the voyage from the first waypoint. Port costs join it when the agent's estimate lands on the same call.",
-    telemetry: 'Distance run', label: 'Crossing', node: true, staged: true,
+    telemetry: 'Distance: 3,118 NM', label: 'Crossing', node: true, staged: true,
   },
   {
     id: 'S4', start: 6, end: 7.2, role: 'Transition', product: 'Portlink platform',
@@ -75,14 +98,14 @@ export const SHOTS: readonly Shot[] = [
     id: 'S5', start: 7.2, end: 8.2, role: 'All roles', product: 'all',
     clip: null, captures: [],
     heading: 'Anchored. Now it gets busy.',
-    line: 'One ship in the bay, four teams ashore and on board, one call record between them.',
+    line: 'One ship in the bay, four teams, one call record between them.',
     telemetry: null, label: 'Arrival', node: true, staged: true,
   },
   {
     id: 'S6', start: 8.2, end: 10.2, role: 'Port agent', product: 'Portlink platform',
-    clip: 'C3', captures: ['P6', 'P7'],
+    clip: 'C3', captures: ['P6'],
     heading: 'One request. One estimate.',
-    line: "Accept the call, send the PDA on the shared record, and see the cruise line's review there.",
+    line: 'Accept the call and send the PDA on the shared record.',
     telemetry: 'PDA: sent', label: 'Port agent', node: true, staged: true,
   },
   {
@@ -96,45 +119,31 @@ export const SHOTS: readonly Shot[] = [
     id: 'S8', start: 12.2, end: 14.4, role: 'Tour operator', product: 'Embark',
     clip: 'C5', captures: ['P9'],
     heading: "Tomorrow's departures, staffed.",
-    line: 'Embark runs departures, guides, bookings and payments for small tour operators. First deployment: Greenland.',
+    line: 'Embark runs departures, guides and bookings for small tour operators.',
     telemetry: null, label: 'Tour operator', node: true, staged: true,
   },
   {
-    id: 'S9', start: 14.4, end: 16.2, role: 'Guide', product: 'Embark',
-    clip: 'C6', captures: ['P10'],
-    heading: "The tour, in the guide's hand.",
-    line: "Embark field mode is the guide's phone view on tour. This is the real screen.",
-    telemetry: null, label: 'Guide', node: true, staged: true,
-  },
-  {
-    id: 'S10', start: 16.2, end: 18, role: 'Vessel, nav team', product: 'Portlink platform',
-    clip: 'C7', captures: ['P11'],
-    heading: 'A berth change is never small.',
-    line: 'On the call record a changed berth is a material amendment. A same-day time shift is treated differently.',
-    telemetry: 'Amendment: material', label: 'Bridge', node: true, staged: true,
-  },
-  {
-    id: 'S11', start: 18, end: 19.2, role: 'Port ops and port agent', product: 'Portlink platform',
+    id: 'S11', start: 14.4, end: 15.6, role: 'Port ops and port agent', product: 'Portlink platform',
     clip: null, captures: ['P12'],
     heading: 'Estimate and actual, one record.',
     line: "The agent's estimate and the draft FDA sit on the same call, not in two spreadsheets.",
     telemetry: 'FDA: draft', label: 'Departure', node: true, staged: true,
   },
   {
-    id: 'S12', start: 19.2, end: 20.4, role: 'All roles', product: 'all',
+    id: 'S12', start: 15.6, end: 16.8, role: 'All roles', product: 'all',
     clip: null, captures: [],
     heading: 'One call. Each role, its part.',
     line: 'Shared context is not shared everything. Each workspace sees what its role on the call allows.',
     telemetry: null, label: 'Harbour', node: true, staged: true,
   },
   {
-    id: 'S13', start: 20.4, end: 21.8, role: 'Products', product: 'Mist',
+    id: 'S13', start: 16.8, end: 18.2, role: 'Products', product: 'Mist',
     clip: null, captures: [],
     heading: 'Three products, one company.',
     line: null, telemetry: null, label: 'Products', node: false, staged: false,
   },
   {
-    id: 'S14', start: 21.8, end: 23.2, role: 'Working session', product: 'Mist',
+    id: 'S14', start: 18.2, end: 19.6, role: 'Working session', product: 'Mist',
     clip: null, captures: [],
     heading: 'Bring one port to a session.',
     line: 'We block the time, open your port on screen and work through it with you.',
@@ -154,7 +163,7 @@ export function shotAt(screens: number): Shot {
 
 /** The three product regions of S13. Wheelhouse carries no claim (Q5 default). */
 export const PRODUCTS = [
-  { name: 'Portlink', href: '/portlink/', text: 'One call record shared by the cruise line, the port agent, the DMC and the vessel.' },
-  { name: 'Embark', href: '/embark/', text: 'Departures, guides, bookings and payments for small tour operators.' },
+  { name: 'Portlink', href: '/portlink/', text: 'One call record shared by the cruise line, the port agent and the DMC.' },
+  { name: 'Embark', href: '/embark/', text: 'Departures, guides and bookings for small tour operators.' },
   { name: 'Wheelhouse', href: '/contact/', text: 'Ask us.' },
 ] as const

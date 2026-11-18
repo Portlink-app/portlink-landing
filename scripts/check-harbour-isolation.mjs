@@ -7,10 +7,16 @@
  *           components/scenes components/film app/_ds` is empty. The page may import from those
  *           places; it may not edit them. Working-tree changes count, so an uncommitted edit fails
  *           the same as a committed one.
- *   --built the prerendered /harbour HTML (.next/server/app/harbour.html) names no sequence file:
- *           nothing under /media/harbour-2026-11/ and no .webp frame. Sequences are fetched only
- *           behind `?bakeoff=` on the client, so the server markup must never mention them.
- *           Requires a build; refuses to report a zero it did not earn.
+ *   --built the prerendered /harbour HTML (.next/server/app/harbour.html) names no sequence file.
+ *           Sequences are fetched only behind `?bakeoff=` on the client, so the server markup must
+ *           never mention them. The rule is an allowlist, not a sequence path list: every
+ *           /media/harbour-2026-11/ reference and every .webp in the markup must be a product
+ *           capture (`/media/harbour-2026-11/captures/P<nn>-desktop|phone.webp`, which the page
+ *           serves as stills). Anything else fails, so a sequence frame moved outside `bakeoff/`
+ *           is still caught. Requires a build; refuses to report a zero it did not earn.
+ *   --selftest proves the classifier on fixed cases (a capture passes; bakeoff frames, a
+ *           sequence frame outside its path and a capture-lookalike fail) before anything relies
+ *           on it.
  *
  * WHEN THE SOURCE PASS CANNOT MEASURE it says so and exits 0 (never a false fail, never a silent
  * pass): no git, no origin/main ref, or no merge-base (a shallow clone). `.github/workflows/ci.yml`
@@ -30,9 +36,19 @@ import { fileURLToPath } from 'node:url'
 const ROOT = join(fileURLToPath(new URL('.', import.meta.url)), '..')
 const GUARDED = ['app/page.tsx', 'components/sections', 'components/scenes', 'components/film', 'app/_ds']
 const BUILT_PAGE = '.next/server/app/harbour.html'
-const SEQUENCE_REFS = [/\/media\/harbour-2026-11\//, /\.webp\b/i]
+// A reference is any harbour media path or any .webp file name the markup carries.
+const MEDIA_REF = /\/media\/harbour-2026-11\/[^"'\s)<>?#]*|[^"'\s()<>=,]*\.webp\b/gi
+// The only harbour media the server markup may name: a product capture still.
+const CAPTURE = /^\/media\/harbour-2026-11\/captures\/P\d{2}-(desktop|phone)\.webp$/
 const STRICT = process.env.HARBOUR_ISOLATION_STRICT === '1'
 const built = process.argv.includes('--built')
+const selftest = process.argv.includes('--selftest')
+
+/** Every harbour media or .webp reference in `html` that is not a product capture. */
+export function sequenceRefs(html) {
+  const refs = html.match(MEDIA_REF) ?? []
+  return [...new Set(refs)].filter((r) => !CAPTURE.test(r))
+}
 
 const git = (...args) => execFileSync('git', args, { cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim()
 
@@ -88,13 +104,49 @@ function builtPass() {
     console.error('check-harbour-isolation: built /harbour has no harbour markup; read the wrong artifact. Nothing judged.')
     process.exit(2)
   }
-  const hits = SEQUENCE_REFS.filter((re) => re.test(html)).map(String)
+  const hits = sequenceRefs(html)
   if (hits.length) {
-    console.error(`check-harbour-isolation FAIL: built /harbour references sequence files (${hits.join(', ')}).`)
+    console.error('check-harbour-isolation FAIL: built /harbour references sequence files:')
+    for (const h of hits.slice(0, 20)) console.error(`  ${h}`)
     process.exit(1)
   }
-  console.log(`check-harbour-isolation: built /harbour (${html.length} bytes) references no sequence file.`)
+  const captures = new Set((html.match(MEDIA_REF) ?? []).filter((r) => CAPTURE.test(r))).size
+  console.log(`check-harbour-isolation: built /harbour (${html.length} bytes) references no sequence file (${captures} capture stills allowed).`)
 }
 
-sourcePass()
-if (built) builtPass()
+function selftestPass() {
+  // Each case states its verdict first. Pairs differ by one thing, so a classifier that refuses
+  // everything, or nothing, fails here.
+  const cases = [
+    ['capture still (known negative)', '<img src="/media/harbour-2026-11/captures/P06-desktop.webp">', 0],
+    ['capture still, phone, in srcset', 'srcSet="/media/harbour-2026-11/captures/P12-phone.webp 390w"', 0],
+    ['bakeoff frame (known positive)', '<link href="/media/harbour-2026-11/bakeoff/hero-A-webp/001.webp">', 1],
+    ['bakeoff directory only', '"/media/harbour-2026-11/bakeoff/hero-A-webp"', 1],
+    ['bakeoff intra video', '"/media/harbour-2026-11/bakeoff/hero-A-intra.mp4"', 1],
+    ['sequence frame outside its path', '<img src="/media/harbour-2026-11/captures/frames/001.webp">', 1],
+    ['sequence frame outside harbour media', '<img src="/video/seq/014.webp">', 1],
+    ['capture lookalike with a suffix', '"/media/harbour-2026-11/captures/P06-desktop-2.webp"', 1],
+    ['no harbour media at all', '<main>One Harbour</main>', 0],
+  ]
+  let bad = 0
+  for (const [name, html, want] of cases) {
+    const got = sequenceRefs(html).length
+    const ok = (got > 0) === (want > 0)
+    if (!ok) bad++
+    console.log(`  ${ok ? 'ok  ' : 'FAIL'} ${name}: expected ${want ? 'refused' : 'allowed'}, got ${got ? 'refused' : 'allowed'}`)
+  }
+  if (bad) {
+    console.error(`check-harbour-isolation --selftest: ${bad} case(s) wrong; the built pass cannot be trusted.`)
+    process.exit(2)
+  }
+  console.log(`check-harbour-isolation --selftest: ${cases.length} cases matched.`)
+}
+
+const isMain = process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]
+if (isMain) {
+  if (selftest) selftestPass()
+  else {
+    sourcePass()
+    if (built) builtPass()
+  }
+}

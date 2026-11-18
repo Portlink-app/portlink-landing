@@ -23,7 +23,7 @@
     "check:viz-type": "node scripts/check-viz-type.mjs",
     "check:contact-intent": "node scripts/check-contact-intent.mjs",
     "check:scene-layouts": "node scripts/check-scene-layouts.mjs",
-    "check:harbour-isolation": "node scripts/check-harbour-isolation.mjs",
+    "check:harbour-isolation": "node scripts/check-harbour-isolation.mjs --selftest && node scripts/check-harbour-isolation.mjs",
     "check:film-motion": "node scripts/check-film-motion.mjs",
     "check:client-ip": "tsx scripts/check-client-ip.mjs",
     "check:consent-gate": "node scripts/check-consent-gate.mjs --live",

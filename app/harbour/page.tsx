@@ -4,6 +4,7 @@ import MotionProvider from '@/components/MotionProvider'
 import ContactForm from '@/components/contact/ContactForm'
 import Footer from '@/components/sections/Footer'
 import HarbourStage from '@/components/harbour/HarbourStage'
+import CaptureFigure from '@/components/harbour/CaptureFigure'
 import { PRODUCTS, SHOTS } from '@/components/harbour/script'
 import styles from '@/components/harbour/harbour.module.css'
 import '@/components/harbour/harbour-tokens.css'
@@ -52,6 +53,9 @@ export default function HarbourPage() {
                     </a>
                   </div>
                 ) : null}
+                {s.captures.map((id) => (
+                  <CaptureFigure key={id} id={id} />
+                ))}
               </div>
             </section>
           ))}

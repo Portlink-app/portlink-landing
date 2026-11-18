@@ -1058,6 +1058,13 @@
   color: #FFFFFF;
 }
 
+/* Inline confirmation tick inside a button label (replaces the text glyph). */
+.pp-inline-icon {
+  display: inline-block;
+  vertical-align: -2px;
+  margin-inline: 2px;
+}
+
 .pp-ui-footer-bar {
   display: flex;
   flex-wrap: wrap;

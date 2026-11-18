@@ -1,0 +1,74 @@
+/* =========================================================
+   Harbour tokens (WP4, /harbour only). Spec: docs/HARBOUR-TOKENS.md
+
+   Scoped to [data-surface="harbour"]. Nothing here changes a token
+   outside that subtree, and app/_ds/ is untouched (no _ds bump).
+
+   Names follow the design system's two tiers so promotion is a
+   cut and paste into portlink-design-system tokens.css:
+     TIER 1 --pl-*  candidate primitives (components never read these)
+     TIER 2 --ds-*  semantic tokens the harbour components consume
+   Colours are literal hex with the primitive named in the comment,
+   as the dist bundle does (no var chains across themes).
+
+   The stage is always dark: it does not follow data-theme. The Mist
+   editorial sections (S13, S14) use the ordinary --ds-* tokens.
+   Contrast ratios are WCAG 2.x, computed from sRGB on 18.11.2026.
+   ========================================================= */
+
+[data-surface="harbour"] {
+  /* ---- TIER 1 candidates ---- */
+  --pl-sun-400:            #f5b53d;  /* Low sun, sampled from the footage */
+  --pl-sun-300:            #f7c45f;  /* Low sun hover */
+  --pl-leading-display:    0.92;
+  --pl-leading-none:       1;
+  --pl-leading-mono:       1.3;
+  --pl-track-display:      -0.035em;
+
+  /* ---- TIER 2: stage colour ---- */
+  --ds-stage-bg:           #0f2340;  /* --pl-navy-925 = --ds-inverted-bg. Replaces brief #0a2342 (dE2000 0.91) */
+  --ds-stage-surface:      #162d4e;  /* = --ds-inverted-surface. ThreadMap panel, "one tone up" */
+  --ds-stage-text:         #f2f5f9;  /* --pl-mist-75. 14.4:1 on stage-bg, 12.6:1 on surface */
+  --ds-stage-text-2:       #c3cddb;  /* --pl-mist-300. 9.8:1 on stage-bg, 8.6:1 on surface */
+  --ds-stage-line:         #a0acbd;  /* --pl-mist-400. Coastline, upcoming nodes. 6.0:1 on surface */
+  --ds-stage-border:       rgba(242, 245, 249, 0.15);  /* = --ds-inverted-border */
+  --ds-stage-scrim:        rgba(15, 35, 64, 0.70);     /* one neutral scrim under text on footage. Mist text 5.4:1 even over pure white ice */
+
+  --ds-signal:             #f5b53d;  /* --pl-sun-400. Thread, current node, lit windows. 8.7:1 on stage-bg */
+  --ds-signal-hover:       #f7c45f;  /* --pl-sun-300. 9.8:1 against signal-ink */
+  --ds-signal-ink:         #0f2340;  /* text on a signal button. 8.7:1 */
+  /* Never put --ds-signal on Mist or white: 1.66:1 and 1.82:1. */
+
+  /* ---- TIER 2: display scale ---- */
+  --ds-display-1:          clamp(2.75rem, 8.4vw, 9.375rem);  /* H1, 44 to 150 px */
+  --ds-display-2:          clamp(2rem, 4.6vw, 4.5rem);       /* H2, 32 to 72 px */
+  --ds-statement:          clamp(1.5rem, 1.221rem + 1.143vw, 2.25rem);  /* 24 at 390, 28 at 768, 36 at 1440 */
+  --ds-text-lead:          var(--pl-text-18);
+  --ds-display-weight:     var(--pl-w-bold);
+  --ds-leading-display:    var(--pl-leading-display);
+  --ds-leading-display-2:  var(--pl-leading-none);
+  --ds-leading-statement:  1.2;
+  --ds-leading-lead:       var(--pl-leading-normal);
+  --ds-track-display:      var(--pl-track-display);
+  --ds-track-display-2:    var(--pl-track-tighter);
+
+  /* ---- TIER 2: telemetry type ---- */
+  --ds-telemetry-font:     var(--ds-font-mono);
+  --ds-telemetry-size:     var(--pl-text-13);
+  --ds-telemetry-leading:  var(--pl-leading-mono);
+  --ds-telemetry-track:    var(--pl-track-normal);
+  --ds-telemetry-color:    #c3cddb;  /* --pl-mist-300 */
+
+  /* ---- TIER 2: harbour component geometry ---- */
+  --ds-capture-radius:     var(--pl-radius-md);   /* 10 px, frameless */
+  --ds-capture-hold-min:   55vw;                  /* desktop hold width floor */
+  --ds-threadmap-w:        232px;
+  --ds-threadmap-h:        132px;
+  --ds-threadmap-inset:    var(--pl-space-6);     /* 24 px */
+  --ds-threadbar-h:        44px;                  /* phone */
+  --ds-thread-stroke:      2px;
+  --ds-hairline:           1px;
+
+  background: var(--ds-stage-bg);
+  color: var(--ds-stage-text);
+}

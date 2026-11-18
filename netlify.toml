@@ -28,6 +28,13 @@
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
+# Dated media folders (public/media/<name>-YYYY-MM/), cached on the same terms as /video/*: the path
+# carries the version, so a re-cut lands in a new directory. First consumer: /harbour (unlisted).
+[[headers]]
+  for = "/media/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
 # The share card, on the same terms as the film and for the same reason: the filename carries its
 # date, so a new card is a new path rather than an edit fighting a year-long immutable entry. A
 # link-preview crawler refetches this on every share, and under the blanket /* rule above that is

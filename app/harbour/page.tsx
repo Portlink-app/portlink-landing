@@ -6,6 +6,7 @@ import Footer from '@/components/sections/Footer'
 import HarbourStage from '@/components/harbour/HarbourStage'
 import { PRODUCTS, SHOTS } from '@/components/harbour/script'
 import styles from '@/components/harbour/harbour.module.css'
+import '@/components/harbour/harbour-tokens.css'
 
 const title = 'One Harbour · Portlink'
 
@@ -33,7 +34,7 @@ export default function HarbourPage() {
   return (
     <>
       <PageNav />
-      <main id="main" tabIndex={-1} className={styles.root}>
+      <main id="main" tabIndex={-1} data-surface="harbour">
         <HarbourStage>
           {stills.map((s) => (
             <section key={s.id} id={`harbour-${s.id.toLowerCase()}`} className={styles.still}>

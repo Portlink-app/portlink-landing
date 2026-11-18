@@ -273,7 +273,7 @@ export default function SequencePlayer({ mode, src, frames = 72, progress, fps =
       <canvas
         ref={canvas}
         aria-hidden="true"
-        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', background: '#0a2342' }}
+        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', background: 'var(--ds-stage-bg)' }}
       />
     </div>
   )

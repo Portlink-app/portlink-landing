@@ -134,7 +134,8 @@ export default function HarbourStage({ children }: { children: ReactNode }) {
   return (
     <section
       ref={track}
-      className={`${styles.root} ${styles.track}`}
+      className={styles.track}
+      data-surface="harbour"
       style={{ height: `${(TRACK_SCREENS + 1) * 100}svh` }}
       aria-label="One Harbour"
     >
@@ -174,20 +175,21 @@ export default function HarbourStage({ children }: { children: ReactNode }) {
           </div>
         ))}
 
-        <nav className={styles.map} aria-label="Thread map">
-          <div className={styles.mapList}>
+        <nav className={styles.map} aria-label="Harbour stops">
+          <ol className={styles.mapList}>
             {nodes.map((s) => (
-              <button
-                key={s.id}
-                type="button"
-                className={`${styles.mapNode} ${s.id === active.id ? styles.mapNodeOn : ''}`}
-                aria-current={s.id === active.id ? 'step' : undefined}
-                onClick={() => goTo(s)}
-              >
-                {s.label}
-              </button>
+              <li key={s.id}>
+                <button
+                  type="button"
+                  className={`${styles.mapNode} ${s.id === active.id ? styles.mapNodeOn : ''}`}
+                  aria-current={s.id === active.id ? 'step' : undefined}
+                  onClick={() => goTo(s)}
+                >
+                  {s.label}
+                </button>
+              </li>
             ))}
-          </div>
+          </ol>
         </nav>
         <p className={styles.telemetry} aria-live="off">
           {telemetry}

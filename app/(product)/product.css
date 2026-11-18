@@ -567,18 +567,17 @@
   box-shadow: 0 12px 28px -14px rgba(15, 23, 42, 0.12);
 }
 
-.pp-callout-pill-kicker {
-  display: block;
-  font-family: var(--pp-mono-font);
+/* Role or capability line under the card title (title leads; no kicker above it). */
+.pp-callout-pill .pp-callout-pill-meta {
   font-size: 12px;
   font-weight: 600;
   color: #5EEAD4;
-  margin-bottom: 4px;
+  margin-top: 6px;
 }
 
-.pp-chapter--day .pp-callout-pill-kicker,
-.pp-chapter--embark-day .pp-callout-pill-kicker,
-.pp-chapter--embark-alt .pp-callout-pill-kicker {
+.pp-chapter--day .pp-callout-pill .pp-callout-pill-meta,
+.pp-chapter--embark-day .pp-callout-pill .pp-callout-pill-meta,
+.pp-chapter--embark-alt .pp-callout-pill .pp-callout-pill-meta {
   color: #0F766E;
 }
 
@@ -1492,11 +1491,11 @@
   box-shadow: 0 12px 28px -12px rgba(8, 19, 31, 0.55);
 }
 
-.pp-chapter--day .pp-callout-pill--dark .pp-callout-pill-kicker {
+.pp-chapter--day .pp-callout-pill--dark .pp-callout-pill-meta {
   color: #5EEAD4;
 }
 
-.pp-chapter--day .pp-callout-pill--dark span:not(.pp-callout-pill-kicker) {
+.pp-chapter--day .pp-callout-pill--dark span:not(.pp-callout-pill-meta) {
   color: #E2E8F0;
 }
 

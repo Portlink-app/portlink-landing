@@ -48,18 +48,18 @@ export default function ProductFragment({
         <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
           <div className="pp-callout-strip">
             <div className="pp-callout-pill">
-              <span className="pp-callout-pill-kicker">Kystverket Hovedled Fairways</span>
               <strong className="pp-mono">257,0 NM · 4 Ports</strong>
+              <span className="pp-callout-pill-meta">Kystverket Hovedled Fairways</span>
               <span>Bergen (NOBGO) to Florø, Stadlandet, Ålesund, and Molde with 0 land crossings</span>
             </div>
             <div className="pp-callout-pill">
-              <span className="pp-callout-pill-kicker">Follow-Water Autorouting</span>
               <strong className="pp-mono">120 Fairway Waypoints</strong>
+              <span className="pp-callout-pill-meta">Follow-Water Autorouting</span>
               <span>Snaps passage legs to official coastal lanes with 42,0 m minimum fairway depth</span>
             </div>
             <div className="pp-callout-pill">
-              <span className="pp-callout-pill-kicker">Voyage Position Scrubber</span>
               <strong className="pp-mono">SHIP AT Timeline · SOG / COG</strong>
+              <span className="pp-callout-pill-meta">Voyage Position Scrubber</span>
               <span>Scrub any timestamp along the polyline to inspect live coordinates and next-port ETA</span>
             </div>
           </div>
@@ -95,18 +95,18 @@ export default function ProductFragment({
             <div className="pp-gangway-stage-grid">
               <div className="pp-gangway-stack">
                 <div className="pp-callout-pill pp-callout-pill--dark">
-                  <span className="pp-callout-pill-kicker">Pilotage &amp; Towage</span>
                   <strong className="pp-mono">07.15 to 08.00 · 2 Tugs</strong>
+                  <span className="pp-callout-pill-meta">Pilotage &amp; Towage</span>
                   <span>Zero tug overtime used alongside; logged directly on the departure report before lines come in.</span>
                 </div>
                 <div className="pp-callout-pill pp-callout-pill--dark">
-                  <span className="pp-callout-pill-kicker">Quay Services Verified</span>
                   <strong className="pp-mono">180 t Water · 6 m³ Waste</strong>
+                  <span className="pp-callout-pill-meta">Quay Services Verified</span>
                   <span>Mooring 6 lines fast kl. 07.52; gangway cleared kl. 08.05; hydrant meter #3 and MARPOL receipt attached.</span>
                 </div>
                 <div className="pp-callout-pill pp-callout-pill--dark">
-                  <span className="pp-callout-pill-kicker">Cryptographic Sign-Off</span>
                   <strong className="pp-mono">17.28 Agent · 17.31 Master</strong>
+                  <span className="pp-callout-pill-meta">Cryptographic Sign-Off</span>
                   <span>Dual on-board signatures lock operational quantities and feed the Final Disbursement Account automatically.</span>
                 </div>
               </div>
@@ -136,18 +136,18 @@ export default function ProductFragment({
         <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
           <div className="pp-callout-strip">
             <div className="pp-callout-pill">
-              <span className="pp-callout-pill-kicker">Vessel Quota Lock</span>
               <strong className="pp-mono">RIB Havørn (12p) · MS Fjordsyn (24p)</strong>
+              <span className="pp-callout-pill-meta">Vessel Quota Lock</span>
               <span>Shared hull inventory prevents overlapping departure overbooking</span>
             </div>
             <div className="pp-callout-pill">
-              <span className="pp-callout-pill-kicker">Guide Qualifications</span>
               <strong className="pp-mono">STCW + NO / EN / DE</strong>
+              <span className="pp-callout-pill-meta">Guide Qualifications</span>
               <span>Filter roster by high-speed craft certificate and guest language</span>
             </div>
             <div className="pp-callout-pill">
-              <span className="pp-callout-pill-kicker">Exception Alerts</span>
               <strong className="pp-mono">Action Required Flag</strong>
+              <span className="pp-callout-pill-meta">Exception Alerts</span>
               <span>Departures missing a skipper or guide highlight 24 hours ahead</span>
             </div>
           </div>
@@ -182,18 +182,18 @@ export default function ProductFragment({
         <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
           <div className="pp-callout-strip">
             <div className="pp-callout-pill">
-              <span className="pp-callout-pill-kicker">Embeddable Web Widget</span>
               <strong className="pp-mono">/w/fjordland · Live Seats</strong>
+              <span className="pp-callout-pill-meta">Embeddable Web Widget</span>
               <span>Real-time seat availability on your own domain with zero OTA commission</span>
             </div>
             <div className="pp-callout-pill">
-              <span className="pp-callout-pill-kicker">Instant Nordic &amp; Global Pay</span>
               <strong className="pp-mono">Vipps · Stripe · Apple Pay</strong>
+              <span className="pp-callout-pill-meta">Instant Nordic &amp; Global Pay</span>
               <span>Payment confirmation attaches directly to the passenger manifest row</span>
             </div>
             <div className="pp-callout-pill">
-              <span className="pp-callout-pill-kicker">Group &amp; DMC Invoicing</span>
               <strong className="pp-mono">Invoice #2048 · Settled 14d Prior</strong>
+              <span className="pp-callout-pill-meta">Group &amp; DMC Invoicing</span>
               <span>Automated payment links and reminders for private charters and cruise groups</span>
             </div>
           </div>

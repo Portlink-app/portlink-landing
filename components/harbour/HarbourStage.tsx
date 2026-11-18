@@ -15,6 +15,9 @@ import CaptureFigure from './CaptureFigure'
 
 gsap.registerPlugin(useGSAP, ScrollTrigger)
 
+/** The captures the stage can show, once each, in track order. */
+const stageCaptures = [...new Set(STAGED_SHOTS.filter((s) => s.start > 0).flatMap((s) => s.captures.slice(0, 1)))]
+
 type BakeoffPlayer = typeof import('./SequencePlayer').default
 
 /**
@@ -101,10 +104,12 @@ export default function HarbourStage({ children }: { children: ReactNode }) {
         if (!el || !shot.heading) continue
         const fade = Math.min(0.25, (shot.end - shot.start) / 4)
         // The hero is already on screen at scroll 0: it only fades out.
-        if (shot.start === 0) gsap.set(el, { opacity: 1 })
-        else tl.fromTo(el, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: fade }, shot.start + 0.05)
+        // autoAlpha, not opacity: a faded copy also becomes visibility: hidden, so it stops lying
+        // over the copy that is on screen (hit-testing and assistive tech skip it).
+        if (shot.start === 0) gsap.set(el, { autoAlpha: 1 })
+        else tl.fromTo(el, { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: fade }, shot.start + 0.05)
         if (shot.id !== STAGED_SHOTS[STAGED_SHOTS.length - 1].id) {
-          tl.to(el, { opacity: 0, duration: fade }, shot.end - fade)
+          tl.to(el, { autoAlpha: 0, duration: fade }, shot.end - fade)
         }
       }
       tl.set({}, {}, TRACK_SCREENS)
@@ -131,6 +136,7 @@ export default function HarbourStage({ children }: { children: ReactNode }) {
   const active = STAGED_SHOTS.find((s) => s.id === activeId) ?? STAGED_SHOTS[0]
   const telemetry = CAPTURES_READY && active.telemetry ? active.telemetry : active.role
   const nodes = SHOTS.filter((s) => s.node && s.staged)
+  const activeCapture = active.start === 0 ? null : (active.captures[0] ?? null)
 
   return (
     <section
@@ -151,15 +157,24 @@ export default function HarbourStage({ children }: { children: ReactNode }) {
         ) : null}
         {bakeoff ? <p className={styles.bakeoffNote}>bakeoff: {bakeoff}</p> : null}
         <div className={styles.scrim} aria-hidden="true" />
-        {CAPTURES_READY && active.captures[0] ? (
-          <CaptureFigure key={active.captures[0]} id={active.captures[0]} className={styles.stageCapture} />
-        ) : null}
+        {/* Every capture stays mounted and loads up front; only the active stop's is shown. The hero
+            (S0) holds no capture: the title owns the first screen and nothing lies over it. */}
+        {CAPTURES_READY
+          ? stageCaptures.map((id) => (
+              <CaptureFigure
+                key={id}
+                id={id}
+                loading="eager"
+                className={`${styles.stageCapture} ${id === activeCapture ? styles.stageCaptureOn : ''}`}
+              />
+            ))
+          : null}
 
         {STAGED_SHOTS.filter((s) => s.heading).map((s) => (
           <div
             key={s.id}
             id={`harbour-${s.id.toLowerCase()}`}
-            className={styles.copy}
+            className={`${styles.copy} ${s.start === 0 ? styles.copyHero : ''}`}
             ref={(el) => {
               copies.current[s.id] = el
             }}

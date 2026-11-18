@@ -40,7 +40,6 @@ export default function HarbourPage() {
           {stills.map((s) => (
             <section key={s.id} id={`harbour-${s.id.toLowerCase()}`} className={styles.still}>
               <div className={styles.stillInner}>
-                <p className={styles.role}>{s.role}</p>
                 {s.id === 'S0' ? <h1 className={styles.h1}>{s.heading}</h1> : <h2 className={styles.h2}>{s.heading}</h2>}
                 {s.line ? <p className={styles.line}>{s.line}</p> : null}
                 {s.id === 'S0' ? (

@@ -62,6 +62,8 @@
   /* ---- TIER 2: harbour component geometry ---- */
   --ds-capture-radius:     var(--pl-radius-md);   /* 10 px, frameless */
   --ds-capture-hold-min:   55vw;                  /* desktop hold width floor */
+  /* One frame for the stage and the page: the 1200 px content column, never closer than the copy margin. */
+  --ds-stage-frame:        max(clamp(24px, 5vw, 80px), calc((100vw - 1200px) / 2));
   --ds-threadmap-w:        232px;
   --ds-threadmap-h:        132px;
   --ds-threadmap-inset:    var(--pl-space-6);     /* 24 px */

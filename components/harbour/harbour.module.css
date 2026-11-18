@@ -36,13 +36,6 @@
   margin: 24px 0 0;
   color: var(--ds-text-2);
 }
-.role {
-  font-family: var(--ds-telemetry-font);
-  font-size: var(--ds-telemetry-size);
-  line-height: var(--ds-telemetry-leading);
-  color: var(--ds-text-3);
-  margin: 0 0 16px;
-}
 .actions {
   display: flex;
   flex-wrap: wrap;
@@ -69,6 +62,12 @@
   display: grid;
   gap: 32px;
   margin-top: 40px;
+}
+/* The shared contact form draws its intent choices as 1.5px outlined cards. On this page a
+   choice is a surface: its fill (one tone up, brand-faint when chosen) and the radio carry the
+   state, so no box is drawn by a line. Inline styles, hence !important; scoped to #session. */
+.sessionGrid label:has(> input[type='radio']) {
+  border-color: transparent !important;
 }
 .productName {
   font-size: 1.5rem;
@@ -104,8 +103,8 @@
 }
 .copy {
   position: absolute;
-  left: clamp(24px, 5vw, 80px);
-  right: clamp(24px, 5vw, 80px);
+  left: var(--ds-stage-frame);
+  right: var(--ds-stage-frame);
   top: 0;
   bottom: 0;
   display: flex;
@@ -115,15 +114,25 @@
   opacity: 0;
   pointer-events: none;
 }
+/* The copy keeps to the left column; the capture holds the right one, so nothing lies over a
+   heading at any scroll position. */
+@media (min-width: 900px) {
+  .copy {
+    right: calc(var(--ds-capture-hold-min) + 4vw + 3vw);
+  }
+  .copy .h2 {
+    font-size: min(var(--ds-display-2), 3.2vw);
+  }
+  .copy.copyHero {
+    right: var(--ds-stage-frame);
+  }
+}
 .copy .h1,
 .copy .h2 {
   color: var(--ds-stage-text);
 }
 .copy .line {
   color: var(--ds-stage-text-2);
-}
-.copy .role {
-  color: var(--ds-telemetry-color);
 }
 .copy a,
 .copy button {
@@ -162,14 +171,14 @@
 /* Thread map: bottom left, solid surface one tone up, no blur. */
 .map {
   position: absolute;
-  left: var(--ds-threadmap-inset);
+  /* On the copy's margin, so the stage and the page share one frame. */
+  left: var(--ds-stage-frame);
   bottom: var(--ds-threadmap-inset);
   width: var(--ds-threadmap-w);
   min-height: var(--ds-threadmap-h);
   box-sizing: border-box;
   padding: 12px;
   background: var(--ds-stage-surface);
-  border: var(--ds-hairline) solid var(--ds-stage-border);
   border-radius: var(--ds-capture-radius);
   z-index: 3;
 }
@@ -224,7 +233,7 @@
 /* Telemetry strip: bottom right, mono, tabular figures. */
 .telemetry {
   position: absolute;
-  right: var(--ds-threadmap-inset);
+  right: var(--ds-stage-frame);
   bottom: var(--ds-threadmap-inset);
   margin: 0;
   font-family: var(--ds-telemetry-font);
@@ -255,7 +264,6 @@
   width: 100%;
   height: auto;
   border-radius: var(--ds-capture-radius);
-  border: var(--ds-hairline) solid var(--ds-border-1);
 }
 .captureNote {
   margin-top: 8px;
@@ -266,26 +274,41 @@
 }
 .stageCapture {
   position: absolute;
-  right: clamp(24px, 4vw, 64px);
+  right: 4vw;
   top: 50%;
-  width: min(var(--ds-capture-hold-min), 60vw);
+  width: var(--ds-capture-hold-min);
   margin: 0;
   transform: translateY(-50%);
   z-index: 2;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.3s ease,
+    visibility 0s linear 0.3s;
 }
-.stageCapture img {
-  border-color: var(--ds-stage-border);
+.stageCaptureOn {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.3s ease;
 }
 .stageCapture .captureNote {
   color: var(--ds-telemetry-color);
 }
+/* Tablet: copy at the top, capture below it, the stop list gives way to the telemetry line. */
 @media (max-width: 899px) {
+  .copy {
+    justify-content: flex-start;
+    padding-top: 112px;
+  }
   .stageCapture {
-    left: 16px;
-    right: 16px;
+    left: 24px;
+    right: 24px;
     top: auto;
-    bottom: calc(var(--ds-threadmap-h) + 2 * var(--ds-threadmap-inset));
+    bottom: calc(var(--ds-threadmap-inset) + 32px);
     width: auto;
     transform: none;
+  }
+  .map {
+    display: none;
   }
 }

@@ -586,7 +586,7 @@ Every station stop runs the same five beats, replacing v1's video dive in and ou
 4. **Hold:** at least 0,7 screens of scroll on the capture, with the stop's copy.
 5. **Pull back:** the capture returns to its anchor, the lights stay on (the harbour remembers who has worked), and travel resumes.
 
-Signal colour appears only inside `lights-*` and `ship-lights` groups; everything else stays in the stage-line greys the art was drawn in.
+Signal colour appears only inside `lights-*` and `ship-lights` groups; everything else stays in the stage-line greys the art was drawn in. Amended by 12.9: a hero group (`ship*`, `quay-crane-*`) may also carry the Low sun rim edge, as a stroke of at most 2 units and never as a fill (`check:harbour-lights`).
 
 ### 12.5 Phone and reduced-motion arms
 

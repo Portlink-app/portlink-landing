@@ -12,6 +12,16 @@ const read = (rel) => readFileSync(new URL(`../${rel}`, import.meta.url), 'utf8'
 const world = JSON.parse(read('public/media/harbour-v2/world.json'))
 const SIGNAL = /#f5b53d\b|rgb\(\s*245\s*,\s*181\s*,\s*61\s*\)/i
 const LIGHTS = /^(lights-[A-Za-z0-9-]+|ship-lights)$/
+// DIRECTION.md 12.9 rim light: a hero surface (the ship, the quay cranes) carries a 1 to 2 unit Low
+// sun edge on its sun side. Inside a hero group, signal is admitted only as a hairline stroke: no
+// signal fill, and a stroke-width of at most 2 on the same element. A signal fill there still fails.
+const HERO = /^(ship(-[A-Za-z0-9-]+)?|quay-crane-[A-Za-z0-9-]+)$/
+const rimEdge = (attrs) => {
+  if (SIGNAL.test(attrs.match(/\sfill="([^"]*)"/i)?.[1] ?? '')) return false
+  if (/style="/i.test(attrs)) return false
+  const w = Number(attrs.match(/\sstroke-width="([\d.]+)"/)?.[1])
+  return SIGNAL.test(attrs.match(/\sstroke="([^"]*)"/i)?.[1] ?? '') && w > 0 && w <= 2
+}
 
 /** Signal-coloured elements outside a lights group, as "tag#id@line" strings. */
 export function strays(svg) {
@@ -25,7 +35,8 @@ export function strays(svg) {
     }
     const id = attrs.match(/\sid="([^"]+)"/)?.[1] ?? ''
     const lit = LIGHTS.test(id) || stack.some((s) => LIGHTS.test(s))
-    if (!lit && SIGNAL.test(attrs)) out.push(`${tag}#${id}@${svg.slice(0, m.index).split('\n').length}`)
+    const hero = HERO.test(id) || stack.some((s) => HERO.test(s))
+    if (!lit && SIGNAL.test(attrs) && !(hero && rimEdge(attrs))) out.push(`${tag}#${id}@${svg.slice(0, m.index).split('\n').length}`)
     if (!self) stack.push(id)
   }
   return out
@@ -36,10 +47,14 @@ if (process.argv.includes('--selftest')) {
   assert.equal(strays('<svg><path style="stroke: rgb(245, 181, 61)"/></svg>').length, 1, 'selftest: stray rgb should fail')
   assert.equal(strays('<svg><g id="lights-A2"><g><rect fill="#f5b53d"/></g></g></svg>').length, 0, 'selftest: nested light should pass')
   assert.equal(strays('<svg><g id="ship-lights"><path stroke="#f5b53d"/></g><rect fill="#f5b53e"/></svg>').length, 0)
+  assert.equal(strays('<svg><g id="quay-crane-portal"><g fill="none" stroke="#f5b53d" stroke-width="1.5"/></g></svg>').length, 0, 'selftest: rim edge on a hero should pass')
+  assert.equal(strays('<svg><g id="quay-crane-portal"><rect fill="#f5b53d"/></g></svg>').length, 1, 'selftest: signal fill on a hero should fail')
+  assert.equal(strays('<svg><g id="ship"><path stroke="#f5b53d" stroke-width="3"/></g></svg>').length, 1, 'selftest: a thick signal stroke on a hero should fail')
+  assert.equal(strays('<svg><g id="quay-wall"><path fill="none" stroke="#f5b53d" stroke-width="1.5"/></g></svg>').length, 1, 'selftest: a rim edge off a hero should fail')
   const s = STOPS[1]
   assert.equal(lightsAt(s, s.arrive - LIGHTS_SCREENS - 0.01), 0)
   assert.equal(lightsAt(s, s.arrive), 1)
-  console.log('check-harbour-lights selftest: stray hex and rgb signal are seen, nested lights pass, fade curve holds')
+  console.log('check-harbour-lights selftest: stray hex and rgb signal are seen, nested lights pass, hero rim edges pass and hero fills fail, fade curve holds')
   process.exit(0)
 }
 
@@ -48,7 +63,7 @@ let groups = 0
 for (const { id } of world.layers) {
   const svg = read(`public/media/harbour-v2/${id}.svg`)
   const bad = strays(svg)
-  assert.deepEqual(bad, [], `${id}.svg: signal colour outside a lights group: ${bad.join(', ')}`)
+  assert.deepEqual(bad, [], `${id}.svg: signal colour outside a lights group or a hero rim edge: ${bad.join(', ')}`)
   groups += (svg.match(/\sid="(lights-[^"]+|ship-lights)"/g) ?? []).length
 }
 assert.ok(groups > 0, 'no lights groups found: the instrument cannot see')

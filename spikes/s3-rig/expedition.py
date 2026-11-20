@@ -40,7 +40,7 @@ M = {
     "concrete": mat("Concrete", "#8d9196", 0.88), "fender": mat("Fender", "#121416", 0.7),
     "shed": mat("Shed", "#b9c0c6", 0.6), "roof": mat("Roof", "#3a4148", 0.55),
     "rope": mat("Rope", "#d9d2c0", 0.8), "land": mat("Land", "#46585a", 0.95),
-    "hill": mat("Hill", "#5d7184", 0.95), "snow": mat("Snow", "#c9d3dc", 0.7),
+    "hill": mat("Hill", "#3a4a4c", 0.95), "snow": mat("Snow", "#c9d3dc", 0.7),
 }
 
 def finish(o, parent, m, bevel=0.0, smooth=True):
@@ -220,7 +220,7 @@ block("SHEDROOF", 112, 36, 1.0, (-40, QY + 62, 3 + 11.4), M["roof"], 0.3, parent
 rows("LAMP", 6, 40.0, lambda: block("lamp", 0.35, 0.35, 12, (-100, QY + 18, 9.0), M["dark"], 0.05,
      parent=world_root))
 # fjord walls: displaced grids far behind, snow above 380 m
-def hills(name, y0, depth, peak, seed, xspan=6000):
+def hills(name, y0, depth, peak, seed, xspan=6000, snow=380):
     random.seed(seed); nx, ny = 160, 40
     me = bpy.data.meshes.new(name); bm = bmesh.new(); vv = []
     waves = [(random.uniform(0.0015, 0.006), random.uniform(0, 6.28), random.uniform(0.3, 1.0)) for _ in range(6)]
@@ -235,14 +235,14 @@ def hills(name, y0, depth, peak, seed, xspan=6000):
     for j in range(ny):
         for i in range(nx):
             f = bm.faces.new([vv[j][i], vv[j][i+1], vv[j+1][i+1], vv[j+1][i]])
-            f.material_index = 1 if f.calc_center_median().z > 380 else 0
+            f.material_index = 1 if f.calc_center_median().z > snow else 0
     bm.to_mesh(me); bm.free()
     o = bpy.data.objects.new(name, me); sc.collection.objects.link(o)
     finish(o, world_root, [M["hill"], M["snow"]], 0.0)
-hills("FJORD_NEAR", QY + 260, 1400, 520, 3)
-hills("FJORD_FAR", QY + 1700, 2600, 900, 11, 9000)
+hills("FJORD_NEAR", QY + 260, 1400, 230, 3, snow=190)
+hills("FJORD_FAR", QY + 1700, 2600, 620, 11, 9000, snow=360)
 for o in sc.objects:
-    if o.name == "FJORD_FAR": o.data.materials[0] = mat("HillFar", "#8396a8", 0.95)
+    if o.name == "FJORD_FAR": o.data.materials[0] = mat("HillFar", "#71869a", 0.95)
 
 bpy.context.view_layer.update()
 def bounds(objs):
@@ -283,8 +283,8 @@ cd = cam.data; cd.lens = 50; cd.sensor_width = 36; cd.sensor_fit = 'HORIZONTAL' 
 cd.sensor_height = 36 if portrait else 24
 L = mx.x - mn.x
 dist = L * (2.9 if portrait else 1.7)
-tgt = Vector(((mn.x + mx.x) / 2, 0, max(0.0, mx.z) * 0.42))
-dirv = Vector((0.62, -0.78, 0.10)).normalized()
+tgt = Vector(((mn.x + mx.x) / 2, 0, max(0.0, mx.z) * 0.62))
+dirv = Vector((0.62, -0.78, 0.06)).normalized()   # near-level so the fjord walls enter frame
 cam.location = tgt + dirv * dist
 cam.rotation_euler = (tgt - cam.location).to_track_quat('-Z', 'Y').to_euler()
 cd.dof.use_dof = True; cd.dof.focus_distance = (tgt - cam.location).length; cd.dof.aperture_fstop = 2.8

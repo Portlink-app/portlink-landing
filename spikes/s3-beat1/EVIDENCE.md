@@ -28,3 +28,9 @@ Renders: `/Users/nyx/Projects/portlink/marketing/one-harbour-v4/s3/beat1/{d,p}`.
 - Plate 2560x1440 at 128 samples: render 19,26 s, shadow 8,21 s; AVIF plate 14,7 KB, shadow 1,6 KB (G4 cap 60 KB).
 - Fix: single-frame clips divided by `cam.frames - 1 = 0`, seeking NaN; guarded with `Math.max(1, ...)`.
 - Open: fjord backdrop out of frame (flat sky), detached white foam slab around hull, amber sun-glint blotch, quay edge reads flat grey.
+
+### G1 expedition, revision 2 (21.11.2026)
+- Sheet: `/Users/nyx/Projects/portlink/marketing/one-harbour-v4/s3/g1/g1-expedition-sheet-2.jpg` (capture `?v=e&f=0`, 1440x900, beside UC `sheet-d.png`).
+- Fixed: fjord now in frame (camera target z 0.62, view dir z 0.06, near ridge darkened to `#3a4a4c`, far ridge `#71869a`, snow line per ridge); foam slab removed (moored one-frame clip disables bow/stern injection and foam, footprint from the rig's hull block); glint cut to 0,35.
+- Plate AVIF 19,4 KB, shadow 1,6 KB (cap 60 KB). Page at 38 fps in headless capture.
+- Open: quay is a flat slab; near ridge reads smooth and toy-like (needs terrain noise or a forest material); a soft amber smear remains in the water reflection; sky is flat navy.

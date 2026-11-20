@@ -6,6 +6,7 @@
 import * as THREE from "three";
 
 export function createOcean(canvas, cam, { sim = 256, dpr = 1.5, seg = 256 } = {}) {
+  const hull = cam.hull || null, moving = cam.frames > 1 ? 1 : 0;   // a one-frame clip is a moored ship: no bow wave, softer glint
   const SIM_SIZE = 640;          // metres covered by the wake grid; hull forward so the trail has room aft
   const SHIP = [0.78, 0.5];      // hull centre in sim uv (bow toward +x)
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: false, powerPreference: "high-performance" });
@@ -30,14 +31,16 @@ export function createOcean(canvas, cam, { sim = 256, dpr = 1.5, seg = 256 } = {
     uniforms: {
       uPrev: { value: null }, uTexel: { value: new THREE.Vector2(1 / sim, 1 / sim) },
       uShip: { value: new THREE.Vector2(...SHIP) },
-      uShipSize: { value: new THREE.Vector2(170 / SIM_SIZE, 26 / SIM_SIZE) },
+      // footprint from the rig's hull block when present (expedition 150 m); 170x26 fits the 180 m cargo hull
+      uShipSize: { value: new THREE.Vector2((hull ? hull.loa_m * 0.95 : 170) / SIM_SIZE, (hull ? hull.beam_m * 1.06 : 26) / SIM_SIZE) },
+      uMove: { value: moving },
       uAdv: { value: 0.06 / sim },  // water moves aft 0.06 texel per substep (ship speed, Mach about 3 vs uC2)
       uC2: { value: 0.0004 }, uInject: { value: 0.05 }, uFoamGain: { value: 40 },
     },
     vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0., 1.); }`,
     fragmentShader: `
       precision highp float;
-      uniform sampler2D uPrev; uniform vec2 uTexel, uShip, uShipSize; uniform float uAdv, uC2, uInject, uFoamGain;
+      uniform sampler2D uPrev; uniform vec2 uTexel, uShip, uShipSize; uniform float uAdv, uC2, uInject, uFoamGain, uMove;
       varying vec2 vUv;
       void main(){
         vec2 s = vUv + vec2(uAdv, 0.);                      // semi-Lagrangian advection: water flows to -x
@@ -50,9 +53,9 @@ export function createOcean(canvas, cam, { sim = 256, dpr = 1.5, seg = 256 } = {
         e.y /= mix(1., 0.25, smoothstep(0.55, 1., e.x));      // fine bow entry
         float inside = 1. - smoothstep(0.75, 1.0, length(e));
         float bow = smoothstep(0.3, 1.0, e.x), stern = smoothstep(-0.6, -1.0, e.x);
-        hn += inside * (0.9 * bow - 0.5 * stern) * uInject;
+        hn += inside * (0.9 * bow - 0.5 * stern) * uInject * uMove;
         float slope = abs(n * 0.25 - h);
-        float foam = max(c.b * 0.9995, clamp(slope * uFoamGain + inside * (bow + stern) * 0.5, 0., 1.));
+        float foam = max(c.b * 0.9995, clamp(slope * uFoamGain + inside * (bow + stern) * 0.5 * uMove, 0., 1.));
         vec2 edge = smoothstep(0., 0.05, vUv) * smoothstep(0., 0.05, 1. - vUv);
         gl_FragColor = vec4(hn * edge.x * edge.y, h * edge.x * edge.y, foam * edge.x * edge.y, 1.);
       }`,
@@ -64,7 +67,7 @@ export function createOcean(canvas, cam, { sim = 256, dpr = 1.5, seg = 256 } = {
     uniforms: {
       uTime: { value: 0 }, uWake: { value: null }, uSimSize: { value: SIM_SIZE }, uTexel: { value: 1 / sim },
       uShipPos: { value: new THREE.Vector2(0, 0) }, uShipUv: { value: new THREE.Vector2(...SHIP) },
-      uNavy: { value: NAVY }, uSun: { value: SUN }, uCold: { value: COLD }, uSunDir: { value: sunB }, uCam: { value: camera.position },
+      uNavy: { value: NAVY }, uSun: { value: SUN }, uCold: { value: COLD }, uSunDir: { value: sunB }, uGlint: { value: moving ? 1 : 0.35 }, uCam: { value: camera.position },
     },
     vertexShader: `
       uniform float uTime, uSimSize, uTexel; uniform sampler2D uWake; uniform vec2 uShipPos, uShipUv;
@@ -97,7 +100,7 @@ export function createOcean(canvas, cam, { sim = 256, dpr = 1.5, seg = 256 } = {
       }`,
     fragmentShader: `
       precision highp float;
-      uniform vec3 uNavy, uSun, uCold, uSunDir, uCam;
+      uniform vec3 uNavy, uSun, uCold, uSunDir, uCam; uniform float uGlint;
       varying vec3 vWorld; varying vec3 vNormal; varying float vFoam; varying vec2 vWakeGrad;
       float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
       float vnoise(vec2 p){ vec2 i = floor(p), f = fract(p); f = f * f * (3. - 2. * f);
@@ -108,7 +111,7 @@ export function createOcean(canvas, cam, { sim = 256, dpr = 1.5, seg = 256 } = {
         float fres = pow(1. - max(dot(n, v), 0.), 5.) * 0.9 + 0.02;
         vec3 col = mix(uNavy * 0.55, mix(uNavy * 1.6, uCold * 0.55, 0.35), fres);
         vec3 h = normalize(uSunDir + v);
-        col += uSun * (pow(max(dot(n, h), 0.), 400.) * 0.32 + pow(max(dot(n, h), 0.), 60.) * 0.025);
+        col += uSun * ((pow(max(dot(n, h), 0.), 400.) * 0.32 + pow(max(dot(n, h), 0.), 60.) * 0.025) * uGlint);
         col += uCold * pow(max(dot(n, -uSunDir), 0.), 4.) * 0.05;
         vec2 fp = vWorld.xz * vec2(0.35, 0.8);
         float nz = vnoise(fp) * 0.65 + vnoise(fp * 2.7 + 13.1) * 0.35;

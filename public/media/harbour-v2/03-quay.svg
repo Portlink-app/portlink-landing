@@ -1,0 +1,130 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4800 2400">
+<title>One Harbour v2, layer 03: quay</title>
+<desc>World 4800 x 2400. Parallax fx 1, fy 1 (the reference plane). Breakwater, quay wall (apron top y 1340, waterline y 1420), container stacks, portal jib crane, mobile harbour crane, terminal tractor, the port agent's office (anchor-A2), the DMC house (anchor-A3), coach, rock shore, the Embark guide hut with kayak rack and jetty (anchor-A4). Signal colour appears only inside lights-A2, lights-A3 and lights-A4. Anything below y 1420 is covered by the water layer.</desc>
+<g id="quay-breakwater">
+<path d="M786 1424L800 1400L824 1392L870 1394L930 1388L990 1392L1050 1386L1100 1390L1124 1384V1424Z" fill="#293c57"/>
+<path d="M800 1400L824 1392L870 1394L930 1388L990 1392L1050 1386L1100 1390L1124 1384V1390L1100 1396L1050 1392L990 1398L930 1394L870 1400L824 1398Z" fill="#5f6e85"/>
+<path d="M840 1424L856 1404L884 1402L900 1424ZM960 1424L980 1402L1010 1400L1030 1424ZM1060 1424L1076 1404L1100 1402L1112 1424Z" fill="#1e314d"/>
+<path d="M812 1394L814 1350H826L828 1394Z" fill="#a0acbd"/>
+<path d="M813.2 1368H826.8L827.2 1376H812.8Z" fill="#384963"/>
+<rect x="815" y="1340" width="10" height="10" fill="#f2f5f9"/>
+<path d="M813 1340L820 1332L827 1340Z" fill="#384963"/>
+</g>
+<g id="quay-wall">
+<rect x="1120" y="1352" width="1760" height="72" fill="#1e314d"/>
+<rect x="1120" y="1340" width="1760" height="12" fill="#495a72"/>
+<path d="M1280 1352V1424M1440 1352V1424M1600 1352V1424M1760 1352V1424M1920 1352V1424M2080 1352V1424M2240 1352V1424M2400 1352V1424M2560 1352V1424M2720 1352V1424" fill="none" stroke="#162d4e" stroke-width="3"/>
+<path d="M1160 1358h12v34h-12zM1280 1358h12v34h-12zM1400 1358h12v34h-12zM1520 1358h12v34h-12zM1640 1358h12v34h-12zM1760 1358h12v34h-12zM1880 1358h12v34h-12zM2000 1358h12v34h-12zM2120 1358h12v34h-12zM2240 1358h12v34h-12zM2360 1358h12v34h-12zM2480 1358h12v34h-12zM2600 1358h12v34h-12zM2720 1358h12v34h-12zM2840 1358h12v34h-12z" fill="#0f2340"/>
+<path d="M1196 1340v-8h-2v-4h12v4h-2v8zM1436 1340v-8h-2v-4h12v4h-2v8zM1676 1340v-8h-2v-4h12v4h-2v8zM1916 1340v-8h-2v-4h12v4h-2v8zM2276 1340v-8h-2v-4h12v4h-2v8zM2516 1340v-8h-2v-4h12v4h-2v8zM2756 1340v-8h-2v-4h12v4h-2v8zM2860 1340v-8h-2v-4h12v4h-2v8z" fill="#758398"/>
+<path d="M1500 1352V1420M1512 1352V1420M1500 1364H1512M1500 1378H1512M1500 1392H1512M1500 1406H1512" fill="none" stroke="#758398" stroke-width="2.5"/>
+</g>
+<g id="quay-containers">
+<path d="M1150 1288h60v25h-60zM1212 1315h60v25h-60zM1344 1261h60v25h-60zM1406 1315h60v25h-60zM1468 1288h60v25h-60zM1468 1234h60v25h-60zM1806 1315h60v25h-60zM1868 1288h60v25h-60zM1930 1261h60v25h-60z" fill="#293c57"/>
+<path d="M1150 1315h60v25h-60zM1344 1288h60v25h-60zM1406 1261h60v25h-60zM1468 1315h60v25h-60zM1530 1288h60v25h-60zM1868 1315h60v25h-60zM1868 1234h60v25h-60zM1930 1288h60v25h-60z" fill="#495a72"/>
+<path d="M1150 1261h60v25h-60zM1344 1315h60v25h-60zM1406 1234h60v25h-60zM1468 1261h60v25h-60zM1806 1288h60v25h-60zM1930 1315h60v25h-60z" fill="#5f6e85"/>
+<path d="M1212 1288h60v25h-60zM1406 1288h60v25h-60zM1530 1315h60v25h-60zM1868 1261h60v25h-60z" fill="#758398"/>
+<path d="M1165 1318v19m15-19v19m15-19v19M1165 1291v19m15-19v19m15-19v19M1165 1264v19m15-19v19m15-19v19M1227 1318v19m15-19v19m15-19v19M1227 1291v19m15-19v19m15-19v19M1359 1318v19m15-19v19m15-19v19M1359 1291v19m15-19v19m15-19v19M1359 1264v19m15-19v19m15-19v19M1421 1318v19m15-19v19m15-19v19M1421 1291v19m15-19v19m15-19v19M1421 1264v19m15-19v19m15-19v19M1421 1237v19m15-19v19m15-19v19M1483 1318v19m15-19v19m15-19v19M1483 1291v19m15-19v19m15-19v19M1483 1264v19m15-19v19m15-19v19M1483 1237v19m15-19v19m15-19v19M1545 1318v19m15-19v19m15-19v19M1545 1291v19m15-19v19m15-19v19M1821 1318v19m15-19v19m15-19v19M1821 1291v19m15-19v19m15-19v19M1883 1318v19m15-19v19m15-19v19M1883 1291v19m15-19v19m15-19v19M1883 1264v19m15-19v19m15-19v19M1883 1237v19m15-19v19m15-19v19M1945 1318v19m15-19v19m15-19v19M1945 1291v19m15-19v19m15-19v19M1945 1264v19m15-19v19m15-19v19" fill="none" stroke="#1e314d" stroke-width="2.5"/>
+<path d="M1150 1258h60v4h-60zM1212 1285h60v4h-60zM1344 1258h60v4h-60zM1406 1231h60v4h-60zM1468 1231h60v4h-60zM1530 1285h60v4h-60zM1806 1285h60v4h-60zM1868 1231h60v4h-60zM1930 1258h60v4h-60z" fill="#a0acbd"/>
+</g>
+<g id="quay-crane-portal">
+<path d="M1268 1340L1278 1258M1326 1340L1316 1258M1273 1300H1321M1262 1340H1274M1320 1340H1332" fill="none" stroke="#a0acbd" stroke-width="4"/>
+<rect x="1270" y="1250" width="54" height="9" fill="#758398"/>
+<rect x="1258" y="1214" width="18" height="30" fill="#495a72"/>
+<rect x="1276" y="1206" width="44" height="44" fill="#5f6e85"/>
+<rect x="1306" y="1214" width="10" height="12" fill="#162d4e"/>
+<path d="M1276 1203h44v4h-44z" fill="#a0acbd"/>
+<path d="M1282 1206L1292 1150L1304 1206M1306 1206L1430 1080M1320 1218L1430 1080" fill="none" stroke="#a0acbd" stroke-width="4"/>
+<path d="M1320 1218L1323 1188L1351 1179L1358 1153L1382 1141L1393 1118L1412 1102M1292 1150L1430 1080M1292 1150L1262 1214M1430 1080V1196" fill="none" stroke="#a0acbd" stroke-width="2.5"/>
+<rect x="1425" y="1196" width="10" height="12" fill="#758398"/>
+</g>
+<g id="quay-tractor">
+<path d="M1590 1332V1312L1596 1304H1612V1332Z" fill="#a0acbd"/>
+<path d="M1594 1314L1598 1308H1608V1318H1594Z" fill="#162d4e"/>
+<rect x="1612" y="1324" width="74" height="6" fill="#758398"/>
+<circle cx="1600" cy="1335" r="6" fill="#0f2340"/><circle cx="1640" cy="1335" r="6" fill="#0f2340"/><circle cx="1676" cy="1335" r="6" fill="#0f2340"/>
+</g>
+<g id="quay-crane-mobile">
+<path d="M1700 1330H1690V1340M1800 1330H1810V1340" fill="none" stroke="#758398" stroke-width="4"/>
+<rect x="1704" y="1316" width="92" height="14" fill="#5f6e85"/>
+<circle cx="1718" cy="1334" r="7" fill="#0f2340"/><circle cx="1738" cy="1334" r="7" fill="#0f2340"/><circle cx="1762" cy="1334" r="7" fill="#0f2340"/><circle cx="1782" cy="1334" r="7" fill="#0f2340"/>
+<rect x="1748" y="1272" width="44" height="44" fill="#495a72"/>
+<path d="M1748 1269h44v4h-44z" fill="#a0acbd"/>
+<rect x="1730" y="1176" width="18" height="140" fill="#758398"/>
+<rect x="1742" y="1176" width="6" height="140" fill="#a0acbd"/>
+<rect x="1708" y="1196" width="22" height="20" fill="#a0acbd"/>
+<rect x="1711" y="1200" width="10" height="9" fill="#162d4e"/>
+<path d="M1726 1256L1640 1112M1734 1270L1640 1112" fill="none" stroke="#a0acbd" stroke-width="4"/>
+<path d="M1734 1270L1716 1239L1711 1232L1695 1204L1689 1194L1674 1170L1666 1156L1654 1135M1739 1176L1640 1112M1640 1112V1238" fill="none" stroke="#a0acbd" stroke-width="2.5"/>
+<rect x="1612" y="1238" width="56" height="5" fill="#a0acbd"/>
+<rect x="1610" y="1244" width="60" height="25" fill="#758398"/>
+<path d="M1625 1247v19m15-19v19m15-19v19" fill="none" stroke="#1e314d" stroke-width="2.5"/>
+</g>
+<g id="anchor-A2" data-anchor="2140 1340" data-dock="2128 1245">
+<path d="M2076 1206V1150M2190 1206V1168M2184 1178H2196" fill="none" stroke="#a0acbd" stroke-width="2.5"/>
+<path d="M2077 1152h22l-5 6l5 6h-22z" fill="#c3cddb"/>
+<rect x="2070" y="1212" width="140" height="128" fill="#495a72"/>
+<rect x="2202" y="1212" width="8" height="128" fill="#5f6e85"/>
+<rect x="2066" y="1206" width="148" height="8" fill="#758398"/>
+<path d="M2086 1232h24v26h-24zM2116 1232h24v26h-24zM2146 1232h24v26h-24zM2176 1232h24v26h-24zM2086 1284h24v26h-24zM2116 1284h24v26h-24z" fill="#162d4e"/>
+<rect x="2150" y="1296" width="18" height="44" fill="#162d4e"/>
+<rect x="2144" y="1286" width="46" height="6" fill="#c3cddb"/>
+<rect x="2146" y="1336" width="26" height="4" fill="#758398"/>
+<g id="lights-A2"><path d="M2116 1232h24v26h-24zM2146 1232h24v26h-24zM2086 1284h24v26h-24z" fill="#f5b53d"/></g>
+<path d="M2098 1232v26M2128 1232v26M2158 1232v26M2188 1232v26M2098 1284v26M2128 1284v26" fill="none" stroke="#495a72" stroke-width="2.5"/>
+</g>
+<g id="quay-furniture">
+<path d="M2226 1322h18v18h-18zM2246 1326h18v14h-18z" fill="#384963"/>
+<path d="M2290 1340V1268h14M2520 1340V1268h14M2850 1340V1268h14M2338 1302V1340M2422 1302V1340" fill="none" stroke="#758398" stroke-width="3"/>
+<path d="M2300 1268h7v4h-7zM2530 1268h7v4h-7zM2860 1268h7v4h-7z" fill="#f2f5f9"/>
+<rect x="2342" y="1306" width="76" height="30" fill="#293c57"/>
+<path d="M2334 1296h92v6h-92z" fill="#758398"/>
+<path d="M2350 1328h60" fill="none" stroke="#5f6e85" stroke-width="3"/>
+</g>
+<g id="anchor-A3" data-anchor="2620 1340" data-dock="2620 1247">
+<rect x="2654" y="1214" width="12" height="40" fill="#293c57"/>
+<rect x="2652" y="1211" width="16" height="4" fill="#a0acbd"/>
+<path d="M2550 1340V1270L2620 1216L2690 1270V1340Z" fill="#1e314d"/>
+<path d="M2550 1288H2690M2550 1306H2690M2550 1324H2690" fill="none" stroke="#162d4e" stroke-width="2.5"/>
+<path d="M2550 1270V1340M2690 1270V1340" fill="none" stroke="#758398" stroke-width="3"/>
+<path d="M2538 1276L2620 1204L2702 1276L2694 1282L2620 1218L2546 1282Z" fill="#a0acbd"/>
+<path d="M2609 1236h22v22h-22zM2564 1290h26v26h-26zM2650 1290h26v26h-26z" fill="#162d4e"/>
+<g id="lights-A3"><path d="M2609 1236h22v22h-22zM2650 1290h26v26h-26z" fill="#f5b53d"/></g>
+<path d="M2620 1236v22M2609 1247h22M2663 1290v26M2577 1290v26" fill="none" stroke="#1e314d" stroke-width="2.5"/>
+<rect x="2608" y="1296" width="24" height="44" fill="#293c57"/>
+<path d="M2600 1292h40v5h-40z" fill="#a0acbd"/>
+<path d="M2690 1296h16" fill="none" stroke="#758398" stroke-width="2.5"/>
+<rect x="2694" y="1298" width="12" height="10" fill="#c3cddb"/>
+</g>
+<g id="quay-coach">
+<path d="M2716 1334V1310Q2716 1304 2722 1304H2790Q2800 1304 2800 1314V1334Z" fill="#a0acbd"/>
+<path d="M2722 1309H2796V1320H2722Z" fill="#162d4e"/>
+<path d="M2740 1309v11M2758 1309v11M2776 1309v11" fill="none" stroke="#a0acbd" stroke-width="2.5"/>
+<circle cx="2734" cy="1335" r="6" fill="#0f2340"/><circle cx="2782" cy="1335" r="6" fill="#0f2340"/>
+</g>
+<g id="quay-shore">
+<path d="M2880 1424V1340L2930 1338L3030 1344L3060 1340L3130 1336L3236 1336L3262 1300L3288 1284L3310 1262L3336 1276L3350 1284L3396 1330L3440 1386L3472 1424Z" fill="#293c57"/>
+<path d="M2880 1340L2930 1338L3030 1344L3060 1340L3130 1336L3236 1336L3262 1300L3288 1284L3310 1262L3322 1290L3296 1300L3270 1316L3244 1346L3130 1346L3060 1350L3030 1354L2930 1348L2880 1350Z" fill="#495a72"/>
+<path d="M3310 1262L3336 1276L3350 1284L3396 1330L3440 1386L3420 1380L3380 1338L3344 1300L3322 1290Z" fill="#5f6e85"/>
+<path d="M2900 1424L2920 1380L2960 1372L2990 1424ZM3160 1424L3190 1370L3250 1360L3290 1424ZM3340 1424L3350 1350L3390 1380L3420 1424Z" fill="#1e314d"/>
+<rect x="3305" y="1238" width="10" height="24" fill="#a0acbd"/>
+<rect x="3306" y="1230" width="8" height="8" fill="#f2f5f9"/>
+</g>
+<g id="anchor-A4" data-anchor="3090 1340" data-dock="3087 1319">
+<path d="M3136 1340V1276M3156 1336V1296M3224 1336V1296" fill="none" stroke="#758398" stroke-width="3"/>
+<path d="M3137 1278h20l-6 5l6 5h-20z" fill="#c3cddb"/>
+<path d="M3146 1302Q3190 1295 3234 1302Q3190 1308 3146 1302Z" fill="#c3cddb"/>
+<path d="M3146 1313Q3190 1306 3234 1313Q3190 1319 3146 1313Z" fill="#758398"/>
+<path d="M3146 1324Q3190 1317 3234 1324Q3190 1330 3146 1324Z" fill="#a0acbd"/>
+<path d="M3056 1340V1306L3090 1282L3124 1306V1340Z" fill="#1e314d"/>
+<path d="M3048 1310L3090 1272L3132 1310L3126 1314L3090 1284L3054 1314Z" fill="#a0acbd"/>
+<rect x="3078" y="1311" width="18" height="16" fill="#162d4e"/>
+<rect x="3102" y="1314" width="14" height="26" fill="#293c57"/>
+<circle cx="3066" cy="1322" r="5" fill="none" stroke="#c3cddb" stroke-width="3"/>
+<path d="M2950 1392V1424M2990 1392V1424M3030 1392V1424" fill="none" stroke="#5f6e85" stroke-width="4"/>
+<rect x="2940" y="1386" width="118" height="6" fill="#758398"/>
+<path d="M3046 1386L3060 1342L3068 1342L3056 1386Z" fill="#5f6e85"/>
+<path d="M2944 1386V1368M2940 1374H3046L3060 1330" fill="none" stroke="#758398" stroke-width="2.5"/>
+<g id="lights-A4"><path d="M3078 1311h18v16h-18zM2941 1362h6v6h-6z" fill="#f5b53d"/></g>
+<path d="M3087 1311v16" fill="none" stroke="#1e314d" stroke-width="2.5"/>
+</g>
+</svg>

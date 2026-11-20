@@ -505,3 +505,130 @@ What this changes in the plan:
 - S13 (about): "side facts, wide paragraph". One vertical line at 34 % of the width; three label and value pairs on the left, a statement paragraph to the right. Applied as: the small plate on the left with the three named regions, the three product sentences as the paragraph column. No card row.
 - S14 (contact): "sentence and links band". Applied to the left half only: the role-worded offer as a statement of 36 px or less on three lines, the reply line beneath. The right half stays the existing `ContactForm` with `intent="pilot"`, as section 4 requires.
 - Its motion line (masked headline reveal) is used for S13 and S14 headings only; the stage carries the rest.
+
+## 12. v2: programmed harbour, no video (Surgeon (Portlink), 20.11.2026)
+
+David's ruling (events 5a123a6a and 9ec043be): the harbour is programmed graphics driven by scroll, never scrubbed video. Fable authors the graphics and decides the architecture, Keel builds. "Top quality or not at all." This section **supersedes** every v1 part that depends on generated video: direction (c)'s AI-video dives in section 2, the clip rows of section 5, `SequencePlayer` and the decode window in section 7, gate G5 and the `?bakeoff=` arms. Everything else in sections 1 to 11 still binds: the idea sentence, the real-capture rules, the thread map, conversion, and the reduced-motion page as server markup.
+
+### 12.1 Rendering: Chose / Over / Because / Revisit-if
+
+| Direction | Fidelity to the authored art | Phone cost | Text and captures stay DOM | Addressable lights and anchors | Pipeline to build | Sum |
+|---|---|---|---|---|---|---|
+| **(a) Inline SVG layers under CSS transforms** | 5 | 4 | 5 | 5 | 5 | **24** |
+| (b) Canvas2D, layers drawn per frame | 4 | 3 | 3 | 2 | 3 | 15 |
+| (c) WebGL, layers as textured quads | 4 | 4 | 3 | 2 | 2 | 15 |
+
+Scores are judgement of visitor outcome (1 to 5), not measurements.
+
+**Chose:** (a). Six inline SVG planes (`00-sky` to `05-foreground`) plus the `ship` sprite, each moved only by a CSS `transform` on its wrapper, driven by one GSAP ScrollTrigger timeline on the existing Lenis wiring (section 7).
+
+**Over:** (b) Canvas2D and (c) WebGL.
+
+**Because:**
+- The source art is already vector SVG (41 KB for all eight files, measured). (a) ships it as authored; (b) and (c) need a raster or tessellation step that loses the flat-field crispness at DPR 2 and 3.
+- Each plane only translates and scales, so the browser composites it on the GPU as one layer. Nothing repaints per frame; the per-frame work is seven transform writes.
+- Lights and stations are addressable by id (`lights-A2` to `lights-A5`, `ship-wake`, `ship-chain`, `ship-lights`). Turning a light on is an `opacity` tween on a named group, not a redraw.
+- Copy, telemetry, the thread map and real captures stay ordinary DOM above the stage: legible, selectable, accessible and indexable. That keeps v1's rule 4 (the stills page is the server markup).
+- No new dependency. `gsap`, `@gsap/react` and `lenis` are already in `package.json`; three.js stays out, as in v1.
+
+**Revisit-if:** p95 frame time exceeds 20 ms on the mid-range phone trace (WP8), or a plane shows rasterisation shimmer while it scales. Then rasterise that plane alone to a bitmap at two scales (or draw it into one canvas) and keep the rest as SVG. A whole-scene WebGL move needs a new decision, not a fallback.
+
+### 12.2 World, camera and the coverage clamp
+
+- **World:** 4800 x 2400 units, origin top left, y down. Every layer shares fy = 1.
+- **Layers and parallax** (from each file's `<desc>`):
+
+| Layer | fx | Notes |
+|---|---|---|
+| `00-sky` | 0,08 | bleeds x -2400 to 7200 |
+| `01-far-coast` | 0,45 | horizon y 1200 |
+| `02-mid-harbour` | 0,82 | town; land base runs to y 1440 |
+| `03-quay` | 1 | reference plane; quay waterline y 1420 |
+| `04-water` | 1 | near water, A1 buoy and A5 tour boat |
+| `ship` | 1 | drawn after water, never rotated, scale 1 |
+| `05-foreground` | 1,22 | tops below y 1750; bleeds 480 past the world edge |
+
+- **Camera:** centre `(cx, cy)` in world units and scale `s` (screen px per world unit). Each layer wrapper gets
+
+  `transform: translate((-2400 - (cx - 2400) * fx) * s + vw / 2, -cy * s + vh / 2) scale(s)`
+
+  with `transform-origin: 0 0`. The reference camera x of 2400 (world centre) is **an assumption** of this section, inferred from the sky and foreground bleed widths; Fable's art states the bleeds, not the reference. If a plane shows an edge, change the reference here and in `world.json`, nowhere else.
+- **Ship:** translate the sprite pivot `(300, 160)` onto `route.getPointAtLength(t * 4810)` on the fx 1 plane. The bridge dock point `(398, 38)` is where capture lifts originate at A1.
+- **Coverage clamp (new gate):** the viewport may never show past a plane's drawn edge. Because fy = 1 everywhere, the vertical part reduces to
+
+  `s >= max((vh / 2) / (2400 - cy), (vh / 2) / cy)`
+
+  and the horizontal part is checked per layer against its drawn extent. At the shipped camera rows: desktop at cy 1420 needs s >= 0,46; phone at cy 1500 needs s >= 0,47. Consequence: **the phone never gets a full-world overview**. It opens on a tight crop and pans. The rejected proof frames (s 0,3 and 0,13) showed a flat cut under the foreground and empty bands; they are kept as the negative control.
+
+### 12.3 Stations and `world.json`
+
+`route.svg` names `world.json` as the home of station fractions, but Fable never wrote it. It is now written beside the SVGs (`public/media/harbour-v2/world.json`, 416 SVG elements across the stage art for the 12.6 budget) with these values, measured by sampling `#route` (length 4810; miss is the distance in units from the anchor named in the art):
+
+| Station | Anchor in the art | t | x | y | miss | Stop (script.ts) |
+|---|---|---|---|---|---|---|
+| A1 | anchorage buoy, `04-water` | 0,288 | 1379,4 | 1610 | 0,6 | S3 port ops and cost forecasting |
+| A2 | port agent's office, `03-quay` | 0,4462 | 2140,5 | 1620 | 0,5 | S6 port agent |
+| A3 | DMC house, `03-quay` | 0,546 | 2620,1 | 1632 | 0,1 | S7 DMC |
+| A4 | Embark guide hut, `03-quay` | 0,6422 | 3080,5 | 1680 | 0,5 | S8 tour operator, first beat |
+| A5 | Embark tour boat, `04-water` | 0,7338 | 3520,4 | 1690 | | S8 tour operator, second beat |
+
+The stop mapping is this section's proposal; `script.ts` stays the single source for it (section 7), so Keel records the final mapping there and in `world.json` together.
+
+### 12.4 Stop grammar without clips
+
+Every station stop runs the same five beats, replacing v1's video dive in and out:
+
+1. **Travel:** the ship moves along the route (wake on, chain off) while the camera follows at the travel scale.
+2. **Push in:** the camera eases onto the station's anchor; that station's `lights-*` groups fade to signal colour. The ship stops (wake off; at A1 the chain shows).
+3. **Lift:** the real capture rises from the anchor point to at least 55 % of the viewport (v1 rule 1).
+4. **Hold:** at least 0,7 screens of scroll on the capture, with the stop's copy.
+5. **Pull back:** the capture returns to its anchor, the lights stay on (the harbour remembers who has worked), and travel resumes.
+
+Signal colour appears only inside `lights-*` and `ship-lights` groups; everything else stays in the stage-line greys the art was drawn in.
+
+### 12.5 Phone and reduced-motion arms
+
+- **Phone (`useNarrow`):** same timeline and same SVG, different camera rows: open at s 0,47 on the anchorage crop (proof frame `p1-open`), pan at s 0,55 between stations, never below the clamp. Native scroll on touch, as v1. No separate asset set.
+- **Reduced motion (`useMotionAllowed` false, the server default):** one static composite of the six planes at the d1 camera, followed by each stop's capture and copy in order. No timeline is created. This is the server markup, so the page makes every claim before any script runs.
+
+### 12.6 Budgets and gates
+
+Carried from v1 unchanged: LCP 2,0 s desktop and 2,5 s phone, CLS 0, route JS 130 KB gzipped, `check-harbour-isolation`, captures >= 55 % for >= 0,7 screens, `capture.mjs` at 1440x900 and 390x844, `website-verify` 0 FAIL at HEAD.
+
+New for v2:
+- **SVG weight:** all stage SVG <= 120 KB raw (41 KB today), so the art can gain detail without becoming the LCP bottleneck.
+- **DOM weight:** <= 2 500 SVG elements across the stage.
+- **Frame time:** p95 <= 16,7 ms desktop and <= 20 ms on the mid-range phone trace across a full scroll (the Revisit-if trigger above).
+- **Coverage clamp:** a unit test samples every camera keyframe at 1440x900 and 390x844 and fails when any plane's edge enters the viewport.
+- **No video on the route:** the isolation guard also fails on any `<video>`, `.mp4` or `.webm` under `/harbour`.
+
+### 12.7 Proof frames
+
+Rendered from the committed SVGs with the camera formula above at DPR 2 (composer: `~/.buzz/RESEARCH/one-harbour-v2/compose.mjs`, camera rows in `shots.json`, output and manifest in `frames/`):
+
+| Frame | Viewport | cx | cy | s | Ship t | State |
+|---|---|---|---|---|---|---|
+| `d1-wide` | 1440x900 | 2400 | 1420 | 0,46 | 0,29 | at anchor |
+| `d2-anchorage-A1` | 1440x900 | 1500 | 1440 | 1,0 | 0,29 | at anchor |
+| `d3-quay-A2-A3` | 1440x900 | 2400 | 1440 | 0,9 | 0,5 | under way |
+| `d4-embark-A4-A5` | 1440x900 | 3300 | 1460 | 0,9 | 0,72 | under way |
+| `p1-open` | 390x844 | 1500 | 1500 | 0,47 | 0,29 | at anchor |
+| `p2-anchorage-A1` | 390x844 | 1420 | 1500 | 0,55 | 0,29 | at anchor |
+| `p3-quay-A3` | 390x844 | 2620 | 1500 | 0,55 | 0,55 | under way |
+
+These prove the art and the camera maths. They are not product captures and do not replace WP9.
+
+### 12.8 Ordered build list for Keel (PR #38, branch `feat/umbrella-harbour`)
+
+Each work package lands as its own commit on the branch, green before the next starts.
+
+- [ ] **WP0, assets and record.** Commit `public/media/harbour-v2/` (eight SVGs plus `world.json` from 12.3) and this section. Push to `feat/umbrella-harbour`.
+- [ ] **WP1, stage engine.** Rewrite `HarbourStage` to mount the six planes inline, apply the camera transform from 12.2, and enforce the coverage clamp in code (clamp `s`, never trust the keyframe). Gate: the clamp unit test from 12.6 passes.
+- [ ] **WP2, remove v1 video.** Delete `SequencePlayer`, the dive clips and the `?bakeoff=` arms; drop `public/media/harbour-2026-11/` clip references. Gate: the isolation guard finds no video under `/harbour`.
+- [ ] **WP3, ship.** Place the sprite on `#route` by `t`; toggle `ship-wake` under way and `ship-chain` at anchor. Gate: the ship sits on the route at all five stations within 1 unit.
+- [ ] **WP4, stop grammar.** Build the five beats of 12.4 into the master timeline from `script.ts`; capture lift with `CaptureFigure`. Gate: every capture reaches >= 55 % and holds >= 0,7 screens.
+- [ ] **WP5, lights.** Fade each station's `lights-*` groups at push in and keep them on. Gate: no signal colour outside lights groups (computed-style check).
+- [ ] **WP6, phone arm.** Phone camera rows from 12.5 behind `useNarrow`. Gate: the clamp test at 390x844 and a real-device scroll.
+- [ ] **WP7, reduced-motion arm.** Static composite plus captures as the server markup; no timeline when motion is not allowed. Gate: the page with JS disabled carries every claim.
+- [ ] **WP8, performance.** Frame-time trace (desktop and mid-range phone throttle), LCP, CLS, JS and SVG weight against 12.6. Gate: every budget met, trace attached to the PR.
+- [ ] **WP9, proof.** `capture.mjs` at 1440x900 and 390x844 on the preview, then `website-verify` 0 FAIL receipt at HEAD.

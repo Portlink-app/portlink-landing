@@ -634,3 +634,30 @@ Each work package lands as its own commit on the branch, green before the next s
 - [ ] **WP7, reduced-motion arm.** Static composite plus captures as the server markup; no timeline when motion is not allowed. Gate: the page with JS disabled carries every claim.
 - [ ] **WP8, performance.** Frame-time trace (desktop and mid-range phone throttle), LCP, CLS, JS and SVG weight against 12.6. Gate: every budget met, trace attached to the PR.
 - [ ] **WP9, proof.** `capture.mjs` at 1440x900 and 390x844 on the preview, then `website-verify` 0 FAIL receipt at HEAD.
+
+### 12.9 Art bar: unitedcarriers.com teardown (Surgeon (Portlink), 20.11.2026)
+
+Measured live at 1440x900 with wheel-driven scroll (the site runs Lenis, so `scrollTo` does not move it), 16 positions, 900 px apart. Evidence: `~/.buzz/RESEARCH/one-harbour-v2/uc-teardown/` (`teardown.json`, `w/d-00..15.png`, `sheet-d.png`). Stack: Webflow, Lenis, Barba, GSAP; the scroll scenes are AVIF frame sequences, the hero a 900x900 canvas.
+
+**What makes their fidelity (five measured traits):**
+
+1. **One hero object, rendered at product detail, on an empty field.** A reach-stacker lifting a 40 ft box, then a truck: corrugation ribs, door bars, lock rods, hazard chevrons, stencilled codes, tyre tread, cab glazing. Nothing else is in frame: no scenery, no sky, a flat white or black field and one black road strip. The detail budget goes to the object, never to the backdrop.
+2. **Two fields and one signal.** Black `#000`/`#0b0b0b`, white `#fff`/`#f4f4f4`, one orange `#ff5500`; a cold electric blue appears only as atmosphere behind the globe. Colour on the object is local colour (teal machine, navy and orange boxes), never decoration.
+3. **Rim light, two-tone.** The hero globe is lit warm on one limb and cold blue on the other; the machinery has a hard key from upper left with crisp specular edges on steel. Light separates the object from the field; there are no gradients on the field itself.
+4. **Two line weights.** Silhouettes are solid fills with no outline; interior detail is hairline (ribs, seams, lane dashes at roughly 1 px on screen). The top-down road map is the same idea flattened: solid black carriageway, thin grey dashes, hatched gore areas.
+5. **Scroll drives the object's action, not just the camera.** The stacker lifts, the box lands on the truck, the truck drives off and turns on the map. The camera barely moves; the subject performs. Huge capitals and stat numerals ride over it, set in BT Steinhart.
+
+**Translated to One Harbour (binding for the v3 layers):**
+
+| Trait | One Harbour rule | Gate |
+|---|---|---|
+| Hero object | The ship and the A1 quay crane carry the detail: hull plating seams, portholes in rows, bridge glazing, lifeboats in davits, funnel bands, mooring lines; crane girders as lattice, trolley, spreader, rails. | Ship and crane together hold >= 40 % of all SVG elements |
+| Empty field | Sky and far coast become near-flat fields: at most 3 tones each, no texture. Mid harbour drops to silhouette mass plus lit windows. | Sky + far coast <= 6 % of elements |
+| Palette | Navy field `#0a2342` and night `#06152b` replace their black; Mist `#f2f5f9` their white; Low sun `#f5b53d` is the only signal (their orange). Steel greys `#8a97ab` to `#d6dde7` for local colour. | No hue outside these families (computed-style check, WP5) |
+| Rim light | Key from the low sun at upper left: every hero surface gets a 1 to 2 unit Low sun edge on its sun side and a `#4f7db8` cold edge on the shadow side. Field stays flat. | Visual review on `d2`/`p2` |
+| Line weight | Silhouettes are fills without stroke; detail strokes 1,5 world units (about 0,7 px at s 0,46, 1,5 px at s 1,0), silhouettes and rails 3 to 4. | Lint: no stroke above 4 outside `#route` |
+| Scroll action | The ship moves along `#route` and the crane lifts at A2: the subject performs while the camera holds (WP3, WP4). | Unchanged from 12.4 |
+
+Unchanged: world 4800x2400, layer ids, `fx`, extents, the camera and the clamp (12.2), the budgets in 12.6 (all stage SVG <= 120 KB raw, <= 2 500 elements).
+
+Chose / Over / Because / Revisit-if: Chose vector detail concentrated on the hero objects with flat fields, Over a photoreal frame sequence like theirs, Because 12.1 already rejected video for weight and the clamp, and their fidelity comes from where the detail goes rather than from photographs; Revisit-if the v3 frames still read as clip art beside `sheet-d.png` at `d2`.

@@ -1,12 +1,16 @@
 # S3 lighting rig on a placeholder hull, Cycles. Real scale (1 unit = 1 m).
-# Args after "--": out_dir width height samples [glb]
+# Args after "--": out_dir width height samples [glb] [frames] [travel_m]
+# frames > 1 renders a sequence: the ship travels travel_m along +x, camera fixed; plate_####.png, shadow_####.png
 # Writes: plate.png (RGBA, hull above the waterline only), shadow.png (RGBA contact shadow on z=0 only),
 # camera.json (position, target, lens, sensor, focus) so the live three.js water uses the same camera.
 import bpy, bmesh, sys, math, time, json
 from mathutils import Vector
 a = sys.argv[sys.argv.index("--")+1:]
 OUT, W, H, SAMPLES = a[0], int(a[1]), int(a[2]), int(a[3])
-GLB = a[4] if len(a) > 4 else ""
+GLB = a[4] if len(a) > 4 and a[4] != "-" else ""
+NF = int(a[5]) if len(a) > 5 else 1
+TRAVEL = float(a[6]) if len(a) > 6 else 0.0
+LEN_M = 180.0   # real scale: expedition-cruise / feeder length
 def lin(h):
     h = h.lstrip("#"); c = [int(h[i:i+2], 16)/255 for i in (0, 2, 4)]
     return tuple(x/12.92 if x <= 0.04045 else ((x+0.055)/1.055)**2.4 for x in c)
@@ -45,6 +49,27 @@ def block(name, sx, sy, sz, loc, m, bevel=0.35, bow=0.0):
 
 if GLB:
     bpy.ops.import_scene.gltf(filepath=GLB)
+    bpy.context.view_layer.update()
+    ms = [o for o in sc.objects if o.type == 'MESH']
+    gmn = Vector((1e9,)*3); gmx = Vector((-1e9,)*3)
+    for o in ms:
+        for c in o.bound_box:
+            w = o.matrix_world @ Vector(c); gmn = Vector(map(min, gmn, w)); gmx = Vector(map(max, gmx, w))
+    roots = [o for o in sc.objects if o.parent is None and o is not ship]
+    holder = bpy.data.objects.new("GLB", None); sc.collection.objects.link(holder)
+    gc = (gmn + gmx) / 2
+    for o in roots:
+        o.parent = holder; o.location -= Vector((gc.x, gc.y, gmn.z))
+    ext = gmx - gmn
+    if ext.y > ext.x: holder.rotation_euler.z = math.pi / 2
+    s = LEN_M / max(ext.x, ext.y); holder.scale = (s, s, s)
+    holder.location.z = -0.34 * ext.z * s * 0.45        # draft as in S2
+    holder.parent = ship
+    for m in bpy.data.materials:
+        if m.node_tree:
+            for n in m.node_tree.nodes:
+                if n.type == 'BSDF_PRINCIPLED':
+                    n.inputs['Roughness'].default_value = max(0.35, n.inputs['Roughness'].default_value)
 else:
     # placeholder: 180 m expedition-cruise proportions, 7 m draft, stepped white superstructure
     hullc = mat("Hull", "#1b2433", 0.42, 0.15); white = mat("White", "#e9ecef", 0.38)
@@ -109,9 +134,25 @@ except Exception as ex: print("gpu", ex)
 
 meshes = [o for o in sc.objects if o.type == 'MESH' and o is not sea]
 ts = {}
+sc.frame_start = 1; sc.frame_end = NF
+x0 = -TRAVEL / 2
+if NF > 1:
+    ship.location.x = x0; ship.keyframe_insert("location", index=0, frame=1)
+    ship.location.x = x0 + TRAVEL; ship.keyframe_insert("location", index=0, frame=NF)
+    for fc in ship.animation_data.action.fcurves if hasattr(ship.animation_data.action, "fcurves") else []:
+        for k in fc.keyframe_points: k.interpolation = 'LINEAR'
+    try:
+        for fc in ship.animation_data.action.layers[0].strips[0].channelbags[0].fcurves:
+            for k in fc.keyframe_points: k.interpolation = 'LINEAR'
+    except Exception as ex: print("interp", ex)
+def go(name):
+    if NF > 1:
+        r.filepath = f"{OUT}/{name}_"; bpy.ops.render.render(animation=True)
+    else:
+        r.filepath = f"{OUT}/{name}.png"; bpy.ops.render.render(write_still=True)
 # pass 1: plate. Sea is a holdout: everything under z=0 becomes transparent; the hull keeps lighting.
 sea.is_holdout = True; sea.is_shadow_catcher = False
-r.filepath = f"{OUT}/plate.png"; t = time.time(); bpy.ops.render.render(write_still=True); ts["plate"] = time.time()-t
+t = time.time(); go("plate"); ts["plate"] = (time.time()-t)/NF
 # pass 2: contact shadow only. Hull invisible to camera, still casts; sea catches.
 sea.is_holdout = False; sea.is_shadow_catcher = True
 for o in meshes: o.visible_camera = False
@@ -119,9 +160,11 @@ for o in lights: o.hide_render = True
 # contact light: near overhead and soft, so the catcher holds a tight band at the hull, not a long cast shadow
 sun("CONTACT", (-0.15, -0.2, 1.0), (1, 1, 1), 4.0, 12.0)
 cy.samples = max(32, SAMPLES // 2)
-r.filepath = f"{OUT}/shadow.png"; t = time.time(); bpy.ops.render.render(write_still=True); ts["shadow"] = time.time()-t
+r.resolution_percentage = 50   # contact shadow is a soft band: half resolution, upscaled in the composite
+t = time.time(); go("shadow"); ts["shadow"] = (time.time()-t)/NF
 json.dump({"position": list(cam.location), "target": list(tgt), "lens_mm": cd.lens, "sensor_mm": 36,
            "sensor_fit": cd.sensor_fit, "focus_m": cd.dof.focus_distance, "fstop": cd.dof.aperture_fstop,
-           "width": W, "height": H, "z_up": True, "secs": {k: round(v, 2) for k, v in ts.items()}},
+           "width": W, "height": H, "z_up": True, "frames": NF,
+           "ship_x": [x0 + TRAVEL * i / max(1, NF-1) for i in range(NF)], "secs": {k: round(v, 2) for k, v in ts.items()}},
           open(f"{OUT}/camera.json", "w"), indent=1)
 print("SECS", {k: round(v, 2) for k, v in ts.items()}, "DEVICE", cy.device)

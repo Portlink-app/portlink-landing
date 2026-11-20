@@ -2,7 +2,7 @@
 
 Source of claims: `DIRECTION.md` section 4 (S0 to S14), tags C / T-shown / T-ask / E as defined there. Pain-today lines are transcript quotes, not product claims, and are not listed. "Visible" means the claim is readable in the named capture. Desktop is 1440x900, phone 390x844, both deviceScaleFactor 2; no pixel editing, no cropping applied.
 
-Data: local Platform stack seeded with PR #3230 (`supabase/seeds/demo_harbour_ilulissat.sql`, MS Disko Star (demo), Ilulissat, 18.11.2026). Platform captures come from the build at b692fce (two commits behind `origin/main` 08e29ee). Embark captures (P9) come from a separate local Embark database (a different demo dataset, Norwegian UI), consistent with DIRECTION Q6 (no data link claimed).
+Data: local Platform stack seeded with PR #3230 (`supabase/seeds/demo_harbour_ilulissat.sql`, MS Disko Star (demo), Ilulissat, 18.11.2026). Platform captures come from a production build of platform `main` at `b4e545cd`, which contains the merged #3230 seed, with the render clock pinned to 18.11.2026 kl. 15.25 UTC (recaptured 20.11.2026). Embark captures (P9) come from a separate local Embark database (a different demo dataset, Norwegian UI), consistent with DIRECTION Q6 (no data link claimed).
 
 | # | Stop | Claim text | Tag | Capture file | Visible | Note |
 |---|---|---|---|---|---|---|

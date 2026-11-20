@@ -217,6 +217,8 @@ Claim status tags used below:
 
 All from one seeded demo call: same vessel, port and dates in every workspace, labelled as demo data. Each at 1440x900 and 390x844, 2x, via `capture.mjs`.
 
+Shipped set (20.11.2026): P1, P3, P4, P5, P6, P8, P12 recaptured from a production build of platform `main` at `b4e545cd` with the merged #3230 seed (`demo_harbour_ilulissat.sql`), render clock pinned to 18.11.2026 kl. 15.25 UTC. Desktop: P1, P3, P4, P5, P6, P8, P9, P12. Phone: P1, P5, P6, P8, P9, P12. P9 is Embark (separate database), not recaptured. P2, P7, P10, P11 have no clean capture and stay removed.
+
 | ID | Screen | Used in |
 |---|---|---|
 | P1 | Voyage planning: map, route, waypoint list | S0, S1, S13 |

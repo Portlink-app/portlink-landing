@@ -726,7 +726,9 @@ Source of truth for v4 from here: `~/.buzz/RESEARCH/one-harbour-v2/v5/ONE_HARBOU
 - **Live 3D.** Live three.js water (13.2) supersedes "no three.js / no WebGL" in 7, 12 and 13, and the baked band in 13.1. Renders are Cycles, not Eevee.
 - **Fallbacks.** A static still, never video (13 no-video rule wins over 13.2's video strip).
 - **Resolution.** Render 2560x1440, deliver 1920x1080 desktop (supersedes 1920x1200 / 1440x900 in 13). Revisit if G4 byte budgets fail.
-- **Product claims.** Wheelhouse is live and a product: one line and one capture. Embark: third product, early access, no prices; "First deployment: Greenland" is deleted. The agent beat claims only the shared call unless an agent can create a PDA at the capture commit.
+- **Product claims.** Wheelhouse is live and a product: one line and one capture. Embark: third product, already public at portlink.app/embark; no prices; "First deployment: Greenland" is deleted. The Portlink to Embark trade link is built (Trade API v1, 02.11.2026): a DMC request answered in Embark is a true claim. The agent beat claims only the shared call unless an agent can create a PDA at the capture commit.
 - **Not yet built.** `components/harbour/FramePlayer.ts` (spike only); `verify` still runs v2 SVG guards that must go.
 
 Chose / Over / Because / Revisit-if: Chose an expedition cruise hero at 140 m, Over the cargo model and a 300 m mass-market hull, Because Portlink's Phase 1 market and every prospect that has seen the product run ships of this class; Revisit-if David or Kris name another vessel type or a mass-market line signs.
+
+- **Open (David, 20.11.2026):** setting (Norway berth like `/portlink` and `/embark`, or Greenland anchorage like the platform seed) and ship size (one ship across the site). Addendum F of the Fable plan.

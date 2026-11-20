@@ -39,8 +39,8 @@ M = {
     "funtop": mat("FunTop", "#101418", 0.45), "orange": mat("Lifeboat", "#e2702c", 0.4, coat=0.5),
     "concrete": mat("Concrete", "#8d9196", 0.88), "fender": mat("Fender", "#121416", 0.7),
     "shed": mat("Shed", "#b9c0c6", 0.6), "roof": mat("Roof", "#3a4148", 0.55),
-    "rope": mat("Rope", "#d9d2c0", 0.8), "land": mat("Land", "#2c3a35", 0.95),
-    "hill": mat("Hill", "#24333a", 0.95), "snow": mat("Snow", "#c9d3dc", 0.7),
+    "rope": mat("Rope", "#d9d2c0", 0.8), "land": mat("Land", "#46585a", 0.95),
+    "hill": mat("Hill", "#5d7184", 0.95), "snow": mat("Snow", "#c9d3dc", 0.7),
 }
 
 def finish(o, parent, m, bevel=0.0, smooth=True):
@@ -241,6 +241,8 @@ def hills(name, y0, depth, peak, seed, xspan=6000):
     finish(o, world_root, [M["hill"], M["snow"]], 0.0)
 hills("FJORD_NEAR", QY + 260, 1400, 520, 3)
 hills("FJORD_FAR", QY + 1700, 2600, 900, 11, 9000)
+for o in sc.objects:
+    if o.name == "FJORD_FAR": o.data.materials[0] = mat("HillFar", "#8396a8", 0.95)
 
 bpy.context.view_layer.update()
 def bounds(objs):
@@ -269,7 +271,7 @@ w = bpy.data.worlds.new("W"); sc.world = w; w.use_nodes = True
 bg = next(n for n in w.node_tree.nodes if n.type == 'BACKGROUND')
 bg.inputs['Color'].default_value = (*lin("#5b7690"), 1); bg.inputs['Strength'].default_value = 0.45
 # aerial perspective: volume scatter in the world so the fjord walls fade toward the sky colour
-vol = w.node_tree.nodes.new('ShaderNodeVolumeScatter') if hasattr(bpy.types, 'ShaderNodeVolumeScatter') else None
+vol = None   # a world volume swallows sun lights (measured: all-black plate); haze lives in the hill colours
 out_w = next(n for n in w.node_tree.nodes if n.type == 'OUTPUT_WORLD')
 if vol:
     vol.inputs['Color'].default_value = (*lin("#7f98ae"), 1); vol.inputs['Density'].default_value = 0.00045
@@ -280,7 +282,7 @@ cam = bpy.data.objects.new("CAM", bpy.data.cameras.new("CAM")); sc.collection.ob
 cd = cam.data; cd.lens = 50; cd.sensor_width = 36; cd.sensor_fit = 'HORIZONTAL' if not portrait else 'VERTICAL'
 cd.sensor_height = 36 if portrait else 24
 L = mx.x - mn.x
-dist = L * (2.9 if portrait else 1.45)
+dist = L * (2.9 if portrait else 1.7)
 tgt = Vector(((mn.x + mx.x) / 2, 0, max(0.0, mx.z) * 0.42))
 dirv = Vector((0.62, -0.78, 0.10)).normalized()
 cam.location = tgt + dirv * dist

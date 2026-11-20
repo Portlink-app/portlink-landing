@@ -67,7 +67,7 @@ export function createOcean(canvas, cam, { sim = 256, dpr = 1.5, seg = 256 } = {
     uniforms: {
       uTime: { value: 0 }, uWake: { value: null }, uSimSize: { value: SIM_SIZE }, uTexel: { value: 1 / sim },
       uShipPos: { value: new THREE.Vector2(0, 0) }, uShipUv: { value: new THREE.Vector2(...SHIP) },
-      uNavy: { value: NAVY }, uSun: { value: SUN }, uCold: { value: COLD }, uSunDir: { value: sunB }, uGlint: { value: moving ? 1 : 0.35 }, uCam: { value: camera.position },
+      uNavy: { value: NAVY }, uSun: { value: moving ? SUN : new THREE.Color("#dfe6ec") }, uCold: { value: COLD }, uSunDir: { value: sunB }, uGlint: { value: moving ? 1 : 0.12 }, uCam: { value: camera.position },
     },
     vertexShader: `
       uniform float uTime, uSimSize, uTexel; uniform sampler2D uWake; uniform vec2 uShipPos, uShipUv;

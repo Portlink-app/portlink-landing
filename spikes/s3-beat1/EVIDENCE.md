@@ -34,3 +34,15 @@ Renders: `/Users/nyx/Projects/portlink/marketing/one-harbour-v4/s3/beat1/{d,p}`.
 - Fixed: fjord now in frame (camera target z 0.62, view dir z 0.06, near ridge darkened to `#3a4a4c`, far ridge `#71869a`, snow line per ridge); foam slab removed (moored one-frame clip disables bow/stern injection and foam, footprint from the rig's hull block); glint cut to 0,35.
 - Plate AVIF 19,4 KB, shadow 1,6 KB (cap 60 KB). Page at 38 fps in headless capture.
 - Open: quay is a flat slab; near ridge reads smooth and toy-like (needs terrain noise or a forest material); a soft amber smear remains in the water reflection; sky is flat navy.
+
+## G1 expedition, revision 3 (after Starboard's G1 rejection)
+
+| Item | Result | Proof |
+|---|---|---|
+| Silhouette | 5 decks plus an observation deck; blunt, raked, glazed front; terraced aft over an open aft deck (rails, crane, zodiac platform); compact low funnel; lifeboats recessed inside the beam | M: `s3-rig/expedition.py` |
+| L/B | 150,0 x 24,5 m, 6,12 (unchanged) | M: render log `HULL ... L/B 6.12` |
+| Moored | quay face moved to beam/2 + 2,4 m; five pneumatic fenders; eight lines (head, breast, spring, stern); no wake (one-frame clip) | M |
+| Setting | sky gradient for camera rays only, so the lighting is unchanged; procedural concrete slabs on the quay; textured fjord slopes; pale rim sun replaces the amber flood | M |
+| Glint | a moored frame uses a cold, pale sheen at 0,12 | M: `ocean.js` |
+| HUD | hidden for fixed-frame captures (`f`) or `?hud=0` | M: capture `beat1-e-f1-r3.png` |
+| Plate size | 14,1 KB AVIF, under the 60 KB cap | M: `encode.mjs` |

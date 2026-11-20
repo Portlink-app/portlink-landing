@@ -32,15 +32,40 @@ def mat(name, col, rough, metal=0.0, trans=0.0, coat=0.0):
         if k in b.inputs: b.inputs[k].default_value = coat; break
     return m
 
+def grain(m, scale, amt, dark, bump=0.25, bricks=False):
+    """Object-space noise (and optional slab joints) into base colour and bump: no flat CG surfaces."""
+    nt = m.node_tree; b = next(n for n in nt.nodes if n.type == 'BSDF_PRINCIPLED')
+    tc = nt.nodes.new('ShaderNodeTexCoord'); nz = nt.nodes.new('ShaderNodeTexNoise')
+    nz.inputs['Scale'].default_value = scale; nz.inputs['Detail'].default_value = 8
+    nt.links.new(tc.outputs['Object'], nz.inputs['Vector'])
+    mix = nt.nodes.new('ShaderNodeMix'); mix.data_type = 'RGBA'
+    mix.inputs[6].default_value = b.inputs['Base Color'].default_value; mix.inputs[7].default_value = (*lin(dark), 1)
+    ramp = nt.nodes.new('ShaderNodeMapRange'); ramp.inputs['From Min'].default_value = 0.5 - amt
+    ramp.inputs['From Max'].default_value = 0.5 + amt
+    nt.links.new(nz.outputs['Fac'], ramp.inputs['Value']); nt.links.new(ramp.outputs['Result'], mix.inputs['Factor'])
+    out = mix.outputs[2]
+    if bricks:
+        br = nt.nodes.new('ShaderNodeTexBrick'); br.inputs['Scale'].default_value = 0.08
+        br.inputs['Mortar Size'].default_value = 0.015; br.inputs['Color1'].default_value = (1, 1, 1, 1)
+        br.inputs['Color2'].default_value = (0.93, 0.93, 0.93, 1); br.inputs['Mortar'].default_value = (0.78, 0.78, 0.78, 1)
+        nt.links.new(tc.outputs['Object'], br.inputs['Vector'])
+        mul = nt.nodes.new('ShaderNodeMix'); mul.data_type = 'RGBA'; mul.blend_type = 'MULTIPLY'
+        mul.inputs['Factor'].default_value = 1.0
+        nt.links.new(out, mul.inputs[6]); nt.links.new(br.outputs['Color'], mul.inputs[7]); out = mul.outputs[2]
+    nt.links.new(out, b.inputs['Base Color'])
+    bp = nt.nodes.new('ShaderNodeBump'); bp.inputs['Strength'].default_value = bump
+    nt.links.new(nz.outputs['Fac'], bp.inputs['Height']); nt.links.new(bp.outputs['Normal'], b.inputs['Normal'])
+    return m
+
 M = {
     "hull": mat("Hull", "#16202c", 0.33, 0.1, coat=0.4), "boot": mat("Boot", "#6e1d1d", 0.5),
     "white": mat("White", "#eef0f1", 0.32, coat=0.3), "glass": mat("Glass", "#0b141e", 0.06, 0.7),
     "rail": mat("Rail", "#9fb4c4", 0.05, 0.0, trans=0.6), "dark": mat("Dark", "#1c242c", 0.5),
     "funtop": mat("FunTop", "#101418", 0.45), "orange": mat("Lifeboat", "#e2702c", 0.4, coat=0.5),
-    "concrete": mat("Concrete", "#8d9196", 0.88), "fender": mat("Fender", "#121416", 0.7),
+    "concrete": grain(mat("Concrete", "#7f8388", 0.9), 0.35, 0.35, "#5d6166", 0.3, bricks=True), "fender": mat("Fender", "#121416", 0.7),
     "shed": mat("Shed", "#b9c0c6", 0.6), "roof": mat("Roof", "#3a4148", 0.55),
     "rope": mat("Rope", "#d9d2c0", 0.8), "land": mat("Land", "#46585a", 0.95),
-    "hill": mat("Hill", "#3a4a4c", 0.95), "snow": mat("Snow", "#c9d3dc", 0.7),
+    "hill": grain(mat("Hill", "#3b4a44", 0.95), 0.045, 0.4, "#1d2824", 0.8), "snow": grain(mat("Snow", "#c9d3dc", 0.7), 0.02, 0.3, "#8e9aa6", 0.4),
 }
 
 def finish(o, parent, m, bevel=0.0, smooth=True):
@@ -104,7 +129,7 @@ def half_breadth(x, z):
         hb *= 1 - 0.10 * t * t - 0.25 * t * t * max(0.0, -z) / DRAFT
     return hb
 def sheer(x):          # deck edge rises toward the bow
-    t = max(0.0, (x - 10) / (X1 - 10)); return DECK + 2.2 * t * t
+    t = max(0.0, (x - 10) / (X1 - 10)); return DECK + 3.2 * t * t
 NU, NZ = 120, 22
 me = bpy.data.meshes.new("HULL"); bm = bmesh.new(); grid = []
 for i in range(NU + 1):
@@ -151,59 +176,69 @@ for side in (-1, 1):
          (-62, side * (BEAM/2 + 0.02), 4.6), M["glass"], 0.2))
     rows(f"PORTB{side}", 26, 3.0, lambda: block(f"PORTHOLE2{side}", 0.9, 0.3, 0.9,
          (-60.5, side * (BEAM/2 + 0.02), 6.8), M["glass"], 0.2))
-# white bulwark on the foredeck, open bow
-block("BULWARK", 34, BEAM - 0.4, 1.4, (X1 - 22, 0, sheer(X1 - 20) + 0.5), M["white"], 0.3, nose=0.45)
-
-# ---------- superstructure: stepped white decks, window rows, balcony bands, bridge with wings ----------
+# ---------- superstructure: expedition profile, 5 decks plus an observation deck ----------
+# Blunt, slightly raked white front stacked almost vertically over the bow (HX-style outline, no livery);
+# aft ends terrace down to an open aft deck at hull-deck level. Everything stays inside the beam.
 # (name, x_aft, x_fwd, z_base, height, width, kind)
-DECKS = [("D4", -68, 30, DECK, 3.0, BEAM - 0.6, "win"),
-         ("D5", -66, 27, DECK + 3.0, 3.0, BEAM - 0.6, "balc"),
-         ("D6", -63, 24, DECK + 6.0, 3.0, BEAM - 0.9, "balc"),
-         ("D7", -56, 21, DECK + 9.0, 3.0, BEAM - 1.6, "balc"),
-         ("D8", -44, 17, DECK + 12.0, 3.0, BEAM - 2.6, "win"),
-         ("D9", -30, 12, DECK + 15.0, 2.8, BEAM - 5.0, "win")]
+H5 = 2.9
+DECKS = [("D1", -50, 40.0, DECK + 0*H5, H5, BEAM - 0.5, "win"),
+         ("D2", -45, 39.2, DECK + 1*H5, H5, BEAM - 0.5, "balc"),
+         ("D3", -39, 38.4, DECK + 2*H5, H5, BEAM - 0.5, "balc"),
+         ("D4", -31, 37.6, DECK + 3*H5, H5, BEAM - 0.9, "win"),
+         ("D5", -22, 36.8, DECK + 4*H5, H5, BEAM - 1.6, "bridge")]
 for name, xa, xf, z0, h, wd, kind in DECKS:
     L = xf - xa; cx = (xa + xf) / 2
-    block(name, L, wd, h, (cx, 0, z0 + h/2), M["white"], 0.18, nose=min(0.35, 9.0 / L))
-    n = int((L * 0.80) / 2.8)
+    block(name, L, wd, h, (cx, 0, z0 + h/2), M["white"], 0.15, nose=min(0.22, 5.0 / L))
+    n = int((L * 0.78) / 2.6)
     for side in (-1, 1):
         y = side * (wd/2 + 0.04)
-        if kind == "win":
-            rows(f"{name}W{side}", n, 2.8, lambda: block(f"{name}w{side}", 2.0, 0.25, 1.25,
+        if kind == "balc":   # recessed balcony band with glass rail
+            block(f"{name}R{side}", L*0.70, 0.3, 1.9, (cx - L*0.06, y, z0 + 1.45), M["dark"], 0.05)
+            block(f"{name}G{side}", L*0.70, 0.12, 0.9, (cx - L*0.06, side*(wd/2 + 0.2), z0 + 0.85), M["rail"], 0.02)
+        else:
+            rows(f"{name}W{side}", n, 2.6, lambda: block(f"{name}w{side}", 1.8, 0.25, 1.2 if kind == "win" else 1.5,
                  (xa + 3.0, y, z0 + h*0.55), M["glass"], 0.08))
-        else:   # balcony: dark recess band, glass rail in front, white divider fins
-            block(f"{name}R{side}", L*0.82, 0.3, 2.0, (cx - L*0.04, side*(wd/2 + 0.02), z0 + 1.5), M["dark"], 0.05)
-            block(f"{name}G{side}", L*0.82, 0.12, 1.0, (cx - L*0.04, side*(wd/2 + 0.5), z0 + 0.9), M["rail"], 0.02)
-            rows(f"{name}F{side}", int(L*0.82/6.0)+1, 6.0, lambda: block(f"{name}f{side}", 0.25, 1.1, 2.4,
-                 (cx - L*0.45, side*(wd/2 + 0.3), z0 + 1.6), M["white"], 0.04))
-    if name in ("D4", "D5", "D6"):            # forward-facing glazed lounge on the rounded fronts
-        block(f"{name}FW", 1.5, wd*0.55, h*0.5, (xf - 1.2, 0, z0 + h*0.55), M["glass"], 0.2, nose=0.5)
-# bridge: wraparound glazing and wings to the ship's sides
-block("BRIDGE", 14, BEAM - 4.0, 3.2, (15, 0, DECK + 16.6), M["white"], 0.2, nose=0.4)
-block("BRIDGEGL", 6.0, BEAM - 3.8, 1.3, (19.0, 0, DECK + 17.0), M["glass"], 0.15, nose=0.6)
-block("WINGS", 4.0, BEAM + 0.6, 1.4, (17.0, 0, DECK + 16.0), M["white"], 0.15)
-block("WINGGL", 3.6, BEAM + 0.7, 0.7, (17.0, 0, DECK + 16.9), M["glass"], 0.08)
-# lifeboats in a recess along deck 5, both sides
+    # forward-facing glazing on every deck front (the expedition "face")
+    block(f"{name}FW", 0.8, wd*0.62, h*0.42, (xf - 0.25, 0, z0 + h*0.58), M["glass"], 0.1)
+# bridge wings to the ship's side on D5
+block("WINGS", 4.0, BEAM - 0.2, 1.4, (33.0, 0, DECK + 4*H5 + 1.2), M["white"], 0.12)
+block("WINGGL", 3.4, BEAM - 0.1, 0.7, (33.0, 0, DECK + 4*H5 + 1.6), M["glass"], 0.06)
+# observation deck (6th) and compact mast on the bridge roof
+block("OBS", 30, BEAM - 6, 2.4, (14, 0, DECK + 5*H5 + 1.2), M["white"], 0.15, nose=0.15)
+rows("OBSW-1", 9, 2.8, lambda: block("obsw-1", 2.0, 0.25, 1.2, (2.5, -(BEAM-6)/2 - 0.04, DECK + 5*H5 + 1.3), M["glass"], 0.06))
+block("OBSFW", 0.8, (BEAM-6)*0.8, 1.4, (28.8, 0, DECK + 5*H5 + 1.3), M["glass"], 0.1)
+block("MAST", 0.7, 0.7, 6.0, (22, 0, DECK + 5*H5 + 5.2), M["white"], 0.1)
+block("YARD", 0.5, 5.0, 0.4, (22, 0, DECK + 5*H5 + 7.0), M["white"], 0.1)
+block("RADAR", 3.6, 0.5, 0.3, (22.3, 0, DECK + 5*H5 + 8.4), M["dark"], 0.1)
+# compact funnel aft on D4: low, raked, dark cap
+block("FUNNEL", 8.0, 5.5, 5.0, (-24, 0, DECK + 4*H5 + 2.5), M["white"], 0.9, nose=0.35, taper=0.2)
+block("FUNTOP", 6.4, 5.2, 0.9, (-24.8, 0, DECK + 4*H5 + 5.3), M["funtop"], 0.3, nose=0.35)
+# tenders and lifeboats tucked into a recess along D2, inside the beam
 for side in (-1, 1):
+    block(f"RECESS{side}", 40, 0.4, 2.6, (-22, side*(BEAM/2 - 0.45), DECK + H5 + 1.4), M["dark"], 0.05)
     for k in range(4):
-        block(f"BOAT{side}{k}", 9.5, 3.2, 2.6, (-48 + k*11.5, side*(BEAM/2 + 0.4), DECK + 4.6),
-              M["orange"], 0.9, nose=0.3)
-# funnel: white, raked aft, dark top; mast with radar on the top deck
-block("FUNNEL", 10, 6.5, 9.0, (-24, 0, DECK + 22.0), M["white"], 1.2, nose=0.3, taper=0.25)
-block("FUNTOP", 7.5, 6.2, 1.2, (-25.2, 0, DECK + 26.8), M["funtop"], 0.4, nose=0.3)
-block("MAST", 0.8, 0.8, 9.0, (6, 0, DECK + 22.3), M["white"], 0.1)
-block("YARD", 0.6, 7.0, 0.5, (6, 0, DECK + 24.5), M["white"], 0.1)
-block("RADAR", 4.5, 0.6, 0.35, (6.4, 0, DECK + 26.3), M["dark"], 0.1)
-block("SUNDECK", 14, BEAM - 9, 1.0, (-5, 0, DECK + 18.3), M["white"], 0.2)
-
+        block(f"BOAT{side}{k}", 8.5, 2.6, 2.3, (-37 + k*10.0, side*(BEAM/2 - 1.0), DECK + H5 + 1.3),
+              M["orange"], 0.8, nose=0.3)
+# open aft deck: rails and a small crane over the zodiac platform
+for side in (-1, 1):
+    block(f"AFTRAIL{side}", 24, 0.12, 1.0, (X0 + 13, side*(BEAM/2 - 0.3), DECK + 0.5), M["rail"], 0.02)
+block("AFTRAILX", 0.12, BEAM - 0.8, 1.0, (X0 + 1.2, 0, DECK + 0.5), M["rail"], 0.02)
+block("CRANE", 0.8, 0.8, 5.0, (X0 + 8, -6, DECK + 2.5), M["orange"], 0.1)
+block("JIB", 9.0, 0.5, 0.5, (X0 + 12, -6, DECK + 4.8), M["orange"], 0.1)
+block("ZODIACS", 10, 6, 0.9, (X0 + 14, 3, DECK + 0.45), M["dark"], 0.4)
+# foredeck: low white bulwark following the hull flare, open bow mooring deck forward of the superstructure
 # ---------- quay: concrete apron on the far (+y) side, fenders, bollards, mooring lines, shed, fjord hills ----------
-QY = BEAM/2 + 1.6
+QY = BEAM/2 + 2.4                      # quay face; pneumatic fenders fill the gap, hull parallel to it
 block("QUAY", 520, 260, 6.0, (0, QY + 130, 0.0), M["concrete"], 0.3, parent=world_root)      # top at z=3
-block("FENDERS", 470, 0.9, 1.6, (0, QY - 0.4, 1.6), M["fender"], 0.3, parent=world_root)
+block("FENDERS", 470, 0.5, 1.4, (0, QY - 0.25, 2.0), M["fender"], 0.2, parent=world_root)
+for k, fx in enumerate((-58, -30, -2, 26, 52)):          # floating pneumatic fenders between hull and quay
+    bpy.ops.mesh.primitive_cylinder_add(vertices=24, radius=1.05, depth=4.2, location=(fx, BEAM/2 + 1.15, 0.7),
+                                        rotation=(0, math.pi/2, 0))
+    fo = bpy.context.object; fo.name = f"YOKO{k}"; finish(fo, world_root, M["fender"], 0.0)
 rows("BOLL", 12, 22.0, lambda: block("bollard", 0.7, 0.7, 0.9, (-121, QY + 2.0, 3.45), M["dark"], 0.3,
      parent=world_root))
 def line(name, p0, p1, sag=1.2):
-    cu = bpy.data.curves.new(name, 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.09
+    cu = bpy.data.curves.new(name, 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.16
     sp = cu.splines.new('BEZIER'); sp.bezier_points.add(1)
     for bp, p in zip(sp.bezier_points, (p0, p1)):
         bp.co = p; bp.handle_left_type = bp.handle_right_type = 'AUTO'
@@ -213,8 +248,9 @@ def line(name, p0, p1, sag=1.2):
     for bp in sp.bezier_points: bp.handle_left_type = bp.handle_right_type = 'AUTO'
     o = bpy.data.objects.new(name, cu); sc.collection.objects.link(o); o.data.materials.append(M["rope"])
     o.parent = world_root
-for nm, xs, xb in (("HEAD", 66, 89), ("FSPRING", 40, 23), ("ASPRING", -50, -33), ("STERN", -72, -99)):
-    line(nm, (xs, BEAM/2 - 0.2, sheer(xs) - 0.4), (xb, QY + 2.0, 3.8))
+for nm, xs, xb in (("HEAD", 68, 92), ("HEAD2", 66, 96), ("FBREAST", 54, 56), ("FSPRING", 40, 20),
+                   ("ASPRING", -50, -30), ("ABREAST", -68, -70), ("STERN", -72, -96), ("STERN2", -73, -101)):
+    line(nm, (xs, BEAM/2 - 0.2, sheer(xs) - 0.4), (xb, QY + 2.0, 3.8), 1.6)
 block("SHED", 110, 34, 11, (-40, QY + 62, 3 + 5.5), M["shed"], 0.3, parent=world_root)
 block("SHEDROOF", 112, 36, 1.0, (-40, QY + 62, 3 + 11.4), M["roof"], 0.3, parent=world_root)
 rows("LAMP", 6, 40.0, lambda: block("lamp", 0.35, 0.35, 12, (-100, QY + 18, 9.0), M["dark"], 0.05,
@@ -265,11 +301,22 @@ def sun(name, src, col, en, ang):
     o = bpy.data.objects.new(name, d); sc.collection.objects.link(o)
     o.rotation_euler = (-Vector(src)).normalized().to_track_quat('-Z', 'Y').to_euler(); return o
 lights = [sun("KEY", (-0.55, -1.0, 1.05), (1, 0.97, 0.93), 4.5, 0.6)]
-lights += [sun("RIM", (-1.0, 1.0, 0.16), lin("#f5b53d"), 6.0, 0.9)]
+lights += [sun("RIM", (-1.0, 1.0, 0.16), lin("#f3d9b0"), 2.6, 0.9)]
 lights += [sun("COLD", (1.0, 0.55, 0.30), lin("#4f7db8"), 3.0, 2.0)]
 w = bpy.data.worlds.new("W"); sc.world = w; w.use_nodes = True
 bg = next(n for n in w.node_tree.nodes if n.type == 'BACKGROUND')
 bg.inputs['Color'].default_value = (*lin("#5b7690"), 1); bg.inputs['Strength'].default_value = 0.45
+wt = w.node_tree; out_bg = next(n for n in wt.nodes if n.type == 'OUTPUT_WORLD')
+sky = wt.nodes.new('ShaderNodeBackground'); sky.inputs['Strength'].default_value = 1.0
+stc = wt.nodes.new('ShaderNodeTexCoord'); ssep = wt.nodes.new('ShaderNodeSeparateXYZ')
+scr = wt.nodes.new('ShaderNodeValToRGB'); el = scr.color_ramp.elements
+el[0].position = 0.0; el[0].color = (*lin("#c3ccd2"), 1); el[1].position = 0.32; el[1].color = (*lin("#3f5f80"), 1)
+mid = el.new(0.09); mid.color = (*lin("#93a9bb"), 1)
+wt.links.new(stc.outputs['Generated'], ssep.inputs['Vector']); wt.links.new(ssep.outputs['Z'], scr.inputs['Fac'])
+wt.links.new(scr.outputs['Color'], sky.inputs['Color'])
+lp = wt.nodes.new('ShaderNodeLightPath'); msh = wt.nodes.new('ShaderNodeMixShader')
+wt.links.new(lp.outputs['Is Camera Ray'], msh.inputs['Fac']); wt.links.new(bg.outputs[0], msh.inputs[1])
+wt.links.new(sky.outputs[0], msh.inputs[2]); wt.links.new(msh.outputs[0], out_bg.inputs['Surface'])
 # aerial perspective: volume scatter in the world so the fjord walls fade toward the sky colour
 vol = None   # a world volume swallows sun lights (measured: all-black plate); haze lives in the hill colours
 out_w = next(n for n in w.node_tree.nodes if n.type == 'OUTPUT_WORLD')
@@ -282,16 +329,16 @@ cam = bpy.data.objects.new("CAM", bpy.data.cameras.new("CAM")); sc.collection.ob
 cd = cam.data; cd.lens = 50; cd.sensor_width = 36; cd.sensor_fit = 'HORIZONTAL' if not portrait else 'VERTICAL'
 cd.sensor_height = 36 if portrait else 24
 L = mx.x - mn.x
-dist = L * (2.9 if portrait else 1.7)
-tgt = Vector(((mn.x + mx.x) / 2, 0, max(0.0, mx.z) * 0.62))
-dirv = Vector((0.62, -0.78, 0.06)).normalized()   # near-level so the fjord walls enter frame
+dist = L * (2.9 if portrait else 1.55)
+tgt = Vector(((mn.x + mx.x) / 2 + 10, 0, max(0.0, mx.z) * 0.50))
+dirv = Vector((0.50, -0.86, 0.065)).normalized()   # near-level so the fjord walls enter frame
 cam.location = tgt + dirv * dist
 cam.rotation_euler = (tgt - cam.location).to_track_quat('-Z', 'Y').to_euler()
 cd.dof.use_dof = True; cd.dof.focus_distance = (tgt - cam.location).length; cd.dof.aperture_fstop = 2.8
 cd.clip_end = 12000
 
 r = sc.render; r.resolution_x, r.resolution_y = W, H; r.resolution_percentage = 100
-r.film_transparent = True; r.image_settings.file_format = 'PNG'; r.image_settings.color_mode = 'RGBA'
+r.film_transparent = False; r.image_settings.file_format = 'PNG'; r.image_settings.color_mode = 'RGBA'
 looks = [i.identifier for i in sc.view_settings.bl_rna.properties['look'].enum_items_static]
 sc.view_settings.view_transform = 'AgX'
 sc.view_settings.look = 'AgX - Medium High Contrast' if 'AgX - Medium High Contrast' in looks else 'None'
@@ -317,7 +364,7 @@ def go(name):
         r.filepath = f"{OUT}/{name}_0001.png"; bpy.ops.render.render(write_still=True)
 sea.is_holdout = True; sea.is_shadow_catcher = False
 t = time.time(); go("plate"); ts["plate"] = (time.time()-t)/NF
-sea.is_holdout = False; sea.is_shadow_catcher = True
+sea.is_holdout = False; sea.is_shadow_catcher = True; r.film_transparent = True
 for o in meshes: o.visible_camera = False
 for o in lights: o.hide_render = True
 if vol: w.node_tree.links.remove(next(l for l in w.node_tree.links if l.to_socket == out_w.inputs['Volume']))

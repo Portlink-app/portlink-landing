@@ -42,6 +42,7 @@ function fit() {   // one cover-fitted box with the plate's aspect, shared by bo
 }
 addEventListener("resize", fit); fit();
 const hud = document.getElementById("hud");
+if (fixed !== null || q.get("hud") === "0") hud.hidden = true;   // evidence frames carry no debug HUD
 let frames = 0, t0 = performance.now(), fps = 0, samples = [];
 window.__beat = { player, samples, cam };
 function loop(now) {

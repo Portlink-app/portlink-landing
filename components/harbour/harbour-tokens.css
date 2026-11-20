@@ -53,7 +53,7 @@
   --ds-track-display-2:    var(--pl-track-tighter);
 
   /* ---- TIER 2: telemetry type ---- */
-  --ds-telemetry-font:     var(--ds-font-mono);
+  --ds-telemetry-font:     var(--ds-font-sans);  /* a data readout, not code: sans with tabular figures */
   --ds-telemetry-size:     var(--pl-text-13);
   --ds-telemetry-leading:  var(--pl-leading-mono);
   --ds-telemetry-track:    var(--pl-track-normal);

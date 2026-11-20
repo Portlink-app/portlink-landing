@@ -20,3 +20,11 @@ Sources: `camera.json` `secs` per render dir; `encode.mjs` output; `window.__bea
 scroll. Comparison sheet (UC sheet-d beside frames 1, 48, 96):
 `/Users/nyx/Projects/portlink/marketing/one-harbour-v4/s3/g1/g1-sheet.jpg`.
 Renders: `/Users/nyx/Projects/portlink/marketing/one-harbour-v4/s3/beat1/{d,p}`.
+
+## G1 (expedition, 21.11.2026): replaces the void cargo sheet
+
+- Sheet: `/Users/nyx/Projects/portlink/marketing/one-harbour-v4/s3/g1/g1-expedition-sheet.jpg` (capture of `index.html?v=e&f=0` at 1440x900 beside UC `sheet-d.png`).
+- Rig: `spikes/s3-rig/expedition.py`, 150 m LOA, 24,5 m beam, L/B 6,12 (G1a 5,8 to 6,4), no cranes, containers or hatches, no name or livery.
+- Plate 2560x1440 at 128 samples: render 19,26 s, shadow 8,21 s; AVIF plate 14,7 KB, shadow 1,6 KB (G4 cap 60 KB).
+- Fix: single-frame clips divided by `cam.frames - 1 = 0`, seeking NaN; guarded with `Math.max(1, ...)`.
+- Open: fjord backdrop out of frame (flat sky), detached white foam slab around hull, amber sun-glint blotch, quay edge reads flat grey.

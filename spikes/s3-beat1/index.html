@@ -46,7 +46,7 @@ let frames = 0, t0 = performance.now(), fps = 0, samples = [];
 window.__beat = { player, samples, cam };
 function loop(now) {
   const max = document.documentElement.scrollHeight - innerHeight;
-  const p = fixed !== null ? fixed / (cam.frames - 1) : (max > 0 ? scrollY / max : 0);
+  const p = fixed !== null ? fixed / Math.max(1, cam.frames - 1) : (max > 0 ? scrollY / max : 0);
   const i = player.seek(p);
   const drawn = player.draw();
   ocean.step(cam.ship_x[drawn >= 0 ? drawn : i]);   // water follows the frame actually on screen

@@ -12,6 +12,9 @@ import type { Shot } from './script'
 import type { PlayerMode } from './SequencePlayer'
 import styles from './harbour.module.css'
 import CaptureFigure from './CaptureFigure'
+import { DESKTOP, LAYERS, cameraAt, clampCamera, layerTransform } from './camera'
+import type { Plane } from './planes'
+import world from '@/public/media/harbour-v2/world.json'
 
 gsap.registerPlugin(useGSAP, ScrollTrigger)
 
@@ -29,6 +32,13 @@ const BAKEOFF = {
   intra: { src: '/media/harbour-2026-11/bakeoff/hero-A-intra.mp4', frames: 0 },
 } as const
 
+/** Horizontal parallax per plane id (world.json); the route lies on the fx 1 plane with the ship. */
+const FX: Record<string, number> = Object.fromEntries([...LAYERS.map((l) => [l.id, l.fx]), [world.route.id, 1]])
+const [PIVOT_X, PIVOT_Y] = world.ship.pivot
+const [SHIP_W, SHIP_H] = world.ship.viewBox
+/** Until WP3 puts the ship on the route, it waits at A1, the anchorage of the opening frames. */
+const SHIP_AT = world.stations.A1
+
 function readBakeoff(): PlayerMode | null {
   const v = new URLSearchParams(window.location.search).get('bakeoff')
   return v === 'webp' || v === 'intra' ? v : null
@@ -45,7 +55,7 @@ function readBakeoff(): PlayerMode | null {
  * The track is (TRACK_SCREENS + 1) viewports tall: the stage is stuck for TRACK_SCREENS of scroll,
  * so a shot range in script.ts is literally the scroll distance in screens from the track top.
  */
-export default function HarbourStage({ children }: { children: ReactNode }) {
+export default function HarbourStage({ children, planes }: { children: ReactNode; planes: Plane[] }) {
   const motion = useMotionAllowed()
   const narrow = useNarrow()
   const enabled = motion && !narrow
@@ -54,6 +64,7 @@ export default function HarbourStage({ children }: { children: ReactNode }) {
   const lenisRef = useRef<Lenis | null>(null)
   const progress = useRef(0)
   const copies = useRef<Record<string, HTMLElement | null>>({})
+  const planeEls = useRef<Record<string, HTMLDivElement | null>>({})
   const [activeId, setActiveId] = useState(STAGED_SHOTS[0].id)
   const [bakeoff, setBakeoff] = useState<PlayerMode | null>(null)
   const [Player, setPlayer] = useState<BakeoffPlayer | null>(null)
@@ -84,6 +95,22 @@ export default function HarbourStage({ children }: { children: ReactNode }) {
       gsap.ticker.add(tick)
       gsap.ticker.lagSmoothing(0)
 
+      // The camera (DIRECTION.md 12.2, 12.6): the keyframes are wishes, clampCamera is the law, so
+      // no scroll position or viewport can show the edge of a full-bleed plane or of the world.
+      const shoot = (screens: number) => {
+        const vw = window.innerWidth
+        const vh = window.innerHeight
+        const cam = clampCamera(cameraAt(screens, DESKTOP), vw, vh)
+        for (const [id, el] of Object.entries(planeEls.current)) {
+          if (!el) continue
+          const { tx, ty, s } = layerTransform(cam, FX[id] ?? 1, vw, vh)
+          el.style.transform = `translate3d(${tx}px, ${ty}px, 0) scale(${s})`
+        }
+      }
+      shoot(0)
+      const reshoot = () => shoot(progress.current * TRACK_SCREENS)
+      window.addEventListener('resize', reshoot)
+
       const tl = gsap.timeline({
         defaults: { ease: 'none' },
         scrollTrigger: {
@@ -93,6 +120,7 @@ export default function HarbourStage({ children }: { children: ReactNode }) {
           scrub: true,
           onUpdate: (self) => {
             progress.current = self.progress
+            shoot(self.progress * TRACK_SCREENS)
             const id = shotAt(self.progress * TRACK_SCREENS).id
             setActiveId((cur) => (cur === id ? cur : id))
           },
@@ -115,6 +143,7 @@ export default function HarbourStage({ children }: { children: ReactNode }) {
       tl.set({}, {}, TRACK_SCREENS)
 
       return () => {
+        window.removeEventListener('resize', reshoot)
         gsap.ticker.remove(tick)
         lenis.destroy()
         lenisRef.current = null
@@ -147,6 +176,33 @@ export default function HarbourStage({ children }: { children: ReactNode }) {
       aria-label="One Harbour"
     >
       <div className={styles.stage}>
+        {/* The planes, in draw order, each at world size under one camera transform. Our own committed
+            artwork read on the server (planes.ts), never user input. */}
+        <div className={styles.world} aria-hidden="true">
+          {planes.map((p) =>
+            p.id === 'ship' ? (
+              <div key={p.id} className={styles.plane} data-plane={p.id} ref={(el) => void (planeEls.current[p.id] = el)}>
+                <svg
+                  className={styles.ship}
+                  viewBox={p.viewBox}
+                  width={SHIP_W}
+                  height={SHIP_H}
+                  style={{ left: SHIP_AT.x - PIVOT_X, top: SHIP_AT.y - PIVOT_Y }}
+                  dangerouslySetInnerHTML={{ __html: p.inner }}
+                />
+              </div>
+            ) : (
+              <div
+                key={p.id}
+                className={`${styles.plane} ${p.id === world.route.id ? styles.planeHidden : ''}`}
+                data-plane={p.id}
+                ref={(el) => void (planeEls.current[p.id] = el)}
+              >
+                <svg viewBox={p.viewBox} dangerouslySetInnerHTML={{ __html: p.inner }} />
+              </div>
+            ),
+          )}
+        </div>
         {bakeoff && Player ? (
           <Player
             mode={bakeoff}

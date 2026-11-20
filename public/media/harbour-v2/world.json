@@ -8,31 +8,62 @@
   "layers": [
     {
       "id": "00-sky",
-      "fx": 0.08
+      "fx": 0.08,
+      "extent": [
+        -2400,
+        7200
+      ],
+      "bleed": true
     },
     {
       "id": "01-far-coast",
-      "fx": 0.45
+      "fx": 0.45,
+      "extent": [
+        -2400,
+        7200
+      ],
+      "bleed": true
     },
     {
       "id": "02-mid-harbour",
-      "fx": 0.82
+      "fx": 0.82,
+      "extent": [
+        -3,
+        3560
+      ],
+      "bleed": false
     },
     {
       "id": "03-quay",
-      "fx": 1
+      "fx": 1,
+      "extent": [
+        786,
+        3472
+      ],
+      "bleed": false
     },
     {
       "id": "04-water",
-      "fx": 1
+      "fx": 1,
+      "extent": [
+        -2400,
+        7200
+      ],
+      "bleed": true
     },
     {
       "id": "ship",
-      "fx": 1
+      "fx": 1,
+      "bleed": false
     },
     {
       "id": "05-foreground",
-      "fx": 1.22
+      "fx": 1.22,
+      "extent": [
+        -520,
+        5300
+      ],
+      "bleed": false
     }
   ],
   "ship": {
@@ -79,5 +110,6 @@
       "x": 3520.4,
       "y": 1690
     }
-  }
+  },
+  "layersNote": "extent: drawn x range in world units; bleed: true when the layer must cover the viewport at every camera (the coverage clamp, DIRECTION.md 12.6)"
 }

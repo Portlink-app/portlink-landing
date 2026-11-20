@@ -162,6 +162,38 @@
   outline-offset: 2px;
 }
 /* The one neutral scrim under text on footage: 0.70 holds 5.4:1 over white ice. */
+/* The world: every plane is drawn at world size (4800 x 2400 units = px at s 1) and moved by the
+   camera transform in HarbourStage (DIRECTION.md 12.2). Content bleeds past the viewBox. */
+.world {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.plane {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 4800px;
+  height: 2400px;
+  transform-origin: 0 0;
+  will-change: transform;
+}
+.plane > svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.plane > svg.ship {
+  position: absolute;
+  width: auto;
+  height: auto;
+}
+.planeHidden {
+  visibility: hidden;
+}
+
 .scrim {
   position: absolute;
   inset: 0;

@@ -5,6 +5,7 @@ import ContactForm from '@/components/contact/ContactForm'
 import Footer from '@/components/sections/Footer'
 import HarbourStage from '@/components/harbour/HarbourStage'
 import CaptureFigure from '@/components/harbour/CaptureFigure'
+import { loadPlanes } from '@/components/harbour/planes'
 import { PRODUCTS, SHOTS } from '@/components/harbour/script'
 import styles from '@/components/harbour/harbour.module.css'
 import '@/components/harbour/harbour-tokens.css'
@@ -32,11 +33,12 @@ const session = SHOTS.find((s) => s.id === 'S14')
  * is removed, never mocked.
  */
 export default function HarbourPage() {
+  const planes = loadPlanes()
   return (
     <>
       <PageNav />
       <main id="main" tabIndex={-1} data-surface="harbour">
-        <HarbourStage>
+        <HarbourStage planes={planes}>
           {stills.map((s) => (
             <section key={s.id} id={`harbour-${s.id.toLowerCase()}`} className={styles.still}>
               <div className={styles.stillInner}>

@@ -8,8 +8,8 @@
  *           places; it may not edit them. Working-tree changes count, so an uncommitted edit fails
  *           the same as a committed one.
  *   --built the prerendered /harbour HTML (.next/server/app/harbour.html) names no sequence file.
- *           Sequences are fetched only behind `?bakeoff=` on the client, so the server markup must
- *           never mention them. The rule is an allowlist, not a sequence path list: every
+ *           v2 (DIRECTION.md 12.8 WP2) removed the video: no SequencePlayer, no clips, no
+ *           `?bakeoff=` arm, so the markup may name no video at all (.mp4, .webm, .mov, <video>). The rule is an allowlist, not a sequence path list: every
  *           /media/harbour-2026-11/ reference and every .webp in the markup must be a product
  *           capture (`/media/harbour-2026-11/captures/P<nn>-desktop|phone.webp`, which the page
  *           serves as stills). Anything else fails, so a sequence frame moved outside `bakeoff/`
@@ -47,8 +47,11 @@ const built = process.argv.includes('--built')
 const selftest = process.argv.includes('--selftest')
 
 /** Every harbour media or .webp reference in `html` that is not a product capture. */
+/** Any video at all: a file by extension, or a <video> element. /harbour carries none (WP2). */
+const VIDEO_REF = /[^"'\\\s()<>=,]*\.(?:mp4|webm|mov|m4v)\b|<video\b/gi
+
 export function sequenceRefs(html) {
-  const refs = html.match(MEDIA_REF) ?? []
+  const refs = [...(html.match(MEDIA_REF) ?? []), ...(html.match(VIDEO_REF) ?? [])]
   return [...new Set(refs)].filter((r) => !CAPTURE.test(r))
 }
 
@@ -113,7 +116,7 @@ function builtPass() {
     process.exit(1)
   }
   const captures = new Set((html.match(MEDIA_REF) ?? []).filter((r) => CAPTURE.test(r))).size
-  console.log(`check-harbour-isolation: built /harbour (${html.length} bytes) references no sequence file (${captures} capture stills allowed).`)
+  console.log(`check-harbour-isolation: built /harbour (${html.length} bytes) references no video or sequence file (${captures} capture stills allowed).`)
 }
 
 function selftestPass() {
@@ -128,6 +131,10 @@ function selftestPass() {
     ['sequence frame outside its path', '<img src="/media/harbour-2026-11/captures/frames/001.webp">', 1],
     ['sequence frame outside harbour media', '<img src="/video/seq/014.webp">', 1],
     ['capture lookalike with a suffix', '"/media/harbour-2026-11/captures/P06-desktop-2.webp"', 1],
+    ['video element, no harbour path (known positive)', '<video src="x.mp4"></video>', 1],
+    ['webm clip anywhere', '"/media/other/clip.webm"', 1],
+    ['bare video tag without a source', '<video autoplay muted>', 1],
+    ['the word video in copy (known negative)', '<p>No video on this page.</p>', 0],
     ['no harbour media at all', '<main>One Harbour</main>', 0],
     ['capture still in the escaped RSC payload', 'self.__next_f.push([1,"{\\"src\\":\\"/media/harbour-2026-11/captures/P06-desktop.webp\\"}"])', 0],
     ['bakeoff frame in the escaped RSC payload', 'self.__next_f.push([1,"{\\"src\\":\\"/media/harbour-2026-11/bakeoff/hero-A-webp/001.webp\\"}"])', 1],

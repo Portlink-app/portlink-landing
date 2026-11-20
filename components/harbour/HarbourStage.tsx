@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -9,7 +9,6 @@ import Lenis from 'lenis'
 import { useMotionAllowed, useNarrow } from '@/components/film/useFilm'
 import { CAPTURES_READY, SHOTS, STAGED_SHOTS, TRACK_SCREENS, shotAt } from './script'
 import type { Shot } from './script'
-import type { PlayerMode } from './SequencePlayer'
 import styles from './harbour.module.css'
 import CaptureFigure from './CaptureFigure'
 import { DESKTOP, LAYERS, cameraAt, clampCamera, layerTransform } from './camera'
@@ -21,28 +20,12 @@ gsap.registerPlugin(useGSAP, ScrollTrigger)
 /** The captures the stage can show, once each, in track order. */
 const stageCaptures = [...new Set(STAGED_SHOTS.filter((s) => s.start > 0).flatMap((s) => s.captures.slice(0, 1)))]
 
-type BakeoffPlayer = typeof import('./SequencePlayer').default
-
-/**
- * Bake-off assets for gate G1 (public/media/harbour-2026-11/bakeoff/). Named only here, behind a
- * client-side query, and loaded with import(): the built /harbour HTML must reference neither.
- */
-const BAKEOFF = {
-  webp: { src: '/media/harbour-2026-11/bakeoff/hero-A-webp', frames: 72 },
-  intra: { src: '/media/harbour-2026-11/bakeoff/hero-A-intra.mp4', frames: 0 },
-} as const
-
 /** Horizontal parallax per plane id (world.json); the route lies on the fx 1 plane with the ship. */
 const FX: Record<string, number> = Object.fromEntries([...LAYERS.map((l) => [l.id, l.fx]), [world.route.id, 1]])
 const [PIVOT_X, PIVOT_Y] = world.ship.pivot
 const [SHIP_W, SHIP_H] = world.ship.viewBox
 /** Until WP3 puts the ship on the route, it waits at A1, the anchorage of the opening frames. */
 const SHIP_AT = world.stations.A1
-
-function readBakeoff(): PlayerMode | null {
-  const v = new URLSearchParams(window.location.search).get('bakeoff')
-  return v === 'webp' || v === 'intra' ? v : null
-}
 
 /**
  * The camera over the stills page (DIRECTION.md sections 4 and 7).
@@ -66,23 +49,6 @@ export default function HarbourStage({ children, planes }: { children: ReactNode
   const copies = useRef<Record<string, HTMLElement | null>>({})
   const planeEls = useRef<Record<string, HTMLDivElement | null>>({})
   const [activeId, setActiveId] = useState(STAGED_SHOTS[0].id)
-  const [bakeoff, setBakeoff] = useState<PlayerMode | null>(null)
-  const [Player, setPlayer] = useState<BakeoffPlayer | null>(null)
-
-  useEffect(() => {
-    setBakeoff(readBakeoff())
-  }, [])
-
-  useEffect(() => {
-    if (!enabled || !bakeoff) return
-    let live = true
-    void import('./SequencePlayer').then((m) => {
-      if (live) setPlayer(() => m.default)
-    })
-    return () => {
-      live = false
-    }
-  }, [enabled, bakeoff])
 
   useGSAP(
     () => {
@@ -203,15 +169,6 @@ export default function HarbourStage({ children, planes }: { children: ReactNode
             ),
           )}
         </div>
-        {bakeoff && Player ? (
-          <Player
-            mode={bakeoff}
-            src={BAKEOFF[bakeoff].src}
-            frames={BAKEOFF[bakeoff].frames || undefined}
-            progress={progress}
-          />
-        ) : null}
-        {bakeoff ? <p className={styles.bakeoffNote}>bakeoff: {bakeoff}</p> : null}
         <div className={styles.scrim} aria-hidden="true" />
         {/* Every capture stays mounted and loads up front; only the active stop's is shown. The hero
             (S0) holds no capture: the title owns the first screen and nothing lies over it. */}

@@ -277,16 +277,6 @@
   z-index: 3;
 }
 
-.bakeoffNote {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  font-family: var(--ds-telemetry-font);
-  font-size: var(--ds-telemetry-size);
-  color: var(--ds-stage-text);
-  z-index: 3;
-}
-
 /* ---- Real captures (CaptureFigure). Frameless, hairline edge, no shadow. ---- */
 .capture {
   margin: 32px 0 0;

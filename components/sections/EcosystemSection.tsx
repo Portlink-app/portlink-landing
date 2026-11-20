@@ -51,7 +51,6 @@ export default function EcosystemSection() {
           </div>
           <div>
             <div className={styles.diagram} aria-label={`Connected teams: ${current.active.map(id => portCallRoles.find(role => role.id === id)!.title).join(', ')}`}>
-              <div className={styles.grid} aria-hidden="true" />
               <svg viewBox="0 0 600 500" preserveAspectRatio="none" className={styles.lines} aria-hidden="true">
                 {paths.map(d => <path key={d} d={d} className={styles.basePath} />)}
                 {paths.map((d, index) => current.active.includes(portCallRoles[index].id) && <path key={`${step}-${index}`} d={d} pathLength="1" className={styles.signal} />)}

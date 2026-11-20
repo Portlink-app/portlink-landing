@@ -84,8 +84,8 @@
 
 .customerBrand { padding: .75rem 1rem; overflow-wrap: anywhere; border: 1px solid #687a85; }
 .swatches { display: flex; flex-wrap: wrap; gap: .4rem; }
-.visualRecord dl { margin: 1.5rem 0; }
-.visualRecord dl div { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; padding: .65rem 0; border-bottom: 1px solid #bcc8ce; }
+.visualRecord dl { margin: 1.5rem 0; display: grid; gap: 4px; }
+.visualRecord dl div { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; padding: .65rem .75rem; background: #f3f5f5; }
 .visualRecord dd { margin: 0; font-weight: 600; }
 .visualRecord { max-width: 620px; border-left: 0; }
 .feature:not(:first-of-type) .visual { min-height: 0; background: #e2e9ec; }
@@ -114,7 +114,8 @@
 .capacityMeter strong span { font-size: 1rem; font-weight: 400; }
 .seatTicks { display: flex; gap: 3px; margin-top: .75rem; }
 .seatTicks span { flex: 1; height: 16px; background: #173b57; border-radius: 2px; }
-.fragmentRows > div { display: flex; justify-content: space-between; gap: 1rem; padding: 1rem .5rem; border-bottom: 1px solid #bcc8ce; }
+.fragmentRows { display: grid; gap: 4px; }
+.fragmentRows > div { display: flex; justify-content: space-between; gap: 1rem; padding: 1rem .75rem; background: #f6f8f9; }
 .fragmentRows > div span { text-align: right; }
 .fragmentRows .accountTotal { background: #edf1f3; font-weight: 700; }
 @media (max-width: 900px) { .reviewRail { flex-wrap: wrap; } .reviewRail li { flex: 1 1 100px; } }

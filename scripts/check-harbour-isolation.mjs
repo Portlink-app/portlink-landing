@@ -6,7 +6,10 @@
  *   source  `git diff <merge-base with origin/main> -- app/page.tsx components/sections
  *           components/scenes components/film app/_ds` is empty. The page may import from those
  *           places; it may not edit them. Working-tree changes count, so an uncommitted edit fails
- *           the same as a committed one.
+ *           the same as a committed one. It applies only to a /harbour branch: one whose diff
+ *           against the merge-base touches HARBOUR (app/harbour, components/harbour or harbour
+ *           media). A branch that edits only shipped surfaces (a home page change) is not a /harbour
+ *           branch, so the pass says so and exits 0 (Starboard ruling 5 on #43, 20.11.2026).
  *   --built the prerendered /harbour HTML (.next/server/app/harbour.html) names no sequence file.
  *           v2 (DIRECTION.md 12.8 WP2) removed the video: no SequencePlayer, no clips, no
  *           `?bakeoff=` arm, so the markup may name no video at all (.mp4, .webm, .mov, <video>). The rule is an allowlist, not a sequence path list: every
@@ -42,6 +45,8 @@ import { fileURLToPath } from 'node:url'
 
 const ROOT = join(fileURLToPath(new URL('.', import.meta.url)), '..')
 const GUARDED = ['app/page.tsx', 'components/sections', 'components/scenes', 'components/film', 'app/_ds']
+// A diff touching any of these makes the branch a /harbour branch, so the source pass applies.
+const HARBOUR = ['app/harbour', 'components/harbour', 'public/media/harbour-2026-11', 'public/media/harbour-v2']
 const BUILT_PAGE = '.next/server/app/harbour.html'
 // A reference is any harbour media path or any .webp file name the markup carries. A backslash
 // ends a reference: the RSC payload inlined in the HTML escapes its quotes (`...webp\"`), so
@@ -60,6 +65,15 @@ const VIDEO_REF = /[^"'\\\s()<>=,]*\.(?:mp4|webm|mov|m4v)\b|<video\b/gi
 export function sequenceRefs(html) {
   const refs = [...(html.match(MEDIA_REF) ?? []), ...(html.match(VIDEO_REF) ?? [])]
   return [...new Set(refs)].filter((r) => !CAPTURE.test(r))
+}
+
+const under = (name, dir) => name === dir || name.startsWith(`${dir}/`)
+
+/** The source verdict for one changed-file list: which guarded files a /harbour branch edited. */
+export function isolationVerdict(changed) {
+  const harbour = changed.filter((n) => HARBOUR.some((d) => under(n, d)))
+  if (!harbour.length) return { applies: false, violations: [] }
+  return { applies: true, harbour, violations: changed.filter((n) => GUARDED.some((d) => under(n, d))) }
 }
 
 const git = (...args) => execFileSync('git', args, { cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim()
@@ -89,20 +103,28 @@ function sourcePass() {
   } catch {
     return notMeasured('no merge-base with origin/main, as in a shallow clone')
   }
-  let names
+  let changed
   try {
     // Compares the merge-base with the working tree: committed and uncommitted edits both count.
-    names = git('diff', '--name-only', base, '--', ...GUARDED)
+    // Untracked files count too, so a new /harbour file makes the branch a /harbour branch.
+    const tracked = git('diff', '--name-only', base)
+    const untracked = git('ls-files', '--others', '--exclude-standard')
+    changed = [...new Set(`${tracked}\n${untracked}`.split('\n').filter(Boolean))]
   } catch (e) {
     console.error(`check-harbour-isolation: git diff failed, nothing judged: ${e.message}`)
     process.exit(2)
   }
-  if (names) {
+  const v = isolationVerdict(changed)
+  if (!v.applies) {
+    console.log(`check-harbour-isolation: source pass not applicable, no /harbour edits against merge-base ${base.slice(0, 7)} (${HARBOUR.join(' ')}).`)
+    return
+  }
+  if (v.violations.length) {
     console.error('check-harbour-isolation FAIL: /harbour must not edit shipped surfaces. Changed:')
-    for (const n of names.split('\n')) console.error(`  ${n}`)
+    for (const n of v.violations) console.error(`  ${n}`)
     process.exit(1)
   }
-  console.log(`check-harbour-isolation: source clean against merge-base ${base.slice(0, 7)} (${GUARDED.join(' ')}).`)
+  console.log(`check-harbour-isolation: source clean against merge-base ${base.slice(0, 7)} (${v.harbour.length} /harbour files; ${GUARDED.join(' ')} untouched).`)
 }
 
 function builtPass() {
@@ -153,11 +175,26 @@ function selftestPass() {
     if (!ok) bad++
     console.log(`  ${ok ? 'ok  ' : 'FAIL'} ${name}: expected ${want ? 'refused' : 'allowed'}, got ${got ? 'refused' : 'allowed'}`)
   }
+  // Source arm: [name, changed files, expected { applies, fails }].
+  const diffs = [
+    ['harbour plus components/sections diff (known positive)', ['app/harbour/page.tsx', 'components/sections/Footer.module.css'], true, true],
+    ['components/sections-only diff (known negative)', ['components/sections/Footer.module.css', 'app/page.tsx'], false, false],
+    ['harbour-only diff', ['app/harbour/page.tsx', 'components/harbour/Stop.tsx'], true, false],
+    ['harbour media plus app/_ds', ['public/media/harbour-2026-11/captures/P06-desktop.webp', 'app/_ds/tokens.css'], true, true],
+    ['harbour lookalike prefix is not harbour', ['app/harbour-old/page.tsx', 'components/film/FilmHero.tsx'], false, false],
+    ['empty diff', [], false, false],
+  ]
+  for (const [name, changed, wantApplies, wantFails] of diffs) {
+    const v = isolationVerdict(changed)
+    const ok = v.applies === wantApplies && (v.violations.length > 0) === wantFails
+    if (!ok) bad++
+    console.log(`  ${ok ? 'ok  ' : 'FAIL'} ${name}: expected ${wantFails ? 'fail' : wantApplies ? 'pass' : 'not applicable'}, got ${v.violations.length ? 'fail' : v.applies ? 'pass' : 'not applicable'}`)
+  }
   if (bad) {
-    console.error(`check-harbour-isolation --selftest: ${bad} case(s) wrong; the built pass cannot be trusted.`)
+    console.error(`check-harbour-isolation --selftest: ${bad} case(s) wrong; the guard cannot be trusted.`)
     process.exit(2)
   }
-  console.log(`check-harbour-isolation --selftest: ${cases.length} cases matched.`)
+  console.log(`check-harbour-isolation --selftest: ${cases.length + diffs.length} cases matched.`)
 }
 
 const isMain = process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]

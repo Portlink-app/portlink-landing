@@ -9,24 +9,23 @@
 .steps button::after { content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 2px; background: var(--ds-inverted-text); transform: scaleX(0); transform-origin: left; transition: transform var(--ds-dur-3) var(--ds-ease-standard); }
 .steps button[aria-current]::after { transform: scaleX(1); }
 .steps button[aria-current] { background: var(--ds-inverted-surface); }
-.stepNumber { font: 11px var(--ds-font-mono); opacity: .75; }
+.stepNumber { font: 11px var(--ds-font-sans); font-variant-numeric: tabular-nums; opacity: .75; }
 .top { display: grid; grid-template-columns: .85fr 1.15fr; gap: 48px; align-items: center; margin-top: 30px; }
 .copy { min-width: 0; }
 .narrative { min-height: 284px; }
-.handoff { font: 11px var(--ds-font-mono); letter-spacing: .025em; }
+.handoff { font: 11px var(--ds-font-sans); font-variant-numeric: tabular-nums; letter-spacing: .025em; }
 .narrative h3 { color: inherit; font-size: clamp(24px, 2.5vw, 32px); line-height: 1.25; font-weight: 500; letter-spacing: -.035em; margin: 20px 0 18px; }
 .narrative p { font-size: 14px; line-height: 1.85; margin: 0 0 18px; }
-.narrative .detail { font-size: 12px; line-height: 1.8; padding-left: 14px; border-left: 1px solid var(--ds-inverted-border); }
+.narrative .detail { font-size: 12px; line-height: 1.8; padding: 12px 14px; background: var(--ds-inverted-surface); border-radius: var(--ds-radius-md); }
 .controls { display: flex; align-items: center; gap: 12px; margin-top: 24px; }
 .previous, .next { display: inline-flex; justify-content: center; align-items: center; gap: 18px; min-height: 46px; border: 1px solid var(--ds-inverted-border); border-radius: var(--ds-radius-pill); color: inherit; background: transparent; font: inherit; font-size: 13px; cursor: pointer; }
 .previous { width: 46px; flex-shrink: 0; }
 .previous:disabled { opacity: .35; cursor: default; }
 .next { padding: 10px 18px; border-color: var(--ds-inverted-text); font-weight: 600; }
-.counter { font: 11px var(--ds-font-mono); margin-left: auto; white-space: nowrap; }
+.counter { font: 11px var(--ds-font-sans); font-variant-numeric: tabular-nums; margin-left: auto; white-space: nowrap; }
 .section button:focus-visible { outline: 2px solid var(--ds-inverted-text); outline-offset: 4px; }
 .note { display: block; font-size: 11px; line-height: 1.7; margin-top: 16px; }
 .diagram { position: relative; height: 500px; }
-.grid { position: absolute; inset: 0; background-image: linear-gradient(var(--ds-inverted-border) 1px, transparent 1px), linear-gradient(90deg, var(--ds-inverted-border) 1px, transparent 1px); background-size: 36px 36px; mask-image: radial-gradient(ellipse, black, transparent 72%); }
 .lines { position: absolute; inset: 0; width: 100%; height: 100%; fill: none; }
 .basePath { stroke: var(--ds-inverted-border); stroke-width: 1.5; }
 .signal { stroke: var(--ds-inverted-text); stroke-width: 1.5; stroke-dasharray: 1; animation: trace 900ms var(--ds-ease-standard) both; }
@@ -35,7 +34,7 @@
 .record > strong { display: block; font-size: 20px; font-weight: 500; letter-spacing: -.035em; }
 .recordCaption { display: block; font-size: 11px; margin: 5px 0 16px; }
 .recordContent { animation: recordIn 300ms var(--ds-ease-standard) both; }
-.recordStatus { display: block; border-block: 1px solid var(--ds-inverted-border); padding: 10px 0; font: 11px var(--ds-font-mono); }
+.recordStatus { display: block; border-block: 1px solid var(--ds-inverted-border); padding: 10px 0; font: 11px var(--ds-font-sans); font-variant-numeric: tabular-nums; }
 .record dl { margin: 0; text-align: left; }
 .record dl > div { padding: 9px 0; }
 .record dt { font-size: 11px; margin-bottom: 3px; }
@@ -51,7 +50,7 @@
 .node i { opacity: 0; }
 .node[data-active='true'] { border-color: var(--ds-inverted-text); background: var(--ds-inverted-surface); }
 .node[data-active='true'] i { opacity: 1; }
-.legend { display: flex; align-items: center; justify-content: center; gap: 8px; font: 11px var(--ds-font-mono); line-height: 1.6; text-align: center; margin: 8px 0 0; }
+.legend { display: flex; align-items: center; justify-content: center; gap: 8px; font: 11px var(--ds-font-sans); font-variant-numeric: tabular-nums; line-height: 1.6; text-align: center; margin: 8px 0 0; }
 .permissions { display: flex; align-items: center; gap: 12px; border-block: 1px solid var(--ds-inverted-border); padding: 20px 0; margin-top: 42px; }
 .permissions svg { flex-shrink: 0; }
 .permissions p { margin: 0; font-size: 12px; line-height: 1.8; }

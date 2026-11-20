@@ -85,11 +85,15 @@ export const DESKTOP: CamRow[] = [
   { at: 3.6, cx: 1500, cy: 1440, s: 1, t: ST.A1.t }, // d2: A1, the call
   { at: 6, cx: 1500, cy: 1440, s: 1, t: ST.A1.t },
   { at: 7.2, cx: 1900, cy: 1440, s: 0.8, t: 0.4 },
-  { at: 8.2, cx: 2240, cy: 1440, s: 1, t: ST.A2.t }, // A2
+  { at: 8.2, cx: 2240, cy: 1440, s: 1, t: ST.A2.t }, // A2 (arrive and depart: script.ts STOPS)
+  { at: 9.4, cx: 2240, cy: 1440, s: 1, t: ST.A2.t },
   { at: 10.2, cx: 2720, cy: 1450, s: 1, t: ST.A3.t }, // A3
+  { at: 11.4, cx: 2720, cy: 1450, s: 1, t: ST.A3.t },
   { at: 12.2, cx: 3180, cy: 1470, s: 1, t: ST.A4.t }, // A4
-  { at: 13.3, cx: 3620, cy: 1480, s: 1, t: ST.A5.t }, // A5
-  { at: 14.4, cx: 3300, cy: 1460, s: 0.9, t: 0.72 }, // d4
+  { at: 13.4, cx: 3180, cy: 1470, s: 1, t: ST.A4.t },
+  { at: 13.8, cx: 3620, cy: 1480, s: 1, t: ST.A5.t }, // A5
+  { at: 14.4, cx: 3620, cy: 1480, s: 1, t: ST.A5.t },
+  { at: 14.8, cx: 3300, cy: 1460, s: 0.9, t: 0.72 }, // d4
   { at: 16.8, cx: 2400, cy: 1440, s: 0.9, t: 0.72 }, // d3
 ]
 
@@ -98,10 +102,15 @@ export const PHONE: CamRow[] = [
   { at: 0, cx: 1500, cy: 1500, s: 0.47, t: ST.A1.t }, // p1
   { at: 2.6, cx: 1500, cy: 1500, s: 0.47, t: ST.A1.t },
   { at: 3.6, cx: 1420, cy: 1500, s: 0.55, t: ST.A1.t }, // p2: A1
+  { at: 6, cx: 1420, cy: 1500, s: 0.55, t: ST.A1.t },
   { at: 8.2, cx: 2140, cy: 1500, s: 0.55, t: ST.A2.t },
+  { at: 9.4, cx: 2140, cy: 1500, s: 0.55, t: ST.A2.t },
   { at: 10.2, cx: 2620, cy: 1500, s: 0.55, t: ST.A3.t }, // p3: A3
+  { at: 11.4, cx: 2620, cy: 1500, s: 0.55, t: ST.A3.t },
   { at: 12.2, cx: 3080, cy: 1500, s: 0.55, t: ST.A4.t },
-  { at: 13.3, cx: 3520, cy: 1500, s: 0.55, t: ST.A5.t },
+  { at: 13.4, cx: 3080, cy: 1500, s: 0.55, t: ST.A4.t },
+  { at: 13.8, cx: 3520, cy: 1500, s: 0.55, t: ST.A5.t },
+  { at: 14.4, cx: 3520, cy: 1500, s: 0.55, t: ST.A5.t },
   { at: 16.8, cx: 2620, cy: 1500, s: 0.47, t: 0.72 },
 ]
 

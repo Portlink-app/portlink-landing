@@ -315,7 +315,27 @@
   visibility: visible;
   transition: opacity 0.3s ease;
 }
-.stageCapture .captureNote {
+/* A stop's capture (DIRECTION.md 12.4): laid out at its lifted place, the hold-width floor wide,
+   and moved onto its station anchor by the stage's per-frame transform. No CSS transform here, so
+   the stage can read the lifted box from offsetLeft/offsetTop. */
+.stageLift {
+  position: absolute;
+  right: 4vw;
+  top: 0;
+  bottom: 0;
+  height: fit-content;
+  margin: auto 0;
+  width: var(--ds-capture-hold-min);
+  z-index: 2;
+  visibility: hidden;
+  transform-origin: 50% 50%;
+  will-change: transform, opacity;
+}
+.stageLift .capture {
+  margin: 0;
+}
+.stageCapture .captureNote,
+.stageLift .captureNote {
   color: var(--ds-telemetry-color);
 }
 /* Tablet: copy at the top, capture below it, the stop list gives way to the telemetry line. */
@@ -331,6 +351,14 @@
     bottom: calc(var(--ds-threadmap-inset) + 32px);
     width: auto;
     transform: none;
+  }
+  .stageLift {
+    left: 24px;
+    right: 24px;
+    top: auto;
+    bottom: calc(var(--ds-threadmap-inset) + 32px);
+    margin: 0;
+    width: auto;
   }
   .map {
     display: none;

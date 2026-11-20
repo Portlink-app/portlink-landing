@@ -7,7 +7,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useGSAP } from '@gsap/react'
 import Lenis from 'lenis'
 import { useMotionAllowed, useNarrow } from '@/components/film/useFilm'
-import { CAPTURES_READY, SHOTS, STAGED_SHOTS, TRACK_SCREENS, shotAt } from './script'
+import { CAPTURES_READY, SHOTS, STAGED_SHOTS, STOPS, TRACK_SCREENS, liftAt, shotAt } from './script'
 import type { Shot } from './script'
 import styles from './harbour.module.css'
 import CaptureFigure from './CaptureFigure'
@@ -18,8 +18,17 @@ import world from '@/public/media/harbour-v2/world.json'
 
 gsap.registerPlugin(useGSAP, ScrollTrigger)
 
-/** The captures the stage can show, once each, in track order. */
-const stageCaptures = [...new Set(STAGED_SHOTS.filter((s) => s.start > 0).flatMap((s) => s.captures.slice(0, 1)))]
+/** Shots that stop at a station: their capture lifts from the anchor instead (DIRECTION.md 12.4). */
+const STOP_SHOTS = new Set(STOPS.map((s) => s.shot))
+/** Stops that lift a capture, in track order. */
+const LIFTS = STOPS.filter((s) => s.capture)
+/** The other shots' captures, shown beside the copy once each, in track order. */
+const stageCaptures = [
+  ...new Set(STAGED_SHOTS.filter((s) => s.start > 0 && !STOP_SHOTS.has(s.id)).flatMap((s) => s.captures.slice(0, 1))),
+]
+/** A capture on its anchor is drawn at this fraction of its lifted size. */
+const LIFT_FROM = 0.06
+const smooth = (u: number) => u * u * (3 - 2 * u)
 
 /** Horizontal parallax per plane id (world.json); the route lies on the fx 1 plane with the ship. */
 const FX: Record<string, number> = Object.fromEntries([...LAYERS.map((l) => [l.id, l.fx]), [world.route.id, 1]])
@@ -50,6 +59,7 @@ export default function HarbourStage({ children, planes }: { children: ReactNode
   const copies = useRef<Record<string, HTMLElement | null>>({})
   const planeEls = useRef<Record<string, HTMLDivElement | null>>({})
   const shipEl = useRef<SVGSVGElement | null>(null)
+  const lifts = useRef<Record<string, HTMLDivElement | null>>({})
   // The ship's route, parsed from the route plane we already render (DIRECTION.md 12.3, WP3).
   const route = useMemo(() => {
     const plane = planes.find((p) => p.id === world.route.id)
@@ -70,11 +80,38 @@ export default function HarbourStage({ children, planes }: { children: ReactNode
 
       // The camera (DIRECTION.md 12.2, 12.6): the keyframes are wishes, clampCamera is the law, so
       // no scroll position or viewport can show the edge of a full-bleed plane or of the world.
+      // Each lifted capture's centre in its laid-out (lifted) place, read once per layout from the
+      // untransformed offset box and cleared on resize.
+      let liftBase: Record<string, { x: number; y: number }> = {}
       const shoot = (screens: number) => {
         const vw = window.innerWidth
         const vh = window.innerHeight
         const row = cameraAt(screens, DESKTOP)
         const cam = clampCamera(row, vw, vh)
+        // The stop grammar's lift and pull-back (DIRECTION.md 12.4): from the station anchor, where the
+        // ship rests on the fx 1 plane, up to the capture's lifted box and back.
+        const ship1 = layerTransform(cam, 1, vw, vh)
+        for (const stop of LIFTS) {
+          const el = lifts.current[stop.station]
+          if (!el) continue
+          const p = liftAt(stop, screens)
+          el.dataset.lift = p.toFixed(3)
+          if (p <= 0) {
+            el.style.visibility = 'hidden'
+            continue
+          }
+          const base = (liftBase[stop.station] ??= {
+            x: el.offsetLeft + el.offsetWidth / 2,
+            y: el.offsetTop + el.offsetHeight / 2,
+          })
+          const st = world.stations[stop.station]
+          const e = smooth(p)
+          const dx = (ship1.tx + st.x * cam.s - base.x) * (1 - e)
+          const dy = (ship1.ty + st.y * cam.s - base.y) * (1 - e)
+          el.style.visibility = 'visible'
+          el.style.opacity = String(Math.min(1, p * 2.5))
+          el.style.transform = `translate(${dx}px, ${dy}px) scale(${LIFT_FROM + (1 - LIFT_FROM) * e})`
+        }
         for (const [id, el] of Object.entries(planeEls.current)) {
           if (!el) continue
           const { tx, ty, s } = layerTransform(cam, FX[id] ?? 1, vw, vh)
@@ -92,7 +129,10 @@ export default function HarbourStage({ children, planes }: { children: ReactNode
         }
       }
       shoot(0)
-      const reshoot = () => shoot(progress.current * TRACK_SCREENS)
+      const reshoot = () => {
+        liftBase = {}
+        shoot(progress.current * TRACK_SCREENS)
+      }
       window.addEventListener('resize', reshoot)
 
       const tl = gsap.timeline({
@@ -149,7 +189,7 @@ export default function HarbourStage({ children, planes }: { children: ReactNode
   const active = STAGED_SHOTS.find((s) => s.id === activeId) ?? STAGED_SHOTS[0]
   const telemetry = CAPTURES_READY && active.telemetry ? active.telemetry : active.role
   const nodes = SHOTS.filter((s) => s.node && s.staged)
-  const activeCapture = active.start === 0 ? null : (active.captures[0] ?? null)
+  const activeCapture = active.start === 0 || STOP_SHOTS.has(active.id) ? null : (active.captures[0] ?? null)
 
   return (
     <section
@@ -199,6 +239,18 @@ export default function HarbourStage({ children, planes }: { children: ReactNode
                 loading="eager"
                 className={`${styles.stageCapture} ${id === activeCapture ? styles.stageCaptureOn : ''}`}
               />
+            ))
+          : null}
+        {CAPTURES_READY
+          ? LIFTS.map((stop) => (
+              <div
+                key={stop.station}
+                className={styles.stageLift}
+                data-station={stop.station}
+                ref={(el) => void (lifts.current[stop.station] = el)}
+              >
+                <CaptureFigure id={stop.capture as string} loading="eager" />
+              </div>
             ))
           : null}
 

@@ -161,6 +161,37 @@ export function shotAt(screens: number): Shot {
   return STAGED_SHOTS[STAGED_SHOTS.length - 1]
 }
 
+/**
+ * The station stops (DIRECTION.md 12.3, 12.4): the single source for which shot stops at which
+ * station and which capture lifts there. `arrive` and `depart` are scroll positions in screens; the
+ * camera rows in camera.ts sit on the station at both, so the camera and the ship rest between them.
+ * Inside that rest the capture lifts for LIFT_SCREENS, holds, and returns for LIFT_SCREENS.
+ *
+ * Chose: A5 stops without a capture. Over: lifting P9 a second time. Because: A5's proof is P10
+ * (Embark field mode), which is not captured yet, and showing one capture twice reads as filler.
+ * Revisit if: P10 lands in public/media/harbour-2026-11/captures.
+ */
+export type Stop = { station: 'A1' | 'A2' | 'A3' | 'A4' | 'A5'; shot: string; capture: string | null; arrive: number; depart: number }
+
+export const LIFT_SCREENS = 0.2
+
+export const STOPS: readonly Stop[] = [
+  { station: 'A1', shot: 'S3', capture: 'P5', arrive: 3.6, depart: 6 },
+  { station: 'A2', shot: 'S6', capture: 'P6', arrive: 8.2, depart: 9.4 },
+  { station: 'A3', shot: 'S7', capture: 'P8', arrive: 10.2, depart: 11.4 },
+  { station: 'A4', shot: 'S8', capture: 'P9', arrive: 12.2, depart: 13.4 },
+  { station: 'A5', shot: 'S8', capture: null, arrive: 13.8, depart: 14.4 },
+]
+
+/** Screens of scroll the stop's capture is fully lifted. */
+export const holdScreens = (s: Stop) => s.depart - s.arrive - 2 * LIFT_SCREENS
+
+/** How far the stop's capture is lifted at a scroll position: 0 on its anchor, 1 fully up. */
+export function liftAt(s: Stop, screens: number): number {
+  const u = Math.min(screens - s.arrive, s.depart - screens) / LIFT_SCREENS
+  return Math.min(1, Math.max(0, u))
+}
+
 /** The three product regions of S13. Wheelhouse carries no claim (Q5 default). */
 export const PRODUCTS = [
   { name: 'Portlink', href: '/portlink/', text: 'One call record shared by the cruise line, the port agent and the DMC.' },

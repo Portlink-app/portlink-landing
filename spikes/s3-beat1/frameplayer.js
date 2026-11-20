@@ -8,7 +8,7 @@ export class FramePlayer {
     this.count = count; this.url = url; this.layers = layers;
     this.radius = radius; this.concurrency = concurrency; this.fit = fit;
     this.cache = new Map(); // frame -> array of ImageBitmap per layer
-    this.pending = new Set(); this.inflight = 0; this.head = 0; this.drawn = -1;
+    this.pending = new Set(); this.inflight = 0; this.head = -1; this.drawn = -1; // -1: first seek always pumps
     this.stats = { loaded: 0, bytes: 0, misses: 0 };
   }
   async loadFrame(i) {

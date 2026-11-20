@@ -13,7 +13,6 @@
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   background: var(--surface-plain);
-  box-shadow: var(--shadow-3);
   color: var(--text-primary);
   animation: rise 360ms var(--ds-ease-standard, ease-out) both;
 }
@@ -48,7 +47,6 @@
   gap: 16px;
   align-items: start;
   padding: 12px 0;
-  border-bottom: 1px solid var(--border);
 }
 
 .rowName { margin: 0 0 2px; font-size: 14px; font-weight: 600; color: var(--text-primary); }
@@ -138,5 +136,5 @@
 }
 
 /* Product composition reserves normal flow for every consent choice. */
-.banner.inline { position: relative; inset: auto; width: 100%; max-height: none; margin: 1rem 0 2rem; box-shadow: none; animation: none; font-family: var(--acq-body), sans-serif; }
+.banner.inline { position: relative; inset: auto; width: 100%; max-height: none; margin: 1rem 0 2rem; animation: none; font-family: var(--acq-body), sans-serif; }
 .banner.inline .actions { max-width: 400px; }

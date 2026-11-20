@@ -35,7 +35,7 @@ export default function ShareBox({ url, code, prize }: { url: string; code: stri
   return (
     <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--ds-radius-xl)', padding: 'var(--ds-gap-5)' }}>
       <p style={{ margin: '0 0 4px', fontSize: 'var(--ds-text-xs)', textTransform: 'uppercase', letterSpacing: 'var(--ds-track-caps)', color: 'var(--text-muted)', fontWeight: 600 }}>Your invitation link</p>
-      <p style={{ margin: '0 0 10px', fontFamily: 'var(--ds-font-mono)', fontSize: 'var(--ds-text-sm)', wordBreak: 'break-all', color: 'var(--text-primary)' }}>{url}</p>
+      <p style={{ margin: '0 0 10px', fontSize: 'var(--ds-text-sm)', wordBreak: 'break-all', color: 'var(--text-primary)' }}>{url}</p>
       <p style={{ margin: '0 0 14px', fontSize: 'var(--ds-text-sm)', color: 'var(--text-secondary)' }}>
         Code to read out: <strong style={{ fontFamily: 'var(--ds-font-mono)', fontSize: '1.05rem', letterSpacing: '0.08em', color: 'var(--text-primary)' }}>{code}</strong>
       </p>

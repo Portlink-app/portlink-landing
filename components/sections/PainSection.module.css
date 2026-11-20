@@ -3,8 +3,8 @@
 .intro h2 { font-size: clamp(28px, 3.2vw, 42px); font-weight: 600; color: var(--text-primary); letter-spacing: -.035em; line-height: 1.15; margin: 0 0 18px; max-width: 400px; }
 .intro p, .answer p { font-size: 15px; color: var(--text-secondary); line-height: 1.7; }
 .note { display: block; font-size: 12px; line-height: 1.6; color: var(--text-muted); margin-top: 24px; }
-.questions { border-top: 1px solid var(--border); }
-.question { border-bottom: 1px solid var(--border); }
+.questions { display: grid; gap: 8px; }
+.question { background: var(--bg); border-radius: var(--ds-radius-md); padding-inline: 20px; }
 .question summary { list-style: none; display: flex; align-items: center; gap: 16px; min-height: 88px; padding: 20px 0; cursor: pointer; }
 .question summary::-webkit-details-marker { display: none; }
 .question summary:focus-visible { outline: 2px solid var(--ds-focus); outline-offset: 4px; }
@@ -13,7 +13,7 @@
 .question[open] summary svg { transform: rotate(45deg); }
 .answer { padding: 0 0 24px; }
 .connected { border-left: 2px solid var(--ds-primary); padding-left: 18px; margin-top: 20px; }
-.connected > span { font: 11px var(--ds-font-mono); line-height: 1.6; color: var(--ds-accent-strong); }
+.connected > span { font: 11px var(--ds-font-sans); font-variant-numeric: tabular-nums; line-height: 1.6; color: var(--ds-accent-strong); }
 .connected p { margin-top: 8px; }
 .connected a { display: inline-flex; gap: 12px; align-items: center; min-height: 44px; margin-top: 8px; color: var(--ds-primary); font-size: 14px; font-weight: 600; text-decoration: none; }
 .connected a:hover { text-decoration: underline; }

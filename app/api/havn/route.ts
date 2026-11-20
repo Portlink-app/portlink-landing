@@ -111,8 +111,8 @@ export async function POST(request: Request) {
         const answerHtml = a
           ? `<p style="margin:6px 0 0;font-size:14px;line-height:1.6;color:#111827;white-space:pre-wrap">${esc(a)}</p>`
           : c ? '' : `<p style="margin:6px 0 0;font-size:13px;color:#94a3b8">Ikke besvart</p>`
-        return `<tr><td style="padding:14px 0;border-bottom:1px solid #e2e8f0">
-          <p style="margin:0;font-size:12px;color:#94a3b8;font-family:'JetBrains Mono',Menlo,monospace">${number}</p>
+        return `<tr><td style="padding:14px 0 18px">
+          <p style="margin:0;font-size:12px;color:#94a3b8;font-family:-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;font-variant-numeric:tabular-nums">${number}</p>
           <p style="margin:4px 0 0;font-size:14px;font-weight:600;color:#1e4a6e;line-height:1.45">${esc(q.text)}</p>
           ${choiceHtml}${answerHtml}
         </td></tr>`

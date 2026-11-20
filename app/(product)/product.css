@@ -6,7 +6,7 @@
   /* Typography */
   --pp-display: var(--pp-font-display), "Schibsted Grotesk", -apple-system, BlinkMacSystemFont, sans-serif;
   --pp-sans: var(--pp-font-text), "Manrope", -apple-system, BlinkMacSystemFont, sans-serif;
-  --pp-mono-font: var(--pp-sans);
+  --pp-figures: var(--pp-sans);
 
   /* /portlink 60-30-10 Color Tokens */
   --pl-ground-day: #F6F5F1;
@@ -112,7 +112,7 @@
 }
 
 .pp-mono {
-  font-family: var(--pp-mono-font);
+  font-family: var(--pp-figures);
   font-variant-numeric: tabular-nums;
 }
 
@@ -142,7 +142,6 @@
   position: sticky;
   top: 0;
   z-index: 40;
-  border-bottom: 1px solid var(--pl-edge-dark);
   background: #08131F;
   color: #F8FAFC;
 }
@@ -150,7 +149,6 @@
 .pp-header--light {
   background: #F4F3EE;
   color: #14181D;
-  border-bottom: 1px solid #D6D3C9;
 }
 
 .pp-header-inner {
@@ -237,7 +235,6 @@
 .pp-header--light .pp-switcher-pill.is-active {
   background: #FFFFFF;
   color: #14181D;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
 }
 
 .pp-chapter-nav {
@@ -458,7 +455,7 @@
   gap: 10px;
   padding: 6px 12px;
   border-radius: var(--pp-r-chip);
-  font-family: var(--pp-mono-font);
+  font-family: var(--pp-figures);
   font-size: 13px;
   font-weight: 600;
   margin-bottom: 20px;
@@ -555,7 +552,6 @@
   background: #102033;
   border: 1px solid #294C6E;
   color: #F8FAFC;
-  box-shadow: 0 12px 28px -12px rgba(8, 19, 31, 0.55);
 }
 
 .pp-chapter--day .pp-callout-pill,
@@ -564,7 +560,6 @@
   background: #FFFFFF;
   border-color: #CBD5E1;
   color: #0F172A;
-  box-shadow: 0 12px 28px -14px rgba(15, 23, 42, 0.12);
 }
 
 /* Role or capability line under the card title (title leads; no kicker above it). */
@@ -606,7 +601,6 @@
   overflow: hidden;
   border: 1px solid #294C6E;
   background: #0C1829;
-  box-shadow: 0 32px 80px -20px rgba(8, 19, 31, 0.48);
 }
 
 .pp-chapter--day .pp-stage-frame,
@@ -614,7 +608,6 @@
 .pp-chapter--embark-alt .pp-stage-frame {
   border-color: #CBD5E1;
   background: #FFFFFF;
-  box-shadow: 0 28px 64px -20px rgba(15, 23, 42, 0.16);
 }
 
 .pp-stage-img {
@@ -799,14 +792,13 @@
   color: #0F172A;
   border-radius: var(--pp-r-card);
   border: 1px solid #CBD5E1;
-  box-shadow: 0 20px 48px -22px rgba(15, 23, 42, 0.14);
   overflow: hidden;
   min-height: 520px;
   display: flex;
   flex-direction: column;
 }
 
-.pp-ui-hd {
+:where([data-ui]) .pp-ui-hd {
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
@@ -843,7 +835,7 @@
   font-weight: 600;
 }
 
-.pp-ui-tabs {
+:where([data-ui]) .pp-ui-tabs {
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
@@ -871,7 +863,7 @@
   background: #F1F5F9;
 }
 
-.pp-ui-summary-strip {
+:where([data-ui]) .pp-ui-summary-strip {
   display: grid;
   grid-template-columns: 1.2fr 1fr;
   gap: 18px;
@@ -955,7 +947,7 @@
   flex: 1;
 }
 
-.pp-ui-row {
+:where([data-ui]) .pp-ui-row {
   display: grid;
   grid-template-columns: 1.6fr 0.9fr auto auto;
   gap: 12px;
@@ -1065,7 +1057,7 @@
   margin-inline: 2px;
 }
 
-.pp-ui-footer-bar {
+:where([data-ui]) .pp-ui-footer-bar {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -1157,7 +1149,6 @@
   border-radius: 36px;
   background: #0F172A;
   border: 2px solid #334155;
-  box-shadow: 0 28px 60px -18px rgba(8, 19, 31, 0.45);
 }
 
 .pp-phone-notch {
@@ -1317,12 +1308,11 @@
   text-align: left;
   font-family: var(--pp-sans);
   cursor: pointer;
-  transition: border-color 140ms ease, box-shadow 140ms ease;
+  transition: border-color 140ms ease;
 }
 
 .pp-diff-card.is-active {
   border: 2px solid #0F766E;
-  box-shadow: 0 16px 36px -18px rgba(15, 118, 110, 0.28);
 }
 
 .pp-diff-card-top {
@@ -1495,7 +1485,6 @@
   background: #102033;
   border-color: #294C6E;
   color: #F8FAFC;
-  box-shadow: 0 12px 28px -12px rgba(8, 19, 31, 0.55);
 }
 
 .pp-chapter--day .pp-callout-pill--dark .pp-callout-pill-meta {
@@ -1518,7 +1507,6 @@
   overflow: hidden;
   border: 2px solid #334155;
   background: #0F172A;
-  box-shadow: 0 28px 64px -18px rgba(8, 19, 31, 0.65);
 }
 
 .pp-close-grid {
@@ -1548,7 +1536,6 @@
   padding-block: 56px 40px;
   background: #08131F;
   color: #CBD5E1;
-  border-top: 1px solid #1E3A56;
 }
 
 .pp--embark .pp-footer {
@@ -1686,7 +1673,7 @@ html[data-motion="off"] .pp *::after {
   scroll-margin-top: 96px;
 }
 
-.pp-scroll-help {
+:where([data-ui]) .pp-scroll-help {
   padding: 12px 24px;
   color: #334155;
   font-size: 13.5px;
@@ -1721,7 +1708,6 @@ html[data-motion="off"] .pp *::after {
   border-radius: var(--pp-r-card);
   background: #FFFFFF;
   border: 1px solid #CBD5E1;
-  box-shadow: 0 14px 34px -18px rgba(15, 23, 42, 0.12);
   color: #0F172A;
 }
 
@@ -1732,8 +1718,7 @@ html[data-motion="off"] .pp *::after {
   justify-content: space-between;
   gap: 12px;
   margin-bottom: 16px;
-  padding-bottom: 14px;
-  border-bottom: 1px solid #E2E8F0;
+  padding-bottom: 4px;
 }
 
 .pp-personalise-title-group {
@@ -1842,7 +1827,7 @@ html[data-motion="off"] .pp *::after {
   border: 1px solid #94A3B8;
   background: #F8FAFC;
   color: #0F172A;
-  font-family: var(--pp-mono-font);
+  font-family: var(--pp-figures);
   font-size: 13px;
   font-weight: 600;
 }

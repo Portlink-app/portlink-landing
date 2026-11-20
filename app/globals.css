@@ -75,7 +75,6 @@
   --color-inverted-border:  var(--ds-inverted-border);
 
   --font-sans:              var(--ds-font-sans);
-  --font-mono:              var(--ds-font-mono);
 
   --radius-xs:              var(--ds-radius-xs);
   --radius-sm:              var(--ds-radius-sm);
@@ -137,7 +136,6 @@
 
   /* Typography stack aliases */
   --font-sans:       var(--ds-font-sans);
-  --font-mono:       var(--ds-font-mono);
 }
 
 /* Dark-mode aliases use the same DS token names — they'll flip
@@ -422,7 +420,7 @@ textarea:focus-visible {
   position: absolute;
   left: 0;
   width: 1px;
-  height: 1px;
+  height: 0;
   scroll-margin-top: 0;
 }
 
@@ -474,7 +472,6 @@ textarea:focus-visible {
   overflow: hidden;
   border: 1px solid var(--ds-border-1);
   background: var(--ds-surface-2);
-  box-shadow: var(--ds-shadow-3);
 }
 
 .film-media {
@@ -534,12 +531,10 @@ textarea:focus-visible {
 }
 
 /* The ring the global a:focus-visible rule gives is --ds-focus at 2px. On the near-black hero that
-   is the one surface where it needs to be unmistakable, so it is thicker and doubled with an
-   inverted halo that holds whichever way the theme goes. */
+   is the one surface where it needs to be unmistakable, so it is thicker and set further out. */
 .film-pill:focus-visible {
   outline: 3px solid var(--ds-focus);
   outline-offset: 3px;
-  box-shadow: 0 0 0 1px var(--ds-canvas);
 }
 
 /* Four signals, only one of which is colour: weight, border, background, and the dot's width.

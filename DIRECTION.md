@@ -713,3 +713,20 @@ Amends the "no three.js" line of section 13 for the water layer only. Hero objec
 - **Weight.** The bundled, minified water chunk (three plus `water.js`) is 135 438 bytes gzipped. It cannot sit inside the 130 KB route budget: it loads as a lazy chunk after LCP, the static navy field holds until the first frame, and reduced motion never loads it.
 
 Chose / Over / Because / Revisit-if: Chose a real-time three.js ocean with a position-driven wake sim, lazy-loaded after LCP, Over the baked Ocean-modifier band of 13.1 and over a fully real-time scene, Because the reference ships exactly this split, a baked band has no hull interaction and costs frames, and the spike holds 60 fps in both measured setups; Revisit-if a real mid-range phone drops below 30 fps at sim 256 (first fallback: sim 128 and seg 160, then a looping video strip for that beat), or the lazy chunk delays interaction past the LCP budget.
+
+## 14. Correction 20.11.2026: cruise segment, expedition hero, supersessions
+
+Source of truth for v4 from here: `~/.buzz/RESEARCH/one-harbour-v2/v5/ONE_HARBOUR_PLAN_FABLE.md` (Fable 5.2, 20.11.2026, read against the Portlink iCloud corpus, `portlink-platform`, `embark` and this worktree). Where this section and an earlier section disagree, this section wins.
+
+- **Audience.** Expedition and luxury cruise lines first (pricing v2: Phase 1 market, 40 to 60 brands, 1 to 10 vessels), then their port agents and DMCs, then small tour operators (Embark). Not cargo, not mass-market cruise, not port authorities. No customer has signed: name no line, agent or operator.
+- **Hero vessel.** Unnamed, unbranded expedition cruise ship, 140 x 23 m (reference HX Roald Amundsen class), navy hull, white superstructure, one funnel, ice-class bow, two tenders in davits. Modelled by us. `rig.py` `LEN_M` becomes 140.
+- **Withdrawn.** 13.1 hero "Cargo ship" (hungry_drifter); the A1 quay crane (12.9); containers, offices, hut; the G1 sheet in `marketing/one-harbour-v4/s3/g1` (pipeline evidence only, void as art).
+- **Objects allowed.** Expedition ship, ship's tender, harbour launch, small open tour boat, one iceberg. Each brief and frame manifest carries `vessel_type` and `segment`; a check fails the build when either is missing or off-list.
+- **Spend.** Cap 40 USD (David, 20.11.2026), planned 0 USD. Supersedes 5 000 kr (5), 0 kr (13) and 500 USD (prior art).
+- **Live 3D.** Live three.js water (13.2) supersedes "no three.js / no WebGL" in 7, 12 and 13, and the baked band in 13.1. Renders are Cycles, not Eevee.
+- **Fallbacks.** A static still, never video (13 no-video rule wins over 13.2's video strip).
+- **Resolution.** Render 2560x1440, deliver 1920x1080 desktop (supersedes 1920x1200 / 1440x900 in 13). Revisit if G4 byte budgets fail.
+- **Product claims.** Wheelhouse is live and a product: one line and one capture. Embark: third product, early access, no prices; "First deployment: Greenland" is deleted. The agent beat claims only the shared call unless an agent can create a PDA at the capture commit.
+- **Not yet built.** `components/harbour/FramePlayer.ts` (spike only); `verify` still runs v2 SVG guards that must go.
+
+Chose / Over / Because / Revisit-if: Chose an expedition cruise hero at 140 m, Over the cargo model and a 300 m mass-market hull, Because Portlink's Phase 1 market and every prospect that has seen the product run ships of this class; Revisit-if David or Kris name another vessel type or a mass-market line signs.

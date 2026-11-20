@@ -279,7 +279,7 @@ function buildAdminEmail(data: AccessRequest): string {
   /* Heading, divider and table only when a row exists. An empty labelled section is what a
      `Something else` pilot request and a build enquiry with no optional answers both produce. */
   const detailBlock = detailRows || keyPortsRow
-    ? `<div style="height:0;margin:24px 0"></div>
+    ? `<hr style="border:none;border-top:1px solid #e2e8f0;margin:16px 0">
     <p style="margin:0 0 8px;font-size:12px;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:0.05em">${data.intent === 'build' ? 'Enquiry details' : 'Operation details'}</p>
     <table cellpadding="0" cellspacing="0" style="border-collapse:collapse;width:100%">
       ${detailRows}

@@ -661,3 +661,30 @@ Measured live at 1440x900 with wheel-driven scroll (the site runs Lenis, so `scr
 Unchanged: world 4800x2400, layer ids, `fx`, extents, the camera and the clamp (12.2), the budgets in 12.6 (all stage SVG <= 120 KB raw, <= 2 500 elements).
 
 Chose / Over / Because / Revisit-if: Chose vector detail concentrated on the hero objects with flat fields, Over a photoreal frame sequence like theirs, Because 12.1 already rejected video for weight and the clamp, and their fidelity comes from where the detail goes rather than from photographs; Revisit-if the v3 frames still read as clip art beside `sheet-d.png` at `d2`.
+
+## 13. v4: rendered frames on a canvas, still no video (supersedes the rendering choice in 12)
+
+**Source.** David's v4 brief (events `34c38c99`, `9e6b3a9b`, relayed by Starboard in goal `portlink-one-harbour-v4-2026-11-20`; brief thread `dac896f5`). Binding direction: `~/.buzz/RESEARCH/one-harbour-v2/v4/ONE_HARBOUR_V4_REALISTIC_POV.md` (option B, documentary photorealism; option C, an AI photo pass, is the upgrade path). Plan: `v4/ONE_HARBOUR_V4_ARCHITECTURE.md` sections 1 to 5.
+
+**What changes.** The harbour is no longer drawn as SVG planes. Each beat is a short sequence of frames rendered offline in Blender (Cycles, Metal GPU, AgX), encoded to AVIF with a WebP fallback, and drawn by scroll onto one `<canvas>` by `components/harbour/FramePlayer.ts`. Scroll picks the frame; nothing plays on a clock.
+
+**What does not change.** Still no `<video>`, no `.mp4`, `.webm`, `.mov` or `.m4v` anywhere on the route (12.6 stands; `check-harbour-isolation` keeps the ban). Screens are never generated UI: every `screen_*` surface in a render is an alpha hole, and a real product capture sits under the canvas in a DOM `<img>` placed by a homography from the exported slot corners (`public/media/harbour-v4/slots/<seq>.json`). People are seen from behind only. Palette families from 12.9 hold: navy `#0a2342`, Mist `#f2f5f9`, Low sun `#f5b53d` as the only signal.
+
+**Look.** Documentary photorealism: no glow, no lens flare, no bloom. Beat 7 is overcast midday at quay level (`SC_overcast`, a CC0 Poly Haven overcast sky, no sun lamp). Assets are CC0 or modelled by script; spend is 0 kr.
+
+**Budgets (from the plan, section 1.5 and 1.6).**
+
+| Tier | Render | Delivered | Per frame |
+|---|---|---|---|
+| Desktop sequence | 1920x1200 | 1440x900 AVIF | 72 KB average, 110 KB max |
+| Desktop hold still | 2560x1600 | 2560x1600 AVIF | 350 KB |
+| Phone sequence | 780x1688 | 585x1266 AVIF | 36 KB average, 55 KB max |
+| Phone still | 780x1688 | 780x1688 AVIF | 80 KB |
+
+Render time at most 90 s per frame. Before first scroll at most 900 KB desktop, 600 KB phone. Whole film at most 36 MB desktop, 7 MB phone; stills path at most 2,5 MB and 1,2 MB. Scrub p95 at most 16,7 ms desktop, 20 ms phone. LCP 2,0 s desktop, 2,5 s phone, CLS 0, route JS at most 130 KB gzipped, no three.js.
+
+**Fallbacks.** Reduced motion and `saveData` get baked stills (capture composited into the slot). The hero is an `<img fetchpriority="high">` pixel-identical to frame 0 of the first sequence.
+
+**Toolchain, measured 20.11.2026.** Blender 5.2.2 LTS at `/Applications/Blender.app/Contents/MacOS/Blender`; Cycles Metal device `Apple M3 Ultra (GPU - 60 cores)`; 96 GB RAM. The v2 engine commits (WP1 to WP5) are on `feat/umbrella-harbour` at `6968167`; v4 builds on `feat/harbour-v4` from that commit.
+
+Chose / Over / Because / Revisit-if: Chose offline rendered frames drawn by scroll on a canvas, Over the v3 vector planes and over scrubbed video, Because David's v4 brief asks for a realistic point of view that vector planes cannot reach, while a frame sequence keeps scroll control, real captures in the screens and the no video rule; Revisit-if the beat 7 spike misses the 90 s render cap, the per frame byte targets or the scrub p95, or G1 judges the spike still below `../v3/d-06.png`.

@@ -77,29 +77,31 @@ export function coverageGaps(cam: Cam, vw: number, vh: number): { edge: string; 
  * Desktop keyframes (1440 x 900 proof frames d1 to d4), in screens of the track (script.ts shots).
  * The opening is the whole harbour at the coverage floor; each stop pushes in on its station.
  */
+const ST = world.stations
+
 export const DESKTOP: CamRow[] = [
-  { at: 0, cx: 2400, cy: 1420, s: 0.46, t: 0.29 }, // d1: the whole harbour
-  { at: 2.6, cx: 2400, cy: 1420, s: 0.46, t: 0.29 },
-  { at: 3.6, cx: 1500, cy: 1440, s: 1, t: 0.29 }, // d2: A1, the call
-  { at: 6, cx: 1500, cy: 1440, s: 1, t: 0.29 },
+  { at: 0, cx: 2400, cy: 1420, s: 0.46, t: ST.A1.t }, // d1: the whole harbour
+  { at: 2.6, cx: 2400, cy: 1420, s: 0.46, t: ST.A1.t },
+  { at: 3.6, cx: 1500, cy: 1440, s: 1, t: ST.A1.t }, // d2: A1, the call
+  { at: 6, cx: 1500, cy: 1440, s: 1, t: ST.A1.t },
   { at: 7.2, cx: 1900, cy: 1440, s: 0.8, t: 0.4 },
-  { at: 8.2, cx: 2240, cy: 1440, s: 1, t: 0.4462 }, // A2
-  { at: 10.2, cx: 2720, cy: 1450, s: 1, t: 0.546 }, // A3
-  { at: 12.2, cx: 3180, cy: 1470, s: 1, t: 0.6422 }, // A4
-  { at: 13.3, cx: 3620, cy: 1480, s: 1, t: 0.7338 }, // A5
+  { at: 8.2, cx: 2240, cy: 1440, s: 1, t: ST.A2.t }, // A2
+  { at: 10.2, cx: 2720, cy: 1450, s: 1, t: ST.A3.t }, // A3
+  { at: 12.2, cx: 3180, cy: 1470, s: 1, t: ST.A4.t }, // A4
+  { at: 13.3, cx: 3620, cy: 1480, s: 1, t: ST.A5.t }, // A5
   { at: 14.4, cx: 3300, cy: 1460, s: 0.9, t: 0.72 }, // d4
   { at: 16.8, cx: 2400, cy: 1440, s: 0.9, t: 0.72 }, // d3
 ]
 
 /** Phone keyframes (390 x 844 proof frames p1 to p3): tight from the first frame, then a pan. */
 export const PHONE: CamRow[] = [
-  { at: 0, cx: 1500, cy: 1500, s: 0.47, t: 0.29 }, // p1
-  { at: 2.6, cx: 1500, cy: 1500, s: 0.47, t: 0.29 },
-  { at: 3.6, cx: 1420, cy: 1500, s: 0.55, t: 0.29 }, // p2: A1
-  { at: 8.2, cx: 2140, cy: 1500, s: 0.55, t: 0.4462 },
-  { at: 10.2, cx: 2620, cy: 1500, s: 0.55, t: 0.546 }, // p3: A3
-  { at: 12.2, cx: 3080, cy: 1500, s: 0.55, t: 0.6422 },
-  { at: 13.3, cx: 3520, cy: 1500, s: 0.55, t: 0.7338 },
+  { at: 0, cx: 1500, cy: 1500, s: 0.47, t: ST.A1.t }, // p1
+  { at: 2.6, cx: 1500, cy: 1500, s: 0.47, t: ST.A1.t },
+  { at: 3.6, cx: 1420, cy: 1500, s: 0.55, t: ST.A1.t }, // p2: A1
+  { at: 8.2, cx: 2140, cy: 1500, s: 0.55, t: ST.A2.t },
+  { at: 10.2, cx: 2620, cy: 1500, s: 0.55, t: ST.A3.t }, // p3: A3
+  { at: 12.2, cx: 3080, cy: 1500, s: 0.55, t: ST.A4.t },
+  { at: 13.3, cx: 3520, cy: 1500, s: 0.55, t: ST.A5.t },
   { at: 16.8, cx: 2620, cy: 1500, s: 0.47, t: 0.72 },
 ]
 

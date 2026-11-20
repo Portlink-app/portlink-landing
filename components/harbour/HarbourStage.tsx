@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -12,6 +12,7 @@ import type { Shot } from './script'
 import styles from './harbour.module.css'
 import CaptureFigure from './CaptureFigure'
 import { DESKTOP, LAYERS, cameraAt, clampCamera, layerTransform } from './camera'
+import { buildRoute, routeD, shipState } from './route'
 import type { Plane } from './planes'
 import world from '@/public/media/harbour-v2/world.json'
 
@@ -24,8 +25,8 @@ const stageCaptures = [...new Set(STAGED_SHOTS.filter((s) => s.start > 0).flatMa
 const FX: Record<string, number> = Object.fromEntries([...LAYERS.map((l) => [l.id, l.fx]), [world.route.id, 1]])
 const [PIVOT_X, PIVOT_Y] = world.ship.pivot
 const [SHIP_W, SHIP_H] = world.ship.viewBox
-/** Until WP3 puts the ship on the route, it waits at A1, the anchorage of the opening frames. */
-const SHIP_AT = world.stations.A1
+/** How far ahead (in screens) the stage looks to tell a ship under way from one at rest. */
+const AHEAD = 0.01
 
 /**
  * The camera over the stills page (DIRECTION.md sections 4 and 7).
@@ -48,6 +49,12 @@ export default function HarbourStage({ children, planes }: { children: ReactNode
   const progress = useRef(0)
   const copies = useRef<Record<string, HTMLElement | null>>({})
   const planeEls = useRef<Record<string, HTMLDivElement | null>>({})
+  const shipEl = useRef<SVGSVGElement | null>(null)
+  // The ship's route, parsed from the route plane we already render (DIRECTION.md 12.3, WP3).
+  const route = useMemo(() => {
+    const plane = planes.find((p) => p.id === world.route.id)
+    return plane ? buildRoute(routeD(plane.inner)) : null
+  }, [planes])
   const [activeId, setActiveId] = useState(STAGED_SHOTS[0].id)
 
   useGSAP(
@@ -66,11 +73,22 @@ export default function HarbourStage({ children, planes }: { children: ReactNode
       const shoot = (screens: number) => {
         const vw = window.innerWidth
         const vh = window.innerHeight
-        const cam = clampCamera(cameraAt(screens, DESKTOP), vw, vh)
+        const row = cameraAt(screens, DESKTOP)
+        const cam = clampCamera(row, vw, vh)
         for (const [id, el] of Object.entries(planeEls.current)) {
           if (!el) continue
           const { tx, ty, s } = layerTransform(cam, FX[id] ?? 1, vw, vh)
           el.style.transform = `translate3d(${tx}px, ${ty}px, 0) scale(${s})`
+        }
+        // The ship rides #route at the camera row's route fraction, pivot on the line, bow along it.
+        // Wake while under way; the chain only while riding at anchor at A1 (DIRECTION.md 12.4).
+        const ship = shipEl.current
+        if (ship && route) {
+          const { x, y, deg } = route.at(row.t)
+          ship.style.transform = `translate(${x - PIVOT_X}px, ${y - PIVOT_Y}px) rotate(${deg}deg)`
+          const { underWay, atAnchor } = shipState(row.t, cameraAt(screens + AHEAD, DESKTOP).t)
+          ship.querySelector<SVGElement>('#ship-wake')?.style.setProperty('opacity', underWay ? '1' : '0')
+          ship.querySelector<SVGElement>('#ship-chain')?.style.setProperty('opacity', atAnchor ? '1' : '0')
         }
       }
       shoot(0)
@@ -115,7 +133,7 @@ export default function HarbourStage({ children, planes }: { children: ReactNode
         lenisRef.current = null
       }
     },
-    { dependencies: [enabled], scope: track, revertOnUpdate: true },
+    { dependencies: [enabled, route], scope: track, revertOnUpdate: true },
   )
 
   const goTo = useCallback((shot: Shot) => {
@@ -149,11 +167,12 @@ export default function HarbourStage({ children, planes }: { children: ReactNode
             p.id === 'ship' ? (
               <div key={p.id} className={styles.plane} data-plane={p.id} ref={(el) => void (planeEls.current[p.id] = el)}>
                 <svg
+                  ref={shipEl}
                   className={styles.ship}
                   viewBox={p.viewBox}
                   width={SHIP_W}
                   height={SHIP_H}
-                  style={{ left: SHIP_AT.x - PIVOT_X, top: SHIP_AT.y - PIVOT_Y }}
+                  style={{ transformOrigin: `${PIVOT_X}px ${PIVOT_Y}px` }}
                   dangerouslySetInnerHTML={{ __html: p.inner }}
                 />
               </div>

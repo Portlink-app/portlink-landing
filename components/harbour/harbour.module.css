@@ -1,0 +1,366 @@
+/* Every colour, size and geometry value on the stage reads a token from
+   harbour-tokens.css (WP4, scoped to [data-surface="harbour"]). Where those
+   tokens differ from DIRECTION.md section 6, the tokens win (Starboard, b472486c). */
+
+/* ---- Stills page: the server markup and the reduced-motion page ---- */
+.still {
+  background: var(--ds-canvas);
+  color: var(--ds-text-1);
+  padding: clamp(56px, 9vw, 120px) clamp(16px, 4vw, 48px);
+}
+/* Consecutive stops separate by a tone step, not a rule. */
+.still:nth-of-type(even) {
+  background: var(--ds-surface-1);
+}
+.stillInner {
+  max-width: 960px;
+  margin: 0 auto;
+}
+.h1 {
+  font-size: var(--ds-display-1);
+  line-height: var(--ds-leading-display);
+  letter-spacing: var(--ds-track-display);
+  font-weight: var(--ds-display-weight);
+  margin: 0;
+  max-width: 14ch;
+}
+.h2 {
+  font-size: var(--ds-display-2);
+  line-height: var(--ds-leading-display-2);
+  letter-spacing: var(--ds-track-display-2);
+  font-weight: var(--ds-display-weight);
+  margin: 0;
+  max-width: 16ch;
+}
+.line {
+  font-size: var(--ds-text-lead);
+  line-height: var(--ds-leading-lead);
+  max-width: 56ch;
+  margin: 24px 0 0;
+  color: var(--ds-text-2);
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 32px;
+}
+.btn {
+  display: inline-block;
+  padding: 14px 22px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 1rem;
+  text-decoration: none;
+  background: var(--ds-primary);
+  color: #fff;
+}
+.btnGhost {
+  composes: btn;
+  background: var(--ds-primary-faint);
+  color: var(--ds-primary);
+}
+.products {
+  display: grid;
+  gap: 32px;
+  margin-top: 40px;
+}
+/* The shared contact form draws its intent choices as 1.5px outlined cards. On this page a
+   choice is a surface: its fill (one tone up, brand-faint when chosen) and the radio carry the
+   state, so no box is drawn by a line. Inline styles, hence !important; scoped to #session. */
+.sessionGrid label:has(> input[type='radio']) {
+  border-color: transparent !important;
+}
+.productName {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+}
+.sessionGrid {
+  display: grid;
+  gap: 40px;
+  grid-template-columns: 1fr;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+@media (min-width: 900px) {
+  .sessionGrid {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+}
+
+/* ---- Stage: motion enhancement ---- */
+.track {
+  position: relative;
+  background: var(--ds-stage-bg);
+}
+.stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+  background: var(--ds-stage-bg);
+  color: var(--ds-stage-text);
+}
+.copy {
+  position: absolute;
+  left: var(--ds-stage-frame);
+  right: var(--ds-stage-frame);
+  top: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  opacity: 0;
+  pointer-events: none;
+}
+/* The copy keeps to the left column; the capture holds the right one, so nothing lies over a
+   heading at any scroll position. */
+@media (min-width: 900px) {
+  .copy {
+    right: calc(var(--ds-capture-hold-min) + 4vw + 3vw);
+  }
+  .copy .h2 {
+    font-size: min(var(--ds-display-2), 3.2vw);
+  }
+  .copy.copyHero {
+    right: var(--ds-stage-frame);
+  }
+}
+.copy .h1,
+.copy .h2 {
+  color: var(--ds-stage-text);
+}
+.copy .line {
+  color: var(--ds-stage-text-2);
+}
+.copy a,
+.copy button {
+  pointer-events: auto;
+}
+.btnSun {
+  composes: btn;
+  background: var(--ds-signal);
+  color: var(--ds-signal-ink);
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+}
+.btnSun:hover {
+  background: var(--ds-signal-hover);
+}
+.btnSunGhost {
+  composes: btn;
+  background: var(--ds-stage-surface);
+  color: var(--ds-stage-text);
+}
+.btnSun:focus-visible,
+.btnSunGhost:focus-visible {
+  outline: 2px solid var(--ds-signal);
+  outline-offset: 2px;
+}
+/* The one neutral scrim under text on footage: 0.70 holds 5.4:1 over white ice. */
+/* The world: every plane is drawn at world size (4800 x 2400 units = px at s 1) and moved by the
+   camera transform in HarbourStage (DIRECTION.md 12.2). Content bleeds past the viewBox. */
+.world {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.plane {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 4800px;
+  height: 2400px;
+  transform-origin: 0 0;
+  will-change: transform;
+}
+.plane > svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.plane > svg.ship {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: auto;
+  height: auto;
+}
+.planeHidden {
+  visibility: hidden;
+}
+
+.scrim {
+  position: absolute;
+  inset: 0;
+  background: var(--ds-stage-scrim);
+  pointer-events: none;
+}
+
+/* Thread map: bottom left, solid surface one tone up, no blur. */
+.map {
+  position: absolute;
+  /* On the copy's margin, so the stage and the page share one frame. */
+  left: var(--ds-stage-frame);
+  bottom: var(--ds-threadmap-inset);
+  width: var(--ds-threadmap-w);
+  min-height: var(--ds-threadmap-h);
+  box-sizing: border-box;
+  padding: 12px;
+  background: var(--ds-stage-surface);
+  border-radius: var(--ds-capture-radius);
+  z-index: 3;
+}
+.mapList {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.mapNode {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 24px;
+  width: 100%;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  color: var(--ds-stage-text-2);
+  font-family: var(--ds-telemetry-font);
+  font-size: var(--ds-telemetry-size);
+  line-height: var(--ds-telemetry-leading);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  text-align: left;
+}
+.mapNode::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ds-stage-line);
+  flex: none;
+}
+.mapNode:focus-visible {
+  outline: 2px solid var(--ds-signal);
+  outline-offset: 2px;
+}
+.mapNodeOn {
+  color: var(--ds-stage-text);
+  font-weight: 700;
+}
+.mapNodeOn::before {
+  width: 10px;
+  height: 10px;
+  background: var(--ds-signal);
+}
+
+/* Telemetry strip: bottom right, sans, tabular figures. */
+.telemetry {
+  position: absolute;
+  right: var(--ds-stage-frame);
+  bottom: var(--ds-threadmap-inset);
+  margin: 0;
+  font-family: var(--ds-telemetry-font);
+  font-size: var(--ds-telemetry-size);
+  line-height: var(--ds-telemetry-leading);
+  letter-spacing: var(--ds-telemetry-track);
+  font-variant-numeric: tabular-nums;
+  color: var(--ds-telemetry-color);
+  z-index: 3;
+}
+
+/* ---- Real captures (CaptureFigure). Frameless, hairline edge, no shadow. ---- */
+.capture {
+  margin: 32px 0 0;
+}
+.capture img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--ds-capture-radius);
+}
+.captureNote {
+  margin-top: 8px;
+  font-family: var(--ds-telemetry-font);
+  font-size: var(--ds-telemetry-size);
+  line-height: var(--ds-telemetry-leading);
+  color: var(--ds-text-3);
+}
+.stageCapture {
+  position: absolute;
+  right: 4vw;
+  top: 50%;
+  width: var(--ds-capture-hold-min);
+  margin: 0;
+  transform: translateY(-50%);
+  z-index: 2;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.3s ease,
+    visibility 0s linear 0.3s;
+}
+.stageCaptureOn {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.3s ease;
+}
+/* A stop's capture (DIRECTION.md 12.4): laid out at its lifted place, the hold-width floor wide,
+   and moved onto its station anchor by the stage's per-frame transform. No CSS transform here, so
+   the stage can read the lifted box from offsetLeft/offsetTop. */
+.stageLift {
+  position: absolute;
+  right: 4vw;
+  top: 0;
+  bottom: 0;
+  height: fit-content;
+  margin: auto 0;
+  width: var(--ds-capture-hold-min);
+  z-index: 2;
+  visibility: hidden;
+  transform-origin: 50% 50%;
+  will-change: transform, opacity;
+}
+.stageLift .capture {
+  margin: 0;
+}
+.stageCapture .captureNote,
+.stageLift .captureNote {
+  color: var(--ds-telemetry-color);
+}
+/* Tablet: copy at the top, capture below it, the stop list gives way to the telemetry line. */
+@media (max-width: 899px) {
+  .copy {
+    justify-content: flex-start;
+    padding-top: 112px;
+  }
+  .stageCapture {
+    left: 24px;
+    right: 24px;
+    top: auto;
+    bottom: calc(var(--ds-threadmap-inset) + 32px);
+    width: auto;
+    transform: none;
+  }
+  .stageLift {
+    left: 24px;
+    right: 24px;
+    top: auto;
+    bottom: calc(var(--ds-threadmap-inset) + 32px);
+    margin: 0;
+    width: auto;
+  }
+  .map {
+    display: none;
+  }
+}

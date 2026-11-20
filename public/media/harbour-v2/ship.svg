@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 190">
+<title>One Harbour v2, ship sprite</title>
+<desc>Expedition cruise ship, side elevation, bow toward +x, 120 m at 5 units per metre. Pivot (300,160): waterline at midship. Bridge window dock point (398,38). Place by translating the pivot onto the route point; never rotate; scale 1. ship-wake shows under way, ship-chain at anchor, ship-lights whenever the ship is on stage. Signal colour appears only inside ship-lights.</desc>
+<g id="ship-reflection">
+<path d="M30 164H544L532 176H420L408 184H150L138 176H46Z" fill="#0f2340"/>
+</g>
+<g id="ship-hull">
+<path d="M24 162L18 122L26 106H436L500 102L584 92L568 124L548 162Z" fill="#495a72"/>
+<path d="M500 102L584 92L568 124L548 162H528L546 122Z" fill="#5f6e85"/>
+<path d="M23 154H552L548 162H24Z" fill="#293c57"/>
+<path d="M22 116H500L575 108" fill="none" stroke="#c3cddb" stroke-width="3"/>
+<path d="M60 128h5v5h-5zm22 0h5v5h-5zm22 0h5v5h-5zm22 0h5v5h-5zm22 0h5v5h-5zm22 0h5v5h-5zm22 0h5v5h-5zm22 0h5v5h-5zm22 0h5v5h-5zm22 0h5v5h-5zm22 0h5v5h-5zm22 0h5v5h-5zm22 0h5v5h-5zm22 0h5v5h-5zm22 0h5v5h-5zm22 0h5v5h-5zm22 0h5v5h-5zm22 0h5v5h-5zm22 0h5v5h-5zm22 0h5v5h-5zm22 0h5v5h-5z" fill="#1e314d"/>
+<path d="M500 102L584 92L582 86L500 96Z" fill="#c3cddb"/>
+<path d="M520 100V78M520 80L556 92M30 106V84M28 106V98H52" fill="none" stroke="#a0acbd" stroke-width="2.5"/>
+<path d="M31 86h14v8h-14z" fill="#c3cddb"/>
+</g>
+<g id="ship-superstructure">
+<path d="M52 106V86H474L490 106ZM88 86V66H452L466 86ZM132 66V46H432L444 66Z" fill="#a0acbd"/>
+<path d="M462 86H474L490 106H474ZM440 66H452L466 86H452ZM420 46H432L444 66H432Z" fill="#c3cddb"/>
+<path d="M326 46V28H414L430 46Z" fill="#c3cddb"/>
+<path d="M52 86H474M88 66H452M132 46H432" fill="none" stroke="#f2f5f9" stroke-width="2.5"/>
+<path d="M60 90H468V101H60ZM94 70H446V81H94ZM138 50H426V61H138ZM330 31H412L420 45H330Z" fill="#1e314d"/>
+<path d="M66 92h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zM100 72h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zM144 52h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zm14 0h6v7h-6zM334 34h8v8h-8zm12 0h8v8h-8zm12 0h8v8h-8zm12 0h8v8h-8z" fill="#384963"/>
+<path d="M196 46L204 10H242L252 46Z" fill="#384963"/>
+<path d="M232 10H242L252 46H240Z" fill="#495a72"/>
+<path d="M201.3 22H245.3L247.5 30H199.6Z" fill="#c3cddb"/>
+<path d="M368 28V2M358 10H378M362 18H374M148 74V68M190 74V68M260 74V68M302 74V68" fill="none" stroke="#a0acbd" stroke-width="2.5"/>
+<circle cx="392" cy="22" r="6" fill="#f2f5f9"/>
+<circle cx="290" cy="40" r="6" fill="#c3cddb"/>
+<circle cx="160" cy="41" r="5" fill="#c3cddb"/>
+<rect x="366" y="0" width="5" height="5" fill="#f2f5f9"/>
+<path d="M150 84l-4 -10h46l-4 10zM262 84l-4 -10h46l-4 10z" fill="#758398"/>
+<path d="M154 74v-4h30v4zM266 74v-4h30v4z" fill="#c3cddb"/>
+</g>
+<g id="ship-lights">
+<path d="M80 92h6v7h-6zM94 92h6v7h-6zM122 92h6v7h-6zM164 92h6v7h-6zM178 92h6v7h-6zM220 92h6v7h-6zM248 92h6v7h-6zM262 92h6v7h-6zM304 92h6v7h-6zM332 92h6v7h-6zM346 92h6v7h-6zM388 92h6v7h-6zM416 92h6v7h-6zM430 92h6v7h-6zM100 72h6v7h-6zM114 72h6v7h-6zM212 72h6v7h-6zM226 72h6v7h-6zM240 72h6v7h-6zM324 72h6v7h-6zM338 72h6v7h-6zM352 72h6v7h-6zM380 72h6v7h-6zM408 72h6v7h-6zM422 72h6v7h-6zM158 52h6v7h-6zM172 52h6v7h-6zM214 52h6v7h-6zM256 52h6v7h-6zM270 52h6v7h-6zM312 52h6v7h-6zM354 52h6v7h-6zM368 52h6v7h-6zM410 52h6v7h-6zM382 34H411L416 42H382Z" fill="#f5b53d"/>
+<path d="M110 170h44M226 176h30M318 170h52M396 178h22" fill="none" stroke="#f5b53d" stroke-width="3"/>
+</g>
+<g id="ship-chain">
+<path d="M566 112L576 162" fill="none" stroke="#758398" stroke-width="2.5"/>
+</g>
+<g id="ship-wake">
+<path d="M10 162H556" fill="none" stroke="#5f6e85" stroke-width="3"/>
+<path d="M548 162L566 150L590 162ZM20 162L4 155L0 162Z" fill="#a0acbd"/>
+</g>
+</svg>

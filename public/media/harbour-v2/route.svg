@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4800 2400">
+<title>One Harbour v2, route</title>
+<desc>The ship's track on the fx 1 plane, one path, monotone in x. Head office edge at x 0, A1 anchorage (1380 1610), A2 abeam the port agent (2140 1620), A3 abeam the DMC (2620 1632), A4 abeam the guide hut (3080 1680), A5 tour boat station (3520 1690), exit at x 4800. Sample it with getTotalLength and getPointAtLength; station fractions are recorded in world.json.</desc>
+<path id="route" d="M0 1700C300 1700 700 1704 960 1670S1250 1610 1380 1610S1900 1616 2140 1620S2460 1624 2620 1632S2940 1672 3080 1680S3380 1694 3520 1690S4300 1650 4800 1640" fill="none" stroke="#f5b53d" stroke-width="4"/>
+</svg>

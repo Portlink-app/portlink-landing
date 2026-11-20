@@ -1,0 +1,303 @@
+'use client'
+
+import { useCallback, useMemo, useRef, useState } from 'react'
+import type { ReactNode } from 'react'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useGSAP } from '@gsap/react'
+import Lenis from 'lenis'
+import { useMotionAllowed, useNarrow } from '@/components/film/useFilm'
+import { CAPTURES_READY, SHOTS, STAGED_SHOTS, STOPS, TRACK_SCREENS, liftAt, shotAt } from './script'
+import type { Shot } from './script'
+import styles from './harbour.module.css'
+import CaptureFigure from './CaptureFigure'
+import { DESKTOP, LAYERS, cameraAt, clampCamera, layerTransform } from './camera'
+import { buildRoute, routeD, shipState } from './route'
+import type { Plane } from './planes'
+import world from '@/public/media/harbour-v2/world.json'
+
+gsap.registerPlugin(useGSAP, ScrollTrigger)
+
+/** Shots that stop at a station: their capture lifts from the anchor instead (DIRECTION.md 12.4). */
+const STOP_SHOTS = new Set(STOPS.map((s) => s.shot))
+/** Stops that lift a capture, in track order. */
+const LIFTS = STOPS.filter((s) => s.capture)
+/** The other shots' captures, shown beside the copy once each, in track order. */
+const stageCaptures = [
+  ...new Set(STAGED_SHOTS.filter((s) => s.start > 0 && !STOP_SHOTS.has(s.id)).flatMap((s) => s.captures.slice(0, 1))),
+]
+/** A capture on its anchor is drawn at this fraction of its lifted size. */
+const LIFT_FROM = 0.06
+const smooth = (u: number) => u * u * (3 - 2 * u)
+
+/** Horizontal parallax per plane id (world.json); the route lies on the fx 1 plane with the ship. */
+const FX: Record<string, number> = Object.fromEntries([...LAYERS.map((l) => [l.id, l.fx]), [world.route.id, 1]])
+const [PIVOT_X, PIVOT_Y] = world.ship.pivot
+const [SHIP_W, SHIP_H] = world.ship.viewBox
+/** How far ahead (in screens) the stage looks to tell a ship under way from one at rest. */
+const AHEAD = 0.01
+
+/**
+ * The camera over the stills page (DIRECTION.md sections 4 and 7).
+ *
+ * The server sends `children`: the reduced-motion stills page, which makes every claim on its own.
+ * Only when the browser has answered that motion is welcome (useMotionAllowed starts at "no") and
+ * the viewport is not a phone does the stage replace those stills with one sticky 100svh stage
+ * inside a tall track. Native scroll on touch: Lenis is not asked to take touch over.
+ *
+ * The track is (TRACK_SCREENS + 1) viewports tall: the stage is stuck for TRACK_SCREENS of scroll,
+ * so a shot range in script.ts is literally the scroll distance in screens from the track top.
+ */
+export default function HarbourStage({ children, planes }: { children: ReactNode; planes: Plane[] }) {
+  const motion = useMotionAllowed()
+  const narrow = useNarrow()
+  const enabled = motion && !narrow
+
+  const track = useRef<HTMLElement>(null)
+  const lenisRef = useRef<Lenis | null>(null)
+  const progress = useRef(0)
+  const copies = useRef<Record<string, HTMLElement | null>>({})
+  const planeEls = useRef<Record<string, HTMLDivElement | null>>({})
+  const shipEl = useRef<SVGSVGElement | null>(null)
+  const lifts = useRef<Record<string, HTMLDivElement | null>>({})
+  // The ship's route, parsed from the route plane we already render (DIRECTION.md 12.3, WP3).
+  const route = useMemo(() => {
+    const plane = planes.find((p) => p.id === world.route.id)
+    return plane ? buildRoute(routeD(plane.inner)) : null
+  }, [planes])
+  const [activeId, setActiveId] = useState(STAGED_SHOTS[0].id)
+
+  useGSAP(
+    () => {
+      if (!enabled || !track.current) return
+      ScrollTrigger.config({ ignoreMobileResize: true })
+      const lenis = new Lenis()
+      lenisRef.current = lenis
+      lenis.on('scroll', ScrollTrigger.update)
+      const tick = (t: number) => lenis.raf(t * 1000)
+      gsap.ticker.add(tick)
+      gsap.ticker.lagSmoothing(0)
+
+      // The camera (DIRECTION.md 12.2, 12.6): the keyframes are wishes, clampCamera is the law, so
+      // no scroll position or viewport can show the edge of a full-bleed plane or of the world.
+      // Each lifted capture's centre in its laid-out (lifted) place, read once per layout from the
+      // untransformed offset box and cleared on resize.
+      let liftBase: Record<string, { x: number; y: number }> = {}
+      const shoot = (screens: number) => {
+        const vw = window.innerWidth
+        const vh = window.innerHeight
+        const row = cameraAt(screens, DESKTOP)
+        const cam = clampCamera(row, vw, vh)
+        // The stop grammar's lift and pull-back (DIRECTION.md 12.4): from the station anchor, where the
+        // ship rests on the fx 1 plane, up to the capture's lifted box and back.
+        const ship1 = layerTransform(cam, 1, vw, vh)
+        for (const stop of LIFTS) {
+          const el = lifts.current[stop.station]
+          if (!el) continue
+          const p = liftAt(stop, screens)
+          el.dataset.lift = p.toFixed(3)
+          if (p <= 0) {
+            el.style.visibility = 'hidden'
+            continue
+          }
+          const base = (liftBase[stop.station] ??= {
+            x: el.offsetLeft + el.offsetWidth / 2,
+            y: el.offsetTop + el.offsetHeight / 2,
+          })
+          const st = world.stations[stop.station]
+          const e = smooth(p)
+          const dx = (ship1.tx + st.x * cam.s - base.x) * (1 - e)
+          const dy = (ship1.ty + st.y * cam.s - base.y) * (1 - e)
+          el.style.visibility = 'visible'
+          el.style.opacity = String(Math.min(1, p * 2.5))
+          el.style.transform = `translate(${dx}px, ${dy}px) scale(${LIFT_FROM + (1 - LIFT_FROM) * e})`
+        }
+        for (const [id, el] of Object.entries(planeEls.current)) {
+          if (!el) continue
+          const { tx, ty, s } = layerTransform(cam, FX[id] ?? 1, vw, vh)
+          el.style.transform = `translate3d(${tx}px, ${ty}px, 0) scale(${s})`
+        }
+        // The ship rides #route at the camera row's route fraction, pivot on the line, bow along it.
+        // Wake while under way; the chain only while riding at anchor at A1 (DIRECTION.md 12.4).
+        const ship = shipEl.current
+        if (ship && route) {
+          const { x, y, deg } = route.at(row.t)
+          ship.style.transform = `translate(${x - PIVOT_X}px, ${y - PIVOT_Y}px) rotate(${deg}deg)`
+          const { underWay, atAnchor } = shipState(row.t, cameraAt(screens + AHEAD, DESKTOP).t)
+          ship.querySelector<SVGElement>('#ship-wake')?.style.setProperty('opacity', underWay ? '1' : '0')
+          ship.querySelector<SVGElement>('#ship-chain')?.style.setProperty('opacity', atAnchor ? '1' : '0')
+        }
+      }
+      shoot(0)
+      const reshoot = () => {
+        liftBase = {}
+        shoot(progress.current * TRACK_SCREENS)
+      }
+      window.addEventListener('resize', reshoot)
+
+      const tl = gsap.timeline({
+        defaults: { ease: 'none' },
+        scrollTrigger: {
+          trigger: track.current,
+          start: 'top top',
+          end: () => `+=${TRACK_SCREENS * window.innerHeight}`,
+          scrub: true,
+          onUpdate: (self) => {
+            progress.current = self.progress
+            shoot(self.progress * TRACK_SCREENS)
+            const id = shotAt(self.progress * TRACK_SCREENS).id
+            setActiveId((cur) => (cur === id ? cur : id))
+          },
+        },
+      })
+      // One master timeline in screens. Each shot's copy fades in after its start and out before its end.
+      for (const shot of STAGED_SHOTS) {
+        const el = copies.current[shot.id]
+        if (!el || !shot.heading) continue
+        const fade = Math.min(0.25, (shot.end - shot.start) / 4)
+        // The hero is already on screen at scroll 0: it only fades out.
+        // autoAlpha, not opacity: a faded copy also becomes visibility: hidden, so it stops lying
+        // over the copy that is on screen (hit-testing and assistive tech skip it).
+        if (shot.start === 0) gsap.set(el, { autoAlpha: 1 })
+        else tl.fromTo(el, { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: fade }, shot.start + 0.05)
+        if (shot.id !== STAGED_SHOTS[STAGED_SHOTS.length - 1].id) {
+          tl.to(el, { autoAlpha: 0, duration: fade }, shot.end - fade)
+        }
+      }
+      tl.set({}, {}, TRACK_SCREENS)
+
+      return () => {
+        window.removeEventListener('resize', reshoot)
+        gsap.ticker.remove(tick)
+        lenis.destroy()
+        lenisRef.current = null
+      }
+    },
+    { dependencies: [enabled, route], scope: track, revertOnUpdate: true },
+  )
+
+  const goTo = useCallback((shot: Shot) => {
+    const el = track.current
+    if (!el) return
+    const y = el.getBoundingClientRect().top + window.scrollY + shot.start * window.innerHeight
+    if (lenisRef.current) lenisRef.current.scrollTo(y)
+    else window.scrollTo({ top: y })
+  }, [])
+
+  if (!enabled) return <>{children}</>
+
+  const active = STAGED_SHOTS.find((s) => s.id === activeId) ?? STAGED_SHOTS[0]
+  const telemetry = CAPTURES_READY && active.telemetry ? active.telemetry : active.role
+  const nodes = SHOTS.filter((s) => s.node && s.staged)
+  const activeCapture = active.start === 0 || STOP_SHOTS.has(active.id) ? null : (active.captures[0] ?? null)
+
+  return (
+    <section
+      ref={track}
+      className={styles.track}
+      data-surface="harbour"
+      style={{ height: `${(TRACK_SCREENS + 1) * 100}svh` }}
+      aria-label="One Harbour"
+    >
+      <div className={styles.stage}>
+        {/* The planes, in draw order, each at world size under one camera transform. Our own committed
+            artwork read on the server (planes.ts), never user input. */}
+        <div className={styles.world} aria-hidden="true">
+          {planes.map((p) =>
+            p.id === 'ship' ? (
+              <div key={p.id} className={styles.plane} data-plane={p.id} ref={(el) => void (planeEls.current[p.id] = el)}>
+                <svg
+                  ref={shipEl}
+                  className={styles.ship}
+                  viewBox={p.viewBox}
+                  width={SHIP_W}
+                  height={SHIP_H}
+                  style={{ transformOrigin: `${PIVOT_X}px ${PIVOT_Y}px` }}
+                  dangerouslySetInnerHTML={{ __html: p.inner }}
+                />
+              </div>
+            ) : (
+              <div
+                key={p.id}
+                className={`${styles.plane} ${p.id === world.route.id ? styles.planeHidden : ''}`}
+                data-plane={p.id}
+                ref={(el) => void (planeEls.current[p.id] = el)}
+              >
+                <svg viewBox={p.viewBox} dangerouslySetInnerHTML={{ __html: p.inner }} />
+              </div>
+            ),
+          )}
+        </div>
+        <div className={styles.scrim} aria-hidden="true" />
+        {/* Every capture stays mounted and loads up front; only the active stop's is shown. The hero
+            (S0) holds no capture: the title owns the first screen and nothing lies over it. */}
+        {CAPTURES_READY
+          ? stageCaptures.map((id) => (
+              <CaptureFigure
+                key={id}
+                id={id}
+                loading="eager"
+                className={`${styles.stageCapture} ${id === activeCapture ? styles.stageCaptureOn : ''}`}
+              />
+            ))
+          : null}
+        {CAPTURES_READY
+          ? LIFTS.map((stop) => (
+              <div
+                key={stop.station}
+                className={styles.stageLift}
+                data-station={stop.station}
+                ref={(el) => void (lifts.current[stop.station] = el)}
+              >
+                <CaptureFigure id={stop.capture as string} loading="eager" />
+              </div>
+            ))
+          : null}
+
+        {STAGED_SHOTS.filter((s) => s.heading).map((s) => (
+          <div
+            key={s.id}
+            id={`harbour-${s.id.toLowerCase()}`}
+            className={`${styles.copy} ${s.start === 0 ? styles.copyHero : ''}`}
+            ref={(el) => {
+              copies.current[s.id] = el
+            }}
+          >
+            {s.id === 'S0' ? <h1 className={styles.h1}>{s.heading}</h1> : <h2 className={styles.h2}>{s.heading}</h2>}
+            {s.line ? <p className={styles.line}>{s.line}</p> : null}
+            {s.id === 'S0' ? (
+              <div className={styles.actions}>
+                <button type="button" className={styles.btnSun} onClick={() => goTo(SHOTS[1])}>
+                  Follow the call
+                </button>
+                <a className={styles.btnSunGhost} href="#session">
+                  Book a working session
+                </a>
+              </div>
+            ) : null}
+          </div>
+        ))}
+
+        <nav className={styles.map} aria-label="Harbour stops">
+          <ol className={styles.mapList}>
+            {nodes.map((s) => (
+              <li key={s.id}>
+                <button
+                  type="button"
+                  className={`${styles.mapNode} ${s.id === active.id ? styles.mapNodeOn : ''}`}
+                  aria-current={s.id === active.id ? 'step' : undefined}
+                  onClick={() => goTo(s)}
+                >
+                  {s.label}
+                </button>
+              </li>
+            ))}
+          </ol>
+        </nav>
+        <p className={styles.telemetry} aria-live="off">
+          {telemetry}
+        </p>
+      </div>
+    </section>
+  )
+}

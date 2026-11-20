@@ -688,3 +688,18 @@ Render time at most 90 s per frame. Before first scroll at most 900 KB desktop, 
 **Toolchain, measured 20.11.2026.** Blender 5.2.2 LTS at `/Applications/Blender.app/Contents/MacOS/Blender`; Cycles Metal device `Apple M3 Ultra (GPU - 60 cores)`; 96 GB RAM. The v2 engine commits (WP1 to WP5) are on `feat/umbrella-harbour` at `6968167`; v4 builds on `feat/harbour-v4` from that commit.
 
 Chose / Over / Because / Revisit-if: Chose offline rendered frames drawn by scroll on a canvas, Over the v3 vector planes and over scrubbed video, Because David's v4 brief asks for a realistic point of view that vector planes cannot reach, while a frame sequence keeps scroll control, real captures in the screens and the no video rule; Revisit-if the beat 7 spike misses the 90 s render cap, the per frame byte targets or the scrub p95, or G1 judges the spike still below `../v3/d-06.png`.
+
+### 13.1 Spike S2: one hero object on a flat field (20.11.2026)
+
+G1 on spike S: the pipeline passed, the art failed (David: "childish"). S2 drops the modelled harbour and renders one product-grade ship on a flat field.
+
+- **Field.** Flat navy `#0a2342`, composited behind a transparent film. No sky, no scenery.
+- **Hero.** "Cargo ship" by hungry_drifter, CC-BY, https://sketchfab.com/3d-models/cargo-ship-b7c97df584824ca682d26daabf401f87, fetched from the Objaverse mirror, 0 kr. Credit line on the page: `Cargo ship by hungry_drifter (Sketchfab), CC BY 4.0`. About 73k faces, 9 textures at 1024 px.
+- **Hull detail.** Plating seams as a brick bump masked below the sheer line. The model has no hull portholes (its windows sit on the superstructure); mooring lines and lifeboats are not added.
+- **Water.** One narrow Ocean-modifier band (900 x 140 m), alpha faded at both edges, dithered; ocean time and ship travel advance with the frame, so wake and reflection move on scroll.
+- **Light.** Hard key from upper left (0,5 degrees), rim `#f5b53d` with specular off (it read as flare), cold edge `#4f7db8`. No bloom, no flare.
+- **Type and UI.** Not in the render; DOM and SVG layers on top, as in section 13.
+- **Beat 1.** 24 frames at 1440x900 and 390x844, Eevee, 64 samples, AgX. Measured 0,65 to 0,94 s per frame desktop (about 0,75 s), 0,50 to 0,70 s mobile (about 0,57 s), far under the 90 s cap.
+- **Sources.** Scripts, frames and the side-by-side with the UC sheet live in `/Users/nyx/Projects/portlink/marketing/one-harbour-v4/s2/` (`py/scene.py`, `r/d/`, `r/p/`, `r/S2_side_by_side.jpg`).
+
+Chose / Over / Because / Revisit-if: Chose one free CC-BY hero ship on a flat navy field with a narrow ocean band and the three-light rig, Over the modelled harbour of spike S and over a paid model, Because G1 judged the scene art childish while the pipeline passed, and a single detailed object carries the realism a whole low-detail harbour could not, at 0 kr; Revisit-if G1 fails S2, or the missing hull details (portholes, lines, lifeboats, a visible wake) are judged blocking, in which case a priced list of 3 paid or custom candidates goes to Starboard before any spend.

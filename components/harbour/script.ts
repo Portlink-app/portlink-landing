@@ -192,6 +192,26 @@ export function liftAt(s: Stop, screens: number): number {
   return Math.min(1, Math.max(0, u))
 }
 
+/**
+ * Screens of push-in before a stop's arrive over which its station lights fade up (DIRECTION.md
+ * 12.4, 12.8 WP5). 0,4 is the shortest approach on the track (A4 depart 13,4 to A5 arrive 13,8), so
+ * every fade lies inside its own approach.
+ */
+export const LIGHTS_SCREENS = 0.4
+
+/** The `lights-*` group ids that belong to a station: its quay lights and their water reflection. */
+export const lightsIds = (station: Stop['station']) => [`lights-${station}`, `lights-${station}-water`]
+
+/**
+ * A station's lights at a scroll position: 0 before its push-in, rising to 1 at arrive, then 1 for
+ * the rest of the track. The pull-back never dims them ("the lights stay on").
+ */
+export function lightsAt(s: Stop, screens: number): number {
+  if (screens >= s.arrive) return 1
+  if (screens <= s.arrive - LIGHTS_SCREENS) return 0
+  return Math.max(0, 1 - (s.arrive - screens) / LIGHTS_SCREENS)
+}
+
 /** The three product regions of S13. Wheelhouse carries no claim (Q5 default). */
 export const PRODUCTS = [
   { name: 'Portlink', href: '/portlink/', text: 'One call record shared by the cruise line, the port agent and the DMC.' },

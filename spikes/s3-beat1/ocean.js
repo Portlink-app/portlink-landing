@@ -108,7 +108,7 @@ export function createOcean(canvas, cam, { sim = 256, dpr = 1.5, seg = 256 } = {
         float fres = pow(1. - max(dot(n, v), 0.), 5.) * 0.9 + 0.02;
         vec3 col = mix(uNavy * 0.55, mix(uNavy * 1.6, uCold * 0.55, 0.35), fres);
         vec3 h = normalize(uSunDir + v);
-        col += uSun * (pow(max(dot(n, h), 0.), 220.) * 0.55 + pow(max(dot(n, h), 0.), 60.) * 0.025);
+        col += uSun * (pow(max(dot(n, h), 0.), 400.) * 0.32 + pow(max(dot(n, h), 0.), 60.) * 0.025);
         col += uCold * pow(max(dot(n, -uSunDir), 0.), 4.) * 0.05;
         vec2 fp = vWorld.xz * vec2(0.35, 0.8);
         float nz = vnoise(fp) * 0.65 + vnoise(fp * 2.7 + 13.1) * 0.35;

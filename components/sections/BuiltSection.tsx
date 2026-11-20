@@ -17,9 +17,6 @@ export default function BuiltSection() {
       }}
     >
       <div style={{ maxWidth: 680, margin: '0 auto' }}>
-        <span className="reveal section-eyebrow" style={{ display: 'inline-block' }}>
-          What we built
-        </span>
         <h2
           className="reveal"
           style={{

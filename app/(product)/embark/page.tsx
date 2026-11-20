@@ -75,23 +75,23 @@ export default function EmbarkProductPage() {
               {/* Front Layer: Integrated 4-Pillar Operational Metrics Strip */}
               <div className="pp-callout-strip pp-callout-strip--four">
                 <div className="pp-callout-pill">
-                  <span className="pp-callout-pill-kicker">Direct Web Checkout</span>
                   <strong>Widget + Vipps &amp; Stripe</strong>
+                  <span className="pp-callout-pill-meta">Direct Web Checkout</span>
                   <span>Embed /w/fjordland on your site with instant seat lock</span>
                 </div>
                 <div className="pp-callout-pill">
-                  <span className="pp-callout-pill-kicker">Resource Protection</span>
                   <strong>Boat &amp; Guide Conflict Lock</strong>
+                  <span className="pp-callout-pill-meta">Resource Protection</span>
                   <span>RIB Havørn (12p) &amp; MS Fjordsyn (24p) never double-book</span>
                 </div>
                 <div className="pp-callout-pill">
-                  <span className="pp-callout-pill-kicker">Pier &amp; Gangway</span>
                   <strong>Offline-Ready Quay Check-In</strong>
+                  <span className="pp-callout-pill-meta">Pier &amp; Gangway</span>
                   <span>Tap guest groups or scan QR vouchers on any guide phone</span>
                 </div>
                 <div className="pp-callout-pill">
-                  <span className="pp-callout-pill-kicker">Cruise B2B Channel</span>
                   <strong>Portlink DMC Trade Sync</strong>
+                  <span className="pp-callout-pill-meta">Cruise B2B Channel</span>
                   <span>Receive &amp; confirm cruise shorex allocations in one click</span>
                 </div>
               </div>
@@ -159,18 +159,18 @@ export default function EmbarkProductPage() {
 
             <div className="pp-callout-strip">
               <div className="pp-callout-pill">
-                <span className="pp-callout-pill-kicker">Vessel Quota Lock</span>
                 <strong className="pp-mono">RIB Havørn (12p) · MS Fjordsyn (24p)</strong>
+                <span className="pp-callout-pill-meta">Vessel Quota Lock</span>
                 <span>Shared hull inventory prevents overlapping departure overbooking</span>
               </div>
               <div className="pp-callout-pill">
-                <span className="pp-callout-pill-kicker">Guide Qualifications</span>
                 <strong className="pp-mono">STCW + NO / EN / DE</strong>
+                <span className="pp-callout-pill-meta">Guide Qualifications</span>
                 <span>Filter roster by high-speed craft certificate and guest language</span>
               </div>
               <div className="pp-callout-pill">
-                <span className="pp-callout-pill-kicker">Exception Alerts</span>
                 <strong className="pp-mono">Action Required Flag</strong>
+                <span className="pp-callout-pill-meta">Exception Alerts</span>
                 <span>Departures missing a skipper or guide highlight 24 hours ahead</span>
               </div>
             </div>
@@ -213,18 +213,18 @@ export default function EmbarkProductPage() {
 
             <div className="pp-callout-strip">
               <div className="pp-callout-pill">
-                <span className="pp-callout-pill-kicker">Embeddable Web Widget</span>
                 <strong className="pp-mono">/w/fjordland · Live Seats</strong>
+                <span className="pp-callout-pill-meta">Embeddable Web Widget</span>
                 <span>Real-time seat availability on your own domain with zero OTA commission</span>
               </div>
               <div className="pp-callout-pill">
-                <span className="pp-callout-pill-kicker">Instant Nordic &amp; Global Pay</span>
                 <strong className="pp-mono">Vipps · Stripe · Apple Pay</strong>
+                <span className="pp-callout-pill-meta">Instant Nordic &amp; Global Pay</span>
                 <span>Payment confirmation attaches directly to the passenger manifest row</span>
               </div>
               <div className="pp-callout-pill">
-                <span className="pp-callout-pill-kicker">Group &amp; DMC Invoicing</span>
                 <strong className="pp-mono">Invoice #2048 · Settled 14d Prior</strong>
+                <span className="pp-callout-pill-meta">Group &amp; DMC Invoicing</span>
                 <span>Automated payment links and reminders for private charters and cruise groups</span>
               </div>
             </div>

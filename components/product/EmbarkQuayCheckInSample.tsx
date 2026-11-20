@@ -6,6 +6,7 @@
  *   2. <EmbarkCruiseTradeBridge /> (Chapter 5: Two-Sided Portlink DMC Request ⇄ Embark Operator Confirmation)
  */
 import { useState } from 'react'
+import { Check, Plus } from 'lucide-react'
 import { useOptionalProductSession } from '@/components/acquisition/ProductSession'
 import { customerBrand } from '@/lib/customer-brand'
 
@@ -316,7 +317,13 @@ export function EmbarkQuayCheckInSample() {
                     aria-pressed={isChecked}
                     onClick={() => toggleRow(row.id)}
                   >
-                    {isChecked ? 'Aboard ✓' : `Check in (+${row.pax})`}
+                    {isChecked ? (
+                      <>
+                        Aboard <Check className="pp-inline-icon" size={14} strokeWidth={2.5} aria-hidden="true" />
+                      </>
+                    ) : (
+                      `Check in (+${row.pax})`
+                    )}
                   </button>
                 </div>
               )
@@ -387,7 +394,7 @@ export function EmbarkQuayCheckInSample() {
                         </small>
                       </span>
                       <span className="pp-phone-tick" aria-hidden="true">
-                        {isChecked ? '✓' : '+'}
+                        {isChecked ? <Check size={16} strokeWidth={2.5} /> : <Plus size={16} strokeWidth={2.5} />}
                       </span>
                     </button>
                   )
@@ -535,7 +542,13 @@ export function EmbarkCruiseTradeBridge() {
               className="pp-action-primary"
               onClick={() => setConfirmed((v) => !v)}
             >
-              {confirmed ? 'Confirmed & Synced ✓ (Click to reset)' : 'Confirm allocation & pricing'}
+              {confirmed ? (
+                <>
+                  Confirmed &amp; Synced <Check className="pp-inline-icon" size={14} strokeWidth={2.5} aria-hidden="true" /> (Click to reset)
+                </>
+              ) : (
+                'Confirm allocation & pricing'
+              )}
             </button>
           </div>
         </div>

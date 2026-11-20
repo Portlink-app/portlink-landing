@@ -186,7 +186,6 @@ export default function Sporsmal() {
       <section id="sporsmal" className={styles.form} aria-labelledby="sporsmal-title">
         <div className={styles.formInner}>
           <div className={styles.sent} role="status">
-            <span className={styles.eyebrow}>Sendt</span>
             <h2 id="sporsmal-title">Tusen takk.</h2>
             <p>{answered} av {total} svar er på vei til oss. Alt er nyttig, også det kritiske.</p>
             <p className={styles.sentNote}>Svarene ligger fortsatt her i nettleseren. Kommer dere på mer, kan dere fylle ut og sende igjen.</p>
@@ -206,7 +205,6 @@ export default function Sporsmal() {
     <section id="sporsmal" className={styles.form} aria-labelledby="sporsmal-title">
       <div className={styles.formInner}>
         <div className={styles.formHeading}>
-          <span className={styles.eyebrow}>Spørsmålene</span>
           <h2 id="sporsmal-title">{total} spørsmål til dere som bruker Grieg Connect hver dag.</h2>
           <p>Velg et tema og svar på det dere kan best. Stikkord holder, vi leser alt. De fem første er de viktigste.</p>
         </div>

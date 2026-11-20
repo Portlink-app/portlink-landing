@@ -72,7 +72,6 @@ export default function Modulkart() {
     <section id="moduler" className={styles.moduler} aria-labelledby="moduler-title">
       <div className={styles.modulerInner}>
         <div className={styles.modulerHeading}>
-          <span className={styles.eyebrow}>Modul for modul</span>
           <h2 id="moduler-title">Hva Grieg Connect gjør, og hva vi gjør ved siden av.</h2>
           <p>Den midterste kolonnen er Grieg Connects egen beskrivelse fra griegconnect.com. Den siste er vår. Rett oss gjerne.</p>
         </div>

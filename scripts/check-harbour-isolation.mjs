@@ -24,6 +24,13 @@
  * "NOT MEASURED" and the built pass plus the review diff carry the guard. Set
  * HARBOUR_ISOLATION_STRICT=1 to turn NOT MEASURED into a failure.
  *
+ * --built RUNS THE BUILT PASS ONLY (postbuild, on the build host). The source pass trusts the
+ * local origin/main ref, and a build host's ref can be stale: Netlify's cached clone kept an
+ * origin/main from before main's #39 to #42, so on 20.11.2026 (deploy 6b003ccf, eff942a) the
+ * merge-base fell behind and main's own edits read as /harbour edits, failing every preview. The
+ * source pass belongs to `npm run check:harbour-isolation` (verify), run where origin/main is
+ * fetched.
+ *
  * EXITS: 0 clean or not measured (printed) · 1 a violation · 2 this script is broken or an
  * artifact it needed was missing.
  */
@@ -157,7 +164,7 @@ const isMain = process.argv[1] && fileURLToPath(import.meta.url) === process.arg
 if (isMain) {
   if (selftest) selftestPass()
   else {
-    sourcePass()
     if (built) builtPass()
+    else sourcePass()
   }
 }

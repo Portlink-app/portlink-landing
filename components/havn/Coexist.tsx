@@ -60,7 +60,6 @@ export default function Coexist() {
         </div>
 
         <div className={styles.diagram} ref={container}>
-          <div className={styles.diagramGrid} aria-hidden="true" />
 
           <div className={styles.parties}>
             <div className={styles.node} ref={cruise}>

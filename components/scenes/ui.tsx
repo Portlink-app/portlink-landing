@@ -94,7 +94,7 @@ export function Num({ children, style }: { children: React.ReactNode; style?: Re
   return (
     <span
       style={{
-        fontFamily: 'var(--ds-font-mono)',
+        fontFamily: 'var(--ds-font-sans)',
         fontVariantNumeric: 'tabular-nums',
         fontSize: 12,
         color: 'var(--ds-text-1)',

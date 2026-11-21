@@ -59,3 +59,12 @@ Renders: `/Users/nyx/Projects/portlink/marketing/one-harbour-v4/s3/beat1/{d,p}`.
 | Not regressed | no HUD, mooring lines to the bollards, no wake, quay and slopes unchanged | M: capture `beat1-e-f1-r4.png` |
 | Plate size | 13,5 KB AVIF, shadow 1,6 KB (cap 60 KB) | M: `encode.mjs` |
 | Sheet | `/Users/nyx/Projects/portlink/marketing/one-harbour-v4/s3/g1/g1-expedition-sheet-4.jpg`, beside UC `sheet-d.png` | M |
+
+### G1 expedition, revision 5 (polish, 21.11.2026)
+
+| Check | Result | Source |
+|---|---|---|
+| Hull value | M: sampled hull pixels RGB 11 to 17 (target under about 30; rev 4 was 49 to 58). Coat 0, roughness 0,9, specular IOR level 0,08 | `beat1-e-f1-r5.png` at (300..1150, 560..600) |
+| Bow at quay | M: quay face moved 2,5 m off the hull (gap 4,9 m, parallel), fenders resized to fill it; bow is clear in 3D. The camera looks along the quay, so the stem still projects over the receding quay edge in frame | `expedition.py` `QY`, `bowcmp` crop |
+| Silhouette | Unchanged from rev 4 (Starboard PASS at `e659af7`) | HULL bounds identical, L/B 6,16 |
+| Sheet | `marketing/one-harbour-v4/s3/g1/g1-expedition-sheet-5.jpg` | |

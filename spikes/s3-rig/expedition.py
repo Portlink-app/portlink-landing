@@ -58,7 +58,7 @@ def grain(m, scale, amt, dark, bump=0.25, bricks=False):
     return m
 
 M = {
-    "hull": mat("Hull", "#07090c", 0.55, 0.0, coat=0.12), "boot": mat("Boot", "#6e1d1d", 0.5),
+    "hull": mat("Hull", "#07090c", 0.9, 0.0, coat=0.0), "boot": mat("Boot", "#6e1d1d", 0.5),
     "white": mat("White", "#eef0f1", 0.32, coat=0.3), "glass": mat("Glass", "#0b141e", 0.06, 0.7),
     "rail": mat("Rail", "#9fb4c4", 0.05, 0.0, trans=0.6), "dark": mat("Dark", "#1c242c", 0.5),
     "funtop": mat("FunTop", "#101418", 0.45), "orange": mat("Lifeboat", "#e2702c", 0.4, coat=0.5), "boat": mat("Tender", "#a9542c", 0.5, coat=0.3),
@@ -67,6 +67,9 @@ M = {
     "rope": mat("Rope", "#d9d2c0", 0.8), "land": mat("Land", "#46585a", 0.95),
     "hill": grain(mat("Hill", "#3b4a44", 0.95), 0.045, 0.4, "#1d2824", 0.8), "snow": grain(mat("Snow", "#c9d3dc", 0.7), 0.02, 0.3, "#8e9aa6", 0.4),
 }
+_hb = next(n for n in M["hull"].node_tree.nodes if n.type == 'BSDF_PRINCIPLED')   # G1 polish: matte hull, no sky sheen
+for k in ('Specular IOR Level', 'Specular'):
+    if k in _hb.inputs: _hb.inputs[k].default_value = 0.08; break
 
 def finish(o, parent, m, bevel=0.0, smooth=True):
     o.parent = parent
@@ -237,11 +240,11 @@ block("JIB", 9.0, 0.5, 0.5, (X0 + 12, -6, DECK + 4.8), M["orange"], 0.1)
 block("ZODIACS", 10, 6, 0.9, (X0 + 14, 3, DECK + 0.45), M["dark"], 0.4)
 # foredeck: low white bulwark following the hull flare, open bow mooring deck forward of the superstructure
 # ---------- quay: concrete apron on the far (+y) side, fenders, bollards, mooring lines, shed, fjord hills ----------
-QY = BEAM/2 + 2.4                      # quay face; pneumatic fenders fill the gap, hull parallel to it
+QY = BEAM/2 + 4.9                      # quay face 4,9 m off the hull (G1 polish: bow clears the quay), parallel
 block("QUAY", 520, 260, 6.0, (0, QY + 130, 0.0), M["concrete"], 0.3, parent=world_root)      # top at z=3
 block("FENDERS", 470, 0.5, 1.4, (0, QY - 0.25, 2.0), M["fender"], 0.2, parent=world_root)
 for k, fx in enumerate((-58, -30, -2, 26, 52)):          # floating pneumatic fenders between hull and quay
-    bpy.ops.mesh.primitive_cylinder_add(vertices=24, radius=1.05, depth=4.2, location=(fx, BEAM/2 + 1.15, 0.7),
+    bpy.ops.mesh.primitive_cylinder_add(vertices=24, radius=(QY - BEAM/2)/2, depth=4.2, location=(fx, (QY + BEAM/2)/2, 0.7),
                                         rotation=(0, math.pi/2, 0))
     fo = bpy.context.object; fo.name = f"YOKO{k}"; finish(fo, world_root, M["fender"], 0.0)
 rows("BOLL", 12, 22.0, lambda: block("bollard", 0.7, 0.7, 0.9, (-121, QY + 2.0, 3.45), M["dark"], 0.3,

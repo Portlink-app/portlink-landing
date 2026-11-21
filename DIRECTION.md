@@ -714,6 +714,17 @@ Amends the "no three.js" line of section 13 for the water layer only. Hero objec
 
 Chose / Over / Because / Revisit-if: Chose a real-time three.js ocean with a position-driven wake sim, lazy-loaded after LCP, Over the baked Ocean-modifier band of 13.1 and over a fully real-time scene, Because the reference ships exactly this split, a baked band has no hull interaction and costs frames, and the spike holds 60 fps in both measured setups; Revisit-if a real mid-range phone drops below 30 fps at sim 256 (first fallback: sim 128 and seg 160, then a looping video strip for that beat), or the lazy chunk delays interaction past the LCP budget.
 
+### 13.3 Production water: raw WebGL2 port of S3 (Keel, 21.11.2026)
+
+`components/harbour/water/` ports `spikes/s3-beat1/ocean.js` line for line to raw WebGL2 (GLSL ES 3.00, RGBA16F ping-pong via `EXT_color_buffer_float`, linear-to-sRGB in the shader). `lazy.ts` loads it only after LCP (or first input, 2,5 s cap, then idle), never under reduced motion; `createOcean` returns `null` without WebGL2 or float targets, so the static navy field stays.
+
+- **Weight.** 3 853 bytes gzipped (9 586 minified), against 135 069 for three.js plus the spike.
+- **Parity, Chrome 1440x900, time frozen.** Moored hero clip `e`: byte-identical to the three.js render. Moving clip `d`: mean abs 0,075, 0,27 % of channels off by more than 8; three.js against itself gives the same figures (wake-sim step timing), so the port sits at three.js's own noise floor.
+- **Tests.** `camera.test.ts`: view-projection matches three.js r187 within 1e-3, axis swap, colour conversion, grid layout.
+- **Still owed for G2.** fps on desktop and a real phone on the assembled page, and the after-LCP check there.
+
+Chose / Over / Because / Revisit-if: Chose raw WebGL2, Over shipping three.js as the lazy chunk, Because three.js alone exceeds G2's 140 KB and G6's 130 KB while the port renders the same pixels at 3 % of the weight; Revisit-if the water needs a scene graph, lights or loaders.
+
 ## 14. Correction 20.11.2026: cruise segment, expedition hero, supersessions
 
 Source of truth for v4 from here: `~/.buzz/RESEARCH/one-harbour-v2/v5/ONE_HARBOUR_PLAN_FABLE.md` (Fable 5.2, 20.11.2026, read against the Portlink iCloud corpus, `portlink-platform`, `embark` and this worktree). Where this section and an earlier section disagree, this section wins.

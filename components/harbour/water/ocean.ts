@@ -12,7 +12,12 @@ import { SIM_VS, SIM_FS, OCEAN_VS, OCEAN_FS } from './shaders'
 import { hexToLinear, rigViewProjection, type RigCamera, type Vec3 } from './camera'
 
 export type OceanOptions = { sim?: number; dpr?: number; seg?: number }
-export type Ocean = { resize(w: number, h: number): void; step(shipX: number): void; dispose(): void }
+export type Ocean = {
+  resize(w: number, h: number): void
+  setCamera(cam: RigCamera): void
+  step(shipX: number): void
+  dispose(): void
+}
 
 const SIM_SIZE = 640                       // metres covered by the wake grid
 const SHIP: [number, number] = [0.78, 0.5] // hull centre in sim uv (bow toward +x)
@@ -109,24 +114,34 @@ export function createOcean(canvas: HTMLCanvasElement, cam: RigCamera, { sim = 2
   gl.uniform1f(su('uAdv'), 0.06 / sim)   // water moves aft 0.06 texel per substep
   gl.uniform1f(su('uC2'), 0.0004); gl.uniform1f(su('uInject'), 0.05); gl.uniform1f(su('uFoamGain'), 40)
 
-  const { eye, viewProj } = rigViewProjection(cam)
   const sun: Vec3 = (() => { const l = Math.hypot(-1, 0.16, -1); return [-1 / l, 0.16 / l, -1 / l] })()
+  const applyCamera = (c: RigCamera) => {
+    const mov = c.frames > 1 ? 1 : 0
+    const h = c.hull
+    gl.useProgram(simP)
+    gl.uniform2f(su('uShipSize'), (h ? h.loa_m * 0.95 : 170) / SIM_SIZE, (h ? h.beam_m * 1.06 : 26) / SIM_SIZE)
+    gl.uniform1f(su('uMove'), mov)
+    const { eye, viewProj } = rigViewProjection(c)
+    gl.useProgram(oceanP)
+    gl.uniformMatrix4fv(ou('uViewProj'), false, viewProj)
+    gl.uniform3fv(ou('uSun'), hexToLinear(mov ? '#f5b53d' : '#dfe6ec'))
+    gl.uniform1f(ou('uGlint'), mov ? 1 : 0.12)
+    gl.uniform3fv(ou('uCam'), eye)
+  }
   gl.useProgram(oceanP)
-  gl.uniformMatrix4fv(ou('uViewProj'), false, viewProj)
   gl.uniform1i(ou('uWake'), 0)
   gl.uniform1f(ou('uSimSize'), SIM_SIZE); gl.uniform1f(ou('uTexel'), 1 / sim)
   gl.uniform2f(ou('uShipUv'), SHIP[0], SHIP[1])
   gl.uniform3fv(ou('uNavy'), hexToLinear(NAVY_HEX))
-  gl.uniform3fv(ou('uSun'), hexToLinear(moving ? '#f5b53d' : '#dfe6ec'))
   gl.uniform3fv(ou('uCold'), hexToLinear('#4f7db8'))
   gl.uniform3fv(ou('uSunDir'), sun)
-  gl.uniform1f(ou('uGlint'), moving ? 1 : 0.12)
-  gl.uniform3fv(ou('uCam'), eye)
+  applyCamera(cam)
 
   const navy = parseInt(NAVY_HEX.slice(1), 16)
   const t0 = performance.now()
   return {
     resize(w, h) { canvas.width = Math.floor(w * dpr); canvas.height = Math.floor(h * dpr) },
+    setCamera(c) { applyCamera(c) },
     step(shipX) {
       gl.useProgram(simP); gl.bindVertexArray(quad); gl.viewport(0, 0, sim, sim)
       gl.activeTexture(gl.TEXTURE0)

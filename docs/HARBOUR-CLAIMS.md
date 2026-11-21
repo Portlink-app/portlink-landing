@@ -1,73 +1,49 @@
-# Claim register, WP3 captures (v2)
+# One Harbour claim register: v4 truth pack (Bergen seed, G5) & v2 archive
 
-Source of claims: `DIRECTION.md` section 4 (S0 to S14), tags C / T-shown / T-ask / E as defined there. Pain-today lines are transcript quotes, not product claims, and are not listed. "Visible" means the claim is readable in the named capture. Desktop is 1440x900, phone 390x844, both deviceScaleFactor 2; no pixel editing, no cropping applied.
+## 1. One Harbour v4 (`/harbour-v4`) truth pack (21.11.2026)
 
-Data: local Platform stack seeded with PR #3230 (`supabase/seeds/demo_harbour_ilulissat.sql`, MS Disko Star (demo), Ilulissat, 18.11.2026). Platform captures come from a production build of platform `main` at `b4e545cd`, which contains the merged #3230 seed, with the render clock pinned to 18.11.2026 kl. 15.25 UTC (recaptured 20.11.2026). Embark captures (P9) come from a separate local Embark database (a different demo dataset, Norwegian UI), consistent with DIRECTION Q6 (no data link claimed).
+Source of truth: `~/.buzz/RESEARCH/one-harbour-v2/v5/ONE_HARBOUR_PLAN_FABLE.md` (§C, §D, §F, §G) and `DIRECTION.md` §14.
+All platform captures taken from `portlink-platform` at `407c6d383` (`keel-harbour-captures-20261118`, render clock pinned to `2026-11-18T15:25:00Z`), seeded with `supabase/seeds/demo_harbour_bergen.sql` and `supabase/seeds/demo_consumption.sql`:
+- **Voyage:** `Norwegian Coast 2026-N4` (`V26N4`, `be6e0000-0002-4000-8000-000000000001`), four ordered calls: Stavanger (`NOSVG`), Bergen (`NOBGO`, `Skolten 3`, alongside), Alesund (`NOAES`), Trondheim (`NOTRD`).
+- **Vessel:** `MS Aster Brisa (demo)` (`be6e0000-0001-4000-8000-000000000001`, 150 m LOA, 22 m beam, 270 guests, 15 kn service speed, `Polaris class` consumption curve).
+- **Fictional workspaces on the call:** `Portlink Cruise (demo)` (`cl`), `Portlink Agency Norway (demo)` (`pa`, `be6e0000-0010-4000-8000-000000000001`), `Portlink Shore Norway (demo)` (`dmc`, `be6e0000-0010-4000-8000-000000000002`).
+- **Viewports:** Desktop `1440x900` (`deviceScaleFactor: 2`) and Phone `390x844` (`deviceScaleFactor: 2`), delivered in `public/media/harbour-v4/captures/` with zero pixel editing and zero Next.js dev overlays.
+
+| # | Beat | On-page claim | Source / code proof at `407c6d383` | Capture file(s) | Visible | Note |
+|---|---|---|---|---|---|---|
+| 1 | Beat 0 | "One port call. Every desk." / "Follow one coastal call from the planner's route to the final account, on the real screens each role works in." | `/cl/voyages/[id]`, `/calls/[id]`, `/dmc/bookings`, `/wheelhouse/todo` | `P01-desktop.webp`, `P01-phone.webp` | yes | Hero opens on the moored 150 m expedition ship (`b00`); reduced-motion and scroll reveal `P01` (421 NM, 3 passages, 4 ports: Stavanger, Bergen, Alesund, Trondheim). |
+| 2 | Beat 1 | "The plan the bridge can load." / "Draw the route on charts made for planning and export RTZ, GPX or CSV for the bridge." | `src/modules/voyages` route builder + RTZ/GPX/CSV toolbar | `P01-desktop.webp`, `P01-phone.webp`, `P03-desktop.webp`, `P04-desktop.webp` | yes | `P03-desktop.webp` shows the open `Stavanger -> Bergen` (102 NM, 12 waypoints) passage editor, sun altitude curve at Bergen, and `EXPORT RTZ GPX CSV` in the top bar. `P04-desktop.webp` shows the satellite layer. (`P03` and `P04` are desktop insets per §D Step 2.) |
+| 3 | Beat 1 | Stated limit: planning aid, not for navigation | Bottom chart bar in voyage builder | `P01-desktop.webp`, `P03-desktop.webp`, `P04-desktop.webp` | yes | Bottom bar displays `"Planning aid, not for navigation"`. |
+| 4 | Beat 2 | "The cost is already moving." / "Fuel sits on the voyage from distance and speed. Port costs join when the agent's estimate lands on the same call." | `src/modules/voyages/components/cost-register.tsx`, `demo_consumption.sql` (`Polaris class`) | `P05-desktop.webp`, `P05-phone.webp` | yes | `Norwegian Coast 2026-N4` Costs tab with fuel estimate from the `Polaris class` curve and Bergen PDA (`Waiting for you`) from `Portlink Agency Norway (demo)`. |
+| 5 | Beat 3 | "One request. One estimate." / "The cruise line created the call. Accept the appointment and send the PDA on the shared record." | `/calls/[id]` + `src/modules/finance/tariff.actions.ts` (`buildPdaFromTariffs` L234, `startBlankPda` L339) | `P06-desktop.webp`, `P06-phone.webp` | yes | Verified at `407c6d383` (§G item 5): appointed port agent creates a PDA on the call (`startBlankPda` / `buildPdaFromTariffs`). `P06` shows Bergen (`NOBGO`, `In Port`, `Skolten 3`, `MS Aster Brisa (demo)`), tide curve (`LW 10:50 0.88 m · HW 17:05 1.34 m`), `Readiness 5/5`, and `PDA NOK 117,284 Sent`. |
+| 6 | Beat 4 | "The request lands as intake." / "A shore request arrives on its call, marked quote requested. Answer operator terms through the Embark trade link." | `/dmc/bookings` + `/dmc/operators?view=requests` (`src/lib/embark/trade.ts`, `embark_trade_requests`) | `P08-desktop.webp`, `P08-phone.webp`, `P08b-desktop.webp`, `P08b-phone.webp` | yes | `P08` shows `Fjord and city tour, Bergen · MS Aster Brisa (demo) · 90 pax` with status `quote requested` and `Pending / Quote`. `P08b` shows the Trade API v1 agreement with `Fjordland Boat Tours (demo)` marked `Agreed`. |
+| 7 | Beat 5 | "The tour, in the guide's hand." / "Embark runs departures, guides and bookings for tour, boat and activity operators, linked to Portlink by Trade API v1." | `embark` (`/admin/departures`) + `portlink-platform` (`src/lib/embark/trade.ts`) | `P09-desktop.webp`, `P09-phone.webp`, `P08b-desktop.webp` | yes | `P09` shows Embark departures (`Avganger`, `Anløp`, guest counts, guide column). `P08b` proves the Trade API v1 link on the Bergen tour. No prices or Greenland deployment claimed (§G item 3). |
+| 8 | Beat 6 | "Estimate and actual, one record." / "With the departure report complete, the agent's estimate and the draft FDA sit side by side on the call." | `/calls/[id]#money` (`src/modules/finance/money.actions.ts`) | `P12-desktop.webp`, `P12-phone.webp` | yes | `P12` shows `"Money on this call"` with `PDA NOK 117,284 Sent`, `Departure report NOK 117,284 Complete`, `FDA NOK 118,634 Draft`, and the itemised disbursement lines (`Port Dues, Alongside NOK 38,400`, `Pilotage, Inbound And Outbound NOK 29,300`). |
+| 9 | Beat 7 | "One call. Each role, its part." / Role switcher across Cruise line, Port agent, DMC and Crew tasks | `/cl/voyages/[id]`, `/calls/[id]`, `/dmc/bookings`, `/wheelhouse/todo` | `P01`, `P06`, `P08`, `P10`, `P12` | yes | Interactive role switcher lets visitors inspect each desk's real screen on the same Bergen call. |
+| 10 | Beat 7 | "Wheelhouse: the crew's task list, worked from any phone." | `/wheelhouse/todo` (`src/modules/wheelhouse/mytodo/my-todo.tsx`) | `P10-phone.webp`, `P10-desktop.webp` | yes | `P10-phone.webp` and `P10-desktop.webp` show `Productivity · Wheelhouse · My to-do` on board `Bergen call · Skolten 3` (`Confirm gangway & fresh water hose · Skolten 3`, `Stage two shorex coaches at quayside gate · 09.15`, `MARPOL Annex V waste receipt sign-off`, `Close departure report & draft FDA before 17.30`). |
+| 11 | Beat 7 | DMC workspace in use with Vela Nordic (no paying/pilot claim; testimonial quote & advisor names gated on written approval) | `ONE_HARBOUR_PLAN_FABLE.md` §G items 2, 8, 9 | Text only (`VELA_QUOTE_APPROVED = false`, `ADVISORS_APPROVED = false`) | yes | Names only Vela Nordic as a DMC using Portlink's DMC side. No unapproved quote or advisor name is rendered. |
+| 12 | Beat 7 | "For ports and terminals" / "Tell us what your port needs. We'll show what Portlink already does for you." | `ONE_HARBOUR_PLAN_FABLE.md` §G item 1; `ContactForm` lead type `"Port or terminal"` | Live form (`#session`) | yes | Invites ports and terminals to talk without claiming a port workspace product. |
+| 13 | Beat 8 | "We set up your account for free. Try Portlink for 30 days. Contact us now." / Primary button "Get your free setup" | `ONE_HARBOUR_PLAN_FABLE.md` §G item 11; `components/contact/ContactForm.tsx` | Live form (`#session`) | yes | Reuses the live `ContactForm` (`intent="pilot"`). |
+
+### G5 Never-list verification (`scripts/check-harbour-v4.mjs`)
+- **Zero open claims:** 13 of 13 rows above are verified and visible at `407c6d383`.
+- **Zero forbidden customer/ship names in captures or copy:** Verified by `caps-bergen.mjs` DOM text scan across all 16 captures and `check-harbour-v4.mjs` source scan (`0` matches for `Windstar`, `HX`, `Hurtigruten`, `Roald Amundsen`, `Fridtjof Nansen`, `Hugo Trumpy`, `Viking`, `SeaDream`, `Carnival`, `MSC`, `Costa`, `Celebrity`, `Trollfjord`, `Blue Water`, `Ilulissat Tours`, `Wild Greenland`).
+- **Zero Never-list claims:** No tides in voyage planning (tides are shown only on the Bergen call record in `P06`), no `"the ship notifies everyone when it arrives"`, no automatic payment, no `"estimates match invoices"`, no `"First deployment: Greenland"`, no Embark prices.
+
+---
+
+## 2. Archive: Claim register, WP3 captures (v2 `/harbour`, Ilulissat seed)
+
+Source of claims: `DIRECTION.md` section 4 (S0 to S14), tags C / T-shown / T-ask / E as defined there. Kept untouched for `/harbour` (v2/v3).
 
 | # | Stop | Claim text | Tag | Capture file | Visible | Note |
 |---|---|---|---|---|---|---|
 | 1 | S0 | "Follow one cruise call from the planner's screen..." (planner's screen) | none | P01-desktop.png, P01-phone.png | yes | Voyage builder on a real chart with the route and four passages. |
-| 2 | S0 | "...to the guide's phone, on the real screens each role works in." (guide's phone) | none | none | no | P10 removed (see row 28). Reword to "...to the tour operator's back office" or remove the guide's phone until P10 exists. |
-| 3 | S1 | Routes follow chart markings | T-shown | P01-desktop.png, P04-desktop.png | no | The route is drawn on the chart, but in this demo it is hand-drawn (`Hand-edited` badge in P03) and the autorouting chip reads "no graph here" (no Greenland graph). Reword to "Draw the route on the chart"; do not claim automatic following. |
-| 4 | S1 | ...trained on AIS tracks of passenger ships | T-shown | none | no | No screen shows AIS-trained routing. Remove, or reword to what P01 shows. |
-| 5 | S1 | Typical wind, waves and sea temperature for the planned dates | T-shown | none (P2 removed) | no | The chart's "Typical conditions" layer needs climate binaries that do not exist on the local stack; the old P02 showed "no Nov data yet" and was rejected. Reword or remove, or capture P2 from an environment with the climate data. Copy line "check typical conditions for your dates" falls with it. |
-| 6 | S1 | RTZ, GPX and CSV in and out | T-shown | P03-desktop.png | yes | Toolbar shows EXPORT RTZ / GPX / CSV and Import with a passage open. Phone variant not captured (layout overlaps at 390 wide). |
-| 7 | S1 | Copy: "export RTZ for the ECDIS" | T-shown | P03-desktop.png | yes | The RTZ button is visible; loading into an ECDIS is not shown. |
-| 8 | S1 | Stated limit: planning software, not navigation | none | P01-desktop.png, P01-phone.png | yes | "Planning aid, not for navigation" and "Planning-grade chart" in the bottom bar. |
-| 9 | S1 | Copy: "Draw the route on charts made for planning" | none | P01-desktop.png, P03-desktop.png | yes | Waypoints, course and distance table in P03. |
-| 10 | S3 | Fuel sits on the voyage from distance and speed, with rates you can override | T-shown | P05-desktop.png, P05-phone.png | yes | Day-by-day fuel from the first day; "Fuel is priced at the price you chose" with region price choices and "Update the price". The label reads "Is $631/t" (region code), as the product has it. |
-| 11 | S3 | Port costs join when the agent's estimate lands on the same call | T-shown, C | P05-desktop.png | yes | "Waiting for you EUR 12 218" on the forecast, plus the Ilulissat day bar. |
-| 12 | S3 | Mono counter: distance run, from the demo voyage's own figures | none | P04-desktop.png | yes | "3,118 NM / 4 passages" in the header. The ship marker is a slider ("Ship at") on the voyage bar. |
-| 13 | S3 | Chart at the satellite layer | none | P04-desktop.png | yes | Whole-route satellite view, 1440 wide. Phone variant not captured (Chart settings control not reachable at 390 wide in automation). |
-| 14 | S3 | Pilot work: timestamped quotations, tariff publication lag | T-ask | none | no | Pilot work, not shown in product. Keep out of present tense or remove. |
-| 15 | S6 | The cruise line requests an agent; accepting creates or staffs the one call, never a duplicate | C | P06-desktop.png, P06-phone.png | yes | Page line: "Accept the call and send the PDA on the shared record." Shows the result: "Agent appointed", "Port agent: Portlink Agency (demo)", one call (call 4 of 5). The accept action itself is not on screen. |
-| 16 | S6 | The agent sends the estimate on that record | C | P06-desktop.png, P06b-desktop.png | yes | "PDA EUR 12 218, Sent"; PDA page header "Sent", step 2 of 5. |
-| 18 | S6 | Not every party sees every cost line | C | P06b-desktop.png | yes | "Visible to" column with "Master + 1" and "Not Master / 2 roles" per line. |
-| 19 | S7 | A shore request arrives on its call as tour intake marked "Quote requested" | C | P08-desktop.png, P08-phone.png | yes | The product spells the status in lowercase ("quote requested"). Copy should match or accept the case difference. Also visible on the call in P06 ("Excursions: 1 tour, 90 of 372 guests placed"). |
-| 20 | S7 | It is not a confirmed excursion / nothing reads as confirmed until you confirm it | C | P08-desktop.png | yes | RFP row "Pending" with a "Quote" button; booking status "quote requested". |
-| 21 | S8 | Embark: departures, guide assignment | E | P09-desktop.png, P09-phone.png | yes | Departures list with a Guider column (one assigned, others "Ingen"). Norwegian UI. |
-| 22 | S8 | Embark: bookings | E | P09-desktop.png | yes | Guest counts per departure (0/12 etc.) and a Bookinger menu entry; the bookings screen itself is not captured. |
-| 23 | S8 | Embark: payments | E | P09-desktop.png | no | Only a "Fakturaer" menu entry is visible. Reword to "invoices" or capture a payments screen. |
-| 24 | S8 | Embark: a booking widget | E | none | no | Not captured. Remove from the line or capture the public widget separately. |
-| 25 | S8 | "First deployment: Greenland" | E | none | no | A fact, not a screen. Not verifiable in a capture; keep only if the founders confirm. |
-| 26 | S8 | "Embark runs departures, guides, bookings and payments for small tour operators" | E | P09-desktop.png | no | Departures, guides and bookings are visible (rows 21, 22); payments is not (row 23). |
-| 27 | S8 | Copy: "Tomorrow's departures, staffed." | E | P09-desktop.png | yes | The top bar shows "I morgen Fjordcruise 15:31"; a staffed departure (initials) sits beside unstaffed ones, so reword to "staffed or not, at a glance" if both rows matter. |
-| 28 | S9 | "Embark field mode is the guide's phone view on tour. This is the real screen." | E | none (P10 removed) | no | The route exists in code (`/admin/on-tour/[id]`) but the local Embark database is 30 migrations behind (at 0109, needs 0110 to 0139; `departure.free_sale` is missing) and the page returns a server error. Applying the migrations was refused by the psql write gate (Embark's port 55322 is not in the platform repo's allowed loopback set). Remove S9, or capture it after the local Embark stack is rebuilt (`supabase/dev/local-up.sh --reset`). |
-| 33 | S11 | With the departure report complete, a draft FDA is generated | C | P12-desktop.png, P12-phone.png | yes | Money tab (recaptured 18.11.2026 kl. 19.05, tab `Money` selected, URL `/calls/1ce1a551-0003-4000-8000-000000000004#money`, agent workspace): cards "PDA EUR 12,218 Sent", "Departure report EUR 12,218 Complete", "FDA EUR 12,348 Draft". The earlier P12 showed the Overview tab and did not support this row. |
-| 34 | S11 | ...signed by both sides | C | P12b-desktop.png | no | The report shows Complete and its sections; the signatures are not visible. Reword to "complete" or capture the signature block. |
-| 35 | S11 | ...using actual amounts where supplied and estimates otherwise | C | P12-desktop.png, P12-phone.png | partial | The totals differ on the Money tab (PDA and departure report 12,218, FDA 12,348) and "Estimated disbursements" lists the FDA lines (Port Dues, Anchorage EUR 3,200; Pilotage EUR 2,900, both phone and desktop). Which line is actual and which estimated is not labelled, so the mix itself is not shown; the /harbour copy does not make this claim (S11 line is row 36). |
-| 36 | S11 | Copy: the estimate and the draft FDA sit on the same call | none | P12-desktop.png | yes | Three cards (PDA, Departure report, FDA) under "Money on this call" on the call's Money tab, desktop and phone (phone scrolled to the cards). |
-| 37 | S12 | "Each workspace sees what its role on the call allows" | none | P05, P06, P08, P12 | yes | Cruise line, agent and DMC workspaces on the same Ilulissat call; a composite of captures, not a single screen. |
-| 38 | S13 | Portlink: cruise line, port agent, DMC | none | P01, P03 to P06, P08, P12 | yes | Three workspaces captured; the vessel is not named (P11 cut). |
-| 39 | S13 | Embark: hut and boat, crop of P9 | E | P09-desktop.png | yes | |
-| 40 | S13 | Wheelhouse: a named node, no claims | none | P08-desktop.png, P09-desktop.png | yes | "Wheelhouse" appears in both sidebars; no claims made. |
-
-## Counts
-
-Rows: 34 (rows 17 and 29 to 32 removed with P07, P11 and stop S10). Open (visible = no): 11 (rows 2, 3, 4, 5, 14, 23, 24, 25, 26, 28, 34). Row 26 restates the payments gap of row 23.
-
-## Stop status
-
-P2 removed (no climate data locally). P10 removed (Embark field mode errors on the local database; see row 28). P07, P11 and stop S10 removed (real ships from the shared demo fleet; Starboard ruling 18.11.2026, same rule as the earlier real-company cut: no real names, no blurring). P03 and P04 are desktop only.
-
-## G2 ruling on the open claims (Keel, 18.11.2026)
-
-Every claim no capture shows is cut from the page or reworded to what a capture shows. The page copy is `components/harbour/script.ts`; nothing there makes an open claim.
-
-| Row | Claim | Ruling | Page line now |
-|---|---|---|---|
-| 2 | to the guide's phone | Cut (P10 removed) | S0: "...to the tour operator's desk" (P09) |
-| 3 | Routes follow chart markings | Cut | S1: "Draw the route on charts made for planning" (P01, P03) |
-| 4 | Trained on AIS tracks of passenger ships | Cut | none |
-| 5 | Typical wind, waves and sea temperature | Cut (P2 removed) | none |
-| 14 | Timestamped quotations, tariff publication lag | Cut (pilot work, not product) | none |
-| 23 | Embark: payments | Cut | S8: "departures, guides and bookings" (P09) |
-| 24 | Embark: a booking widget | Cut | none |
-| 25 | First deployment: Greenland | Cut (a fact, not a screen; founders may restore it) | none |
-| 26 | Embark runs departures, guides, bookings and payments | Reworded, payments cut | S8 line above |
-| 28 | Embark field mode on the guide's phone | Cut with stop S9 (P10 removed) | stop removed |
-| 34 | Draft FDA signed by both sides | Reworded, signatures cut | S11: "the draft FDA sit on the same call" (P12) |
-
-No real company appears in a capture: the Ilulissat call's port agent and DMC are the seed's own "Portlink Agency (demo)" and "Portlink Shore (demo)" (platform PR #3230).
-
-S5 line reworded to "One ship in the bay, four teams, one call record between them." (no "on board": no vessel screen remains). Product card text reworded to "the cruise line, the port agent and the DMC" (vessel dropped with P11).
+| 6 | S1 | RTZ, GPX and CSV in and out | T-shown | P03-desktop.png | yes | Toolbar shows EXPORT RTZ / GPX / CSV and Import with a passage open. |
+| 8 | S1 | Stated limit: planning software, not navigation | none | P01-desktop.png, P01-phone.png | yes | "Planning aid, not for navigation" in the bottom bar. |
+| 10 | S3 | Fuel sits on the voyage from distance and speed, with rates you can override | T-shown | P05-desktop.png, P05-phone.png | yes | Day-by-day fuel from the first day. |
+| 11 | S3 | Port costs join when the agent's estimate lands on the same call | T-shown, C | P05-desktop.png | yes | "Waiting for you EUR 12 218" on the forecast. |
+| 15 | S6 | The cruise line requests an agent; accepting creates or staffs the one call, never a duplicate | C | P06-desktop.png, P06-phone.png | yes | Shows "Agent appointed", "Port agent: Portlink Agency (demo)". |
+| 19 | S7 | A shore request arrives on its call as tour intake marked "Quote requested" | C | P08-desktop.png, P08-phone.png | yes | Booking status "quote requested". |
+| 21 | S8 | Embark: departures, guide assignment | E | P09-desktop.png, P09-phone.png | yes | Departures list with a Guider column. |
+| 33 | S11 | With the departure report complete, a draft FDA is generated | C | P12-desktop.png, P12-phone.png | yes | Money tab cards: PDA Sent, Departure report Complete, FDA Draft. |

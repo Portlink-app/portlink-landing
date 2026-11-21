@@ -1,0 +1,42 @@
+{
+  "beat": "b04",
+  "position": [
+    20.236,
+    -31.401,
+    8.98
+  ],
+  "target": [
+    0,
+    3,
+    2.1
+  ],
+  "lens_mm": 50,
+  "sensor_mm": 36,
+  "sensor_fit": "VERTICAL",
+  "focus_m": 40.5,
+  "fstop": 2.799999952316284,
+  "width": 585,
+  "height": 1266,
+  "z_up": true,
+  "frames": 6,
+  "ship_x": [
+    -3.5,
+    -2.1,
+    -0.7,
+    0.7,
+    2.1,
+    3.5
+  ],
+  "secs": {
+    "plate": 3.28,
+    "contactPass": 1.88
+  },
+  "vessel_type": "ship_tender",
+  "segment": "dmc",
+  "props": [],
+  "hull": {
+    "loa_m": 9.8,
+    "beam_m": 3.4,
+    "l_over_b": 2.88
+  }
+}

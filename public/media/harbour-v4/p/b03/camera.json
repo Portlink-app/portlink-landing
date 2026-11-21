@@ -1,0 +1,42 @@
+{
+  "beat": "b03",
+  "position": [
+    28.294,
+    -65.162,
+    11.106
+  ],
+  "target": [
+    0,
+    -20,
+    2.4
+  ],
+  "lens_mm": 50,
+  "sensor_mm": 36,
+  "sensor_fit": "VERTICAL",
+  "focus_m": 54,
+  "fstop": 2.799999952316284,
+  "width": 585,
+  "height": 1266,
+  "z_up": true,
+  "frames": 6,
+  "ship_x": [
+    -3.5,
+    -2.1,
+    -0.7,
+    0.7,
+    2.1,
+    3.5
+  ],
+  "secs": {
+    "plate": 3.38,
+    "contactPass": 1.9
+  },
+  "vessel_type": "harbour_launch",
+  "segment": "port_agent",
+  "props": [],
+  "hull": {
+    "loa_m": 13.8,
+    "beam_m": 4.2,
+    "l_over_b": 3.29
+  }
+}

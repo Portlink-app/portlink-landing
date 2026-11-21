@@ -1,0 +1,42 @@
+{
+  "beat": "b01",
+  "position": [
+    59.85,
+    -392.945,
+    35.941
+  ],
+  "target": [
+    4,
+    0,
+    14
+  ],
+  "lens_mm": 50,
+  "sensor_mm": 36,
+  "sensor_fit": "VERTICAL",
+  "focus_m": 397.5,
+  "fstop": 2.799999952316284,
+  "width": 585,
+  "height": 1266,
+  "z_up": true,
+  "frames": 6,
+  "ship_x": [
+    -24,
+    -14.4,
+    -4.8,
+    4.8,
+    14.4,
+    24
+  ],
+  "secs": {
+    "plate": 2.4,
+    "contactPass": 1.32
+  },
+  "vessel_type": "expedition_cruise",
+  "segment": "cruise",
+  "props": [],
+  "hull": {
+    "loa_m": 150,
+    "beam_m": 24.5,
+    "l_over_b": 6.16
+  }
+}

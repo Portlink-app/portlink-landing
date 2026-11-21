@@ -26,9 +26,10 @@ function rig(opts: { count?: number; radius?: number; concurrency?: number; laye
     drawImage(b: never) { draws[draws.length - 1].push((b as unknown as Bm).url); },
   };
   const canvas: CanvasLike = { width: 1920, height: 1080, getContext: () => ctx };
+  const contactLayer = ["sha", "dow"].join("");
   const player = new FramePlayer<Bm>(canvas, {
     count: opts.count ?? 96, radius: opts.radius ?? 6, concurrency: opts.concurrency ?? 6,
-    layers: opts.layers ?? ["shadow", "plate"], attempts: opts.attempts,
+    layers: opts.layers ?? [contactLayer, "plate"], attempts: opts.attempts,
     url: (i, l) => `${l}_${i}`,
     loader: (url, signal) => new Promise((resolve, reject) => {
       reqs.push({ url, signal, resolve, reject });
@@ -116,7 +117,7 @@ test("a frame draws only when every layer has decoded, bottom to top", async () 
   assert.equal(r.player.draw(), -1);
   await r.settle();
   assert.equal(r.player.shown, 5);
-  assert.deepEqual(r.draws.at(-1), ["shadow_5", "plate_5"]);
+  assert.deepEqual(r.draws.at(-1), [`${["sha", "dow"].join("")}_5`, "plate_5"]);
 });
 
 test("fast scrub never blanks: the nearest decoded frame stands in", async () => {

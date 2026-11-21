@@ -725,6 +725,19 @@ Chose / Over / Because / Revisit-if: Chose a real-time three.js ocean with a pos
 
 Chose / Over / Because / Revisit-if: Chose raw WebGL2, Over shipping three.js as the lazy chunk, Because three.js alone exceeds G2's 140 KB and G6's 130 KB while the port renders the same pixels at 3 % of the weight; Revisit-if the water needs a scene graph, lights or loaders.
 
+### 13.4 Production FramePlayer (Keel, 21.11.2026)
+
+`components/harbour/frames/FramePlayer.ts` ports `spikes/s3-beat1/frameplayer.js` (1 372 bytes gzipped). Additions over the spike: prefetch ordered in the direction of travel, loads that leave the window are aborted (an abort spends no retry), the playhead's own frame pre-empts the farthest prefetch when every slot is busy, two attempts per frame, `dispose()`, and an injected loader and canvas so `FramePlayer.test.ts` (14 tests, `npm run test:harbour-v4`, in `verify`) covers windowing, eviction, aborts, layer order, never-blank draws and the byte budget at the G4 frame caps.
+
+G3 run on the spike's beat 1 frames with the TS water underneath, Chrome GPU, 6 full-length scrubs at about 96 frames per second:
+
+| Arm | Before first scroll | rAF p95 / max | Blank frames | Playhead lag p95 / max |
+|---|---|---|---|---|
+| Desktop 1440x900, DPR 1,5, radius 6 | 211 KB frames (7 frames), 15 KB JS | 16,8 / 16,8 ms | 0 | 7 / 12 frames |
+| Phone emulation 390x844, DPR 2, CPU 4x, radius 4 | 56 KB frames (5 frames), 15 KB JS | 16,7 / 16,8 ms | 0 | 1 / 3 frames |
+
+Not one dropped frame in either arm (p95 is the 60 Hz vsync interval; 16,8 against the 16,7 gate is timer quantisation). Desktop lag at this scrub speed means the nearest decoded frame stands in for up to 12 frames; a real scroll is slower. Emulation throttles the CPU, not the GPU or decoder: a real mid-range phone is still owed for G2 and G3.
+
 ## 14. Correction 20.11.2026: cruise segment, expedition hero, supersessions
 
 Source of truth for v4 from here: `~/.buzz/RESEARCH/one-harbour-v2/v5/ONE_HARBOUR_PLAN_FABLE.md` (Fable 5.2, 20.11.2026, read against the Portlink iCloud corpus, `portlink-platform`, `embark` and this worktree). Where this section and an earlier section disagree, this section wins.

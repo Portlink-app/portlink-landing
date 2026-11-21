@@ -46,3 +46,16 @@ Renders: `/Users/nyx/Projects/portlink/marketing/one-harbour-v4/s3/beat1/{d,p}`.
 | Glint | a moored frame uses a cold, pale sheen at 0,12 | M: `ocean.js` |
 | HUD | hidden for fixed-frame captures (`f`) or `?hud=0` | M: capture `beat1-e-f1-r3.png` |
 | Plate size | 14,1 KB AVIF, under the 60 KB cap | M: `encode.mjs` |
+
+## G1 expedition, revision 4 (after Starboard's rev 3 verdict)
+
+| Item | Result | Proof |
+|---|---|---|
+| Bow | stem raked forward 27° (`STEM_RAKE`), forefoot swept back below the waterline | M: `s3-rig/expedition.py`, sheet 4 |
+| Superstructure | all five decks share one forward face (`XF` 36,0 m), so the front is near-vertical over a single wraparound bridge (front glass plus 9 m side glass and full-beam wings); the terraces are aft only (-50 to -22 m) | M: rig, sheet 4 |
+| Lifeboats | two tenders per side in a dark recessed band (22 m at x -35), muted rust colour, inside the beam | M: rig, sheet 4 |
+| Hull | `#07090c`, roughness 0,55, coat 0,12 (the rev 3 clear coat reflected the sky grey) | M: preview r4p, then full render r4 |
+| L/B | 6,16 (bounds -75 to 75,8 x ±12,2 m) | M: render log `HULL` |
+| Not regressed | no HUD, mooring lines to the bollards, no wake, quay and slopes unchanged | M: capture `beat1-e-f1-r4.png` |
+| Plate size | 13,5 KB AVIF, shadow 1,6 KB (cap 60 KB) | M: `encode.mjs` |
+| Sheet | `/Users/nyx/Projects/portlink/marketing/one-harbour-v4/s3/g1/g1-expedition-sheet-4.jpg`, beside UC `sheet-d.png` | M |

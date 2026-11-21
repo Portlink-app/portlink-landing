@@ -58,10 +58,10 @@ def grain(m, scale, amt, dark, bump=0.25, bricks=False):
     return m
 
 M = {
-    "hull": mat("Hull", "#16202c", 0.33, 0.1, coat=0.4), "boot": mat("Boot", "#6e1d1d", 0.5),
+    "hull": mat("Hull", "#07090c", 0.55, 0.0, coat=0.12), "boot": mat("Boot", "#6e1d1d", 0.5),
     "white": mat("White", "#eef0f1", 0.32, coat=0.3), "glass": mat("Glass", "#0b141e", 0.06, 0.7),
     "rail": mat("Rail", "#9fb4c4", 0.05, 0.0, trans=0.6), "dark": mat("Dark", "#1c242c", 0.5),
-    "funtop": mat("FunTop", "#101418", 0.45), "orange": mat("Lifeboat", "#e2702c", 0.4, coat=0.5),
+    "funtop": mat("FunTop", "#101418", 0.45), "orange": mat("Lifeboat", "#e2702c", 0.4, coat=0.5), "boat": mat("Tender", "#a9542c", 0.5, coat=0.3),
     "concrete": grain(mat("Concrete", "#7f8388", 0.9), 0.35, 0.35, "#5d6166", 0.3, bricks=True), "fender": mat("Fender", "#121416", 0.7),
     "shed": mat("Shed", "#b9c0c6", 0.6), "roof": mat("Roof", "#3a4148", 0.55),
     "rope": mat("Rope", "#d9d2c0", 0.8), "land": mat("Land", "#46585a", 0.95),
@@ -109,8 +109,11 @@ def rows(name, n, step, proto_fn, axis=0):
     return o
 
 # ---------- hull: lofted sections, flat bottom with bilge radius, raked ice-class stem, transom stern ----------
-def stem_x(z):          # bow profile: near-vertical ice stem below water, raked and flared above
-    return X1 - 3.5 + 3.5 * min(1.0, max(0.0, (z + DRAFT) / (DECK + DRAFT))) ** 1.4
+STEM_RAKE = math.tan(math.radians(27))   # rev 4: stem raked 27 deg forward above the waterline
+STEM_TOP = DECK + 3.2                     # deck height at the stem (sheer at X1)
+def stem_x(z):          # bow profile: straight raked stem above water, short ice knuckle swept aft below
+    x0 = X1 - STEM_TOP * STEM_RAKE        # stem at the waterline
+    return x0 + z * STEM_RAKE if z >= 0 else x0 + z * 0.45
 def stern_x(z):         # transom above z=-1, cut-up run below
     return X0 + max(0.0, -1.0 - z) * 3.2
 def half_breadth(x, z):
@@ -181,14 +184,15 @@ for side in (-1, 1):
 # aft ends terrace down to an open aft deck at hull-deck level. Everything stays inside the beam.
 # (name, x_aft, x_fwd, z_base, height, width, kind)
 H5 = 2.9
-DECKS = [("D1", -50, 40.0, DECK + 0*H5, H5, BEAM - 0.5, "win"),
-         ("D2", -45, 39.2, DECK + 1*H5, H5, BEAM - 0.5, "balc"),
-         ("D3", -39, 38.4, DECK + 2*H5, H5, BEAM - 0.5, "balc"),
-         ("D4", -31, 37.6, DECK + 3*H5, H5, BEAM - 0.9, "win"),
-         ("D5", -22, 36.8, DECK + 4*H5, H5, BEAM - 1.6, "bridge")]
+XF = 36.0   # rev 4: one flush, near-vertical front; terraces stay aft only
+DECKS = [("D1", -50, XF, DECK + 0*H5, H5, BEAM - 0.5, "win"),
+         ("D2", -45, XF, DECK + 1*H5, H5, BEAM - 0.5, "balc"),
+         ("D3", -39, XF, DECK + 2*H5, H5, BEAM - 0.5, "balc"),
+         ("D4", -31, XF, DECK + 3*H5, H5, BEAM - 0.9, "win"),
+         ("D5", -22, XF, DECK + 4*H5, H5, BEAM - 0.9, "bridge")]
 for name, xa, xf, z0, h, wd, kind in DECKS:
     L = xf - xa; cx = (xa + xf) / 2
-    block(name, L, wd, h, (cx, 0, z0 + h/2), M["white"], 0.15, nose=min(0.22, 5.0 / L))
+    block(name, L, wd, h, (cx, 0, z0 + h/2), M["white"], 0.15, nose=min(0.06, 1.6 / L))
     n = int((L * 0.78) / 2.6)
     for side in (-1, 1):
         y = side * (wd/2 + 0.04)
@@ -199,26 +203,31 @@ for name, xa, xf, z0, h, wd, kind in DECKS:
             rows(f"{name}W{side}", n, 2.6, lambda: block(f"{name}w{side}", 1.8, 0.25, 1.2 if kind == "win" else 1.5,
                  (xa + 3.0, y, z0 + h*0.55), M["glass"], 0.08))
     # forward-facing glazing on every deck front (the expedition "face")
-    block(f"{name}FW", 0.8, wd*0.62, h*0.42, (xf - 0.25, 0, z0 + h*0.58), M["glass"], 0.1)
+    if kind != "bridge":
+        block(f"{name}FW", 0.8, wd*0.55, h*0.36, (xf - 0.25, 0, z0 + h*0.58), M["glass"], 0.1)
+# wraparound bridge on D5: one continuous glass band across the front and round both sides
+ZB = DECK + 4*H5 + H5*0.58
+block("BRIDGEFW", 0.9, BEAM - 0.7, 1.35, (XF - 0.2, 0, ZB), M["glass"], 0.12)
+for side in (-1, 1):
+    block(f"BRIDGESW{side}", 9.0, 0.5, 1.35, (XF - 4.6, side*((BEAM - 0.9)/2 + 0.05), ZB), M["glass"], 0.12)
 # bridge wings to the ship's side on D5
-block("WINGS", 4.0, BEAM - 0.2, 1.4, (33.0, 0, DECK + 4*H5 + 1.2), M["white"], 0.12)
-block("WINGGL", 3.4, BEAM - 0.1, 0.7, (33.0, 0, DECK + 4*H5 + 1.6), M["glass"], 0.06)
+block("WINGS", 3.0, BEAM - 0.2, 0.5, (XF - 7.0, 0, DECK + 4*H5 + 0.5), M["white"], 0.12)
 # observation deck (6th) and compact mast on the bridge roof
-block("OBS", 30, BEAM - 6, 2.4, (14, 0, DECK + 5*H5 + 1.2), M["white"], 0.15, nose=0.15)
-rows("OBSW-1", 9, 2.8, lambda: block("obsw-1", 2.0, 0.25, 1.2, (2.5, -(BEAM-6)/2 - 0.04, DECK + 5*H5 + 1.3), M["glass"], 0.06))
-block("OBSFW", 0.8, (BEAM-6)*0.8, 1.4, (28.8, 0, DECK + 5*H5 + 1.3), M["glass"], 0.1)
-block("MAST", 0.7, 0.7, 6.0, (22, 0, DECK + 5*H5 + 5.2), M["white"], 0.1)
-block("YARD", 0.5, 5.0, 0.4, (22, 0, DECK + 5*H5 + 7.0), M["white"], 0.1)
-block("RADAR", 3.6, 0.5, 0.3, (22.3, 0, DECK + 5*H5 + 8.4), M["dark"], 0.1)
+block("OBS", 26, BEAM - 6, 2.4, (10, 0, DECK + 5*H5 + 1.2), M["white"], 0.15, nose=0.08)
+rows("OBSW-1", 9, 2.8, lambda: block("obsw-1", 2.0, 0.25, 1.2, (-0.5, -(BEAM-6)/2 - 0.04, DECK + 5*H5 + 1.3), M["glass"], 0.06))
+block("OBSFW", 0.8, (BEAM-6)*0.8, 1.4, (22.8, 0, DECK + 5*H5 + 1.3), M["glass"], 0.1)
+block("MAST", 0.7, 0.7, 6.0, (17, 0, DECK + 5*H5 + 5.2), M["white"], 0.1)
+block("YARD", 0.5, 5.0, 0.4, (17, 0, DECK + 5*H5 + 7.0), M["white"], 0.1)
+block("RADAR", 3.6, 0.5, 0.3, (17.3, 0, DECK + 5*H5 + 8.4), M["dark"], 0.1)
 # compact funnel aft on D4: low, raked, dark cap
 block("FUNNEL", 8.0, 5.5, 5.0, (-24, 0, DECK + 4*H5 + 2.5), M["white"], 0.9, nose=0.35, taper=0.2)
 block("FUNTOP", 6.4, 5.2, 0.9, (-24.8, 0, DECK + 4*H5 + 5.3), M["funtop"], 0.3, nose=0.35)
-# tenders and lifeboats tucked into a recess along D2, inside the beam
+# rev 4: two tenders per side tucked aft, set deep into a dark recess band on D2
 for side in (-1, 1):
-    block(f"RECESS{side}", 40, 0.4, 2.6, (-22, side*(BEAM/2 - 0.45), DECK + H5 + 1.4), M["dark"], 0.05)
-    for k in range(4):
-        block(f"BOAT{side}{k}", 8.5, 2.6, 2.3, (-37 + k*10.0, side*(BEAM/2 - 1.0), DECK + H5 + 1.3),
-              M["orange"], 0.8, nose=0.3)
+    block(f"RECESS{side}", 22, 0.5, 3.0, (-35, side*(BEAM/2 - 0.5), DECK + H5 + 1.5), M["funtop"], 0.05)
+    for k in range(2):
+        block(f"BOAT{side}{k}", 8.0, 2.4, 2.0, (-40 + k*10.0, side*(BEAM/2 - 1.6), DECK + H5 + 1.3),
+              M["boat"], 0.8, nose=0.3)
 # open aft deck: rails and a small crane over the zodiac platform
 for side in (-1, 1):
     block(f"AFTRAIL{side}", 24, 0.12, 1.0, (X0 + 13, side*(BEAM/2 - 0.3), DECK + 0.5), M["rail"], 0.02)

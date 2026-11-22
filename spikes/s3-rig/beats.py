@@ -1,10 +1,10 @@
 # One Harbour v4, Step 7 (G4): procedural Blender Cycles rig for beats b00..b06.
 # Models:
-#   - expedition_cruise (150,0 x 24,5 m, L/B 6,16, G1 rev 5 approved)
-#   - harbour_launch    (13,8 x 4,2 m port-agent pilot launch)
-#   - ship_tender       (9,8 x 3,4 m expedition ship tender)
-#   - tour_boat         (10,6 x 3,5 m small open RIB tour boat, people from behind only)
-#   - iceberg           (42 x 28 x 19 m glacial iceberg prop for beat 5)
+#   - expedition_cruise (150,0 x 24,5 m, L/B 6,16, G1 rev 5 approved, razor-sharp boot-top, flush glazing)
+#   - harbour_launch    (13,8 x 4,2 m Nordic port-agent pilot launch with tubular D-fender & raked wheelhouse)
+#   - ship_tender       (9,8 x 3,4 m streamlined expedition ship tender with flush panoramic cabin)
+#   - tour_boat         (10,6 x 3,5 m offshore RIB tour boat with tubular hypalon collar, saddle seats, twin outboards & tubular A-frame arch; zero pawn figures)
+#   - iceberg           (38 x 24 x 16 m flat-faceted calved tabular/pinnacled glacial iceberg prop for beat 5)
 #
 # Usage:
 #   /Applications/Blender.app/Contents/MacOS/Blender -b -P spikes/s3-rig/beats.py -- <out_dir> <beat_id> <w> <h> <samples> <frames>
@@ -74,26 +74,27 @@ def grain(m, scale, amt, dark, bump=0.25, bricks=False):
     return m
 
 M = {
-    "hull": mat("Hull", "#07090c", 0.9, 0.0, coat=0.0),
-    "navy_hull": mat("NavyHull", "#0b192e", 0.55, 0.0, coat=0.1),
+    "hull": mat("Hull", "#07090c", 0.88, 0.0, coat=0.0),
+    "navy_hull": mat("NavyHull", "#0a1c34", 0.45, 0.05, coat=0.18),
     "boot": mat("Boot", "#6e1d1d", 0.5),
-    "white": mat("White", "#eef0f1", 0.32, coat=0.3),
-    "glass": mat("Glass", "#0b141e", 0.06, 0.7),
+    "white": mat("White", "#eef0f1", 0.30, coat=0.3),
+    "alum": mat("Aluminium", "#cdd4dc", 0.35, 0.45, coat=0.15),
+    "glass": mat("Glass", "#08111a", 0.05, 0.75),
     "rail": mat("Rail", "#9fb4c4", 0.05, 0.0, trans=0.6),
-    "dark": mat("Dark", "#1c242c", 0.5),
-    "sponson": mat("Sponson", "#141a22", 0.65),
+    "steel": mat("Steel", "#b8c2cc", 0.22, 0.85),
+    "dark": mat("Dark", "#1b232b", 0.48),
+    "sponson": mat("Sponson", "#121820", 0.55, coat=0.1),
     "funtop": mat("FunTop", "#101418", 0.45),
-    "orange": mat("Lifeboat", "#e2702c", 0.4, coat=0.5),
-    "boat": mat("Tender", "#a9542c", 0.5, coat=0.3),
-    "parka": mat("Parka", "#233140", 0.75),
+    "orange": mat("SignalOrange", "#d86524", 0.38, coat=0.4),
+    "boat": mat("TenderHull", "#152b47", 0.42, coat=0.25),
     "concrete": grain(mat("Concrete", "#7f8388", 0.9), 0.35, 0.35, "#5d6166", 0.3, bricks=True),
-    "fender": mat("Fender", "#121416", 0.7),
+    "fender": mat("Fender", "#121416", 0.68),
     "shed": mat("Shed", "#b9c0c6", 0.6),
     "roof": mat("Roof", "#3a4148", 0.55),
     "rope": mat("Rope", "#d9d2c0", 0.8),
     "hill": grain(mat("Hill", "#3b4a44", 0.95), 0.045, 0.4, "#1d2824", 0.8),
-    "snow": grain(mat("Snow", "#c9d3dc", 0.7), 0.02, 0.3, "#8e9aa6", 0.4),
-    "ice": grain(mat("Ice", "#d7e6f2", 0.35, trans=0.25, coat=0.4), 0.12, 0.42, "#5b8db3", 0.45),
+    "snow": grain(mat("Snow", "#dde6ee", 0.62), 0.03, 0.25, "#9fb0c0", 0.35),
+    "ice": grain(mat("Ice", "#8db7d4", 0.28, trans=0.32, coat=0.45), 0.14, 0.38, "#3a688c", 0.4),
 }
 _hb = next(n for n in M["hull"].node_tree.nodes if n.type == 'BSDF_PRINCIPLED')
 for k in ('Specular IOR Level', 'Specular'):
@@ -110,25 +111,44 @@ def finish(o, parent, m, bevel=0.0, smooth=True):
     if smooth:
         for p in o.data.polygons: p.use_smooth = True
         o.modifiers.new("WN", 'WEIGHTED_NORMAL')
+    else:
+        for p in o.data.polygons: p.use_smooth = False
     return o
 
-def block(name, sx, sy, sz, loc, m, bevel=0.25, nose=0.0, parent=None, taper=0.0):
+def block(name, sx, sy, sz, loc, m, bevel=0.22, nose=0.0, parent=None, taper=0.0):
     me = bpy.data.meshes.new(name); bm = bmesh.new()
     bmesh.ops.create_cube(bm, size=1.0)
     if nose > 0:
         bmesh.ops.subdivide_edges(bm, edges=[e for e in bm.edges if abs(e.verts[0].co.x - e.verts[1].co.x) > 0.5],
-                                  cuts=8, use_grid_fill=True)
+                                  cuts=10, use_grid_fill=True)
     for v in bm.verts:
         x = v.co.x
         if nose > 0 and x > 0.5 - nose:
             t = (x - (0.5 - nose)) / nose
-            v.co.y *= max(0.25, math.cos(t * math.pi / 2)) ** 0.5
+            v.co.y *= max(0.22, math.cos(t * math.pi / 2)) ** 0.55
         if taper:
             v.co.x *= 1 - taper * (v.co.z + 0.5)
         v.co.x *= sx; v.co.y *= sy; v.co.z *= sz
     bm.to_mesh(me); bm.free()
     o = bpy.data.objects.new(name, me); sc.collection.objects.link(o); o.location = loc
     return finish(o, parent or ship, m, bevel)
+
+def tube_curve(name, pts, radius, m, parent, cyclic=False, res=10):
+    cu = bpy.data.curves.new(name, 'CURVE')
+    cu.dimensions = '3D'
+    cu.bevel_depth = radius
+    cu.bevel_resolution = res
+    cu.use_fill_caps = not cyclic
+    sp = cu.splines.new('POLY')
+    sp.points.add(len(pts) - 1)
+    for idx, p in enumerate(pts):
+        sp.points[idx].co = (p[0], p[1], p[2], 1.0)
+    sp.use_cyclic_u = cyclic
+    o = bpy.data.objects.new(name, cu)
+    sc.collection.objects.link(o)
+    o.parent = parent
+    o.data.materials.append(m)
+    return o
 
 def rows(name, n, step, proto_fn, axis=0):
     o = proto_fn()
@@ -137,28 +157,34 @@ def rows(name, n, step, proto_fn, axis=0):
     o.modifiers.move(len(o.modifiers) - 1, 0)
     return o
 
-def build_small_hull(name, loa, beam, draft, freeboard, parent, hull_mat, boot_mat):
-    """Lofted small-craft hull centered at origin, bow toward +x."""
+def build_small_hull(name, loa, beam, draft, freeboard, parent, hull_mat, boot_mat, boot_z=0.18):
+    """Lofted deep-V marine hull centered at origin, bow toward +x, with exact horizontal boot-top loop."""
     x0, x1 = -loa / 2, loa / 2
-    nu, nz = 48, 12
+    nu = 56
+    z_fracs = [0.0, 0.16, 0.30, 0.44, 0.56, 0.68, 0.80, 0.90, 1.0]
+    nz = len(z_fracs) - 1
     me = bpy.data.meshes.new(name); bm = bmesh.new(); verts = {}
     for i in range(nu + 1):
         u = i / nu
+        zt = freeboard * (1.0 + 0.32 * (max(0.0, u - 0.50) / 0.50) ** 1.8)
         for side in (-1, 1):
-            for j in range(nz + 1):
-                zf = j / nz
-                zt = freeboard * (1.0 + 0.28 * (max(0.0, u - 0.55) / 0.45) ** 2)
-                z = -draft + zf * (zt + draft)
-                xs = x1 - 0.12 * loa * (1.0 - zf)
-                xa = x0 + 0.05 * loa * max(0.0, -z / draft)
+            for j, zf in enumerate(z_fracs):
+                if j == 3:
+                    z = boot_z
+                else:
+                    z = -draft + zf * (zt + draft)
+                xs = x1 - 0.14 * loa * (1.0 - zf)
+                xa = x0 + 0.04 * loa * max(0.0, -z / max(0.1, draft))
                 x = xa + u * (xs - xa)
-                hb = (beam / 2) * (0.35 + 0.65 * zf ** 0.45)
-                if u > 0.52:
-                    t = (u - 0.52) / 0.48
-                    hb *= max(0.0, 1.0 - t ** 1.85) ** 0.58
-                elif u < 0.18:
-                    t = (0.18 - u) / 0.18
-                    hb *= 1.0 - 0.16 * t * t
+                # Deep-V hull section with hard chine near zf=0.44
+                hb = (beam / 2) * (0.28 + 0.72 * min(1.0, zf / 0.72) ** 0.48)
+                if u > 0.48:
+                    t = (u - 0.48) / 0.52
+                    flare = 1.0 + 0.14 * zf * (1.0 - t * 0.5)
+                    hb *= max(0.0, 1.0 - t ** 1.75) ** 0.62 * flare
+                elif u < 0.16:
+                    t = (0.16 - u) / 0.16
+                    hb *= 1.0 - 0.12 * t * t
                 verts[(i, side, j)] = bm.verts.new((x, side * hb, z))
     for i in range(nu):
         for side in (-1, 1):
@@ -168,10 +194,10 @@ def build_small_hull(name, loa, beam, draft, freeboard, parent, hull_mat, boot_m
         bm.faces.new([verts[(i, 1, 0)], verts[(i+1, 1, 0)], verts[(i+1, -1, 0)], verts[(i, -1, 0)]])
     bm.faces.new([verts[(0, -1, j)] for j in range(nz + 1)] + [verts[(0, 1, j)] for j in range(nz, -1, -1)])
     bm.faces.new([verts[(i, -1, nz)] for i in range(nu + 1)] + [verts[(i, 1, nz)] for i in range(nu, -1, -1)][1:-1])
-    bmesh.ops.remove_doubles(bm, verts=bm.verts, dist=0.01)
+    bmesh.ops.remove_doubles(bm, verts=bm.verts, dist=0.008)
     bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
     for f in bm.faces:
-        f.material_index = 1 if f.calc_center_median().z < 0.22 else 0
+        f.material_index = 1 if f.calc_center_median().z < boot_z else 0
     bm.to_mesh(me); bm.free()
     o = bpy.data.objects.new(name, me); sc.collection.objects.link(o)
     return finish(o, parent, [hull_mat, boot_mat], 0.0)
@@ -202,15 +228,21 @@ def build_expedition_ship():
     def sheer(x):
         t = max(0.0, (x - 10) / (X1 - 10)); return DECK + 3.2 * t * t
 
+    BOOT_TOP_Z = 0.85
     NU, NZ = 120, 22
     me = bpy.data.meshes.new("HULL"); bm = bmesh.new(); verts = {}
     for i in range(NU + 1):
         u = i / NU
+        zt = sheer(stern_x(-DRAFT) + u * (X1 - X0))
         for side in (-1, 1):
             for j in range(NZ + 1):
                 zf = j / NZ
-                zt = sheer(stern_x(-DRAFT) + u * (X1 - X0))
-                z = -DRAFT + zf * (zt + DRAFT)
+                if j == 9:
+                    z = BOOT_TOP_Z
+                elif j < 9:
+                    z = -DRAFT + (j / 9.0) * (BOOT_TOP_Z + DRAFT)
+                else:
+                    z = BOOT_TOP_Z + ((j - 9) / (NZ - 9.0)) * (zt - BOOT_TOP_Z)
                 x = stern_x(z) + u * (stem_x(z) - stern_x(z))
                 y = side * half_breadth(x, z)
                 verts[(i, side, j)] = bm.verts.new((x, y, z))
@@ -226,17 +258,12 @@ def build_expedition_ship():
     bmesh.ops.remove_doubles(bm, verts=bm.verts, dist=0.02)
     bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
     for f in bm.faces:
-        f.material_index = 1 if f.calc_center_median().z < 0.9 else 0
+        f.material_index = 1 if f.calc_center_median().z < BOOT_TOP_Z else 0
     bm.to_mesh(me); bm.free()
     hull = bpy.data.objects.new("HULL", me); sc.collection.objects.link(hull)
     finish(hull, ship, [M["hull"], M["boot"]], 0.0)
 
-    for side in (-1, 1):
-        rows(f"PORT{side}", 26, 3.0, lambda: block(f"PORTHOLE{side}", 0.9, 0.3, 0.9,
-             (-62, side * (BEAM/2 + 0.02), 4.6), M["glass"], 0.2))
-        rows(f"PORTB{side}", 26, 3.0, lambda: block(f"PORTHOLE2{side}", 0.9, 0.3, 0.9,
-             (-60.5, side * (BEAM/2 + 0.02), 6.8), M["glass"], 0.2))
-
+    # Flush superstructure decks D1..D5 (no protruding lower-hull studs)
     H5 = 2.9; XF = 36.0
     DECKS = [("D1", -50, XF, DECK + 0*H5, H5, BEAM - 0.5, "win"),
              ("D2", -45, XF, DECK + 1*H5, H5, BEAM - 0.5, "balc"),
@@ -248,23 +275,23 @@ def build_expedition_ship():
         block(name, L, wd, h, (cx, 0, z0 + h/2), M["white"], 0.15, nose=min(0.06, 1.6 / L))
         n = int((L * 0.78) / 2.6)
         for side in (-1, 1):
-            y = side * (wd/2 + 0.04)
+            y = side * (wd/2 + 0.015)
             if kind == "balc":
-                block(f"{name}R{side}", L*0.70, 0.3, 1.9, (cx - L*0.06, y, z0 + 1.45), M["dark"], 0.05)
-                block(f"{name}G{side}", L*0.70, 0.12, 0.9, (cx - L*0.06, side*(wd/2 + 0.2), z0 + 0.85), M["rail"], 0.02)
+                block(f"{name}R{side}", L*0.70, 0.14, 1.9, (cx - L*0.06, y, z0 + 1.45), M["dark"], 0.03)
+                block(f"{name}G{side}", L*0.70, 0.08, 0.9, (cx - L*0.06, side*(wd/2 + 0.12), z0 + 0.85), M["rail"], 0.02)
             else:
-                rows(f"{name}W{side}", n, 2.6, lambda: block(f"{name}w{side}", 1.8, 0.25, 1.2 if kind == "win" else 1.5,
-                     (xa + 3.0, y, z0 + h*0.55), M["glass"], 0.08))
+                rows(f"{name}W{side}", n, 2.6, lambda: block(f"{name}w{side}", 1.8, 0.06, 1.2 if kind == "win" else 1.5,
+                     (xa + 3.0, y, z0 + h*0.55), M["glass"], 0.03))
         if kind != "bridge":
-            block(f"{name}FW", 0.8, wd*0.55, h*0.36, (xf - 0.25, 0, z0 + h*0.58), M["glass"], 0.1)
+            block(f"{name}FW", 0.12, wd*0.55, h*0.36, (xf + 0.02, 0, z0 + h*0.58), M["glass"], 0.04)
     ZB = DECK + 4*H5 + H5*0.58
-    block("BRIDGEFW", 0.9, BEAM - 0.7, 1.35, (XF - 0.2, 0, ZB), M["glass"], 0.12)
+    block("BRIDGEFW", 0.35, BEAM - 0.7, 1.35, (XF - 0.05, 0, ZB), M["glass"], 0.06)
     for side in (-1, 1):
-        block(f"BRIDGESW{side}", 9.0, 0.5, 1.35, (XF - 4.6, side*((BEAM - 0.9)/2 + 0.05), ZB), M["glass"], 0.12)
+        block(f"BRIDGESW{side}", 9.0, 0.15, 1.35, (XF - 4.6, side*((BEAM - 0.9)/2 + 0.03), ZB), M["glass"], 0.05)
     block("WINGS", 3.0, BEAM - 0.2, 0.5, (XF - 7.0, 0, DECK + 4*H5 + 0.5), M["white"], 0.12)
     block("OBS", 26, BEAM - 6, 2.4, (10, 0, DECK + 5*H5 + 1.2), M["white"], 0.15, nose=0.08)
-    rows("OBSW-1", 9, 2.8, lambda: block("obsw-1", 2.0, 0.25, 1.2, (-0.5, -(BEAM-6)/2 - 0.04, DECK + 5*H5 + 1.3), M["glass"], 0.06))
-    block("OBSFW", 0.8, (BEAM-6)*0.8, 1.4, (22.8, 0, DECK + 5*H5 + 1.3), M["glass"], 0.1)
+    rows("OBSW-1", 9, 2.8, lambda: block("obsw-1", 2.0, 0.06, 1.2, (-0.5, -(BEAM-6)/2 - 0.02, DECK + 5*H5 + 1.3), M["glass"], 0.03))
+    block("OBSFW", 0.12, (BEAM-6)*0.8, 1.4, (22.9, 0, DECK + 5*H5 + 1.3), M["glass"], 0.04)
     block("MAST", 0.7, 0.7, 6.0, (17, 0, DECK + 5*H5 + 5.2), M["white"], 0.1)
     block("YARD", 0.5, 5.0, 0.4, (17, 0, DECK + 5*H5 + 7.0), M["white"], 0.1)
     block("RADAR", 3.6, 0.5, 0.3, (17.3, 0, DECK + 5*H5 + 8.4), M["dark"], 0.1)
@@ -274,10 +301,10 @@ def build_expedition_ship():
         block(f"RECESS{side}", 22, 0.5, 3.0, (-35, side*(BEAM/2 - 0.5), DECK + H5 + 1.5), M["funtop"], 0.05)
         for k in range(2):
             block(f"BOAT{side}{k}", 8.0, 2.4, 2.0, (-40 + k*10.0, side*(BEAM/2 - 1.6), DECK + H5 + 1.3),
-                  M["boat"], 0.8, nose=0.3)
+                  M["orange"], 0.6, nose=0.3)
     for side in (-1, 1):
-        block(f"AFTRAIL{side}", 24, 0.12, 1.0, (X0 + 13, side*(BEAM/2 - 0.3), DECK + 0.5), M["rail"], 0.02)
-    block("AFTRAILX", 0.12, BEAM - 0.8, 1.0, (X0 + 1.2, 0, DECK + 0.5), M["rail"], 0.02)
+        block(f"AFTRAIL{side}", 24, 0.10, 1.0, (X0 + 13, side*(BEAM/2 - 0.3), DECK + 0.5), M["rail"], 0.02)
+    block("AFTRAILX", 0.10, BEAM - 0.8, 1.0, (X0 + 1.2, 0, DECK + 0.5), M["rail"], 0.02)
     block("CRANE", 0.8, 0.8, 5.0, (X0 + 8, -6, DECK + 2.5), M["orange"], 0.1)
     block("JIB", 9.0, 0.5, 0.5, (X0 + 12, -6, DECK + 4.8), M["orange"], 0.1)
     block("ZODIACS", 10, 6, 0.9, (X0 + 14, 3, DECK + 0.45), M["dark"], 0.4)
@@ -312,16 +339,17 @@ def build_quay(sheer, with_lines=True):
     rows("LAMP", 6, 40.0, lambda: block("lamp", 0.35, 0.35, 12, (-100, QY + 18, 9.0), M["dark"], 0.05, parent=world_root))
 
 def build_fjord(qy_offset=17.15):
-    def hills(name, y0, depth, peak, seed, xspan=6000, snow=380):
-        random.seed(seed); nx, ny = 160, 40
+    """Fjord mountain ranges rooted below z=0 (-6 m) so they meet the water plane seamlessly with zero gap."""
+    def hills(name, y0, depth, peak, seed, xspan=7200, snow=380):
+        random.seed(seed); nx, ny = 160, 44
         me = bpy.data.meshes.new(name); bm = bmesh.new(); vv = []
-        waves = [(random.uniform(0.0015, 0.006), random.uniform(0, 6.28), random.uniform(0.3, 1.0)) for _ in range(6)]
+        waves = [(random.uniform(0.0015, 0.0055), random.uniform(0, 6.28), random.uniform(0.3, 1.0)) for _ in range(6)]
         for j in range(ny + 1):
             row = []
             for i in range(nx + 1):
                 x = -xspan/2 + xspan * i / nx; t = j / ny
                 n = sum(a * math.sin(x * f + p + t * 3.1) for f, p, a in waves) / 3.0
-                z = 3 + peak * math.sin(t * math.pi / 1.6) ** 1.3 * (0.65 + 0.35 * n)
+                z = -6.0 + (peak + 6.0) * math.sin(t * math.pi / 1.55) ** 1.15 * (0.68 + 0.32 * n)
                 row.append(bm.verts.new((x, y0 + depth * t, z)))
             vv.append(row)
         for j in range(ny):
@@ -331,82 +359,223 @@ def build_fjord(qy_offset=17.15):
         bm.to_mesh(me); bm.free()
         o = bpy.data.objects.new(name, me); sc.collection.objects.link(o)
         finish(o, world_root, [M["hill"], M["snow"]], 0.0)
-    hills("FJORD_NEAR", qy_offset + 260, 1400, 230, 3, snow=190)
-    hills("FJORD_FAR", qy_offset + 1700, 2600, 620, 11, 9000, snow=360)
+    hills("FJORD_NEAR", qy_offset + 240, 1450, 240, 3, snow=185)
+    hills("FJORD_FAR", qy_offset + 1650, 2600, 640, 11, 9600, snow=350)
     for o in sc.objects:
         if o.name == "FJORD_FAR": o.data.materials[0] = mat("HillFar", "#71869a", 0.95)
 
 def build_harbour_launch():
-    """13,8 x 4,2 m port-agent harbour launch."""
-    h = build_small_hull("LAUNCH_HULL", 13.8, 4.2, 1.3, 1.65, craft, M["navy_hull"], M["orange"])
-    block("LAUNCH_COLLAR", 13.4, 4.38, 0.34, (0.0, 0.0, 1.52), M["orange"], 0.12, nose=0.35, parent=craft)
-    block("LAUNCH_DECK", 12.6, 3.8, 0.25, (-0.2, 0.0, 1.55), M["dark"], 0.08, nose=0.32, parent=craft)
-    block("LAUNCH_CABIN", 5.6, 2.9, 1.75, (0.8, 0.0, 2.45), M["white"], 0.14, nose=0.25, taper=0.1, parent=craft)
-    block("LAUNCH_ROOF", 5.9, 3.05, 0.18, (0.7, 0.0, 3.38), M["white"], 0.08, nose=0.25, parent=craft)
-    block("LAUNCH_WIN_F", 0.35, 2.55, 0.72, (3.45, 0.0, 2.72), M["glass"], 0.05, parent=craft)
+    """13,8 x 4,2 m Nordic port-agent pilot launch with continuous tubular D-fender and flush glazing."""
+    loa, beam, draft, fb = 13.8, 4.2, 1.25, 1.55
+    h = build_small_hull("LAUNCH_HULL", loa, beam, draft, fb, craft, M["navy_hull"], M["boot"], boot_z=0.16)
+    # Continuous curved rubber D-fender around the gunwale perimeter
+    collar_pts = []
+    for k in range(33):
+        ang = -math.pi + (2 * math.pi * k / 32)
+        u = (math.cos(ang) + 1.0) / 2.0
+        x = -loa * 0.49 + u * loa * 0.98
+        side = 1 if math.sin(ang) >= 0 else -1
+        hb = (beam / 2) * (1.0 if u <= 0.48 else max(0.06, (1.0 - ((u - 0.48) / 0.52) ** 1.75) ** 0.62))
+        if u < 0.16:
+            hb *= 1.0 - 0.12 * ((0.16 - u) / 0.16) ** 2
+        z = fb * (1.0 + 0.30 * (max(0.0, u - 0.50) / 0.50) ** 1.8) - 0.08
+        collar_pts.append((x, side * hb * abs(math.sin(ang)) ** 0.15 if 0 < k < 32 and k != 16 else (x, 0.0, z)[1], z))
+    # Build clean port + starboard gunwale fender tubes meeting at bow and transom
+    fender_loop = []
+    for i in range(25):
+        u = i / 24.0
+        x = -loa * 0.47 + u * loa * 0.93
+        hb = (beam / 2 + 0.06) * (1.0 if u <= 0.48 else max(0.04, (1.0 - ((u - 0.48) / 0.52) ** 1.75) ** 0.62))
+        if u < 0.16: hb *= 1.0 - 0.12 * ((0.16 - u) / 0.16) ** 2
+        z = fb * (1.0 + 0.30 * (max(0.0, u - 0.50) / 0.50) ** 1.8) - 0.08
+        fender_loop.append((x, -hb, z))
+    for i in range(24, -1, -1):
+        x, yn, z = fender_loop[i]
+        fender_loop.append((x, -yn, z))
+    tube_curve("LAUNCH_FENDER", fender_loop, 0.19, M["fender"], craft, cyclic=True)
+    # Signal orange bow fender wrap
+    bow_pts = [p for p in fender_loop if p[0] > loa * 0.24]
+    if len(bow_pts) >= 4:
+        tube_curve("LAUNCH_BOW_BAND", bow_pts, 0.205, M["orange"], craft, cyclic=False)
+
+    # Recessed non-skid work deck
+    block("LAUNCH_DECK", 12.2, 3.65, 0.22, (-0.3, 0.0, fb - 0.08), M["dark"], 0.08, nose=0.38, parent=craft)
+    # Coaming plinth
+    block("LAUNCH_COAMING", 6.2, 2.95, 0.42, (0.3, 0.0, fb + 0.22), M["white"], 0.10, nose=0.28, parent=craft)
+    # Sleek aluminum wheelhouse with flush dark glazing band
+    block("LAUNCH_CABIN_LOW", 5.6, 2.76, 0.82, (0.35, 0.0, fb + 0.72), M["white"], 0.12, nose=0.26, taper=0.06, parent=craft)
+    block("LAUNCH_GLASS_CORE", 5.38, 2.66, 0.66, (0.42, 0.0, fb + 1.34), M["glass"], 0.04, nose=0.26, taper=0.08, parent=craft)
+    block("LAUNCH_ROOF", 5.85, 2.86, 0.20, (0.25, 0.0, fb + 1.74), M["white"], 0.08, nose=0.26, parent=craft)
+    block("LAUNCH_VISOR", 0.65, 2.60, 0.14, (3.05, 0.0, fb + 1.70), M["orange"], 0.05, nose=0.35, parent=craft)
+    # Window mullions (flush with cabin walls)
+    for mx in (-1.6, -0.3, 1.0, 2.1):
+        for side in (-1, 1):
+            block(f"LAUNCH_MUL_{mx}_{side}", 0.12, 0.06, 0.68, (mx, side * 1.32, fb + 1.34), M["white"], 0.02, parent=craft)
+    # Foredeck & roof safety grab rails (tubular stainless steel)
     for side in (-1, 1):
-        block(f"LAUNCH_WIN_S{side}", 3.8, 0.18, 0.68, (0.8, side * 1.44, 2.70), M["glass"], 0.05, parent=craft)
-        block(f"LAUNCH_RAIL{side}", 4.6, 0.08, 0.65, (3.6, side * 1.55, 2.05), M["white"], 0.02, parent=craft)
-    block("LAUNCH_MAST", 0.28, 0.28, 1.5, (0.2, 0.0, 4.1), M["white"], 0.05, parent=craft)
-    block("LAUNCH_RADAR", 0.9, 0.9, 0.32, (0.2, 0.0, 4.88), M["white"], 0.12, parent=craft)
+        tube_curve(f"LAUNCH_FRAIL{side}", [
+            (2.8, side * 1.35, fb + 0.1), (2.8, side * 1.35, fb + 0.72),
+            (5.1, side * 0.65, fb + 0.98), (5.1, side * 0.65, fb + 0.35)
+        ], 0.035, M["steel"], craft)
+        tube_curve(f"LAUNCH_RRAIL{side}", [
+            (-2.1, side * 1.15, fb + 1.82), (-2.1, side * 1.15, fb + 2.02),
+            (2.4, side * 1.05, fb + 2.02), (2.4, side * 1.05, fb + 1.82)
+        ], 0.03, M["steel"], craft)
+    # Tripod radar mast & open-array scanner
+    tube_curve("LAUNCH_MAST_MAIN", [(-0.4, 0.0, fb + 1.82), (-0.7, 0.0, fb + 3.15)], 0.07, M["white"], craft)
+    for side in (-1, 1):
+        tube_curve(f"LAUNCH_MAST_LEG{side}", [(-1.1, side * 0.55, fb + 1.82), (-0.65, 0.0, fb + 2.95)], 0.04, M["white"], craft)
+    block("LAUNCH_RADAR_PED", 0.38, 0.38, 0.26, (-0.7, 0.0, fb + 3.25), M["white"], 0.06, parent=craft)
+    block("LAUNCH_RADAR_BAR", 0.24, 1.45, 0.14, (-0.68, 0.0, fb + 3.45), M["white"], 0.05, parent=craft)
     return h
 
 def build_ship_tender():
-    """9,8 x 3,4 m expedition ship tender."""
-    h = build_small_hull("TENDER_HULL", 9.8, 3.4, 0.95, 1.35, craft, M["boat"], M["dark"])
-    block("TENDER_RUB", 9.5, 3.55, 0.28, (0.0, 0.0, 1.20), M["fender"], 0.1, nose=0.35, parent=craft)
-    block("TENDER_CANOPY", 5.8, 2.75, 1.25, (-0.3, 0.0, 1.85), M["white"], 0.18, nose=0.28, taper=0.12, parent=craft)
-    block("TENDER_TOP", 5.6, 2.65, 0.18, (-0.3, 0.0, 2.52), M["orange"], 0.1, nose=0.28, parent=craft)
-    block("TENDER_WIN_F", 0.3, 2.3, 0.52, (2.48, 0.0, 2.02), M["glass"], 0.05, parent=craft)
+    """9,8 x 3,4 m streamlined expedition ship tender with flush panoramic glazing."""
+    loa, beam, draft, fb = 9.8, 3.4, 0.90, 1.28
+    h = build_small_hull("TENDER_HULL", loa, beam, draft, fb, craft, M["boat"], M["dark"], boot_z=0.14)
+    fender_loop = []
+    for i in range(25):
+        u = i / 24.0
+        x = -loa * 0.47 + u * loa * 0.93
+        hb = (beam / 2 + 0.05) * (1.0 if u <= 0.48 else max(0.04, (1.0 - ((u - 0.48) / 0.52) ** 1.75) ** 0.62))
+        if u < 0.16: hb *= 1.0 - 0.12 * ((0.16 - u) / 0.16) ** 2
+        z = fb * (1.0 + 0.30 * (max(0.0, u - 0.50) / 0.50) ** 1.8) - 0.06
+        fender_loop.append((x, -hb, z))
+    for i in range(24, -1, -1):
+        x, yn, z = fender_loop[i]
+        fender_loop.append((x, -yn, z))
+    tube_curve("TENDER_FENDER", fender_loop, 0.15, M["fender"], craft, cyclic=True)
+
+    block("TENDER_DECK", 8.8, 2.95, 0.18, (-0.1, 0.0, fb - 0.05), M["dark"], 0.06, nose=0.35, parent=craft)
+    # Low-profile limousine tender cabin: white lower skirt, flush continuous dark glass core, signal orange roof cap
+    block("TENDER_CABIN_BASE", 5.8, 2.68, 0.52, (-0.35, 0.0, fb + 0.28), M["white"], 0.12, nose=0.28, taper=0.06, parent=craft)
+    block("TENDER_GLASS_BAND", 5.55, 2.58, 0.54, (-0.32, 0.0, fb + 0.74), M["glass"], 0.04, nose=0.28, taper=0.10, parent=craft)
+    block("TENDER_ROOF_WHITE", 5.70, 2.64, 0.16, (-0.38, 0.0, fb + 1.08), M["white"], 0.08, nose=0.28, parent=craft)
+    block("TENDER_ROOF_CAP", 5.20, 2.35, 0.14, (-0.42, 0.0, fb + 1.20), M["orange"], 0.08, nose=0.28, parent=craft)
+    for mx in (-2.2, -1.0, 0.2, 1.4):
+        for side in (-1, 1):
+            block(f"TENDER_MUL_{mx}_{side}", 0.10, 0.05, 0.56, (mx, side * 1.28, fb + 0.74), M["white"], 0.02, parent=craft)
+    # Forward boarding well & stainless boarding handrails
+    block("TENDER_BOW_WELL", 1.85, 1.95, 0.36, (3.15, 0.0, fb + 0.16), M["dark"], 0.08, nose=0.35, parent=craft)
     for side in (-1, 1):
-        block(f"TENDER_WIN_S{side}", 4.4, 0.16, 0.50, (-0.3, side * 1.36, 2.02), M["glass"], 0.05, parent=craft)
-    block("TENDER_COCKPIT", 2.2, 2.2, 0.5, (3.1, 0.0, 1.45), M["dark"], 0.08, nose=0.3, parent=craft)
+        tube_curve(f"TENDER_RAIL{side}", [
+            (2.3, side * 1.05, fb + 0.25), (2.3, side * 1.05, fb + 0.82),
+            (4.0, side * 0.55, fb + 0.92), (4.0, side * 0.55, fb + 0.35)
+        ], 0.03, M["steel"], craft)
+    bpy.ops.mesh.primitive_cylinder_add(vertices=24, radius=0.34, depth=0.24, location=(0.6, 0.0, fb + 1.36))
+    rd = bpy.context.object; rd.name = "TENDER_RADOME"; finish(rd, craft, M["white"], 0.06)
     return h
 
 def build_tour_boat():
-    """10,6 x 3,5 m small open tour boat (RIB), with seated figures seen from behind only."""
-    h = build_small_hull("RIB_HULL", 10.6, 3.5, 0.75, 1.05, craft, M["navy_hull"], M["dark"])
-    block("RIB_TUBE", 10.4, 3.68, 0.62, (0.0, 0.0, 0.98), M["sponson"], 0.28, nose=0.42, parent=craft)
-    block("RIB_BOW_PATCH", 2.2, 2.4, 0.66, (3.9, 0.0, 1.04), M["orange"], 0.22, nose=0.45, parent=craft)
-    block("RIB_FLOOR", 8.2, 2.4, 0.18, (-0.4, 0.0, 0.85), M["dark"], 0.06, parent=craft)
-    block("RIB_CONSOLE", 1.1, 1.15, 1.25, (0.9, 0.0, 1.45), M["dark"], 0.1, parent=craft)
-    block("RIB_SCREEN", 0.25, 1.05, 0.55, (1.2, 0.0, 2.18), M["glass"], 0.05, parent=craft)
-    block("RIB_ARCH", 0.25, 2.8, 1.85, (-4.2, 0.0, 1.85), M["white"], 0.06, parent=craft)
-    # Silhouetted figures from behind (torso + hooded head, facing forward +x away from stern camera)
-    for idx, (px, py) in enumerate(((-0.2, 0.0), (-1.6, -0.65), (-1.6, 0.65), (-3.0, -0.65), (-3.0, 0.65))):
-        block(f"FIG_BODY{idx}", 0.55, 0.62, 0.88, (px, py, 1.45), M["parka"] if idx else M["orange"], 0.18, parent=craft)
-        bpy.ops.mesh.primitive_uv_sphere_add(segments=16, ring_count=12, radius=0.22, location=(px - 0.02, py, 2.05))
-        hd = bpy.context.object; hd.name = f"FIG_HOOD{idx}"; finish(hd, craft, M["dark"], 0.0)
+    """10,6 x 3,5 m offshore RIB tour boat with tubular hypalon collar, saddle seats, twin outboards & tubular A-frame arch (zero pawn figures)."""
+    loa, beam, draft, fb = 10.6, 3.5, 0.72, 0.96
+    h = build_small_hull("RIB_HULL", loa, beam, draft, fb, craft, M["navy_hull"], M["dark"], boot_z=0.10)
+    # Authentic cylindrical hypalon collar tube wrapping the gunwales to a raised bow nose
+    rib_loop = []
+    for i in range(29):
+        u = i / 28.0
+        x = -loa * 0.46 + u * loa * 0.94
+        hb = (beam / 2 - 0.12) * (1.0 if u <= 0.46 else max(0.05, (1.0 - ((u - 0.46) / 0.54) ** 1.7) ** 0.60))
+        z = fb * (0.94 + 0.36 * (max(0.0, u - 0.48) / 0.52) ** 1.75)
+        rib_loop.append((x, -hb, z))
+    for i in range(28, -1, -1):
+        x, yn, z = rib_loop[i]
+        rib_loop.append((x, -yn, z))
+    tube_curve("RIB_SPONSON_TUBE", rib_loop, 0.42, M["sponson"], craft, cyclic=False, res=14)
+    # Outer rubbing strake & signal-orange bow wear patch tube
+    tube_curve("RIB_RUB_STRAKE", rib_loop, 0.435 if False else 0.12, M["fender"], craft, cyclic=False)
+    bow_collar = [p for p in rib_loop if p[0] > loa * 0.25]
+    if len(bow_collar) >= 4:
+        tube_curve("RIB_BOW_COLLAR", bow_collar, 0.435, M["orange"], craft, cyclic=False, res=12)
+
+    # Non-skid cockpit sole
+    block("RIB_FLOOR", 8.4, 2.35, 0.16, (-0.35, 0.0, fb - 0.12), M["dark"], 0.05, nose=0.30, parent=craft)
+    # Center helm console with flush acrylic windshield and stainless grab rail
+    block("RIB_CONSOLE", 1.25, 1.12, 1.05, (1.15, 0.0, fb + 0.42), M["dark"], 0.10, nose=0.22, taper=0.12, parent=craft)
+    block("RIB_WINDSHIELD", 0.65, 0.98, 0.48, (1.28, 0.0, fb + 1.05), M["glass"], 0.04, nose=0.20, taper=0.18, parent=craft)
+    tube_curve("RIB_CONSOLE_RAIL", [
+        (0.75, -0.54, fb + 0.85), (1.55, -0.48, fb + 1.34),
+        (1.55, 0.48, fb + 1.34), (0.75, 0.54, fb + 0.85)
+    ], 0.026, M["steel"], craft)
+
+    # 8 contoured marine jockey/saddle seats with backrest bolsters (no primitive pawn spheres)
+    for rx, pairs in ((2.65, (-0.48, 0.48)), (-0.25, (-0.56, 0.56)), (-1.55, (-0.56, 0.56)), (-2.85, (-0.56, 0.56))):
+        for py in pairs:
+            block(f"RIB_SEAT_{rx}_{py}", 0.68, 0.44, 0.46, (rx, py, fb + 0.16), M["dark"], 0.08, parent=craft)
+            block(f"RIB_PAD_{rx}_{py}", 0.58, 0.40, 0.10, (rx + 0.03, py, fb + 0.42), M["sponson"], 0.05, parent=craft)
+            block(f"RIB_BACK_{rx}_{py}", 0.12, 0.40, 0.34, (rx - 0.26, py, fb + 0.56), M["orange"] if rx > 2.0 else M["dark"], 0.05, parent=craft)
+
+    # Tubular stainless A-frame radar arch at the stern (never a solid wall)
+    for side in (-1, 1):
+        tube_curve(f"RIB_ARCH_FWD_{side}", [
+            (-3.75, side * 1.18, fb + 0.25), (-3.95, side * 1.02, fb + 1.75), (-3.95, 0.0, fb + 1.82)
+        ], 0.048, M["steel"], craft)
+        tube_curve(f"RIB_ARCH_AFT_{side}", [
+            (-4.35, side * 1.14, fb + 0.25), (-4.05, side * 1.00, fb + 1.75), (-4.05, 0.0, fb + 1.82)
+        ], 0.042, M["steel"], craft)
+    block("RIB_NAV_POD", 0.32, 0.64, 0.12, (-4.0, 0.0, fb + 1.90), M["white"], 0.04, parent=craft)
+
+    # Twin outboard engines on the transom
+    for side in (-1, 1):
+        block(f"RIB_OB_COWL_{side}", 0.72, 0.46, 0.68, (-4.95, side * 0.52, fb + 0.35), M["dark"], 0.12, nose=0.25, parent=craft)
+        block(f"RIB_OB_LEG_{side}", 0.36, 0.18, 0.95, (-4.90, side * 0.52, fb - 0.35), M["dark"], 0.05, parent=craft)
     return h
 
-def build_iceberg(loc=(-4.0, 24.0, -3.5)):
-    """Sculpted 34 x 20 x 16 m glacial iceberg prop for beat 5, rooted below z=0."""
-    random.seed(19)
+def build_iceberg(loc=(-10.0, 32.0, -2.5)):
+    """Flat-faceted calved glacial iceberg prop for beat 5 (planar bisect cliffs, sharp ridges, zero smooth sphere dome)."""
+    random.seed(23)
     me = bpy.data.meshes.new("ICEBERG"); bm = bmesh.new()
-    bmesh.ops.create_icosphere(bm, subdivisions=5, radius=1.0)
+    bmesh.ops.create_icosphere(bm, subdivisions=4, radius=1.0)
     for v in bm.verts:
         nx, ny, nz = v.co.x, v.co.y, v.co.z
-        ridge = (
-            0.32 * math.sin(nx * 4.5 + ny * 2.7)
-            + 0.22 * math.cos(ny * 5.3 - nz * 3.5)
-            + 0.14 * math.sin(nx * 9.1 - nz * 6.2)
+        ang = math.atan2(ny, nx)
+        rad = math.hypot(nx, ny)
+        # Angular faceted spire and tabular shoulder profile
+        lobe = (
+            0.28 * math.cos(ang * 3.0 + 0.4)
+            + 0.18 * math.sin(ang * 5.0 - 1.1)
+            + 0.12 * math.cos(ang * 8.0 + nz * 4.0)
         )
-        steep = max(0.0, 1.0 - 0.55 * (nx * nx + ny * ny))
-        x = nx * 16.5 * (1.0 + 0.18 * ridge)
-        y = ny * 10.5 * (1.0 + 0.18 * ridge)
-        if nz < -0.15:
-            z = -1.0
+        facet = abs(math.sin(nx * 3.8 + ny * 2.4)) - 0.45 * abs(math.cos(ny * 4.6 - nz * 3.2))
+        x = nx * 18.0 * (1.0 + 0.25 * lobe + 0.10 * facet)
+        y = ny * 11.5 * (1.0 + 0.22 * lobe - 0.08 * facet)
+        if nz < -0.10:
+            z = -3.0
         else:
-            h = ((nz + 0.15) / 1.15) ** 0.75
-            z = h * 15.5 * (0.65 + 0.45 * steep) + ridge * 1.8
+            u = (nz + 0.10) / 1.10
+            # Tabular plateau on positive x, sharp pinnacle ridge on negative x
+            spire = 1.32 if nx < 0.05 else 0.74
+            z = (u ** 0.62) * 14.5 * spire + 2.2 * facet * u
+            # Waterline wave-cut erosion notch around z = 0.2..1.3 m
+            if 0.0 < z < 1.5:
+                notch = 0.86 + 0.14 * abs(z - 0.75) / 0.75
+                x *= notch; y *= notch
         v.co = Vector((x, y, z))
+
+    # Calving fracture planes: bisect and displace along planar shear surfaces
+    for co, no in (
+        ((6.5, -4.2, 5.0), (0.78, -0.58, 0.22)),
+        ((-7.5, -3.8, 6.2), (-0.72, -0.64, 0.26)),
+        ((1.5, -5.8, 7.5), (0.15, -0.92, 0.35)),
+        ((-3.0, 4.5, 9.8), (-0.20, 0.35, 0.91)),
+    ):
+        geom = bm.verts[:] + bm.edges[:] + bm.faces[:]
+        bmesh.ops.bisect_plane(bm, geom=geom, dist=0.01, plane_co=co, plane_no=no, clear_outer=False, clear_inner=False)
+        pno = Vector(no).normalized(); pco = Vector(co)
+        for v in bm.verts:
+            d = (v.co - pco).dot(pno)
+            if d > 0:
+                v.co -= pno * (d * 0.58)
+
     bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
     for f in bm.faces:
         c = f.calc_center_median()
-        f.material_index = 1 if (c.z > 8.2 or f.normal.z > 0.62) else 0
+        # Snow on upper tabular ledges and gentle slopes; glacial blue ice on steep sheer cliffs and waterline
+        f.material_index = 1 if (c.z > 2.4 and f.normal.z > 0.48) else 0
     bm.to_mesh(me); bm.free()
     o = bpy.data.objects.new("ICEBERG", me); sc.collection.objects.link(o); o.location = loc
-    return finish(o, world_root, [M["ice"], M["snow"]], 0.0, smooth=True)
+    # smooth=False keeps the crystalline planar calving facets sharp
+    return finish(o, world_root, [M["ice"], M["snow"]], 0.0, smooth=False)
 
 # ---------- Scene setup per beat ----------
 hull, sheer = build_expedition_ship()
@@ -441,50 +610,53 @@ elif BEAT == "b02":
     tgt = Vector((0.0, 0.0, 8.0))
     dirv = Vector((0.36, -0.68, 0.63)).normalized()
 elif BEAT == "b03":
-    # Beat 3: Harbour launch alongside the moored expedition ship at the quay
+    # Beat 3: Harbour launch approaching the raked bow of the moored expedition ship at the quay
     build_quay(sheer, with_lines=True)
     build_fjord(BEAM / 2 + 4.9)
     build_harbour_launch()
-    craft.location = (0.0, -23.0, 0.0)
+    craft.location = (72.0, -22.0, 0.0)
+    craft.rotation_euler = (0.0, 0.0, math.radians(14.0))
     travel_obj = craft
-    travel_m = 7.0
+    travel_m = 18.0
     vessel_type = "harbour_launch"
     segment = "port_agent"
     hull_meta = {"loa_m": 13.8, "beam_m": 4.2, "l_over_b": 3.29}
-    dist = 24.0 * (2.25 if portrait else 1.25)
-    tgt = Vector((0.0, -20.0, 2.4))
-    dirv = Vector((0.52, -0.83, 0.16)).normalized()
+    dist = 58.0 * (1.55 if portrait else 1.0)
+    tgt = Vector((64.0, -10.0, 5.8))
+    dirv = Vector((0.68, -0.73, 0.072)).normalized()
 elif BEAT == "b04":
-    # Beat 4: Ship's tender leaves the expedition ship toward the shore
-    build_fjord(140.0)
-    ship.location = (-18.0, 56.0, 0.0)
+    # Beat 4: Ship's tender heading toward shore with the anchored expedition ship out in the fjord bay
+    build_fjord(195.0)
+    ship.location = (-58.0, 125.0, 0.0)
+    ship.rotation_euler = (0.0, 0.0, math.radians(-24.0))
     build_ship_tender()
-    craft.location = (0.0, 0.0, 0.0)
+    craft.location = (4.0, 0.0, 0.0)
+    craft.rotation_euler = (0.0, 0.0, math.radians(-10.0))
     travel_obj = craft
-    travel_m = 7.0
+    travel_m = 16.0
     vessel_type = "ship_tender"
     segment = "dmc"
     hull_meta = {"loa_m": 9.8, "beam_m": 3.4, "l_over_b": 2.88}
-    dist = 18.0 * (2.25 if portrait else 1.25)
-    tgt = Vector((0.0, 3.0, 2.1))
-    dirv = Vector((0.50, -0.85, 0.17)).normalized()
+    dist = 38.0 * (1.55 if portrait else 1.0)
+    tgt = Vector((0.0, 10.0, 4.0))
+    dirv = Vector((0.52, -0.85, 0.072)).normalized()
 elif BEAT == "b05":
-    # Beat 5: Small open tour boat beside an iceberg
+    # Beat 5: Offshore RIB tour boat cruising past a sculpted flat-faceted glacial iceberg
     for o in [o for o in sc.objects if o.parent is ship]:
         o.hide_render = True; o.visible_camera = False
-    build_fjord(160.0)
-    build_iceberg(loc=(-3.0, 25.0, -3.5))
+    build_fjord(175.0)
+    build_iceberg(loc=(-8.0, 28.0, -2.5))
     build_tour_boat()
     craft.location = (0.0, 0.0, 0.0)
     travel_obj = craft
-    travel_m = 7.0
+    travel_m = 16.0
     vessel_type = "tour_boat"
     segment = "tour_operator"
     props = ["iceberg"]
     hull_meta = {"loa_m": 10.6, "beam_m": 3.5, "l_over_b": 3.03}
-    dist = 24.0 * (2.25 if portrait else 1.25)
-    tgt = Vector((0.0, 7.5, 3.2))
-    dirv = Vector((-0.52, -0.83, 0.18)).normalized()
+    dist = 48.0 * (1.55 if portrait else 1.0)
+    tgt = Vector((-2.5, 11.5, 4.6))
+    dirv = Vector((-0.46, -0.88, 0.072)).normalized()
 elif BEAT == "b06":
     # Beat 6: Expedition ship departs, stern three-quarter and wake
     build_quay(sheer, with_lines=False)
@@ -532,17 +704,18 @@ cd = cam.data; cd.lens = 50; cd.sensor_width = 36; cd.sensor_fit = 'HORIZONTAL' 
 cd.sensor_height = 36 if portrait else 24
 cam.location = tgt + dirv * dist
 cam.rotation_euler = (tgt - cam.location).to_track_quat('-Z', 'Y').to_euler()
-cd.dof.use_dof = True; cd.dof.focus_distance = (tgt - cam.location).length; cd.dof.aperture_fstop = 2.8
+cd.dof.use_dof = True; cd.dof.focus_distance = (tgt - cam.location).length; cd.dof.aperture_fstop = 4.0
 cd.clip_end = 12000
 
 r = sc.render; r.resolution_x, r.resolution_y = W, H; r.resolution_percentage = 100
 r.film_transparent = False; r.image_settings.file_format = 'PNG'; r.image_settings.color_mode = 'RGBA'
+r.use_persistent_data = True
 looks = [i.identifier for i in sc.view_settings.bl_rna.properties['look'].enum_items_static]
 sc.view_settings.view_transform = 'AgX'
 sc.view_settings.look = 'AgX - Medium High Contrast' if 'AgX - Medium High Contrast' in looks else 'None'
 r.engine = 'CYCLES'
 cy = sc.cycles; cy.samples = SAMPLES; cy.use_denoising = True; cy.device = 'GPU'
-cy.use_adaptive_sampling = True; cy.adaptive_threshold = 0.025
+cy.use_adaptive_sampling = True; cy.adaptive_threshold = 0.03
 try:
     pr = bpy.context.preferences.addons['cycles'].preferences
     pr.compute_device_type = 'METAL'; pr.get_devices()
@@ -555,8 +728,9 @@ ts = {}
 sc.frame_start = 1; sc.frame_end = NF
 base_x = travel_obj.location.x - travel_m / 2
 if NF > 1:
-    travel_obj.location.x = base_x; travel_obj.keyframe_insert("location", index=0, frame=1)
-    travel_obj.location.x = base_x + travel_m; travel_obj.keyframe_insert("location", index=0, frame=NF)
+    for f in range(1, NF + 1):
+        travel_obj.location.x = base_x + travel_m * (f - 1) / (NF - 1)
+        travel_obj.keyframe_insert("location", index=0, frame=f)
 
 def go(name):
     if NF > 1:
@@ -567,10 +741,13 @@ def go(name):
 sea.is_holdout = True; sea.is_shadow_catcher = False
 t = time.time(); go("plate"); ts["plate"] = (time.time() - t) / NF
 sea.is_holdout = False; sea.is_shadow_catcher = True; r.film_transparent = True
-for o in meshes: o.visible_camera = False
+for o in meshes:
+    o.visible_camera = False
+    if o.name in ("FJORD_NEAR", "FJORD_FAR", "QUAY", "SHED", "SHEDROOF"):
+        o.hide_render = True
 for o in lights: o.hide_render = True
 sun("CONTACT", (-0.15, -0.2, 1.0), (1, 1, 1), 4.0, 12.0)
-cy.samples = max(16, SAMPLES // 2)
+cy.samples = max(12, SAMPLES // 2)
 r.resolution_percentage = 50
 t = time.time(); go("shadow"); ts["contactPass"] = (time.time() - t) / NF
 

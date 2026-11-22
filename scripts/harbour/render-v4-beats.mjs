@@ -16,12 +16,12 @@ const OUT_ROOT = path.resolve('public/media/harbour-v4')
 
 const BEATS = [
   { id: 'b00', dFrames: 1, pFrames: 1, samples: 96 },
-  { id: 'b01', dFrames: 8, pFrames: 6, samples: 32 },
-  { id: 'b02', dFrames: 8, pFrames: 6, samples: 32 },
-  { id: 'b03', dFrames: 8, pFrames: 6, samples: 32 },
-  { id: 'b04', dFrames: 8, pFrames: 6, samples: 32 },
-  { id: 'b05', dFrames: 8, pFrames: 6, samples: 32 },
-  { id: 'b06', dFrames: 8, pFrames: 6, samples: 32 },
+  { id: 'b01', dFrames: 24, pFrames: 24, samples: 24 },
+  { id: 'b02', dFrames: 24, pFrames: 24, samples: 24 },
+  { id: 'b03', dFrames: 24, pFrames: 24, samples: 24 },
+  { id: 'b04', dFrames: 24, pFrames: 24, samples: 24 },
+  { id: 'b05', dFrames: 24, pFrames: 24, samples: 24 },
+  { id: 'b06', dFrames: 24, pFrames: 24, samples: 24 },
 ]
 
 const TIERS = [
@@ -30,6 +30,7 @@ const TIERS = [
 ]
 
 const only = process.argv.slice(2)
+const manifestOnly = only.includes('--manifest-only')
 const manifestPath = path.join(OUT_ROOT, 'manifest.json')
 const existing = fs.existsSync(manifestPath)
   ? JSON.parse(fs.readFileSync(manifestPath, 'utf8'))
@@ -37,7 +38,7 @@ const existing = fs.existsSync(manifestPath)
 const manifest = { version: 4, beats: existing.beats || {}, totals: existing.totals || {} }
 
 for (const b of BEATS) {
-  if (only.length && !only.includes(b.id)) continue
+  if (manifestOnly || (only.length && !only.includes(b.id))) continue
   manifest.beats[b.id] = manifest.beats[b.id] || { tiers: {} }
   for (const t of TIERS) {
     const frames = t.id === 'd' ? b.dFrames : b.pFrames
@@ -48,7 +49,7 @@ for (const b of BEATS) {
     console.log(`[render] ${b.id} ${t.id} (${t.renderW}x${t.renderH}, ${frames}f, ${b.samples}spp)...`)
     execFileSync(
       BLENDER,
-      ['-b', '-P', RIG, '--', rawDir, b.id, String(t.renderW), String(t.renderH), String(b.samples), String(frames)],
+      ['-b', '--python-exit-code', '1', '-P', RIG, '--', rawDir, b.id, String(t.renderW), String(t.renderH), String(b.samples), String(frames)],
       { stdio: ['ignore', 'pipe', 'pipe'] },
     )
     const cam = JSON.parse(fs.readFileSync(path.join(rawDir, 'camera.json'), 'utf8'))

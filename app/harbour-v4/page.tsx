@@ -16,9 +16,6 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 }
 
-const heroBeat = BEATS_V4[0]
-const storyBeats = BEATS_V4.slice(1)
-
 export default function HarbourV4Page() {
   return (
     <div className={styles.page}>
@@ -28,7 +25,7 @@ export default function HarbourV4Page() {
             Portlink
           </Link>
           <nav className={styles.topNav} aria-label="Harbour v4 navigation">
-            <a href={`#beat-${storyBeats[0].id}`} className={styles.topLink}>
+            <a href={`#beat-${BEATS_V4[1].id}`} className={`${styles.topLink} ${styles.topLinkSecondary}`}>
               Voyage &amp; call
             </a>
             <a href="#roles" className={styles.topLink}>
@@ -37,7 +34,7 @@ export default function HarbourV4Page() {
             <a href="#products" className={styles.topLink}>
               Products
             </a>
-            <a href="#ports" className={styles.topLink}>
+            <a href="#ports" className={`${styles.topLink} ${styles.topLinkSecondary}`}>
               Ports &amp; terminals
             </a>
             <a href="#session" className={styles.topCta}>
@@ -46,101 +43,10 @@ export default function HarbourV4Page() {
           </nav>
         </div>
       </header>
+
       <main id="main" tabIndex={-1} data-surface="harbour-v4">
-        {/* Hero section (Beat 0): passes Cold Hero Gate at 1440, 1280, 390 */}
-        <section id="beat-b00" className={styles.heroSection}>
-          <div className={styles.container}>
-            <div className={styles.heroGrid}>
-              <div className={styles.revealItem} data-reveal="true">
-                <h1 className={styles.h1} data-reveal="true">{heroBeat.heading}</h1>
-                <p className={styles.lead} data-reveal="true">{heroBeat.lead}</p>
-                <p className={styles.body}>{heroBeat.body}</p>
-                <div className={styles.actions} data-reveal="true">
-                  <a className={styles.btnPrimary} href="#session">
-                    Get your free setup
-                  </a>
-                  <a className={styles.btnSecondary} href={`#beat-${storyBeats[0].id}`}>
-                    Follow the call
-                  </a>
-                </div>
-              </div>
-
-              <div className={styles.heroVisual}>
-                <div className={`${styles.stageCard} ${styles.revealItem}`} data-reveal="true">
-                  <img
-                    src="/media/harbour-v4/d/b00/plate_0001.avif"
-                    alt="150 m expedition cruise vessel moored alongside a Norwegian quay with fjord mountains behind"
-                    width={1440}
-                    height={810}
-                    fetchPriority="high"
-                    className={styles.plateImg}
-                  />
-                </div>
-                <div className={styles.revealItem} data-reveal="true">
-                  <CapturePictureV4 id="P01" loading="eager" />
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Live WebGL2 water + FramePlayer canvas scrubber stage */}
+        {/* Unified One Harbour v4 scroll story: Hero (b00) + Beats b01..b06 paired with ONE sticky live-water + FramePlayer + capture stage */}
         <HarbourV4Stage />
-
-        {/* Beats 1 to 6: each beat carries its rendered 3D object and its real product capture >= 55% viewport */}
-        {storyBeats.map((beat, idx) => (
-          <section
-            key={beat.id}
-            id={`beat-${beat.id}`}
-            className={idx % 2 === 0 ? styles.beatSection : styles.beatSectionAlt}
-          >
-            <div className={styles.container}>
-              <div className={styles.beatGrid}>
-                <div className={styles.revealItem} data-reveal="true">
-                  <h2 className={styles.h2} data-reveal="true">{beat.heading}</h2>
-                  <p className={styles.lead}>{beat.lead}</p>
-                  <p className={styles.body}>{beat.body}</p>
-                  <div className={styles.actions} data-reveal="true">
-                    <a className={styles.btnPrimary} href="#session">
-                      Get your free setup
-                    </a>
-                    <a className={styles.btnSecondary} href="#roles">
-                      Switch desk role
-                    </a>
-                  </div>
-                </div>
-
-                <div className={styles.beatVisualStack}>
-                  <div className={`${styles.stageCard} ${styles.revealItem}`} data-reveal="true">
-                    <img
-                      src={`/media/harbour-v4/d/${beat.id}/plate_0001.avif`}
-                      alt={`${beat.label}: ${beat.heading}`}
-                      width={1440}
-                      height={810}
-                      loading="eager"
-                      decoding="async"
-                      className={styles.plateImg}
-                    />
-                  </div>
-
-                  <div className={styles.revealItem} data-reveal="true">
-                    <CapturePictureV4 id={beat.primaryCapture} />
-                  </div>
-
-                  {beat.insetCaptures.length > 0 ? (
-                    <div className={styles.insetGrid}>
-                      {beat.insetCaptures.map((cid) => (
-                        <div key={cid} className={styles.revealItem} data-reveal="true">
-                          <CapturePictureV4 id={cid} />
-                        </div>
-                      ))}
-                    </div>
-                  ) : null}
-                </div>
-              </div>
-            </div>
-          </section>
-        ))}
 
         {/* Beat 7a: Role switcher across Cruise line, Port agent, DMC, Tour operator and Wheelhouse */}
         <section id="roles" className={styles.mistSection}>
@@ -209,7 +115,7 @@ export default function HarbourV4Page() {
           </div>
         </section>
 
-        {/* Beat 8: Conversion CTA (ONE_HARBOUR_PLAN_FABLE.md §G item 11) */}
+        {/* Beat 8: Conversion CTA (ONE_HARBOUR_PLAN_FABLE.md §G item 11) + visible inline consent slot */}
         <section id="session" className={styles.mistSectionAlt}>
           <div className={styles.container}>
             <div className={styles.sessionGrid}>
@@ -224,10 +130,11 @@ export default function HarbourV4Page() {
               </div>
               <HarbourV4PilotForm />
             </div>
+            <div id="product-consent" className={styles.consentSlot} />
           </div>
         </section>
-        <div id="product-consent" style={{ display: 'none' }} aria-hidden="true" />
       </main>
+
       <footer className={styles.footer}>
         <div className={styles.container}>
           <div className={styles.footerGrid}>

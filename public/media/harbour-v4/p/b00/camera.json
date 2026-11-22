@@ -14,7 +14,7 @@
   "sensor_mm": 36,
   "sensor_fit": "VERTICAL",
   "focus_m": 435,
-  "fstop": 2.799999952316284,
+  "fstop": 4,
   "width": 585,
   "height": 1266,
   "z_up": true,
@@ -23,8 +23,8 @@
     0
   ],
   "secs": {
-    "plate": 4.43,
-    "contactPass": 2.38
+    "plate": 3.63,
+    "contactPass": 1.54
   },
   "vessel_type": "expedition_cruise",
   "segment": "cruise",

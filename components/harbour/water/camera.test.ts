@@ -1,13 +1,24 @@
 // Run: npx tsx --test components/harbour/water/camera.test.ts
-// Reference numbers are what three.js r187 produced for the expedition rig
-// (spikes/s3-beat1/frames/e/camera.json): PerspectiveCamera + lookAt, projection x view.
+// Reference numbers are what three.js r187 produced for the expedition rig:
+// PerspectiveCamera + lookAt, projection x view.
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { readFileSync } from 'node:fs'
 import { blenderToYUp, hexToLinear, rigViewProjection, type RigCamera } from './camera'
 import { oceanGrid } from './ocean'
 
-const cam: RigCamera = JSON.parse(readFileSync(new URL('../../../spikes/s3-beat1/frames/e/camera.json', import.meta.url), 'utf8'))
+const cam: RigCamera = {
+  position: [127.66075134277344, -201.6694793701172, 31.267459869384766],
+  target: [10.411052703857422, 0, 16.024999618530273],
+  lens_mm: 50,
+  sensor_mm: 36,
+  sensor_fit: 'HORIZONTAL',
+  width: 1440,
+  height: 810,
+  frames: 1,
+  ship_x: [0],
+  hull: { loa_m: 150.82, beam_m: 24.5, l_over_b: 6.16 },
+}
+
 const THREE_VP = [2.401408845015319, -0.16183539887216875, -0.5017181523139058, -0.5015509407983871, 0, 4.92776350828174,
   -0.06522335735231165, -0.06520161985611025, -1.396167948994046, -0.2783568829009593, -0.8629552121859335, -0.8626676083825056,
   -25.00119404896378, -77.28253147341435, 238.12047996762928, 240.04078642323083]

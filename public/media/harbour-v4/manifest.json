@@ -18,10 +18,10 @@
           "avgFrameKB": 15.8,
           "maxFrameKB": 15.8,
           "capKB": 60,
-          "totalBytes": 16222,
+          "totalBytes": 16128,
           "secsPerFrame": {
-            "plate": 9.29,
-            "contactPass": 4.62
+            "plate": 10.27,
+            "contactPass": 2.78
           },
           "path": "/media/harbour-v4/d/b00/"
         },
@@ -29,13 +29,13 @@
           "frames": 1,
           "width": 585,
           "height": 1266,
-          "avgFrameKB": 7.2,
-          "maxFrameKB": 7.2,
+          "avgFrameKB": 7,
+          "maxFrameKB": 7,
           "capKB": 24,
-          "totalBytes": 7354,
+          "totalBytes": 7166,
           "secsPerFrame": {
-            "plate": 4.43,
-            "contactPass": 2.38
+            "plate": 3.63,
+            "contactPass": 1.54
           },
           "path": "/media/harbour-v4/p/b00/"
         }
@@ -52,30 +52,30 @@
       },
       "tiers": {
         "d": {
-          "frames": 8,
+          "frames": 24,
           "width": 1440,
           "height": 810,
-          "avgFrameKB": 14.3,
-          "maxFrameKB": 14.8,
+          "avgFrameKB": 13.6,
+          "maxFrameKB": 14.1,
           "capKB": 60,
-          "totalBytes": 117037,
+          "totalBytes": 334488,
           "secsPerFrame": {
-            "plate": 5.53,
-            "contactPass": 1.85
+            "plate": 17.26,
+            "contactPass": 8.82
           },
           "path": "/media/harbour-v4/d/b01/"
         },
         "p": {
-          "frames": 6,
+          "frames": 24,
           "width": 585,
           "height": 1266,
           "avgFrameKB": 6.5,
-          "maxFrameKB": 6.8,
+          "maxFrameKB": 6.7,
           "capKB": 24,
-          "totalBytes": 40150,
+          "totalBytes": 159823,
           "secsPerFrame": {
-            "plate": 2.4,
-            "contactPass": 1.32
+            "plate": 11.3,
+            "contactPass": 4.33
           },
           "path": "/media/harbour-v4/p/b01/"
         }
@@ -92,30 +92,30 @@
       },
       "tiers": {
         "d": {
-          "frames": 8,
+          "frames": 24,
           "width": 1440,
           "height": 810,
-          "avgFrameKB": 20.2,
-          "maxFrameKB": 20.7,
+          "avgFrameKB": 18.8,
+          "maxFrameKB": 19.7,
           "capKB": 60,
-          "totalBytes": 165350,
+          "totalBytes": 461687,
           "secsPerFrame": {
-            "plate": 3.72,
-            "contactPass": 2.15
+            "plate": 16.08,
+            "contactPass": 9.17
           },
           "path": "/media/harbour-v4/d/b02/"
         },
         "p": {
-          "frames": 6,
+          "frames": 24,
           "width": 585,
           "height": 1266,
           "avgFrameKB": 9.8,
-          "maxFrameKB": 10.8,
+          "maxFrameKB": 10.5,
           "capKB": 24,
-          "totalBytes": 60289,
+          "totalBytes": 239903,
           "secsPerFrame": {
-            "plate": 2.07,
-            "contactPass": 1.62
+            "plate": 8.39,
+            "contactPass": 3.81
           },
           "path": "/media/harbour-v4/p/b02/"
         }
@@ -132,30 +132,30 @@
       },
       "tiers": {
         "d": {
-          "frames": 8,
+          "frames": 24,
           "width": 1440,
           "height": 810,
-          "avgFrameKB": 14.7,
-          "maxFrameKB": 15.5,
+          "avgFrameKB": 16.1,
+          "maxFrameKB": 18.1,
           "capKB": 60,
-          "totalBytes": 120118,
+          "totalBytes": 396389,
           "secsPerFrame": {
-            "plate": 5.78,
-            "contactPass": 2.79
+            "plate": 6.91,
+            "contactPass": 3.05
           },
           "path": "/media/harbour-v4/d/b03/"
         },
         "p": {
-          "frames": 6,
+          "frames": 24,
           "width": 585,
           "height": 1266,
-          "avgFrameKB": 11.2,
-          "maxFrameKB": 11.5,
+          "avgFrameKB": 7.6,
+          "maxFrameKB": 8.1,
           "capKB": 24,
-          "totalBytes": 68675,
+          "totalBytes": 186504,
           "secsPerFrame": {
-            "plate": 3.38,
-            "contactPass": 1.9
+            "plate": 5.47,
+            "contactPass": 1.87
           },
           "path": "/media/harbour-v4/p/b03/"
         }
@@ -172,30 +172,30 @@
       },
       "tiers": {
         "d": {
-          "frames": 8,
+          "frames": 24,
           "width": 1440,
           "height": 810,
-          "avgFrameKB": 16.3,
-          "maxFrameKB": 18,
+          "avgFrameKB": 18.9,
+          "maxFrameKB": 20.2,
           "capKB": 60,
-          "totalBytes": 133418,
+          "totalBytes": 464666,
           "secsPerFrame": {
-            "plate": 4.89,
-            "contactPass": 2.42
+            "plate": 6.83,
+            "contactPass": 2.82
           },
           "path": "/media/harbour-v4/d/b04/"
         },
         "p": {
-          "frames": 6,
+          "frames": 24,
           "width": 585,
           "height": 1266,
-          "avgFrameKB": 12.4,
-          "maxFrameKB": 13.2,
+          "avgFrameKB": 10.3,
+          "maxFrameKB": 11.1,
           "capKB": 24,
-          "totalBytes": 76160,
+          "totalBytes": 254032,
           "secsPerFrame": {
-            "plate": 3.28,
-            "contactPass": 1.88
+            "plate": 5.39,
+            "contactPass": 1.97
           },
           "path": "/media/harbour-v4/p/b04/"
         }
@@ -214,30 +214,30 @@
       },
       "tiers": {
         "d": {
-          "frames": 8,
+          "frames": 24,
           "width": 1440,
           "height": 810,
-          "avgFrameKB": 13.6,
-          "maxFrameKB": 14.1,
+          "avgFrameKB": 16,
+          "maxFrameKB": 17.1,
           "capKB": 60,
-          "totalBytes": 111299,
+          "totalBytes": 392339,
           "secsPerFrame": {
-            "plate": 5.92,
-            "contactPass": 2.7
+            "plate": 7.25,
+            "contactPass": 3.01
           },
           "path": "/media/harbour-v4/d/b05/"
         },
         "p": {
-          "frames": 6,
+          "frames": 24,
           "width": 585,
           "height": 1266,
-          "avgFrameKB": 8.5,
-          "maxFrameKB": 9.2,
+          "avgFrameKB": 7.4,
+          "maxFrameKB": 8.2,
           "capKB": 24,
-          "totalBytes": 52529,
+          "totalBytes": 181176,
           "secsPerFrame": {
-            "plate": 3.35,
-            "contactPass": 1.7
+            "plate": 5.77,
+            "contactPass": 1.71
           },
           "path": "/media/harbour-v4/p/b05/"
         }
@@ -254,30 +254,30 @@
       },
       "tiers": {
         "d": {
-          "frames": 8,
+          "frames": 24,
           "width": 1440,
           "height": 810,
-          "avgFrameKB": 19.5,
-          "maxFrameKB": 20.1,
+          "avgFrameKB": 18.9,
+          "maxFrameKB": 19.4,
           "capKB": 60,
-          "totalBytes": 160008,
+          "totalBytes": 465281,
           "secsPerFrame": {
-            "plate": 5.83,
-            "contactPass": 2.57
+            "plate": 18.16,
+            "contactPass": 8.66
           },
           "path": "/media/harbour-v4/d/b06/"
         },
         "p": {
-          "frames": 6,
+          "frames": 24,
           "width": 585,
           "height": 1266,
-          "avgFrameKB": 8.9,
-          "maxFrameKB": 9,
+          "avgFrameKB": 9.2,
+          "maxFrameKB": 9.4,
           "capKB": 24,
-          "totalBytes": 54914,
+          "totalBytes": 226840,
           "secsPerFrame": {
-            "plate": 2.9,
-            "contactPass": 1.59
+            "plate": 11.33,
+            "contactPass": 3.84
           },
           "path": "/media/harbour-v4/p/b06/"
         }
@@ -285,9 +285,9 @@
     }
   },
   "totals": {
-    "desktopMB": 0.79,
+    "desktopMB": 2.41,
     "desktopCapMB": 36,
-    "phoneMB": 0.34,
+    "phoneMB": 1.2,
     "phoneCapMB": 7
   }
 }

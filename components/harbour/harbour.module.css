@@ -192,10 +192,6 @@
   width: auto;
   height: auto;
 }
-/* Station lights start dark; the stage fades each station's groups up at its push-in (WP5). */
-.plane :global([id^='lights-']) {
-  opacity: 0;
-}
 .planeHidden {
   visibility: hidden;
 }

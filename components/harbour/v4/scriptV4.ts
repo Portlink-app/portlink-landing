@@ -12,6 +12,7 @@ export type Segment = 'cruise' | 'port_agent' | 'dmc' | 'tour_operator'
 
 export type CaptureV4 = {
   id: string
+  label: string
   desktop: string
   phone: string | null
   alt: string
@@ -30,6 +31,7 @@ export const ADVISORS_APPROVED = false
 export const CAPTURES_V4: Record<string, CaptureV4> = {
   P01: {
     id: 'P01',
+    label: 'Voyage route',
     desktop: '/media/harbour-v4/captures/P01-desktop.webp',
     phone: '/media/harbour-v4/captures/P01-phone.webp',
     alt: 'Portlink voyage planner showing Norwegian Coast 2026-N4 route from Stavanger to Bergen, Alesund and Trondheim',
@@ -37,6 +39,7 @@ export const CAPTURES_V4: Record<string, CaptureV4> = {
   },
   P03: {
     id: 'P03',
+    label: 'Passage & RTZ',
     desktop: '/media/harbour-v4/captures/P03-desktop.webp',
     phone: null,
     alt: 'Passage editor for Stavanger to Bergen with 12 waypoints, sun curve and RTZ, GPX and CSV export buttons',
@@ -44,6 +47,7 @@ export const CAPTURES_V4: Record<string, CaptureV4> = {
   },
   P04: {
     id: 'P04',
+    label: 'Satellite track',
     desktop: '/media/harbour-v4/captures/P04-desktop.webp',
     phone: null,
     alt: 'Voyage map on the satellite chart layer along the Norwegian coast',
@@ -51,6 +55,7 @@ export const CAPTURES_V4: Record<string, CaptureV4> = {
   },
   P05: {
     id: 'P05',
+    label: 'Voyage costs',
     desktop: '/media/harbour-v4/captures/P05-desktop.webp',
     phone: '/media/harbour-v4/captures/P05-phone.webp',
     alt: 'Voyage costs tab showing fuel estimate from the consumption curve and Bergen PDA waiting for approval',
@@ -58,6 +63,7 @@ export const CAPTURES_V4: Record<string, CaptureV4> = {
   },
   P06: {
     id: 'P06',
+    label: 'Agent call & PDA',
     desktop: '/media/harbour-v4/captures/P06-desktop.webp',
     phone: '/media/harbour-v4/captures/P06-phone.webp',
     alt: 'Port agent call workspace for Bergen at Skolten 3 with tide curve, readiness 5 of 5 and sent PDA',
@@ -65,6 +71,7 @@ export const CAPTURES_V4: Record<string, CaptureV4> = {
   },
   P08: {
     id: 'P08',
+    label: 'DMC tour intake',
     desktop: '/media/harbour-v4/captures/P08-desktop.webp',
     phone: '/media/harbour-v4/captures/P08-phone.webp',
     alt: 'DMC bookings workspace showing Fjord and city tour Bergen for 90 guests marked quote requested',
@@ -72,6 +79,7 @@ export const CAPTURES_V4: Record<string, CaptureV4> = {
   },
   P08b: {
     id: 'P08b',
+    label: 'Embark Trade API',
     desktop: '/media/harbour-v4/captures/P08b-desktop.webp',
     phone: '/media/harbour-v4/captures/P08b-phone.webp',
     alt: 'DMC operators requests view showing an Embark Trade API v1 agreement with Fjordland Boat Tours',
@@ -79,6 +87,7 @@ export const CAPTURES_V4: Record<string, CaptureV4> = {
   },
   P09: {
     id: 'P09',
+    label: 'Embark departures',
     desktop: '/media/harbour-v4/captures/P09-desktop.webp',
     phone: '/media/harbour-v4/captures/P09-phone.webp',
     alt: 'Embark departures back office showing upcoming boat tours, guest capacity and guide assignments',
@@ -86,6 +95,7 @@ export const CAPTURES_V4: Record<string, CaptureV4> = {
   },
   P10: {
     id: 'P10',
+    label: 'Wheelhouse tasks',
     desktop: '/media/harbour-v4/captures/P10-desktop.webp',
     phone: '/media/harbour-v4/captures/P10-phone.webp',
     alt: 'Wheelhouse phone and desktop task list showing Bergen call tasks at Skolten 3',
@@ -93,6 +103,7 @@ export const CAPTURES_V4: Record<string, CaptureV4> = {
   },
   P12: {
     id: 'P12',
+    label: 'Draft FDA close-out',
     desktop: '/media/harbour-v4/captures/P12-desktop.webp',
     phone: '/media/harbour-v4/captures/P12-phone.webp',
     alt: 'Call money tab showing sent PDA, completed departure report and draft FDA side by side',
@@ -132,7 +143,7 @@ export const BEATS_V4: readonly BeatV4[] = [
     pFrames: 1,
     heading: 'One port call. Every desk.',
     lead: 'One shared record per port call across the cruise line, the port agent, the DMC and the tour operator.',
-    body: 'Follow a 150 m expedition vessel calling at Bergen Skolten 3. Every stop below opens the real screen that team works in.',
+    body: 'Follow a 150 m expedition vessel calling at Bergen Skolten 3. Scroll the harbour timeline to inspect the real screen each team works in.',
     telemetry: 'Call: NOBGO · Skolten 3 · Alongside',
     primaryCapture: 'P01',
     insetCaptures: [],
@@ -145,8 +156,8 @@ export const BEATS_V4: readonly BeatV4[] = [
     role: 'Itinerary planner',
     vessel_type: 'expedition_cruise',
     segment: 'cruise',
-    dFrames: 8,
-    pFrames: 6,
+    dFrames: 24,
+    pFrames: 24,
     heading: 'The plan the bridge loads.',
     lead: 'Draw the coastal route on planning charts, check solar elevation at arrival, and export RTZ, GPX or CSV.',
     body: 'The cruise line creates the voyage once. Passages, distance and berth windows carry forward to every call on the itinerary. Planning aid, not for navigation.',
@@ -162,8 +173,8 @@ export const BEATS_V4: readonly BeatV4[] = [
     role: 'Port operations & finance',
     vessel_type: 'expedition_cruise',
     segment: 'cruise',
-    dFrames: 8,
-    pFrames: 6,
+    dFrames: 24,
+    pFrames: 24,
     heading: 'The cost is already moving.',
     lead: 'Fuel sits on the voyage from distance and speed. Port costs join when the agent sends the estimate.',
     body: 'Each steaming day prices fuel from the vessel consumption curve. When the port agent submits the Bergen PDA, it lands on the voyage forecast for review.',
@@ -179,8 +190,8 @@ export const BEATS_V4: readonly BeatV4[] = [
     role: 'Port agent',
     vessel_type: 'harbour_launch',
     segment: 'port_agent',
-    dFrames: 8,
-    pFrames: 6,
+    dFrames: 24,
+    pFrames: 24,
     heading: 'One request. One estimate.',
     lead: 'The cruise line created the call. The agent never re-types ship, dates or berth.',
     body: 'Accept the appointment, build or start the PDA on the shared Bergen record, and track pilotage, linesmen, waste and Kartverket tide limits in one place.',
@@ -196,8 +207,8 @@ export const BEATS_V4: readonly BeatV4[] = [
     role: 'Destination management company',
     vessel_type: 'ship_tender',
     segment: 'dmc',
-    dFrames: 8,
-    pFrames: 6,
+    dFrames: 24,
+    pFrames: 24,
     heading: 'The request lands as intake.',
     lead: 'A shore request arrives on its call, marked quote requested until you confirm it.',
     body: 'The DMC sees guest counts, berth and cutoff times on the call record, and agrees tour terms with local boat operators through the Embark trade link. DMC workspace in use with Vela Nordic.',
@@ -214,8 +225,8 @@ export const BEATS_V4: readonly BeatV4[] = [
     vessel_type: 'tour_boat',
     segment: 'tour_operator',
     props: ['iceberg'],
-    dFrames: 8,
-    pFrames: 6,
+    dFrames: 24,
+    pFrames: 24,
     heading: "The tour, in the guide's hand.",
     lead: 'Embark runs departures, guides and bookings for small tour, boat and activity operators.',
     body: 'Operators manage daily departures and guide assignments in Embark while answering DMC trade requests directly through Trade API v1.',
@@ -231,8 +242,8 @@ export const BEATS_V4: readonly BeatV4[] = [
     role: 'Port ops & port agent',
     vessel_type: 'expedition_cruise',
     segment: 'cruise',
-    dFrames: 8,
-    pFrames: 6,
+    dFrames: 24,
+    pFrames: 24,
     heading: 'Estimate and actual, together.',
     lead: 'The agent estimate, the completed departure report and the draft FDA sit on the same call.',
     body: 'When the ship sails from Skolten 3, the departure report generates the draft final disbursement account beside the original PDA so every variance is visible.',
@@ -322,7 +333,7 @@ export const PRODUCTS_V4 = [
     name: 'Wheelhouse (by Portlink)',
     href: '/contact/',
     lead: "Wheelhouse: the crew's task list, worked from any phone.",
-    detail: ' Kanban boards, personal to-do queues, checklists and CRM for maritime teams and standalone companies.',
+    detail: 'Kanban boards, personal to-do queues, checklists and CRM for maritime teams and standalone companies.',
     captureId: 'P10' as const,
   },
 ] as const

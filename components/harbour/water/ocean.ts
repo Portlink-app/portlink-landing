@@ -115,9 +115,18 @@ export function createOcean(canvas: HTMLCanvasElement, cam: RigCamera, { sim = 2
   gl.uniform1f(su('uC2'), 0.0004); gl.uniform1f(su('uInject'), 0.05); gl.uniform1f(su('uFoamGain'), 40)
 
   const sun: Vec3 = (() => { const l = Math.hypot(-1, 0.16, -1); return [-1 / l, 0.16 / l, -1 / l] })()
+  const clearSim = () => {
+    for (const t of [a, b]) {
+      gl.bindFramebuffer(gl.FRAMEBUFFER, t!.fb)
+      gl.clearColor(0, 0, 0, 1)
+      gl.clear(gl.COLOR_BUFFER_BIT)
+    }
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null)
+  }
   const applyCamera = (c: RigCamera) => {
-    const mov = c.frames > 1 ? 1 : 0
     const h = c.hull
+    const mov = c.frames > 1 && (!h || h.loa_m >= 30) ? 1 : 0
+    clearSim()
     gl.useProgram(simP)
     gl.uniform2f(su('uShipSize'), (h ? h.loa_m * 0.95 : 170) / SIM_SIZE, (h ? h.beam_m * 1.06 : 26) / SIM_SIZE)
     gl.uniform1f(su('uMove'), mov)

@@ -7,7 +7,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useGSAP } from '@gsap/react'
 import Lenis from 'lenis'
 import { useMotionAllowed, useNarrow } from '@/components/film/useFilm'
-import { CAPTURES_READY, SHOTS, STAGED_SHOTS, STOPS, TRACK_SCREENS, liftAt, lightsAt, lightsIds, shotAt } from './script'
+import { CAPTURES_READY, SHOTS, STAGED_SHOTS, STOPS, TRACK_SCREENS, liftAt, shotAt } from './script'
 import type { Shot } from './script'
 import styles from './harbour.module.css'
 import CaptureFigure from './CaptureFigure'
@@ -83,14 +83,6 @@ export default function HarbourStage({ children, planes }: { children: ReactNode
       // Each lifted capture's centre in its laid-out (lifted) place, read once per layout from the
       // untransformed offset box and cleared on resize.
       let liftBase: Record<string, { x: number; y: number }> = {}
-      // Each station's lights groups, found once in the inline planes (DIRECTION.md 12.8 WP5).
-      const lightsEls = STOPS.map((stop) => ({
-        stop,
-        els: lightsIds(stop.station).flatMap((id) => {
-          const el = track.current?.querySelector<SVGElement>(`[id="${id}"]`)
-          return el ? [el] : []
-        }),
-      }))
       const shoot = (screens: number) => {
         const vw = window.innerWidth
         const vh = window.innerHeight
@@ -119,11 +111,6 @@ export default function HarbourStage({ children, planes }: { children: ReactNode
           el.style.visibility = 'visible'
           el.style.opacity = String(Math.min(1, p * 2.5))
           el.style.transform = `translate(${dx}px, ${dy}px) scale(${LIFT_FROM + (1 - LIFT_FROM) * e})`
-        }
-        // Station lights fade up on the push-in and stay on through the pull-back (DIRECTION.md 12.4).
-        for (const { stop, els } of lightsEls) {
-          const v = lightsAt(stop, screens).toFixed(3)
-          for (const el of els) el.style.opacity = v
         }
         for (const [id, el] of Object.entries(planeEls.current)) {
           if (!el) continue

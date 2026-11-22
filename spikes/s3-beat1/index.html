@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>S3 beat 1: plate over live water</title>
+<style>
+  html, body { margin: 0; background: #0a2342; }
+  #track { height: 400vh; }
+  #stage { position: fixed; inset: 0; overflow: hidden; }
+  #box { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); }
+  #box canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  #hud { position: fixed; left: 8px; bottom: 8px; font: 12px/1.4 ui-monospace, monospace; color: #9fb3c8; z-index: 2; }
+</style>
+<script type="importmap">{ "imports": { "three": "../s3-water/node_modules/three/build/three.module.js" } }</script>
+</head>
+<body>
+<div id="stage"><div id="box"><canvas id="water"></canvas><canvas id="plate"></canvas></div></div>
+<div id="track"></div>
+<div id="hud"></div>
+<script type="module">
+import { createOcean } from "./ocean.js";
+import { FramePlayer } from "./frameplayer.js";
+const q = new URLSearchParams(location.search);
+const v = q.get("v") || (innerHeight > innerWidth ? "p" : "d");
+const fixed = q.has("f") ? +q.get("f") : null;   // fixed frame index for captures
+const base = `./frames/${v}/`;
+const cam = await (await fetch(base + "camera.json")).json();
+const box = document.getElementById("box"), wc = document.getElementById("water"), pc = document.getElementById("plate");
+const dpr = Math.min(devicePixelRatio, v === "p" ? 2 : 1.5);
+const ocean = createOcean(wc, cam, { dpr, sim: v === "p" ? 192 : 256, seg: v === "p" ? 160 : 256 });
+const player = new FramePlayer(pc, {
+  count: cam.frames, layers: (q.get("layers") || "shadow,plate").split(","), radius: 6, concurrency: 6,
+  url: (i, l) => `${base}${l}_${String(i + 1).padStart(4, "0")}.avif`,
+});
+function fit() {   // one cover-fitted box with the plate's aspect, shared by both canvases
+  const a = cam.width / cam.height, s = Math.max(innerWidth / a, innerHeight);
+  const w = Math.round(s * a), h = Math.round(s);
+  box.style.width = w + "px"; box.style.height = h + "px";
+  ocean.resize(w, h);
+  pc.width = Math.round(w * dpr); pc.height = Math.round(h * dpr); player.draw(true);
+}
+addEventListener("resize", fit); fit();
+const hud = document.getElementById("hud");
+if (fixed !== null || q.get("hud") === "0") hud.hidden = true;   // evidence frames carry no debug HUD
+let frames = 0, t0 = performance.now(), fps = 0, samples = [];
+window.__beat = { player, samples, cam };
+function loop(now) {
+  const max = document.documentElement.scrollHeight - innerHeight;
+  const p = fixed !== null ? fixed / Math.max(1, cam.frames - 1) : (max > 0 ? scrollY / max : 0);
+  const i = player.seek(p);
+  const drawn = player.draw();
+  ocean.step(cam.ship_x[drawn >= 0 ? drawn : i]);   // water follows the frame actually on screen
+  frames++;
+  if (now - t0 >= 1000) { fps = frames * 1000 / (now - t0); samples.push(fps); frames = 0; t0 = now; }
+  hud.textContent = `${v} f${i + 1}/${cam.frames} ${fps.toFixed(0)} fps cache ${player.cache.size} ${(player.stats.bytes / 1024 | 0)} KB miss ${player.stats.misses}`;
+  window.__beat.ready = drawn === i;
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>

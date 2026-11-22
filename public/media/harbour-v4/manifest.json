@@ -1,0 +1,293 @@
+{
+  "version": 4,
+  "beats": {
+    "b00": {
+      "vessel_type": "expedition_cruise",
+      "segment": "cruise",
+      "props": [],
+      "hull": {
+        "loa_m": 150,
+        "beam_m": 24.5,
+        "l_over_b": 6.16
+      },
+      "tiers": {
+        "d": {
+          "frames": 1,
+          "width": 1440,
+          "height": 810,
+          "avgFrameKB": 15.8,
+          "maxFrameKB": 15.8,
+          "capKB": 60,
+          "totalBytes": 16128,
+          "secsPerFrame": {
+            "plate": 10.27,
+            "contactPass": 2.78
+          },
+          "path": "/media/harbour-v4/d/b00/"
+        },
+        "p": {
+          "frames": 1,
+          "width": 585,
+          "height": 1266,
+          "avgFrameKB": 7,
+          "maxFrameKB": 7,
+          "capKB": 24,
+          "totalBytes": 7166,
+          "secsPerFrame": {
+            "plate": 3.63,
+            "contactPass": 1.54
+          },
+          "path": "/media/harbour-v4/p/b00/"
+        }
+      }
+    },
+    "b01": {
+      "vessel_type": "expedition_cruise",
+      "segment": "cruise",
+      "props": [],
+      "hull": {
+        "loa_m": 150,
+        "beam_m": 24.5,
+        "l_over_b": 6.16
+      },
+      "tiers": {
+        "d": {
+          "frames": 24,
+          "width": 1440,
+          "height": 810,
+          "avgFrameKB": 13.6,
+          "maxFrameKB": 14.1,
+          "capKB": 60,
+          "totalBytes": 334488,
+          "secsPerFrame": {
+            "plate": 17.26,
+            "contactPass": 8.82
+          },
+          "path": "/media/harbour-v4/d/b01/"
+        },
+        "p": {
+          "frames": 24,
+          "width": 585,
+          "height": 1266,
+          "avgFrameKB": 6.5,
+          "maxFrameKB": 6.7,
+          "capKB": 24,
+          "totalBytes": 159823,
+          "secsPerFrame": {
+            "plate": 11.3,
+            "contactPass": 4.33
+          },
+          "path": "/media/harbour-v4/p/b01/"
+        }
+      }
+    },
+    "b02": {
+      "vessel_type": "expedition_cruise",
+      "segment": "cruise",
+      "props": [],
+      "hull": {
+        "loa_m": 150,
+        "beam_m": 24.5,
+        "l_over_b": 6.16
+      },
+      "tiers": {
+        "d": {
+          "frames": 24,
+          "width": 1440,
+          "height": 810,
+          "avgFrameKB": 18.8,
+          "maxFrameKB": 19.7,
+          "capKB": 60,
+          "totalBytes": 461687,
+          "secsPerFrame": {
+            "plate": 16.08,
+            "contactPass": 9.17
+          },
+          "path": "/media/harbour-v4/d/b02/"
+        },
+        "p": {
+          "frames": 24,
+          "width": 585,
+          "height": 1266,
+          "avgFrameKB": 9.8,
+          "maxFrameKB": 10.5,
+          "capKB": 24,
+          "totalBytes": 239903,
+          "secsPerFrame": {
+            "plate": 8.39,
+            "contactPass": 3.81
+          },
+          "path": "/media/harbour-v4/p/b02/"
+        }
+      }
+    },
+    "b03": {
+      "vessel_type": "harbour_launch",
+      "segment": "port_agent",
+      "props": [],
+      "hull": {
+        "loa_m": 13.8,
+        "beam_m": 4.2,
+        "l_over_b": 3.29
+      },
+      "tiers": {
+        "d": {
+          "frames": 24,
+          "width": 1440,
+          "height": 810,
+          "avgFrameKB": 16.1,
+          "maxFrameKB": 18.1,
+          "capKB": 60,
+          "totalBytes": 396389,
+          "secsPerFrame": {
+            "plate": 6.91,
+            "contactPass": 3.05
+          },
+          "path": "/media/harbour-v4/d/b03/"
+        },
+        "p": {
+          "frames": 24,
+          "width": 585,
+          "height": 1266,
+          "avgFrameKB": 7.6,
+          "maxFrameKB": 8.1,
+          "capKB": 24,
+          "totalBytes": 186504,
+          "secsPerFrame": {
+            "plate": 5.47,
+            "contactPass": 1.87
+          },
+          "path": "/media/harbour-v4/p/b03/"
+        }
+      }
+    },
+    "b04": {
+      "vessel_type": "ship_tender",
+      "segment": "dmc",
+      "props": [],
+      "hull": {
+        "loa_m": 9.8,
+        "beam_m": 3.4,
+        "l_over_b": 2.88
+      },
+      "tiers": {
+        "d": {
+          "frames": 24,
+          "width": 1440,
+          "height": 810,
+          "avgFrameKB": 18.9,
+          "maxFrameKB": 20.2,
+          "capKB": 60,
+          "totalBytes": 464666,
+          "secsPerFrame": {
+            "plate": 6.83,
+            "contactPass": 2.82
+          },
+          "path": "/media/harbour-v4/d/b04/"
+        },
+        "p": {
+          "frames": 24,
+          "width": 585,
+          "height": 1266,
+          "avgFrameKB": 10.3,
+          "maxFrameKB": 11.1,
+          "capKB": 24,
+          "totalBytes": 254032,
+          "secsPerFrame": {
+            "plate": 5.39,
+            "contactPass": 1.97
+          },
+          "path": "/media/harbour-v4/p/b04/"
+        }
+      }
+    },
+    "b05": {
+      "vessel_type": "tour_boat",
+      "segment": "tour_operator",
+      "props": [
+        "iceberg"
+      ],
+      "hull": {
+        "loa_m": 10.6,
+        "beam_m": 3.5,
+        "l_over_b": 3.03
+      },
+      "tiers": {
+        "d": {
+          "frames": 24,
+          "width": 1440,
+          "height": 810,
+          "avgFrameKB": 16,
+          "maxFrameKB": 17.1,
+          "capKB": 60,
+          "totalBytes": 392339,
+          "secsPerFrame": {
+            "plate": 7.25,
+            "contactPass": 3.01
+          },
+          "path": "/media/harbour-v4/d/b05/"
+        },
+        "p": {
+          "frames": 24,
+          "width": 585,
+          "height": 1266,
+          "avgFrameKB": 7.4,
+          "maxFrameKB": 8.2,
+          "capKB": 24,
+          "totalBytes": 181176,
+          "secsPerFrame": {
+            "plate": 5.77,
+            "contactPass": 1.71
+          },
+          "path": "/media/harbour-v4/p/b05/"
+        }
+      }
+    },
+    "b06": {
+      "vessel_type": "expedition_cruise",
+      "segment": "cruise",
+      "props": [],
+      "hull": {
+        "loa_m": 150,
+        "beam_m": 24.5,
+        "l_over_b": 6.16
+      },
+      "tiers": {
+        "d": {
+          "frames": 24,
+          "width": 1440,
+          "height": 810,
+          "avgFrameKB": 18.9,
+          "maxFrameKB": 19.4,
+          "capKB": 60,
+          "totalBytes": 465281,
+          "secsPerFrame": {
+            "plate": 18.16,
+            "contactPass": 8.66
+          },
+          "path": "/media/harbour-v4/d/b06/"
+        },
+        "p": {
+          "frames": 24,
+          "width": 585,
+          "height": 1266,
+          "avgFrameKB": 9.2,
+          "maxFrameKB": 9.4,
+          "capKB": 24,
+          "totalBytes": 226840,
+          "secsPerFrame": {
+            "plate": 11.33,
+            "contactPass": 3.84
+          },
+          "path": "/media/harbour-v4/p/b06/"
+        }
+      }
+    }
+  },
+  "totals": {
+    "desktopMB": 2.41,
+    "desktopCapMB": 36,
+    "phoneMB": 1.2,
+    "phoneCapMB": 7
+  }
+}

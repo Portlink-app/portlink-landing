@@ -586,7 +586,7 @@ Every station stop runs the same five beats, replacing v1's video dive in and ou
 4. **Hold:** at least 0,7 screens of scroll on the capture, with the stop's copy.
 5. **Pull back:** the capture returns to its anchor, the lights stay on (the harbour remembers who has worked), and travel resumes.
 
-Signal colour appears only inside `lights-*` and `ship-lights` groups; everything else stays in the stage-line greys the art was drawn in.
+Signal colour appears only inside `lights-*` and `ship-lights` groups; everything else stays in the stage-line greys the art was drawn in. Amended by 12.9: a hero group (`ship*`, `quay-crane-*`) may also carry the Low sun rim edge, as a stroke of at most 2 units and never as a fill (`check:harbour-lights`).
 
 ### 12.5 Phone and reduced-motion arms
 
@@ -634,3 +634,133 @@ Each work package lands as its own commit on the branch, green before the next s
 - [ ] **WP7, reduced-motion arm.** Static composite plus captures as the server markup; no timeline when motion is not allowed. Gate: the page with JS disabled carries every claim.
 - [ ] **WP8, performance.** Frame-time trace (desktop and mid-range phone throttle), LCP, CLS, JS and SVG weight against 12.6. Gate: every budget met, trace attached to the PR.
 - [ ] **WP9, proof.** `capture.mjs` at 1440x900 and 390x844 on the preview, then `website-verify` 0 FAIL receipt at HEAD.
+
+### 12.9 Art bar: unitedcarriers.com teardown (Surgeon (Portlink), 20.11.2026)
+
+Measured live at 1440x900 with wheel-driven scroll (the site runs Lenis, so `scrollTo` does not move it), 16 positions, 900 px apart. Evidence: `~/.buzz/RESEARCH/one-harbour-v2/uc-teardown/` (`teardown.json`, `w/d-00..15.png`, `sheet-d.png`). Stack: Webflow, Lenis, Barba, GSAP; the scroll scenes are AVIF frame sequences, the hero a 900x900 canvas.
+
+**What makes their fidelity (five measured traits):**
+
+1. **One hero object, rendered at product detail, on an empty field.** A reach-stacker lifting a 40 ft box, then a truck: corrugation ribs, door bars, lock rods, hazard chevrons, stencilled codes, tyre tread, cab glazing. Nothing else is in frame: no scenery, no sky, a flat white or black field and one black road strip. The detail budget goes to the object, never to the backdrop.
+2. **Two fields and one signal.** Black `#000`/`#0b0b0b`, white `#fff`/`#f4f4f4`, one orange `#ff5500`; a cold electric blue appears only as atmosphere behind the globe. Colour on the object is local colour (teal machine, navy and orange boxes), never decoration.
+3. **Rim light, two-tone.** The hero globe is lit warm on one limb and cold blue on the other; the machinery has a hard key from upper left with crisp specular edges on steel. Light separates the object from the field; there are no gradients on the field itself.
+4. **Two line weights.** Silhouettes are solid fills with no outline; interior detail is hairline (ribs, seams, lane dashes at roughly 1 px on screen). The top-down road map is the same idea flattened: solid black carriageway, thin grey dashes, hatched gore areas.
+5. **Scroll drives the object's action, not just the camera.** The stacker lifts, the box lands on the truck, the truck drives off and turns on the map. The camera barely moves; the subject performs. Huge capitals and stat numerals ride over it, set in BT Steinhart.
+
+**Translated to One Harbour (binding for the v3 layers):**
+
+| Trait | One Harbour rule | Gate |
+|---|---|---|
+| Hero object | The ship and the A1 quay crane carry the detail: hull plating seams, portholes in rows, bridge glazing, lifeboats in davits, funnel bands, mooring lines; crane girders as lattice, trolley, spreader, rails. | Ship and crane together hold >= 40 % of all SVG elements |
+| Empty field | Sky and far coast become near-flat fields: at most 3 tones each, no texture. Mid harbour drops to silhouette mass plus lit windows. | Sky + far coast <= 6 % of elements |
+| Palette | Navy field `#0a2342` and night `#06152b` replace their black; Mist `#f2f5f9` their white; Low sun `#f5b53d` is the only signal (their orange). Steel greys `#8a97ab` to `#d6dde7` for local colour. | No hue outside these families (computed-style check, WP5) |
+| Rim light | Key from the low sun at upper left: every hero surface gets a 1 to 2 unit Low sun edge on its sun side and a `#4f7db8` cold edge on the shadow side. Field stays flat. | Visual review on `d2`/`p2` |
+| Line weight | Silhouettes are fills without stroke; detail strokes 1,5 world units (about 0,7 px at s 0,46, 1,5 px at s 1,0), silhouettes and rails 3 to 4. | Lint: no stroke above 4 outside `#route` |
+| Scroll action | The ship moves along `#route` and the crane lifts at A2: the subject performs while the camera holds (WP3, WP4). | Unchanged from 12.4 |
+
+Unchanged: world 4800x2400, layer ids, `fx`, extents, the camera and the clamp (12.2), the budgets in 12.6 (all stage SVG <= 120 KB raw, <= 2 500 elements).
+
+Chose / Over / Because / Revisit-if: Chose vector detail concentrated on the hero objects with flat fields, Over a photoreal frame sequence like theirs, Because 12.1 already rejected video for weight and the clamp, and their fidelity comes from where the detail goes rather than from photographs; Revisit-if the v3 frames still read as clip art beside `sheet-d.png` at `d2`.
+
+## 13. v4: rendered frames on a canvas, still no video (supersedes the rendering choice in 12)
+
+**Source.** David's v4 brief (events `34c38c99`, `9e6b3a9b`, relayed by Starboard in goal `portlink-one-harbour-v4-2026-11-20`; brief thread `dac896f5`). Binding direction: `~/.buzz/RESEARCH/one-harbour-v2/v4/ONE_HARBOUR_V4_REALISTIC_POV.md` (option B, documentary photorealism; option C, an AI photo pass, is the upgrade path). Plan: `v4/ONE_HARBOUR_V4_ARCHITECTURE.md` sections 1 to 5.
+
+**What changes.** The harbour is no longer drawn as SVG planes. Each beat is a short sequence of frames rendered offline in Blender (Cycles, Metal GPU, AgX), encoded to AVIF with a WebP fallback, and drawn by scroll onto one `<canvas>` by `components/harbour/FramePlayer.ts`. Scroll picks the frame; nothing plays on a clock.
+
+**What does not change.** Still no `<video>`, no `.mp4`, `.webm`, `.mov` or `.m4v` anywhere on the route (12.6 stands; `check-harbour-isolation` keeps the ban). Screens are never generated UI: every `screen_*` surface in a render is an alpha hole, and a real product capture sits under the canvas in a DOM `<img>` placed by a homography from the exported slot corners (`public/media/harbour-v4/slots/<seq>.json`). People are seen from behind only. Palette families from 12.9 hold: navy `#0a2342`, Mist `#f2f5f9`, Low sun `#f5b53d` as the only signal.
+
+**Look.** Documentary photorealism: no glow, no lens flare, no bloom. Beat 7 is overcast midday at quay level (`SC_overcast`, a CC0 Poly Haven overcast sky, no sun lamp). Assets are CC0 or modelled by script; spend is 0 kr.
+
+**Budgets (from the plan, section 1.5 and 1.6).**
+
+| Tier | Render | Delivered | Per frame |
+|---|---|---|---|
+| Desktop sequence | 1920x1200 | 1440x900 AVIF | 72 KB average, 110 KB max |
+| Desktop hold still | 2560x1600 | 2560x1600 AVIF | 350 KB |
+| Phone sequence | 780x1688 | 585x1266 AVIF | 36 KB average, 55 KB max |
+| Phone still | 780x1688 | 780x1688 AVIF | 80 KB |
+
+Render time at most 90 s per frame. Before first scroll at most 900 KB desktop, 600 KB phone. Whole film at most 36 MB desktop, 7 MB phone; stills path at most 2,5 MB and 1,2 MB. Scrub p95 at most 16,7 ms desktop, 20 ms phone. LCP 2,0 s desktop, 2,5 s phone, CLS 0, route JS at most 130 KB gzipped, no three.js.
+
+**Fallbacks.** Reduced motion and `saveData` get baked stills (capture composited into the slot). The hero is an `<img fetchpriority="high">` pixel-identical to frame 0 of the first sequence.
+
+**Toolchain, measured 20.11.2026.** Blender 5.2.2 LTS at `/Applications/Blender.app/Contents/MacOS/Blender`; Cycles Metal device `Apple M3 Ultra (GPU - 60 cores)`; 96 GB RAM. The v2 engine commits (WP1 to WP5) are on `feat/umbrella-harbour` at `6968167`; v4 builds on `feat/harbour-v4` from that commit.
+
+Chose / Over / Because / Revisit-if: Chose offline rendered frames drawn by scroll on a canvas, Over the v3 vector planes and over scrubbed video, Because David's v4 brief asks for a realistic point of view that vector planes cannot reach, while a frame sequence keeps scroll control, real captures in the screens and the no video rule; Revisit-if the beat 7 spike misses the 90 s render cap, the per frame byte targets or the scrub p95, or G1 judges the spike still below `../v3/d-06.png`.
+
+### 13.1 Spike S2: one hero object on a flat field (20.11.2026)
+
+G1 on spike S: the pipeline passed, the art failed (David: "childish"). S2 drops the modelled harbour and renders one product-grade ship on a flat field.
+
+- **Field.** Flat navy `#0a2342`, composited behind a transparent film. No sky, no scenery.
+- **Hero.** "Cargo ship" by hungry_drifter, CC-BY, https://sketchfab.com/3d-models/cargo-ship-b7c97df584824ca682d26daabf401f87, fetched from the Objaverse mirror, 0 kr. Credit line on the page: `Cargo ship by hungry_drifter (Sketchfab), CC BY 4.0`. About 73k faces, 9 textures at 1024 px.
+- **Hull detail.** Plating seams as a brick bump masked below the sheer line. The model has no hull portholes (its windows sit on the superstructure); mooring lines and lifeboats are not added.
+- **Water.** One narrow Ocean-modifier band (900 x 140 m), alpha faded at both edges, dithered; ocean time and ship travel advance with the frame, so wake and reflection move on scroll.
+- **Light.** Hard key from upper left (0,5 degrees), rim `#f5b53d` with specular off (it read as flare), cold edge `#4f7db8`. No bloom, no flare.
+- **Type and UI.** Not in the render; DOM and SVG layers on top, as in section 13.
+- **Beat 1.** 24 frames at 1440x900 and 390x844, Eevee, 64 samples, AgX. Measured 0,65 to 0,94 s per frame desktop (about 0,75 s), 0,50 to 0,70 s mobile (about 0,57 s), far under the 90 s cap.
+- **Sources.** Scripts, frames and the side-by-side with the UC sheet live in `/Users/nyx/Projects/portlink/marketing/one-harbour-v4/s2/` (`py/scene.py`, `r/d/`, `r/p/`, `r/S2_side_by_side.jpg`).
+
+Chose / Over / Because / Revisit-if: Chose one free CC-BY hero ship on a flat navy field with a narrow ocean band and the three-light rig, Over the modelled harbour of spike S and over a paid model, Because G1 judged the scene art childish while the pipeline passed, and a single detailed object carries the realism a whole low-detail harbour could not, at 0 kr; Revisit-if G1 fails S2, or the missing hull details (portholes, lines, lifeboats, a visible wake) are judged blocking, in which case a priced list of 3 paid or custom candidates goes to Starboard before any spend.
+
+### 13.2 S3: live water in three.js, the only real-time layer (20.11.2026)
+
+Amends the "no three.js" line of section 13 for the water layer only. Hero objects stay pre-rendered AVIF frames on a 2D canvas; type and UI stay DOM and SVG. Method from `RESEARCH/one-harbour-v2/v4/ONE_HARBOUR_V4_PRIOR_ART.md` (unitedcarriers.com ships `OceanScene` and `WakeSimulation` chunks; OceanX drives its wave field from the ship position).
+
+- **Spike.** `spikes/s3-water/` (`water.js`, three 0.187.0). Four Gerstner waves on a centre-dense 256 x 256 grid, plus a wave-equation wake sim on 256 x 256 half-float ping-pong targets covering 80 m, driven by a ship-position uniform. Slow wave speed against hull speed (about Mach 3) gives the Kelvin V; foam decays per substep and is broken by value noise. Navy `#0a2342`, amber sun specular, cold fill, horizon fade.
+- **Measured (Chrome, 10 s window after 3 s warm-up).** Desktop 1440x900 at DPR 1,5: 60 fps, p95 17,6 ms. Phone emulation 390x844, DPR cap 1,5, CPU throttled 4x: 60 fps, p95 17,6 ms. Emulation throttles the CPU only, not the GPU, so a real mid-range phone measurement is still owed before launch.
+- **Weight.** The bundled, minified water chunk (three plus `water.js`) is 135 438 bytes gzipped. It cannot sit inside the 130 KB route budget: it loads as a lazy chunk after LCP, the static navy field holds until the first frame, and reduced motion never loads it.
+
+Chose / Over / Because / Revisit-if: Chose a real-time three.js ocean with a position-driven wake sim, lazy-loaded after LCP, Over the baked Ocean-modifier band of 13.1 and over a fully real-time scene, Because the reference ships exactly this split, a baked band has no hull interaction and costs frames, and the spike holds 60 fps in both measured setups; Revisit-if a real mid-range phone drops below 30 fps at sim 256 (first fallback: sim 128 and seg 160, then a looping video strip for that beat), or the lazy chunk delays interaction past the LCP budget.
+
+### 13.3 Production water: raw WebGL2 port of S3 (Keel, 21.11.2026)
+
+`components/harbour/water/` ports `spikes/s3-beat1/ocean.js` line for line to raw WebGL2 (GLSL ES 3.00, RGBA16F ping-pong via `EXT_color_buffer_float`, linear-to-sRGB in the shader). `lazy.ts` loads it only after LCP (or first input, 2,5 s cap, then idle), never under reduced motion; `createOcean` returns `null` without WebGL2 or float targets, so the static navy field stays.
+
+- **Weight.** 3 853 bytes gzipped (9 586 minified), against 135 069 for three.js plus the spike.
+- **Parity, Chrome 1440x900, time frozen.** Moored hero clip `e`: byte-identical to the three.js render. Moving clip `d`: mean abs 0,075, 0,27 % of channels off by more than 8; three.js against itself gives the same figures (wake-sim step timing), so the port sits at three.js's own noise floor.
+- **Tests.** `camera.test.ts`: view-projection matches three.js r187 within 1e-3, axis swap, colour conversion, grid layout.
+- **Still owed for G2.** fps on desktop and a real phone on the assembled page, and the after-LCP check there.
+
+Chose / Over / Because / Revisit-if: Chose raw WebGL2, Over shipping three.js as the lazy chunk, Because three.js alone exceeds G2's 140 KB and G6's 130 KB while the port renders the same pixels at 3 % of the weight; Revisit-if the water needs a scene graph, lights or loaders.
+
+### 13.4 Production FramePlayer (Keel, 21.11.2026)
+
+`components/harbour/frames/FramePlayer.ts` ports `spikes/s3-beat1/frameplayer.js` (1 372 bytes gzipped). Additions over the spike: prefetch ordered in the direction of travel, loads that leave the window are aborted (an abort spends no retry), the playhead's own frame pre-empts the farthest prefetch when every slot is busy, two attempts per frame, `dispose()`, and an injected loader and canvas so `FramePlayer.test.ts` (14 tests, `npm run test:harbour-v4`, in `verify`) covers windowing, eviction, aborts, layer order, never-blank draws and the byte budget at the G4 frame caps.
+
+G3 run on the spike's beat 1 frames with the TS water underneath, Chrome GPU, 6 full-length scrubs at about 96 frames per second:
+
+| Arm | Before first scroll | rAF p95 / max | Blank frames | Playhead lag p95 / max |
+|---|---|---|---|---|
+| Desktop 1440x900, DPR 1,5, radius 6 | 211 KB frames (7 frames), 15 KB JS | 16,8 / 16,8 ms | 0 | 7 / 12 frames |
+| Phone emulation 390x844, DPR 2, CPU 4x, radius 4 | 56 KB frames (5 frames), 15 KB JS | 16,7 / 16,8 ms | 0 | 1 / 3 frames |
+
+Not one dropped frame in either arm (p95 is the 60 Hz vsync interval; 16,8 against the 16,7 gate is timer quantisation). Desktop lag at this scrub speed means the nearest decoded frame stands in for up to 12 frames; a real scroll is slower. Emulation throttles the CPU, not the GPU or decoder: a real mid-range phone is still owed for G2 and G3.
+
+## 14. Correction 20.11.2026: cruise segment, expedition hero, supersessions
+
+Source of truth for v4 from here: `~/.buzz/RESEARCH/one-harbour-v2/v5/ONE_HARBOUR_PLAN_FABLE.md` (Fable 5.2, 20.11.2026, read against the Portlink iCloud corpus, `portlink-platform`, `embark` and this worktree). Where this section and an earlier section disagree, this section wins.
+
+- **Audience.** Expedition and luxury cruise lines first (pricing v2: Phase 1 market, 40 to 60 brands, 1 to 10 vessels), then their port agents and DMCs, then small tour operators (Embark). Not cargo, not mass-market cruise, not port authorities. No customer has signed: name no line, agent or operator.
+- **Hero vessel.** Unnamed, unbranded expedition cruise ship, 140 x 23 m (reference HX Roald Amundsen class), navy hull, white superstructure, one funnel, ice-class bow, two tenders in davits. Modelled by us. `rig.py` `LEN_M` becomes 140.
+- **Withdrawn.** 13.1 hero "Cargo ship" (hungry_drifter); the A1 quay crane (12.9); containers, offices, hut; the G1 sheet in `marketing/one-harbour-v4/s3/g1` (pipeline evidence only, void as art).
+- **Objects allowed.** Expedition ship, ship's tender, harbour launch, small open tour boat, one iceberg. Each brief and frame manifest carries `vessel_type` and `segment`; a check fails the build when either is missing or off-list.
+- **Spend.** Cap 40 USD (David, 20.11.2026), planned 0 USD. Supersedes 5 000 kr (5), 0 kr (13) and 500 USD (prior art).
+- **Live 3D.** Live three.js water (13.2) supersedes "no three.js / no WebGL" in 7, 12 and 13, and the baked band in 13.1. Renders are Cycles, not Eevee.
+- **Fallbacks.** A static still, never video (13 no-video rule wins over 13.2's video strip).
+- **Resolution.** Render 2560x1440, deliver 1920x1080 desktop (supersedes 1920x1200 / 1440x900 in 13). Revisit if G4 byte budgets fail.
+- **Product claims.** Wheelhouse is live and a product: one line and one capture. Embark: third product, already public at portlink.app/embark; no prices; "First deployment: Greenland" is deleted. The Portlink to Embark trade link is built (Trade API v1, 02.11.2026): a DMC request answered in Embark is a true claim. The agent beat claims only the shared call unless an agent can create a PDA at the capture commit.
+- **Not yet built.** `components/harbour/FramePlayer.ts` (spike only); `verify` still runs v2 SVG guards that must go.
+
+Chose / Over / Because / Revisit-if: Chose an expedition cruise hero at 140 m, Over the cargo model and a 300 m mass-market hull, Because Portlink's Phase 1 market and every prospect that has seen the product run ships of this class; Revisit-if David or Kris name another vessel type or a mass-market line signs.
+
+- **Open (David, 20.11.2026):** setting (Norway berth like `/portlink` and `/embark`, or Greenland anchorage like the platform seed) and ship size (one ship across the site). Addendum F of the Fable plan.
+
+### 14.1 Execution completion: Bergen truth pack, G4 beats and `/harbour-v4` (Keel, 21.11.2026 & 22.11.2026)
+
+- **Step 2 (G5) truth pack:** Seeded `demo_harbour_bergen.sql` + `demo_consumption.sql` (`Norwegian Coast 2026-N4`, `MS Aster Brisa (demo)`, 150 m LOA, Bergen `Skolten 3`, fictional `Portlink Agency Norway (demo)` and `Portlink Shore Norway (demo)`). Captured 16 screens at `1440x900` and `390x844` (2x DPR, clock pinned to `2026-11-18T15:25:00Z`) from `portlink-platform` `407c6d383` into `public/media/harbour-v4/captures/` (`P01`, `P03`, `P04`, `P05`, `P06`, `P08`, `P08b` Embark Trade API v1 agreement, `P09`, `P10` Wheelhouse task list, `P12`). Verified `buildPdaFromTariffs` and `startBlankPda` in `src/modules/finance/tariff.actions.ts:234,339` so Beat 3 carries "One request. One estimate." Updated `docs/HARBOUR-CLAIMS.md`.
+- **Step 7 (G4) 3D models & 24-frame sequences:** Modelled `harbour_launch` (13,8 x 4,2 m Nordic pilot launch with continuous tubular D-fender, flush mullioned pilothouse glazing, handrails and tripod radar mast), `ship_tender` (9,8 x 3,4 m streamlined expedition tender with flush panoramic glazing and boarding handrails), `tour_boat` (10,6 x 3,5 m offshore RIB with cylindrical hypalon collar tube, contoured marine saddle seats, twin outboard engines and tubular stainless A-frame radar arch; zero pawn figures) and `iceberg` (flat-faceted calved glacial iceberg with planar fracture cliffs and snow ledges) beside the G1-approved `expedition_cruise` (150 x 24,5 m, L/B 6,16, razor-sharp horizontal boot-top, zero lower-hull studs) in `spikes/s3-rig/beats.py`. Rooted fjord mountains at `z = -6 m` below the `z = 0` water plane with level camera elevation so zero horizon seam appears above the live WebGL2 water. Rendered and AVIF-encoded beats `b00` (`1` frame) and `b01` to `b06` (`24` desktop frames and `24` phone frames each) into `public/media/harbour-v4/`, guarded by `scripts/check-harbour-v4.mjs`.
+- **Step 8 (G5, G6) `/harbour-v4` unified sticky stage:** Built `app/harbour-v4/page.tsx` (`noindex`), `components/harbour/v4/HarbourV4Stage.tsx`, `scriptV4.ts` and `harbour-v4.module.css` around ONE sticky live-water + `FramePlayer` + real product capture stage (`>= 55 %` viewport width on desktop, ref-driven imperative `FramePlayer.seek()` + `ocean.step()` in `ScrollTrigger.onUpdate` with zero per-pixel React state churn), leaving `/harbour` (v2/v3) and `/` untouched.
+
+Chose / Over / Because / Revisit-if: Chose a dedicated `/harbour-v4` route with one unified sticky live-water + `FramePlayer` + real capture stage and 24-frame Cycles sequences while keeping `/harbour` (v2/v3) untouched, Over overwriting `/harbour` in place or duplicating static waterless beat cards, Because `ONE_HARBOUR_PLAN_FABLE.md` §G item 10 requires keeping earlier `/harbour` and `/` side by side while the scroll story runs on one live water stage; Revisit-if David or Kris promote `/harbour-v4` to replace `/harbour` after G7 review.

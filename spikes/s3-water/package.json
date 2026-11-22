@@ -1,0 +1,6 @@
+{
+  "name": "s3-water-spike",
+  "private": true,
+  "description": "S3 live-water spike: Gerstner ocean plus GPU wake height field. Isolated from the Next build.",
+  "dependencies": { "three": "0.187.0" }
+}

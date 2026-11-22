@@ -1,0 +1,794 @@
+/* One Harbour v4 (/harbour-v4) styles.
+   Flat colour fields only: Navy #0a2342, Navy surface #102e54, Mist #f2f5f9, Mist surface #e4ebf3, Low sun #f5b53d.
+   No gradients, no thin 1px rules, no shadows at rest, no backdrop blur, rectangular 6px controls. */
+
+.page {
+  background-color: #0a2342;
+  color: #f2f5f9;
+  font-family: var(--font-jakarta, 'Plus Jakarta Sans', system-ui, sans-serif);
+}
+
+.container {
+  max-width: 1380px;
+  margin-inline: auto;
+  padding-inline: clamp(18px, 3vw, 40px);
+}
+
+/* Self-contained compact header and footer (flat tone step, no blur, 1 row on mobile) */
+.topHeader {
+  background-color: #071930;
+  color: #f2f5f9;
+  padding-block: 12px;
+}
+
+.topBar {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.topBrand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #f2f5f9;
+  font-size: 1.1875rem;
+  font-weight: 700;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.topNav {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: clamp(10px, 2vw, 22px);
+}
+
+.topLink {
+  color: #d5e0ec;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.topLinkSecondary {
+  display: inline-flex;
+}
+
+.topLink:hover,
+.topLink:focus-visible {
+  color: #f2f5f9;
+}
+
+.topCta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding: 6px 14px;
+  border-radius: 6px;
+  background-color: #f5b53d;
+  color: #0a2342;
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Unified scrollytelling section: left story steps (b00..b06) + right sticky live-water + FramePlayer + capture stage */
+.storySection {
+  position: relative;
+  background-color: #0a2342;
+  color: #f2f5f9;
+  padding-top: clamp(20px, 3vw, 36px);
+  padding-bottom: clamp(48px, 6vw, 80px);
+}
+
+.storyGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.39fr) minmax(0, 0.61fr);
+  column-gap: clamp(24px, 3vw, 40px);
+  row-gap: clamp(32px, 5vw, 56px);
+  align-items: start;
+}
+
+.storySteps {
+  grid-column: 1;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(32px, 5vw, 56px);
+}
+
+.heroStep {
+  grid-column: 1;
+  min-height: 76svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-block: clamp(16px, 2.5vw, 32px);
+}
+
+.beatStep {
+  min-height: 68svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(20px, 2.8vw, 32px);
+  border-radius: 10px;
+  background-color: #0d2a4e;
+  transition: background-color 180ms ease;
+}
+
+.beatStepActive {
+  background-color: #102e54;
+}
+
+.beatMeta {
+  margin: 0 0 10px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #f5b53d;
+}
+
+.h1 {
+  margin: 0;
+  font-size: clamp(2.125rem, 3.8vw, 3.5rem);
+  font-weight: 700;
+  line-height: 0.96;
+  letter-spacing: -0.035em;
+  color: #f2f5f9;
+  max-width: 13ch;
+}
+
+.h2 {
+  margin: 0;
+  font-size: clamp(1.625rem, 2.75vw, 2.5rem);
+  font-weight: 700;
+  line-height: 1.04;
+  letter-spacing: -0.03em;
+  color: inherit;
+  max-width: 16ch;
+}
+
+.h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: inherit;
+  max-width: 26ch;
+}
+
+.lead {
+  margin: 16px 0 0;
+  font-size: 1.125rem;
+  line-height: 1.44;
+  color: #f2f5f9;
+  max-width: 52ch;
+}
+
+.leadMist {
+  margin: 18px 0 0;
+  font-size: 1.25rem;
+  line-height: 1.42;
+  color: #0d1420;
+  max-width: 54ch;
+}
+
+.body {
+  margin: 12px 0 0;
+  font-size: 1rem;
+  line-height: 1.54;
+  color: #d5e0ec;
+  max-width: 54ch;
+}
+
+.bodyMist {
+  margin: 14px 0 0;
+  font-size: 1rem;
+  line-height: 1.55;
+  color: #1f2d3d;
+  max-width: 56ch;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.btnPrimary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 10px 20px;
+  border-radius: 6px;
+  border: 0;
+  background-color: #f5b53d;
+  color: #0a2342;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 160ms ease, opacity 160ms ease;
+}
+
+.btnPrimary:hover,
+.btnPrimary:focus-visible {
+  transform: translateY(-2px);
+}
+
+.btnSecondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 10px 20px;
+  border-radius: 6px;
+  border: 0;
+  background-color: #13355f;
+  color: #f2f5f9;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 160ms ease, background-color 160ms ease;
+}
+
+.btnSecondary:hover,
+.btnSecondary:focus-visible {
+  background-color: #1a4375;
+  transform: translateY(-2px);
+}
+
+.btnMistPrimary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 10px 20px;
+  border-radius: 6px;
+  border: 0;
+  background-color: #0a2342;
+  color: #f2f5f9;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 160ms ease, background-color 160ms ease;
+}
+
+.btnMistPrimary:hover,
+.btnMistPrimary:focus-visible {
+  background-color: #143660;
+  transform: translateY(-2px);
+}
+
+/* Right sticky stage column (>= 55% viewport width on desktop) */
+.stickyCol {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: stretch;
+  position: relative;
+}
+
+.stickyStage {
+  position: sticky;
+  top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: #071930;
+  padding: 12px;
+  border-radius: 10px;
+}
+
+.stageTopBar {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.threadNav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.threadBtn {
+  min-height: 34px;
+  padding: 6px 11px;
+  border-radius: 6px;
+  border: 0;
+  background-color: #102e54;
+  color: #f2f5f9;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 150ms ease, background-color 150ms ease;
+}
+
+.threadBtn:hover,
+.threadBtn:focus-visible {
+  background-color: #173d6c;
+  color: #f2f5f9;
+  transform: translateY(-1px);
+}
+
+.threadBtnActive,
+.threadBtnActive:hover,
+.threadBtnActive:focus-visible {
+  background-color: #f5b53d;
+  color: #0a2342;
+}
+
+.scrubberRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  background-color: #102e54;
+  padding: 8px 12px;
+  border-radius: 6px;
+}
+
+.scrubberInput {
+  flex: 1;
+  accent-color: #f5b53d;
+  cursor: pointer;
+}
+
+.telemetryText {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #f5b53d;
+  white-space: nowrap;
+}
+
+.canvasViewport {
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: #0a2342;
+  aspect-ratio: 16 / 9;
+  width: 100%;
+}
+
+.plateImg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.waterCanvas,
+.plateCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.routeSvg {
+  position: absolute;
+  inset: auto 18px 14px 18px;
+  width: calc(100% - 36px);
+  height: 38px;
+  pointer-events: none;
+}
+
+/* Real product capture dock inside the sticky stage (>= 55% viewport width on desktop) */
+.stageCaptureDock {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dockTabs,
+.stepCaptureTabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.stepCaptureTabs {
+  margin-top: 18px;
+}
+
+.captureTabBtn {
+  min-height: 32px;
+  padding: 5px 11px;
+  border-radius: 6px;
+  border: 0;
+  background-color: #13355f;
+  color: #f2f5f9;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 150ms ease;
+}
+
+.captureTabBtn:hover,
+.captureTabBtn:focus-visible {
+  background-color: #1a4375;
+  color: #f2f5f9;
+}
+
+.captureTabBtnActive,
+.captureTabBtnActive:hover,
+.captureTabBtnActive:focus-visible {
+  background-color: #f5b53d;
+  color: #0a2342;
+}
+
+.captureCard {
+  margin: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: #102e54;
+  padding: 12px;
+}
+
+.captureCardStage {
+  margin: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: #102e54;
+  padding: 10px;
+}
+
+.captureCardMist {
+  margin: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: #e4ebf3;
+  padding: 14px;
+}
+
+.captureImg {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+}
+
+.captureImgStage {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+}
+
+.caption {
+  margin-top: 8px;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: #d5e0ec;
+}
+
+.captionMist {
+  margin-top: 10px;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: #1f2d3d;
+}
+
+.mobileBeatCapture {
+  display: none;
+  margin-top: 18px;
+}
+
+/* Mist sections: Role switcher, Three products, Ports & terminals, Session CTA */
+.mistSection {
+  background-color: #f2f5f9;
+  color: #0d1420;
+  padding-block: clamp(56px, 7vw, 96px);
+}
+
+.mistSectionAlt {
+  background-color: #e4ebf3;
+  color: #0d1420;
+  padding-block: clamp(56px, 7vw, 96px);
+}
+
+.roleLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.25fr);
+  gap: clamp(28px, 4vw, 56px);
+  align-items: start;
+}
+
+.roleTabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.roleTabBtn {
+  min-height: 42px;
+  padding: 10px 16px;
+  border-radius: 6px;
+  border: 0;
+  background-color: #dde6f0;
+  color: #0d1420;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 150ms ease, background-color 150ms ease;
+}
+
+.roleTabBtn:hover,
+.roleTabBtn:focus-visible {
+  background-color: #cfdbe8;
+  color: #0d1420;
+  transform: translateY(-1px);
+}
+
+.roleTabBtnActive,
+.roleTabBtnActive:hover,
+.roleTabBtnActive:focus-visible {
+  background-color: #0a2342;
+  color: #f2f5f9;
+}
+
+.rolePanel {
+  margin-top: 24px;
+  background-color: #e4ebf3;
+  padding: 24px;
+  border-radius: 10px;
+}
+
+.productsStack {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  margin-top: 36px;
+}
+
+.productRow {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.2fr);
+  gap: clamp(24px, 4vw, 48px);
+  align-items: center;
+  background-color: #f2f5f9;
+  padding: clamp(20px, 3vw, 32px);
+  border-radius: 10px;
+}
+
+.productLink {
+  color: #0a2342;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.portsGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(28px, 4vw, 56px);
+  align-items: center;
+}
+
+.portsPanel {
+  background-color: #e4ebf3;
+  padding: clamp(24px, 3.5vw, 36px);
+  border-radius: 10px;
+}
+
+.sessionGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+  gap: clamp(28px, 4vw, 56px);
+  align-items: start;
+}
+
+.pilotFormCard {
+  background-color: #f2f5f9;
+  padding: clamp(24px, 3.5vw, 36px);
+  border-radius: 10px;
+}
+
+.pilotFormStack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.pilotFieldLabel {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1f2d3d;
+  margin-bottom: 6px;
+}
+
+.pilotInput {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border-radius: 6px;
+  border: 0;
+  background-color: #e4ebf3;
+  color: #0d1420;
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+.pilotStatus {
+  margin: 12px 0 0;
+  font-size: 0.875rem;
+  color: #0a2342;
+}
+
+/* Visible inline consent portal target styled with Harbour v4 tokens (rectangular 6px controls, no 1px lines) */
+.consentSlot {
+  --surface-plain: #f2f5f9;
+  --text-primary: #0d1420;
+  --text-secondary: #1f2d3d;
+  --text-muted: #1f2d3d;
+  --brand: #0a2342;
+  --border: transparent;
+  --radius-lg: 10px;
+  --ds-radius-pill: 6px;
+  margin-top: 28px;
+}
+
+.consentSlot :global(section) {
+  border: 0;
+  background-color: #f2f5f9;
+  color: #0d1420;
+}
+
+.consentSlot :global(div > button) {
+  border: 0;
+  border-radius: 6px;
+  background-color: #0a2342;
+  color: #f2f5f9;
+}
+
+/* Entrance motion class toggled by GSAP ScrollTrigger */
+.revealItem {
+  will-change: transform, opacity;
+}
+
+.footer {
+  background-color: #071930;
+  color: #d5e0ec;
+  padding-block: clamp(48px, 6vw, 72px);
+}
+
+.footerGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(24px, 4vw, 48px);
+}
+
+.footerBrand {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #f2f5f9;
+}
+
+.footerHeading {
+  margin: 0 0 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #f2f5f9;
+}
+
+.footerList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.footerLink {
+  color: #d5e0ec;
+  font-size: 0.875rem;
+  text-decoration: none;
+}
+
+.footerLink:hover,
+.footerLink:focus-visible {
+  color: #f2f5f9;
+}
+
+.footerLegal {
+  margin-top: 36px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 0.875rem;
+  color: #aebfd2;
+}
+
+@media (max-width: 960px) {
+  .storyGrid,
+  .roleLayout,
+  .productRow,
+  .portsGrid,
+  .sessionGrid,
+  .footerGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* On mobile/tablet, Hero (#beat-b00) is first, interactive live stage is second, and Beats b01..b06 follow with inline captures */
+  .heroStep,
+  .stickyCol,
+  .storySteps {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  .stickyStage {
+    position: relative;
+    top: 0;
+  }
+
+  .canvasViewport {
+    max-height: none;
+  }
+
+  .captureImgStage {
+    max-height: none;
+  }
+
+  .heroStep,
+  .beatStep {
+    min-height: 0;
+  }
+
+  .mobileBeatCapture {
+    display: block;
+  }
+}
+
+@media (max-width: 720px) {
+  .topLinkSecondary {
+    display: none;
+  }
+
+  .topHeader {
+    padding-block: 10px;
+  }
+
+  .topBrand {
+    font-size: 1.0625rem;
+  }
+
+  .topLink {
+    font-size: 0.8125rem;
+  }
+
+  .topCta {
+    min-height: 34px;
+    padding: 6px 11px;
+    font-size: 0.8125rem;
+  }
+
+  .scrubberRow {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+}

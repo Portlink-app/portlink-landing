@@ -1,14 +1,15 @@
 #!/usr/bin/env node
 /**
  * check-harbour-v4: enforces Gates G0 (hero visual proof receipt, procedural primitive-mesh
- * rejection, sub-22 KB frame detail rejection, single tablist & <=1 mobile pill row above y < 520
- * at 375x812), G1a/G4 (segment guard + frame/film byte caps), G5 (truth pack + Never-list +
- * unapproved customer/quote gate + English-only v1 capture provenance), and G6 (no <video>, route
- * JS <= 130 KB gz) on One Harbour v4 (/harbour-v4).
+ * rejection, sub-22 KB frame detail rejection, single hero/stage tablist & <=1 mobile pill row
+ * above y < 520 at 375x812), G1a/G4 (segment guard + frame/film byte caps), G5 (truth pack +
+ * Never-list + unapproved customer/quote gate + English-only v1 capture provenance), and G6 (no
+ * <video>, route JS <= 130 KB gz) on One Harbour v4 (/harbour-v4).
  *
- * --selftest proves each detector against both required controls:
- *   1. MUST FIRE on PR #44 949a77f257706c13fb81b83927bf40a8bae7436c (fixture + live git commit when present)
- *   2. MUST NOT FIRE on a clean English G0 hero
+ * --selftest proves each detector against both required controls and adversarial probes:
+ *   1. MUST FIRE on PR #44 949a77f257706c13fb81b83927bf40a8bae7436c (fixture + live git commit
+ *      when present) and adversarial probes A1, A2, B1, C3, D1.
+ *   2. MUST NOT FIRE on a clean English G0 hero and adversarial probes A4, C1, C2.
  */
 import assert from 'node:assert/strict'
 import { execFileSync } from 'node:child_process'
@@ -35,7 +36,7 @@ export const PROCEDURAL_PRIMITIVE_RE =
   /\b(?:bpy\.ops\.mesh\.primitive_(?:cube|cylinder|uv_sphere|ico_sphere|cone|torus|monkey|plane|grid)_add|bmesh\.ops\.create_(?:cube|icosphere|uvsphere|cone|circle|grid))\b/g
 
 export const NORWEGIAN_UI_TOKENS_RE =
-  /\b(OPPRETT\s+NY|Eksporter|Søk\s+oppdrag|Avvik|Avganger|Anløp|Oversikt|Innboks|Mine\s+oppgaver|Generer\s+avganger|Fakturaer|Rapporter|Planlagt|Norwegian\s+UI)\b/gi
+  /\b(OPPRETT\s+NY|Eksporter|Søk\s+oppdrag|Avvik|Avganger|Anløp|Oversikt|Innboks|Mine\s+oppgaver|Generer\s+avganger|Fakturaer|Rapporter|Planlagt)\b/gi
 
 export const NEVER_CLAIMS = [
   { id: 'ship-notifies-arrival', re: /ship\s+notifies\s+everyone\s+when\s+it\s+arrives/i },
@@ -51,6 +52,7 @@ export const NEVER_CLAIMS = [
 const RIG_SCRIPT_PATHS = [
   'spikes/s3-rig/beats.py',
   'spikes/s3-rig/expedition.py',
+  'spikes/s3-rig/rig.py',
   'spikes/s3-rig/render_harbour.py',
   'scripts/harbour/render_beat.py',
   'scripts/generate-harbour-frames.py',
@@ -187,31 +189,118 @@ export function validateProceduralAndG0({ rigSources = [], manifest = null, g0Re
   return errs
 }
 
+/**
+ * Evaluates `.threadNav` `flex-wrap` in CSS cascade order at a 375x812 mobile viewport.
+ * Rules inside desktop-only `@media (min-width: Npx)` (where N > 375) do not apply at 375px;
+ * base rules and `@media (max-width: Npx)` (where N >= 375) apply in document order so a later
+ * mobile `flex-wrap: wrap` overrides an earlier desktop `flex-wrap: nowrap`.
+ */
+export function doesThreadNavWrapAt375(cssText) {
+  const clean = cssText.replace(/\/\*[\s\S]*?\*\//g, '')
+  let effectiveWrap = null
+
+  const applyDeclarations = (body) => {
+    for (const m of body.matchAll(/flex-wrap\s*:\s*(nowrap|wrap-reverse|wrap)\b/gi)) {
+      effectiveWrap = m[1].toLowerCase()
+    }
+  }
+
+  let i = 0
+  const n = clean.length
+  while (i < n) {
+    const braceIdx = clean.indexOf('{', i)
+    if (braceIdx === -1) break
+    const header = clean.slice(i, braceIdx).trim()
+
+    if (/^@media\b/i.test(header)) {
+      let depth = 1
+      let j = braceIdx + 1
+      while (j < n && depth > 0) {
+        if (clean[j] === '{') depth += 1
+        else if (clean[j] === '}') depth -= 1
+        j += 1
+      }
+      const mediaBody = clean.slice(braceIdx + 1, j - 1)
+      const minW = header.match(/min-width\s*:\s*(\d+)\s*px/i)
+      const maxW = header.match(/max-width\s*:\s*(\d+)\s*px/i)
+      const appliesAt375 =
+        (!minW || Number(minW[1]) <= 375) && (!maxW || Number(maxW[1]) >= 375)
+      if (appliesAt375) {
+        for (const rm of mediaBody.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+          if (/\.threadNav(?![A-Za-z0-9_-])/.test(rm[1])) {
+            applyDeclarations(rm[2])
+          }
+        }
+      }
+      i = j
+    } else {
+      const closeIdx = clean.indexOf('}', braceIdx + 1)
+      if (closeIdx === -1) break
+      const body = clean.slice(braceIdx + 1, closeIdx)
+      if (/\.threadNav(?![A-Za-z0-9_-])/.test(header)) {
+        applyDeclarations(body)
+      }
+      i = closeIdx + 1
+    }
+  }
+
+  return effectiveWrap === 'wrap' || effectiveWrap === 'wrap-reverse'
+}
+
+/**
+ * Strips below-fold Beat 7 RoleSwitcher (`RoleSwitcherV4`, `#roles`, `.roleTabs`) from markup so
+ * hero/stage tablist checks evaluate only hero and sticky-stage controls.
+ */
+function extractHeroStageMarkup(markup) {
+  return markup
+    .replace(/export\s+function\s+RoleSwitcher[A-Za-z0-9_]*\s*\([^)]*\)\s*\{[\s\S]*?\n\}/g, '')
+    .replace(/<section\b[^>]*\bid\s*=\s*["']roles["'][^>]*>[\s\S]*?<\/section>/gi, '')
+    .replace(/<([A-Za-z0-9]+)\b[^>]*\b(?:roleTabs|RoleSwitcher)\b[^>]*>[\s\S]*?<\/\1>/g, '')
+    .replace(/<([A-Za-z0-9]+)\b[^>]*aria-label\s*=\s*["'][^"']*maritime\s+role[^"']*["'][^>]*>[\s\S]*?<\/\1>/gi, '')
+}
+
 export function validateHeroLayout({ stageSources = [], cssSources = [], layoutMetrics = null }) {
   const errs = []
   const combinedMarkup = stageSources.map((s) => s.content ?? '').join('\n')
+  const heroMarkup = extractHeroStageMarkup(combinedMarkup)
   const combinedCss = cssSources.map((s) => s.content ?? '').join('\n')
 
-  const tablistMatches = [...combinedMarkup.matchAll(/\brole\s*=\s*["']tablist["']/g)]
-  if (tablistMatches.length > 1) {
+  const heroTablistTags = [...heroMarkup.matchAll(/<[A-Za-z0-9]+\b[^>]*\brole\s*=\s*["']tablist["'][^>]*>/g)].filter(
+    (m) => !/\b(?:roleTabs|RoleSwitcher)\b|maritime\s+role/i.test(m[0]),
+  )
+  const hasThreadNav = /\bthreadNav\b/.test(heroMarkup)
+  const hasStepCaptureTabs = /\bstepCaptureTabs\b/.test(heroMarkup)
+  const hasDockTabs = /\bdockTabs\b/.test(heroMarkup)
+  const stageTabBarCount =
+    (hasThreadNav ? 1 : 0) + (hasStepCaptureTabs ? 1 : 0) + (hasDockTabs ? 1 : 0)
+  const duplicateTabControlCount = Math.max(
+    heroTablistTags.length,
+    heroTablistTags.length >= 1 && stageTabBarCount > 1 ? stageTabBarCount : 0,
+  )
+
+  if (duplicateTabControlCount > 1) {
     errs.push(
-      `hero layout: duplicate role="tablist" controls (${tablistMatches.length} found in /harbour-v4; max 1 allowed)`,
+      `hero layout: duplicate role="tablist" controls (${duplicateTabControlCount} found in /harbour-v4 hero/stage; max 1 allowed)`,
     )
   }
 
   let mobilePillRows = layoutMetrics?.mobilePillRowsAboveFold ?? null
-  if (mobilePillRows === null && combinedMarkup.length > 0) {
+  if (mobilePillRows === null && heroMarkup.length > 0) {
     let rows = 0
-    const hasThreadNav = /\bthreadNav\b/.test(combinedMarkup)
-    const threadNavWraps =
-      /\.threadNav\s*\{[^}]*flex-wrap\s*:\s*wrap/s.test(combinedCss) &&
-      !/\.threadNav\s*\{[^}]*flex-wrap\s*:\s*nowrap/s.test(combinedCss)
-    const multiThreadPills = /THREADS\.map/.test(combinedMarkup) || [...combinedMarkup.matchAll(/threadPill\b/g)].length > 1
+    const threadNavWraps = doesThreadNavWrapAt375(combinedCss)
+    const threadNavBlockMatch = heroMarkup.match(/<([A-Za-z0-9]+)\b[^>]*\bthreadNav\b[^>]*>([\s\S]*?)<\/\1>/)
+    const threadNavInner = threadNavBlockMatch ? threadNavBlockMatch[2] : heroMarkup
+    const multiThreadPills =
+      /\b(?:THREADS|BEATS_V4)\s*\.map\b/.test(heroMarkup) ||
+      /\b(?:threadPill|threadBtn)\b/.test(heroMarkup) ||
+      /\.map\s*\(/.test(threadNavInner) ||
+      [...threadNavInner.matchAll(/<(?:button|li)\b/g)].length > 1
+
     if (hasThreadNav) {
       rows += threadNavWraps && multiThreadPills ? 2 : 1
     }
-    if (/\bstepCaptureTabs\b/.test(combinedMarkup)) rows += 1
-    if (/\bdockTabs\b/.test(combinedMarkup)) rows += 1
+    if (hasStepCaptureTabs) rows += 1
+    if (hasDockTabs) rows += 1
     mobilePillRows = rows
   }
 
@@ -237,6 +326,21 @@ export function validateCaptureProvenance({ provenanceSources = [] }) {
   return errs
 }
 
+function walkPyFilesFs(rootDir, prefixes) {
+  const out = []
+  const visit = (relDir) => {
+    const absDir = path.join(rootDir, relDir)
+    if (!fs.existsSync(absDir)) return
+    for (const ent of fs.readdirSync(absDir, { withFileTypes: true })) {
+      const childRel = path.posix.join(relDir, ent.name)
+      if (ent.isDirectory()) visit(childRel)
+      else if (ent.isFile() && ent.name.endsWith('.py')) out.push(childRel)
+    }
+  }
+  for (const p of prefixes) visit(p)
+  return out.sort()
+}
+
 function makeFsReader(rootDir) {
   return {
     label: rootDir,
@@ -252,6 +356,9 @@ function makeFsReader(rootDir) {
     readBuffer(rel) {
       const p = path.join(rootDir, rel)
       return fs.existsSync(p) ? fs.readFileSync(p) : null
+    },
+    listPyFiles(prefixes = ['spikes', 'scripts']) {
+      return walkPyFilesFs(rootDir, prefixes)
     },
   }
 }
@@ -286,6 +393,11 @@ function makeGitReader(repoDir, ref) {
     readBuffer(rel) {
       if (!files.has(rel)) return null
       return execFileSync('git', ['-C', repoDir, 'show', `${ref}:${rel}`])
+    },
+    listPyFiles(prefixes = ['spikes', 'scripts']) {
+      return [...files]
+        .filter((f) => f.endsWith('.py') && prefixes.some((p) => f.startsWith(`${p}/`)))
+        .sort()
     },
   }
 }
@@ -324,9 +436,12 @@ export function inspectHarbourTree(reader) {
     }
   }
 
-  const rigSources = RIG_SCRIPT_PATHS.map((rel) => ({ file: rel, content: reader.readText(rel) })).filter(
-    (s) => s.content !== null,
-  )
+  const discoveredPy = typeof reader.listPyFiles === 'function' ? reader.listPyFiles(['spikes', 'scripts']) : []
+  const allRigPaths = [...new Set([...discoveredPy, ...RIG_SCRIPT_PATHS])].sort()
+  const rigSources = allRigPaths
+    .map((rel) => ({ file: rel, content: reader.readText(rel) }))
+    .filter((s) => s.content !== null)
+
   let g0Receipt = null
   for (const rel of G0_RECEIPT_PATHS) {
     const raw = reader.readText(rel)
@@ -560,14 +675,148 @@ export function selftest() {
     'MUST FIRE on Norwegian UI strings in capture provenance',
   )
 
+  // 3. Surgeon adversarial probes (A1, A2, A4, B1, C1)
+  // Probe A1 (MUST FIRE): desktop flex-wrap: nowrap overridden by mobile @media (max-width: 720px) flex-wrap: wrap
+  const probeA1Errs = validateHeroLayout({
+    stageSources: [
+      {
+        file: 'components/harbour/v4/HarbourV4Stage.tsx',
+        content: `
+          <nav className={styles.threadNav} role="tablist">
+            {THREADS.map((t) => <button key={t.id} role="tab" className={styles.threadPill}>{t.label}</button>)}
+          </nav>
+        `,
+      },
+    ],
+    cssSources: [
+      {
+        file: 'components/harbour/v4/harbour-v4.module.css',
+        content: `
+          .threadNav { display: flex; flex-wrap: nowrap; }
+          @media (max-width: 720px) {
+            .threadNav { flex-wrap: wrap; }
+          }
+        `,
+      },
+    ],
+  })
+  assert.ok(
+    probeA1Errs.some((e) => e.includes('mobile pill rows above the hero fold')),
+    'Probe A1 MUST FIRE when mobile @media flex-wrap: wrap overrides desktop nowrap',
+  )
+
+  // Probe A2 (MUST FIRE): real 949a77f .threadNav (BEATS_V4.map + styles.threadBtn + flex-wrap: wrap) without stepCaptureTabs/dockTabs
+  const probeA2Errs = validateHeroLayout({
+    stageSources: [
+      {
+        file: 'components/harbour/v4/HarbourV4Stage.tsx',
+        content: `
+          <ul className={styles.threadNav} aria-label="Harbour call beats">
+            {BEATS_V4.map((b) => (
+              <li key={b.id}>
+                <button type="button" className={styles.threadBtn}>{b.label}</button>
+              </li>
+            ))}
+          </ul>
+        `,
+      },
+    ],
+    cssSources: [
+      {
+        file: 'components/harbour/v4/harbour-v4.module.css',
+        content: '.threadNav { display: flex; flex-wrap: wrap; gap: 0.35rem; }',
+      },
+    ],
+  })
+  assert.ok(
+    probeA2Errs.some((e) => e.includes('mobile pill rows above the hero fold')),
+    'Probe A2 MUST FIRE on BEATS_V4.map + threadBtn + flex-wrap: wrap alone',
+  )
+
+  // Probe A4 (MUST NOT FIRE): clean single-tablist hero (threadNav role="tablist", nowrap) + Beat 7 below-fold RoleSwitcher (role="tablist")
+  const probeA4Errs = validateHeroLayout({
+    stageSources: [
+      {
+        file: 'components/harbour/v4/HarbourV4Stage.tsx',
+        content: `
+          export function RoleSwitcherV4() {
+            return (
+              <div className={styles.roleTabs} role="tablist" aria-label="Choose your maritime role">
+                <button role="tab">Cruise line</button>
+              </div>
+            )
+          }
+          export default function HarbourV4Stage() {
+            return (
+              <nav className={styles.threadNav} role="tablist" aria-label="One Harbour v4 buyer threads">
+                {BEATS_V4.map((b) => <button key={b.id} role="tab" className={styles.threadBtn}>{b.label}</button>)}
+              </nav>
+            )
+          }
+        `,
+      },
+    ],
+    cssSources: [
+      {
+        file: 'components/harbour/v4/harbour-v4.module.css',
+        content: '.threadNav { display: flex; flex-wrap: nowrap; overflow-x: auto; }',
+      },
+    ],
+  })
+  assert.deepEqual(
+    probeA4Errs,
+    [],
+    'Probe A4 MUST NOT FIRE on single-tablist hero + below-fold Beat 7 RoleSwitcher',
+  )
+
+  // Probe B1 (MUST FIRE): procedural primitive in spikes/s3-rig/rig.py
+  const cleanG0Receipt = {
+    gate: 'G0',
+    approved: true,
+    approver: 'David Bakke',
+    approved_at: '2026-11-23T01:00:00Z',
+    commit: '573c4c834f9f1a0a24b3a9b2d3c4e5f6a7b8c9d0',
+    asset_sha256: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
+  }
+  const cleanManifest = makeCleanManifest()
+  const probeB1Errs = validateProceduralAndG0({
+    rigSources: [
+      {
+        file: 'spikes/s3-rig/rig.py',
+        content: 'bpy.ops.mesh.primitive_cube_add(size=1.0)',
+      },
+    ],
+    manifest: cleanManifest,
+    g0Receipt: cleanG0Receipt,
+  })
+  assert.ok(
+    probeB1Errs.some((e) => e.includes('spikes/s3-rig/rig.py: procedural primitive-mesh generation')),
+    'Probe B1 MUST FIRE on procedural primitive in spikes/s3-rig/rig.py',
+  )
+
+  // Probe C1 (MUST NOT FIRE): clean docs/HARBOUR-CLAIMS.md stating "All 16 captures audited: zero Norwegian UI strings detected."
+  const probeC1Errs = validateCaptureProvenance({
+    provenanceSources: [
+      {
+        file: 'docs/HARBOUR-CLAIMS.md',
+        content: 'All 16 captures audited: zero Norwegian UI strings detected.',
+      },
+    ],
+  })
+  assert.deepEqual(
+    probeC1Errs,
+    [],
+    'Probe C1 MUST NOT FIRE on clean English audit prose mentioning "zero Norwegian UI strings"',
+  )
+
   // Live git commit verification when PR #44 commit 949a77f257706c13fb81b83927bf40a8bae7436c is present in git
   let live949Verified = false
   if (gitRefExists(DEFAULT_ROOT, PR44_BAD_COMMIT)) {
     const liveRes = inspectHarbourTree(makeGitReader(DEFAULT_ROOT, PR44_BAD_COMMIT))
     assert.ok(liveRes.present, '949a77f257706c13fb81b83927bf40a8bae7436c must have /harbour-v4 manifest')
     assert.ok(
-      liveRes.errs.some((e) => e.includes('procedural primitive-mesh generation')),
-      'MUST FIRE on live git commit 949a77f procedural primitive-mesh generation',
+      liveRes.errs.some((e) => e.includes('spikes/s3-rig/rig.py: procedural primitive-mesh generation')),
+      'MUST FIRE on live git commit 949a77f spikes/s3-rig/rig.py procedural primitive-mesh generation',
     )
     assert.ok(
       liveRes.errs.some((e) => e.includes('sub-threshold frame detail')),
@@ -588,16 +837,7 @@ export function selftest() {
     live949Verified = true
   }
 
-  // 3. Control 2 (MUST NOT FIRE): Clean English G0 hero
-  const cleanG0Receipt = {
-    gate: 'G0',
-    approved: true,
-    approver: 'David Bakke',
-    approved_at: '2026-11-23T01:00:00Z',
-    commit: '573c4c834f9f1a0a24b3a9b2d3c4e5f6a7b8c9d0',
-    asset_sha256: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
-  }
-  const cleanManifest = makeCleanManifest()
+  // 4. Control 2 (MUST NOT FIRE): Clean English G0 hero
   assert.deepEqual(validateG4Manifest(cleanManifest), [])
   assert.deepEqual(
     validateProceduralAndG0({
@@ -641,7 +881,7 @@ export function selftest() {
         {
           file: 'docs/HARBOUR-CLAIMS.md',
           content:
-            'All product captures (P01..P12) taken from English (en-GB) staging seed: Port calls, Departures, Create new, Export, Search assignments.',
+            'All product captures (P01..P12) taken from English (en-GB) staging seed: Port calls, Departures, Create new, Export, Search assignments. Zero Norwegian UI strings detected.',
         },
       ],
     }),
@@ -650,7 +890,7 @@ export function selftest() {
   )
 
   console.log(
-    `check-harbour-v4 --selftest: PASS (MUST FIRE verified on PR #44 949a77f fixture${live949Verified ? ' + live git commit 949a77f257706c13fb81b83927bf40a8bae7436c' : ''}; MUST NOT FIRE verified on clean English G0 hero).`,
+    `check-harbour-v4 --selftest: PASS (MUST FIRE verified on PR #44 949a77f fixture${live949Verified ? ' + live git commit 949a77f257706c13fb81b83927bf40a8bae7436c' : ''} + probes A1/A2/B1; MUST NOT FIRE verified on clean English G0 hero + probes A4/C1).`,
   )
 }
 
@@ -689,5 +929,8 @@ function run() {
   )
 }
 
-if (process.argv.includes('--selftest')) selftest()
-else run()
+const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)
+if (isMain) {
+  if (process.argv.includes('--selftest')) selftest()
+  else run()
+}

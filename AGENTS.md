@@ -1,5 +1,7 @@
 # Portlink landing
 
+Canonical domain terms and retired synonyms live in [GLOSSARY.md](GLOSSARY.md); review-time code standards, Studio Website Pipeline checks, and the 12 Fowler structural smells live in [CODING_STANDARDS.md](CODING_STANDARDS.md).
+
 ## Services and connections
 
 The one authoritative service table for this repository is [CLAUDE.md, Services and connections](CLAUDE.md#services-and-connections). This file deliberately keeps no second copy: two tables drift (consolidated 01.10.2026). Read that section before any external action, then confirm the exact account, site and project with a scoped read.

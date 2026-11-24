@@ -3,6 +3,7 @@
 The public Portlink marketing site: Next.js 16, live at **https://portlink.app**.
 It vendors the Portlink design system into `app/_ds/` at a pinned version; see
 `../portlink-design-system/CONSUMERS.md`.
+Canonical domain terms and retired synonyms live in [GLOSSARY.md](GLOSSARY.md); review-time code standards, Studio Website Pipeline checks, and the 12 Fowler structural smells live in [CODING_STANDARDS.md](CODING_STANDARDS.md).
 
 ## Services and connections
 

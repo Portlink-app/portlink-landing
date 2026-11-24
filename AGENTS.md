@@ -12,7 +12,7 @@ Run `/Users/nyx/Projects/_admin/bin/project-route "$PWD"` first, and `/Users/nyx
 
 Read `docs/LANDING-DIRECTION.md` for the design rationale, Refero references, component map, verification evidence and current progress. Do not edit generated `app/_ds/*`. The product explorer's chapter registry is `components/scenes/chapters.ts`; keep every scene's separate Wide and Narrow composition. Contact forms and the Seatrade campaign are independent of this visual upgrade.
 
-Run `npm run build` and `npm run verify`. The build checks rendered scene pairs and excludes film from server markup. `check:viz-type` covers authored TSX and CSS, including the new CSS modules. Browser verification still owns actual layout, keyboard, fragment links and playback.
+Run `npm run build` and `npm run verify`. The build checks rendered scene pairs and excludes film from server markup. `check:viz-type` covers authored TSX and CSS, including the new CSS modules. Browser verification still owns actual layout, keyboard, fragment links and playback. `npm run dev` (`scripts/dev.sh`) and `npm run start` bind `-H 127.0.0.1` by default; any direct `npx next dev` or `next start` call must include `-H 127.0.0.1` so no listener binds `*:port` on the shared host.
 
 ## Preview links
 

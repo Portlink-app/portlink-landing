@@ -12,7 +12,7 @@
     "lint:dashes-selftest": "node scripts/lint-dashes.selftest.mjs",
     "build": "next build",
     "postbuild": "node scripts/check-scene-layouts.mjs --built && node scripts/check-film-motion.mjs --built && node scripts/check-anchors.mjs --built && node scripts/check-consent-gate.mjs --built && node scripts/check-font-hosts.mjs --built && npm run check:acquisition:http && node scripts/check-harbour-isolation.mjs --built && node scripts/check-harbour-v4.mjs",
-    "start": "next start",
+    "start": "next start -H 127.0.0.1",
     "lint": "eslint",
     "ds:check": "node scripts/check-ds-version.mjs --strict",
     "check:leaderboard": "tsx scripts/check-leaderboard-privacy.mjs",

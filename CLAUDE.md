@@ -93,3 +93,5 @@ before external work.
 | `git push v2 ...` | **avoid** | that remote is a stale parallel repo and deploys nothing; pushing there splits history |
 | Changing the custom domain or DNS for portlink.app | **David only** | it takes the company's public site offline |
 | Bumping the vendored DS version in `app/_ds/` | **David approves** | it is a visual change to the public site; keep `CONSUMERS.md` in step |
+
+**Local server loopback binding:** `npm run dev` (`scripts/dev.sh`) and `npm run start` bind `-H 127.0.0.1` by default on the shared host so `next-server` never listens on `*:port`. Any direct `npx next dev` or `npx next start` invocation must also include `-H 127.0.0.1`.
